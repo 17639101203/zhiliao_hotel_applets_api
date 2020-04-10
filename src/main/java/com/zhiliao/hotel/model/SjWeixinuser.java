@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * 微信用户类
  *
- * @author xiegege
+ * @author xiehuiyi
  * @date 2020-04-09
  */
 public class SjWeixinuser {
