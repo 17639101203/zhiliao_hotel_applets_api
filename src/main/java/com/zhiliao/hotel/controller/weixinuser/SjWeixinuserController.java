@@ -1,4 +1,4 @@
-package com.zhiliao.hotel.controller;
+package com.zhiliao.hotel.controller.weixinuser;
 
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
@@ -25,7 +25,7 @@ import java.util.Map;
 
 @Api(tags = "微信用户接口")
 @RestController
-@RequestMapping("user")
+@RequestMapping("weixinuser")
 public class SjWeixinuserController {
 
     private static final Logger logger = LoggerFactory.getLogger(SjWeixinuserController.class);
