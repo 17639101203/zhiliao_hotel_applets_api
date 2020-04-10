@@ -1,0 +1,30 @@
+server:
+  port: 8066
+
+mybatis:
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+  config-location:  classpath:/mybatis/mybatis-config.xml
+
+#pagehelper分页插件配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+
+spring:
+  datasource:
+    driver: com.mysql.jdbc.Driver
+    druid:
+      url: jdbc:mysql://120.77.147.184:3306/testqmwl?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
+      username: testqmwl
+      password: SnlAhd4hxoKO40O
+      initial-size: 5
+      max-active: 20
+      min-idle: 10
+      max-wait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      filters: stat,wall
+# 打印sql
+logging:
+  level:
+    com.zhiliao.hotel.mapper : debug

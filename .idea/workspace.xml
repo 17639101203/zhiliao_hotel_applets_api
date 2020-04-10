@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="786d9c81-04a8-4d56-9e87-0719a6fe2011" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="E:\java_repository\repository" />
+        <option name="mavenHome" value="E:/Program Files (x86)/Javaapp/apache-maven-3.5.2-bin/apache-maven-3.5.2" />
+        <option name="userSettingsFile" value="E:\Program Files (x86)\Javaapp\apache-maven-3.5.2-bin\apache-maven-3.5.2\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+        <option name="jdkForImporter" value="#JAVA_HOME" />
+        <option name="vmOptionsForImporter" value="-Xmx768m" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="MavenRunner">
+    <option name="jreName" value="1.8" />
+    <option name="vmOptions" value="-DarchetypeCatalog=internal" />
+  </component>
+  <component name="ProjectId" id="1aIngaF4wGKjDjMzNzfrYSTRXWB" />
+  <component name="ProjectViewState">
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showVisibilityIcons" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../zhiliao-hotel" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.repository.indices" />
+  </component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RebelAgentSelection">
+    <selection>jr</selection>
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\data\zhiliao\zhiliao-hotel-applets-api\src\main\resources" />
+      <recent name="E:\data\zhiliao\zhiliao-hotel-applets-api\src\main\java\com\zhiliao\hotel" />
+      <recent name="E:\data\zhiliao\zhiliao-hotel-applets-api\src\test\java" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.ZhiliaoHotelAppletsApplication">
+    <configuration name="Generator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.zhiliao.hotel.generator.Generator" />
+      <module name="zhiliao-hotel-applets-api" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.zhiliao.hotel.generator.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ZhiliaoHotelAppletsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="zhiliao-hotel-applets-api" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.zhiliao.hotel.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.zhiliao.hotel.ZhiliaoHotelAppletsApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.ZhiliaoHotelAppletsApplication" />
+        <item itemvalue="Application.Generator" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\MAIBENBEN\AppData\Roaming\Subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="786d9c81-04a8-4d56-9e87-0719a6fe2011" name="Default Changelist" comment="" />
+      <created>1586432087429</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1586432087429</updated>
+      <workItem from="1586432090671" duration="5482000" />
+      <workItem from="1586481791750" duration="533000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="552" y="186" key="#Project_Structure" timestamp="1586432270636">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="552" y="186" key="#Project_Structure/0.0.1920.1050@0.0.1920.1050" timestamp="1586432270636" />
+    <state x="765" y="218" key="#com.intellij.ide.util.MemberChooser" timestamp="1586435022917">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="765" y="218" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1050@0.0.1920.1050" timestamp="1586435022917" />
+    <state x="690" y="274" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1586434705382">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="690" y="274" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1586434705382" />
+    <state x="2660" y="283" key="FileChooserDialogImpl" timestamp="1586482415152">
+      <screen x="1920" y="0" width="1920" height="1050" />
+    </state>
+    <state x="2660" y="283" key="FileChooserDialogImpl/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586482415152" />
+    <state width="1877" height="705" key="GridCell.Tab.0.bottom" timestamp="1586437588505">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="705" key="GridCell.Tab.0.bottom/0.0.1920.1050@0.0.1920.1050" timestamp="1586437588505" />
+    <state width="1877" height="705" key="GridCell.Tab.0.center" timestamp="1586437588505">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="705" key="GridCell.Tab.0.center/0.0.1920.1050@0.0.1920.1050" timestamp="1586437588505" />
+    <state width="1877" height="705" key="GridCell.Tab.0.left" timestamp="1586437588505">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="705" key="GridCell.Tab.0.left/0.0.1920.1050@0.0.1920.1050" timestamp="1586437588505" />
+    <state width="1877" height="705" key="GridCell.Tab.0.right" timestamp="1586437588505">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="705" key="GridCell.Tab.0.right/0.0.1920.1050@0.0.1920.1050" timestamp="1586437588505" />
+    <state width="1877" height="705" key="GridCell.Tab.1.bottom" timestamp="1586437588505">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="705" key="GridCell.Tab.1.bottom/0.0.1920.1050@0.0.1920.1050" timestamp="1586437588505" />
+    <state width="1877" height="705" key="GridCell.Tab.1.center" timestamp="1586437588505">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="705" key="GridCell.Tab.1.center/0.0.1920.1050@0.0.1920.1050" timestamp="1586437588505" />
+    <state width="1877" height="705" key="GridCell.Tab.1.left" timestamp="1586437588505">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="705" key="GridCell.Tab.1.left/0.0.1920.1050@0.0.1920.1050" timestamp="1586437588505" />
+    <state width="1877" height="705" key="GridCell.Tab.1.right" timestamp="1586437588505">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="705" key="GridCell.Tab.1.right/0.0.1920.1050@0.0.1920.1050" timestamp="1586437588505" />
+    <state width="1877" height="705" key="GridCell.Tab.2.bottom" timestamp="1586437588506">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="705" key="GridCell.Tab.2.bottom/0.0.1920.1050@0.0.1920.1050" timestamp="1586437588506" />
+    <state width="1877" height="705" key="GridCell.Tab.2.center" timestamp="1586437588505">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="705" key="GridCell.Tab.2.center/0.0.1920.1050@0.0.1920.1050" timestamp="1586437588505" />
+    <state width="1877" height="705" key="GridCell.Tab.2.left" timestamp="1586437588505">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="705" key="GridCell.Tab.2.left/0.0.1920.1050@0.0.1920.1050" timestamp="1586437588505" />
+    <state width="1877" height="705" key="GridCell.Tab.2.right" timestamp="1586437588506">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="705" key="GridCell.Tab.2.right/0.0.1920.1050@0.0.1920.1050" timestamp="1586437588506" />
+    <state x="463" y="170" key="SettingsEditor" timestamp="1586432983942">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="463" y="170" key="SettingsEditor/0.0.1920.1050@0.0.1920.1050" timestamp="1586432983942" />
+    <state x="616" y="243" key="run.anything.popup" timestamp="1586435939844">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="616" y="243" key="run.anything.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1586435939844" />
+  </component>
+</project>
