@@ -1,7 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.model.SjWeixinuser;
-import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 /**
@@ -10,5 +9,4 @@ import tk.mybatis.mapper.common.Mapper;
 
 public interface SjWeixinuserMapper extends Mapper<SjWeixinuser> {
 
-    SjWeixinuser findWeixinuserInfo(@Param("weixinOpenid") String weixinOpenid);
 }

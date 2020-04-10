@@ -7,7 +7,7 @@ import com.zhiliao.hotel.model.SjWeixinuser;
  */
 public interface SjWeixinuserService {
 
-    SjWeixinuser findWeixinuserInfo(String weixinOpenid);
-
     SjWeixinuser findWeixinuserById(Integer weixinuserId);
+
+    SjWeixinuser findWeixinuserByOpenId(String openid);
 }

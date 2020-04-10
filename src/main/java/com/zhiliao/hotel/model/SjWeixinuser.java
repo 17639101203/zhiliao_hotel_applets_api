@@ -38,12 +38,12 @@ public class SjWeixinuser {
     /**
      * 加入时间
      */
-    private Integer addtime;
+    private Long addtime;
 
     /**
      * 更新时间
      */
-    private Integer updatatime;
+    private Long updatatime;
 
     /**
      * 状态，0未绑定，1绑定，-1取消关注
@@ -180,19 +180,19 @@ public class SjWeixinuser {
         this.wxqrcodeupdatatime = wxqrcodeupdatatime;
     }
 
-    public Integer getAddtime() {
+    public Long getAddtime() {
         return addtime;
     }
 
-    public void setAddtime(Integer addtime) {
+    public void setAddtime(Long addtime) {
         this.addtime = addtime;
     }
 
-    public Integer getUpdatatime() {
+    public Long getUpdatatime() {
         return updatatime;
     }
 
-    public void setUpdatatime(Integer updatatime) {
+    public void setUpdatatime(Long updatatime) {
         this.updatatime = updatatime;
     }
 

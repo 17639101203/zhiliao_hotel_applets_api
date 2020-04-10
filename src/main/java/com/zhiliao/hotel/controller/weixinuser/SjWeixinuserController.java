@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.controller.weixinuser;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
@@ -11,11 +12,23 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.security.*;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +43,13 @@ public class SjWeixinuserController {
 
     private static final Logger logger = LoggerFactory.getLogger(SjWeixinuserController.class);
 
+    private final static String requestUrl = "https://api.weixin.qq.com/sns/jscode2session";
+
+    @Value("${weChat.appid}")
+    private String APP_ID;
+    @Value("${weChat.secret}")
+    private String SECRET;
+
     private SjWeixinuserService sjWeixinuserService;
     private TokenUtil tokenUtil;
     private RedisCommonUtil redisCommonUtil;
@@ -43,30 +63,49 @@ public class SjWeixinuserController {
 
     @ApiOperation(value = "微信用户登录")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "weixinOpenid", dataType = "String", required = true, value = "微信openid")
+            @ApiImplicitParam(paramType = "query", name = "code", dataType = "String", required = true, value = "code"),
+            @ApiImplicitParam(paramType = "query", name = "encryptedData", dataType = "String", required = true, value = "加密秘钥"),
+            @ApiImplicitParam(paramType = "query", name = "iv", dataType = "String", required = true, value = "偏移量")
     })
     @PassToken
     @PostMapping("weixinUserLogin")
-    public ReturnString weixinUserLogin(String weixinOpenid) {
+    public ReturnString weixinUserLogin(String code, String encryptedData, String iv) {
         try {
-            logger.info("开始登录->参数->微信openid->weixinOpenid：" + weixinOpenid);
-            SjWeixinuser sjWeixinuser = sjWeixinuserService.findWeixinuserInfo(weixinOpenid);
-            if (null != sjWeixinuser) {
+            logger.info("开始请求->参数->微信code码->jsCode：" + code);
+            Map<String, Object> dataMap = new HashMap<>();
+            String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + APP_ID + "&secret=" + SECRET + "&js_code=" + code + "&grant_type=authorization_code";
+            JSONObject res = getJsonObject(url);
+            if (res != null && res.get("errcode") != null) {
+                return new ReturnString("解析失败");
+            }
+            String openid = res.getString("openid");
+            // 通过openid查找用户信息
+            SjWeixinuser sjWeixinuser = sjWeixinuserService.findWeixinuserByOpenId(openid);
+            if (sjWeixinuser != null) {
                 String token = tokenUtil.getToken(sjWeixinuser);
-                Map<String, Object> dataMap = new HashMap<>();
                 dataMap.put("token", token);
                 dataMap.put("userInfo", sjWeixinuser);
-                // 登录成功设置token过期时间
-                redisCommonUtil.setCache(sjWeixinuser.getOpenid(), token, 60 * 60);
+                // 登录成功设置token过期时间 存七天
+                redisCommonUtil.setCache(sjWeixinuser.getOpenid(), token, 60 * 60 * 24 * 7);
                 return new ReturnString(dataMap);
             } else {
                 // TODO: 相关注册操作
-                return null;
+                JSONObject res1 = getUserInfo(encryptedData, String.valueOf(res.get("session_key")), iv);
+                if (res1 == null) {
+                    return new ReturnString("解析失败");
+                }
+                sjWeixinuser = new SjWeixinuser();
+                sjWeixinuser.setOpenid(openid);
+                sjWeixinuser.setUnionid(res1.getString("unionId"));
+                sjWeixinuser.setAddtime(new Date().getTime());
+                sjWeixinuser.setUpdatatime(new Date().getTime());
+                // 状态，0未绑定，1绑定，-1取消关注
+                sjWeixinuser.setStatus((byte) 0);
+                return new ReturnString(res1);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("登录出错");
-            return new ReturnString("登录出错");
+            return new ReturnString("解析失败");
         }
     }
 
@@ -76,5 +115,71 @@ public class SjWeixinuserController {
         Integer weixinuserId = tokenUtil.getWeixinuserId(token);
         System.out.println(weixinuserId);
         return new ReturnString(0, "你已通过验证");
+    }
+
+    /**
+     * 解密用户敏感数据获取用户信息
+     *
+     * @param sessionKey    数据进行加密签名的密钥
+     * @param encryptedData 包括敏感数据在内的完整用户信息的加密数据
+     * @param iv            加密算法的初始向量
+     */
+    public static JSONObject getUserInfo(String encryptedData, String sessionKey, String iv) {
+        // 被加密的数据
+        byte[] dataByte = Base64.decode(encryptedData);
+        // 加密秘钥
+        byte[] keyByte = Base64.decode(sessionKey);
+        // 偏移量
+        byte[] ivByte = Base64.decode(iv);
+
+        try {
+            // 如果密钥不足16位，那么就补足.  这个if 中的内容很重要
+            int base = 16;
+            if (keyByte.length % base != 0) {
+                int groups = keyByte.length / base + (keyByte.length % base != 0 ? 1 : 0);
+                byte[] temp = new byte[groups * base];
+                Arrays.fill(temp, (byte) 0);
+                System.arraycopy(keyByte, 0, temp, 0, keyByte.length);
+                keyByte = temp;
+            }
+            // 初始化
+            Security.addProvider(new BouncyCastleProvider());
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "BC");
+            SecretKeySpec spec = new SecretKeySpec(keyByte, "AES");
+            AlgorithmParameters parameters = AlgorithmParameters.getInstance("AES");
+            parameters.init(new IvParameterSpec(ivByte));
+            cipher.init(Cipher.DECRYPT_MODE, spec, parameters);// 初始化
+            byte[] resultByte = cipher.doFinal(dataByte);
+            if (null != resultByte && resultByte.length > 0) {
+                String result = new String(resultByte, "UTF-8");
+                return JSONObject.parseObject(result);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private JSONObject getJsonObject(String url) throws IOException {
+        URL serverUrl = new URL(url);
+        HttpURLConnection conn = (HttpURLConnection) serverUrl.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        //必须设置false，否则会自动redirect到重定向后的地址
+        conn.setInstanceFollowRedirects(false);
+        conn.connect();
+        StringBuffer buffer = new StringBuffer();
+        //将返回的输入流转换成字符串
+        String result;
+        try (InputStream inputStream = conn.getInputStream();
+             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);) {
+            String str = null;
+            while ((str = bufferedReader.readLine()) != null) {
+                buffer.append(str);
+            }
+            result = buffer.toString();
+        }
+        return JSONObject.parseObject(result);
     }
 }

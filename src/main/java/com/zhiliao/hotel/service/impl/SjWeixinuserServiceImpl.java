@@ -23,14 +23,16 @@ public class SjWeixinuserServiceImpl implements SjWeixinuserService {
     }
 
     @Override
-    public SjWeixinuser findWeixinuserInfo(String weixinOpenid) {
-        return sjWeixinuserMapper.findWeixinuserInfo(weixinOpenid);
-    }
-
-    @Override
     public SjWeixinuser findWeixinuserById(Integer weixinuserId) {
         SjWeixinuser sjWeixinuser = new SjWeixinuser();
         sjWeixinuser.setId(weixinuserId);
+        return sjWeixinuserMapper.selectOne(sjWeixinuser);
+    }
+
+    @Override
+    public SjWeixinuser findWeixinuserByOpenId(String openid) {
+        SjWeixinuser sjWeixinuser = new SjWeixinuser();
+        sjWeixinuser.setOpenid(openid);
         return sjWeixinuserMapper.selectOne(sjWeixinuser);
     }
 }

@@ -16,8 +16,8 @@
         <result column="UnionID" jdbcType="CHAR" property="unionid" />
         <result column="WXQrcodeTicket" jdbcType="CHAR" property="wxqrcodeticket" />
         <result column="WXQrcodeUpdataTime" jdbcType="INTEGER" property="wxqrcodeupdatatime" />
-        <result column="AddTime" jdbcType="INTEGER" property="addtime" />
-        <result column="UpdataTime" jdbcType="INTEGER" property="updatatime" />
+        <result column="AddTime" jdbcType="LONG" property="addtime" />
+        <result column="UpdataTime" jdbcType="LONG" property="updatatime" />
         <result column="Status" jdbcType="TINYINT" property="status" />
         <result column="NicknName" jdbcType="CHAR" property="nicknname" />
         <result column="HeadImgUrl" jdbcType="CHAR" property="headimgurl" />
@@ -39,7 +39,7 @@
         <result column="perfect" jdbcType="BIT" property="perfect" />
     </resultMap>
 
-    <select id="findWeixinuserInfo" resultType="com.zhiliao.hotel.model.SjWeixinuser">
+    <select id="" resultType="com.zhiliao.hotel.model.SjWeixinuser">
         select * from sj_weixinuser where OpenID=#{weixinOpenid}
     </select>
 </mapper>
