@@ -8,6 +8,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +27,8 @@ import java.util.*;
 @RequestMapping("fuwu")
 public class SjFuwuController {
 
+    private static final Logger logger = LoggerFactory.getLogger(SjFuwuController.class);
+
     private SjFuwuService sjFuwuService;
 
     @Autowired
@@ -41,6 +45,7 @@ public class SjFuwuController {
     @PostMapping("findFuwuList/{jiuDianId}")
     public ReturnString findFuwuList(String token, @PathVariable Integer jiuDianId) {
         try {
+            logger.info("开始请求->参数->酒店id：" + jiuDianId);
             List<FuwuListVo> fuwuListVos = sjFuwuService.findFuwuList(jiuDianId);
             // 存放商品类别
             List<String> titles = new ArrayList<>();
@@ -83,6 +88,7 @@ public class SjFuwuController {
     @PostMapping("findFuwuDetail/{fuwuId}")
     public ReturnString findFuwuDetail(String token, @PathVariable Integer fuwuId) {
         try {
+            logger.info("开始请求->参数->客房服务商品id：" + fuwuId);
             FuwuListVo fuwuListVo = sjFuwuService.findFuwuDetail(fuwuId);
             if (fuwuListVo == null) {
                 return new ReturnString("客房服务商品不存在");

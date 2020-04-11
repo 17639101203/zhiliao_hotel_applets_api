@@ -69,7 +69,7 @@ public class SjWeixinuserController {
     @PostMapping("weixinUserLogin")
     public ReturnString weixinUserLogin(String code, String encryptedData, String iv) {
         try {
-            logger.info("开始请求->参数->微信code码->jsCode：" + code);
+            logger.info("开始请求->参数->code：" + code + "|加密秘钥：" + encryptedData + "|偏移量：" + iv);
             String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + APP_ID + "&secret=" + SECRET + "&js_code=" + code + "&grant_type=authorization_code";
             JSONObject res = getJsonObject(url);
             if (res != null && res.get("errcode") != null) {
@@ -116,7 +116,7 @@ public class SjWeixinuserController {
         // 头像
         dataMap.put("headImgUrl", sjWeixinuser.getHeadimgurl());
         // 微信昵称
-        dataMap.put("nickName",sjWeixinuser.getNicknname());
+        dataMap.put("nickName", sjWeixinuser.getNicknname());
         // 登录成功设置token过期时间 存七天
         redisCommonUtil.setCache(sjWeixinuser.getOpenid(), token, 60 * 60 * 24 * 7);
         return dataMap;
