@@ -7,12 +7,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="zhiliao-hotel-applets-api" />
+        <module name="zhiliao_hotel_applets_api" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="zhiliao-hotel-applets-api" options="-parameters" />
+      <module name="zhiliao_hotel_applets_api" options="-parameters" />
     </option>
   </component>
 </project>

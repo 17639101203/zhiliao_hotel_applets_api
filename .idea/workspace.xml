@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="786d9c81-04a8-4d56-9e87-0719a6fe2011" name="Default Changelist" comment="" />
+    <list default="true" id="786d9c81-04a8-4d56-9e87-0719a6fe2011" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/news/SjCbNewsController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/SjCbNewsMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/model/SjCbNews.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/SjCbNewsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/SjCbNewsServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/SjCbNewsMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,12 +32,16 @@
     <expand />
     <select />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="MERGE" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="localRepository" value="E:\java_repository\repository" />
-        <option name="mavenHome" value="E:/Program Files (x86)/Javaapp/apache-maven-3.5.2-bin/apache-maven-3.5.2" />
-        <option name="userSettingsFile" value="E:\Program Files (x86)\Javaapp\apache-maven-3.5.2-bin\apache-maven-3.5.2\conf\settings.xml" />
+        <option name="localRepository" value="E:\develop\maven\repository" />
+        <option name="mavenHome" value="E:/develop/maven/apache-maven-3.5.2" />
+        <option name="userSettingsFile" value="E:\develop\maven\apache-maven-3.5.2\conf\settings.xml" />
       </MavenGeneralSettings>
     </option>
     <option name="importingSettings">
@@ -43,6 +58,7 @@
   </component>
   <component name="ProjectId" id="1aIngaF4wGKjDjMzNzfrYSTRXWB" />
   <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
@@ -55,7 +71,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../zhiliao-hotel" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/mybatis/mapper" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -67,16 +83,21 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.repository.indices" />
-  </component>
-  <component name="ReactorSettings">
-    <option name="notificationShown" value="true" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
   <component name="RebelAgentSelection">
     <selection>jr</selection>
   </component>
   <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.zhiliao.hotel.service.impl" />
+      <recent name="com.zhiliao.hotel.service" />
+      <recent name="com.zhiliao.hotel.model" />
+      <recent name="com.zhiliao.hotel.mapper" />
+      <recent name="com.zhiliao.hotel.controller.news" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\work\zhiliao_hotel_applets_api\src\main\resources\mybatis\mapper" />
       <recent name="E:\data\zhiliao\zhiliao-hotel-applets-api\src\main\resources" />
       <recent name="E:\data\zhiliao\zhiliao-hotel-applets-api\src\main\java\com\zhiliao\hotel" />
       <recent name="E:\data\zhiliao\zhiliao-hotel-applets-api\src\test\java" />
@@ -116,6 +137,18 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
   <component name="SvnConfiguration">
     <configuration>C:\Users\MAIBENBEN\AppData\Roaming\Subversion</configuration>
   </component>
@@ -128,6 +161,9 @@
       <updated>1586432087429</updated>
       <workItem from="1586432090671" duration="5482000" />
       <workItem from="1586481791750" duration="533000" />
+      <workItem from="1586590043813" duration="40000" />
+      <workItem from="1586590124244" duration="242000" />
+      <workItem from="1586590375646" duration="1245000" />
     </task>
     <servers />
   </component>
@@ -147,9 +183,14 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="690" y="274" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1586434705382" />
-    <state x="2660" y="283" key="FileChooserDialogImpl" timestamp="1586482415152">
-      <screen x="1920" y="0" width="1920" height="1050" />
+    <state x="483" y="47" key="CommitChangelistDialog2" timestamp="1586591720109">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="483" y="47" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1586591720109" />
+    <state x="740" y="280" key="FileChooserDialogImpl" timestamp="1586591188414">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="280" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1586591188414" />
     <state x="2660" y="283" key="FileChooserDialogImpl/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586482415152" />
     <state width="1877" height="705" key="GridCell.Tab.0.bottom" timestamp="1586437588505">
       <screen x="0" y="0" width="1920" height="1050" />
@@ -199,10 +240,15 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state width="1877" height="705" key="GridCell.Tab.2.right/0.0.1920.1050@0.0.1920.1050" timestamp="1586437588506" />
-    <state x="463" y="170" key="SettingsEditor" timestamp="1586432983942">
-      <screen x="0" y="0" width="1920" height="1050" />
+    <state x="463" y="156" key="SettingsEditor" timestamp="1586591212580">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="463" y="156" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1586591212580" />
     <state x="463" y="170" key="SettingsEditor/0.0.1920.1050@0.0.1920.1050" timestamp="1586432983942" />
+    <state x="722" y="418" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586591621044">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="722" y="418" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1586591621044" />
     <state x="616" y="243" key="run.anything.popup" timestamp="1586435939844">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
