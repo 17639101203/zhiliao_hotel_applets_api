@@ -1,5 +1,8 @@
 package com.zhiliao.hotel.model;
 
+import org.springframework.data.annotation.Id;
+
+import javax.persistence.GeneratedValue;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,6 +16,8 @@ public class SjWeixinuser {
     /**
      *
      */
+    @Id
+    @GeneratedValue(generator = "JDBC")
     private Integer id;
 
     /**
@@ -139,6 +144,11 @@ public class SjWeixinuser {
      * 是否完善资料
      */
     private Boolean perfect;
+
+    /**
+     * 来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
+     */
+    private Integer comeformid;
 
     public Integer getId() {
         return id;
@@ -346,5 +356,13 @@ public class SjWeixinuser {
 
     public void setPerfect(Boolean perfect) {
         this.perfect = perfect;
+    }
+
+    public Integer getComeformid() {
+        return comeformid;
+    }
+
+    public void setComeformid(Integer comeformid) {
+        this.comeformid = comeformid;
     }
 }

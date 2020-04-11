@@ -43,8 +43,6 @@ public class SjWeixinuserController {
 
     private static final Logger logger = LoggerFactory.getLogger(SjWeixinuserController.class);
 
-    private final static String requestUrl = "https://api.weixin.qq.com/sns/jscode2session";
-
     @Value("${weChat.appid}")
     private String APP_ID;
     @Value("${weChat.secret}")
@@ -72,7 +70,6 @@ public class SjWeixinuserController {
     public ReturnString weixinUserLogin(String code, String encryptedData, String iv) {
         try {
             logger.info("开始请求->参数->微信code码->jsCode：" + code);
-            Map<String, Object> dataMap = new HashMap<>();
             String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + APP_ID + "&secret=" + SECRET + "&js_code=" + code + "&grant_type=authorization_code";
             JSONObject res = getJsonObject(url);
             if (res != null && res.get("errcode") != null) {
@@ -82,11 +79,7 @@ public class SjWeixinuserController {
             // 通过openid查找用户信息
             SjWeixinuser sjWeixinuser = sjWeixinuserService.findWeixinuserByOpenId(openid);
             if (sjWeixinuser != null) {
-                String token = tokenUtil.getToken(sjWeixinuser);
-                dataMap.put("token", token);
-                dataMap.put("userInfo", sjWeixinuser);
-                // 登录成功设置token过期时间 存七天
-                redisCommonUtil.setCache(sjWeixinuser.getOpenid(), token, 60 * 60 * 24 * 7);
+                Map<String, Object> dataMap = returnUserInfoData(sjWeixinuser);
                 return new ReturnString(dataMap);
             } else {
                 // TODO: 相关注册操作
@@ -99,14 +92,34 @@ public class SjWeixinuserController {
                 sjWeixinuser.setUnionid(res1.getString("unionId"));
                 sjWeixinuser.setAddtime(new Date().getTime());
                 sjWeixinuser.setUpdatatime(new Date().getTime());
-                // 状态，0未绑定，1绑定，-1取消关注
-                sjWeixinuser.setStatus((byte) 0);
-                return new ReturnString(res1);
+                sjWeixinuser.setNicknname(res1.getString("nickName"));
+                sjWeixinuser.setHeadimgurl(res1.getString("avatarUrl"));
+                sjWeixinuser.setSex(res1.getByte("gender"));
+                sjWeixinuser.setProvince(res1.getString("province"));
+                sjWeixinuser.setCity(res1.getString("city"));
+                // 来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
+                sjWeixinuser.setComeformid(1);
+                sjWeixinuserService.addWeixinuser(sjWeixinuser);
+                Map<String, Object> dataMap = returnUserInfoData(sjWeixinuser);
+                return new ReturnString(dataMap);
             }
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("解析失败");
         }
+    }
+
+    private Map<String, Object> returnUserInfoData(SjWeixinuser sjWeixinuser) {
+        Map<String, Object> dataMap = new HashMap<>();
+        String token = tokenUtil.getToken(sjWeixinuser);
+        dataMap.put("token", token);
+        // 头像
+        dataMap.put("headImgUrl", sjWeixinuser.getHeadimgurl());
+        // 微信昵称
+        dataMap.put("nickName",sjWeixinuser.getNicknname());
+        // 登录成功设置token过期时间 存七天
+        redisCommonUtil.setCache(sjWeixinuser.getOpenid(), token, 60 * 60 * 24 * 7);
+        return dataMap;
     }
 
     @UserLoginToken

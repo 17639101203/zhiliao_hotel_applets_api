@@ -35,4 +35,9 @@ public class SjWeixinuserServiceImpl implements SjWeixinuserService {
         sjWeixinuser.setOpenid(openid);
         return sjWeixinuserMapper.selectOne(sjWeixinuser);
     }
+
+    @Override
+    public void addWeixinuser(SjWeixinuser sjWeixinuser) {
+        sjWeixinuserMapper.insertSelective(sjWeixinuser);
+    }
 }

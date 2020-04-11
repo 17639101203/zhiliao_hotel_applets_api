@@ -10,4 +10,6 @@ public interface SjWeixinuserService {
     SjWeixinuser findWeixinuserById(Integer weixinuserId);
 
     SjWeixinuser findWeixinuserByOpenId(String openid);
+
+    void addWeixinuser(SjWeixinuser sjWeixinuser);
 }

@@ -16,8 +16,8 @@
         <result column="UnionID" jdbcType="CHAR" property="unionid" />
         <result column="WXQrcodeTicket" jdbcType="CHAR" property="wxqrcodeticket" />
         <result column="WXQrcodeUpdataTime" jdbcType="INTEGER" property="wxqrcodeupdatatime" />
-        <result column="AddTime" jdbcType="LONG" property="addtime" />
-        <result column="UpdataTime" jdbcType="LONG" property="updatatime" />
+        <result column="AddTime" jdbcType="BIGINT" property="addtime" />
+        <result column="UpdataTime" jdbcType="BIGINT" property="updatatime" />
         <result column="Status" jdbcType="TINYINT" property="status" />
         <result column="NicknName" jdbcType="CHAR" property="nicknname" />
         <result column="HeadImgUrl" jdbcType="CHAR" property="headimgurl" />
@@ -37,6 +37,7 @@
         <result column="money" jdbcType="DECIMAL" property="money" />
         <result column="cashmoney" jdbcType="DECIMAL" property="cashmoney" />
         <result column="perfect" jdbcType="BIT" property="perfect" />
+        <result column="ComeFormID" jdbcType="INTEGER" property="comeformid" />
     </resultMap>
 
     <select id="" resultType="com.zhiliao.hotel.model.SjWeixinuser">
