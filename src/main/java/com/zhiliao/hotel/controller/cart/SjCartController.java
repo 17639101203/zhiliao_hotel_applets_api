@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,7 +62,7 @@ public class SjCartController {
             boolean flag = false;
             // 商品id
             String goodsId = String.valueOf(addCartParam.getGoodsId());
-            // 删除购物车
+            // 清空购物车
             redisCommonUtil.deleteCache("cart" + cartType + "-" + jiuDianId + "-" + weixinuserId);
             if (dataMap == null || dataMap.size() == 0) {
                 if (addCartParam.getNum() != 0) {
@@ -83,7 +85,9 @@ public class SjCartController {
                     }
                 } else {
                     // 购物车中无记录，新增一条
-                    dataMap.put(goodsId, cartJson);
+                    if (addCartParam.getNum() != 0) {
+                        dataMap.put(goodsId, cartJson);
+                    }
                 }
                 if (dataMap.size() > 0) {
                     // dataMap的size要大于0，才执行添加。为0的时候说明购物车已经清空
@@ -99,6 +103,51 @@ public class SjCartController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("添加失败");
+        }
+    }
+
+    @ApiOperation(value = "购物车查询")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "path", name = "jiuDianId", dataType = "String", required = true, value = "酒店id"),
+            @ApiImplicitParam(paramType = "path", name = "cartType", dataType = "String", required = true, value = "购物车类型：0客房服务，1便利店，2餐饮服务，3情趣用品，4土特产")
+    })
+    @UserLoginToken
+    @PostMapping("findCart/{jiuDianId}/{cartType}")
+    public ReturnString findCart(String token, @PathVariable Integer jiuDianId, @PathVariable Integer cartType) {
+        try {
+            Integer weixinuserId = tokenUtil.getWeixinuserId(token);
+            Map<String, String> dataMap = (Map<String, String>) redisCommonUtil.getHashCache("cart" + cartType + "-" + jiuDianId + "-" + weixinuserId);
+            List<AddCartParam> dataList = new ArrayList<>();
+            dataMap.forEach((k, v) -> {
+                AddCartParam addCartParam = JSONArray.parseObject(v, AddCartParam.class);
+                dataList.add(addCartParam);
+            });
+            return new ReturnString(dataList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("获取出错");
+        }
+    }
+
+    @ApiOperation(value = "购物车清空")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "path", name = "jiuDianId", dataType = "String", required = true, value = "酒店id"),
+            @ApiImplicitParam(paramType = "path", name = "cartType", dataType = "String", required = true, value = "购物车类型：0客房服务，1便利店，2餐饮服务，3情趣用品，4土特产")
+    })
+    @UserLoginToken
+    @PostMapping("emptyCart/{jiuDianId}/{cartType}")
+    public ReturnString emptyCart(String token, @PathVariable Integer jiuDianId, @PathVariable Integer cartType) {
+        try {
+            Integer weixinuserId = tokenUtil.getWeixinuserId(token);
+            logger.info("开始请求->参数->酒店id：" + jiuDianId + "|购物车类型：" + cartType + "|用户id：" + weixinuserId);
+            // 清空购物车
+            redisCommonUtil.deleteCache("cart" + cartType + "-" + jiuDianId + "-" + weixinuserId);
+            return new ReturnString(0, "清空成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("清空出错");
         }
     }
 }
