@@ -117,8 +117,8 @@ public class SjWeixinuserController {
         dataMap.put("headImgUrl", sjWeixinuser.getHeadimgurl());
         // 微信昵称
         dataMap.put("nickName", sjWeixinuser.getNicknname());
-        // 登录成功设置token过期时间 存七天
-        redisCommonUtil.setCache(sjWeixinuser.getOpenid(), token, 60 * 60 * 24 * 7);
+        // 登录成功设置token过期时间 存3天
+        redisCommonUtil.setCache(sjWeixinuser.getOpenid(), token, 60 * 60 * 24 * 3);
         return dataMap;
     }
 
