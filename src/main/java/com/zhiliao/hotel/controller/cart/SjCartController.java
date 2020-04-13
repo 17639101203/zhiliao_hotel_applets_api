@@ -57,7 +57,7 @@ public class SjCartController {
             Map<String, String> dataMap = (Map<String, String>) redisCommonUtil.getHashCache("cart" + cartType + "-" + jiuDianId + "-" + weixinuserId);
             String cartJson = JSONArray.toJSON(addCartParam).toString();
             // 操作成功布尔值
-            boolean flag;
+            boolean flag = false;
             // 商品id
             String goodsId = String.valueOf(addCartParam.getGoodsId());
             // 删除购物车
@@ -78,14 +78,19 @@ public class SjCartController {
                     if (addCartParam.getNum() == 0) {
                         dataMap.remove(goodsId);
                     } else {
-                        // 购物车中有记录，更新购物车数据
+                        // 购物车中有记录，更新购物车这条商品的数据
                         dataMap.put(goodsId, cartJson);
                     }
                 } else {
                     // 购物车中无记录，新增一条
                     dataMap.put(goodsId, cartJson);
                 }
-                flag = redisCommonUtil.setHashCache("cart" + cartType + "-" + jiuDianId + "-" + weixinuserId, dataMap, 60 * 60 * 24 * 3);
+                if (dataMap.size() > 0) {
+                    // dataMap的size要大于0，才执行添加。为0的时候说明购物车已经清空
+                    flag = redisCommonUtil.setHashCache("cart" + cartType + "-" + jiuDianId + "-" + weixinuserId, dataMap, 60 * 60 * 24 * 3);
+                } else {
+                    flag = true;
+                }
             }
             if (flag) {
                 return new ReturnString(0, "添加成功");
