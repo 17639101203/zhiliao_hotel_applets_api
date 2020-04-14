@@ -36,143 +36,55 @@ public class ZlCartController {
 
     private static final Logger logger = LoggerFactory.getLogger(ZlCartController.class);
 
-    private RedisCommonUtil redisCommonUtil;
     private TokenUtil tokenUtil;
     private ZlCartService zlCartService;
 
     @Autowired
-    public ZlCartController(RedisCommonUtil redisCommonUtil, TokenUtil tokenUtil, ZlCartService zlCartService) {
-        this.redisCommonUtil = redisCommonUtil;
+    public ZlCartController(TokenUtil tokenUtil, ZlCartService zlCartService) {
         this.tokenUtil = tokenUtil;
         this.zlCartService = zlCartService;
     }
 
-    // redis缓存做法----------------------------------------------------------------------------------------------------------------------------------------
-    @ApiOperation(value = "购物车添加redis")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
-            @ApiImplicitParam(paramType = "path", name = "cartType", dataType = "String", required = true, value = "购物车类型：0客房服务，1便利店，2餐饮服务，3情趣用品，4土特产")
-    })
-    @UserLoginToken
-    @PostMapping("addCart/{hotelId}/{cartType}")
-    public ReturnString addCartRedis(String token, @PathVariable Integer hotelId, @PathVariable Integer cartType, AddCartParam addCartParam) {
-        try {
-            Integer userId = tokenUtil.getUserId(token);
-            logger.info("开始请求->参数->酒店id：" + hotelId + "|购物车类型：" + cartType + "|用户id：" + userId + "|参数：" + addCartParam.toString());
-            // 先从redis中获取数据，判断购物车中是否有数据  cart购物车类型-酒店id-用户id
-            Map<String, String> dataMap = (Map<String, String>) redisCommonUtil.getHashCache("cart" + cartType + "-" + hotelId + "-" + userId);
-            String cartJson = JSONArray.toJSON(addCartParam).toString();
-            // 操作成功布尔值
-            boolean flag = false;
-            // 商品id
-            String goodsId = String.valueOf(addCartParam.getGoodsId());
-            // 清空购物车
-            redisCommonUtil.deleteCache("cart" + cartType + "-" + hotelId + "-" + userId);
-            if (dataMap == null || dataMap.size() == 0) {
-                if (addCartParam.getNum() != 0) {
-                    // 新增数据到redis
-                    dataMap = new HashMap<>();
-                    dataMap.put(goodsId, cartJson);
-                    flag = redisCommonUtil.setHashCache("cart" + cartType + "-" + hotelId + "-" + userId, dataMap, 60 * 60 * 24 * 3);
-                } else {
-                    return new ReturnString(0, "商品数量为0，不执行添加操作");
-                }
-            } else {
-                // 取出数据判断商品是否存在，更改数量
-                if (dataMap.containsKey(goodsId)) {
-                    // 传过来的数量为0则删除这条数据
-                    if (addCartParam.getNum() == 0) {
-                        dataMap.remove(goodsId);
-                    } else {
-                        // 购物车中有记录，更新购物车这条商品的数据
-                        dataMap.put(goodsId, cartJson);
-                    }
-                } else {
-                    // 购物车中无记录，新增一条
-                    if (addCartParam.getNum() != 0) {
-                        dataMap.put(goodsId, cartJson);
-                    }
-                }
-                if (dataMap.size() > 0) {
-                    // dataMap的size要大于0，才执行添加。为0的时候说明购物车已经清空
-                    flag = redisCommonUtil.setHashCache("cart" + cartType + "-" + hotelId + "-" + userId, dataMap, 60 * 60 * 24 * 3);
-                } else {
-                    flag = true;
-                }
-            }
-            if (flag) {
-                return new ReturnString(0, "添加成功");
-            }
-            return new ReturnString("添加出错");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnString("添加出错");
-        }
-    }
-
-    @ApiOperation(value = "购物车查询redis")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
-            @ApiImplicitParam(paramType = "path", name = "cartType", dataType = "String", required = true, value = "购物车类型：0客房服务，1便利店，2餐饮服务，3情趣用品，4土特产")
-    })
-    @UserLoginToken
-    @PostMapping("findCart/{hotelId}/{cartType}")
-    public ReturnString findCartRedis(String token, @PathVariable Integer hotelId, @PathVariable Integer cartType) {
-        try {
-            Integer userId = tokenUtil.getUserId(token);
-            Map<String, String> dataMap = (Map<String, String>) redisCommonUtil.getHashCache("cart" + cartType + "-" + hotelId + "-" + userId);
-            List<AddCartParam> dataList = new ArrayList<>();
-            dataMap.forEach((k, v) -> {
-                AddCartParam addCartParam = JSONArray.parseObject(v, AddCartParam.class);
-                dataList.add(addCartParam);
-            });
-            return new ReturnString(dataList);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnString("获取出错");
-        }
-    }
-
-    @ApiOperation(value = "购物车清空redis")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
-            @ApiImplicitParam(paramType = "path", name = "cartType", dataType = "String", required = true, value = "购物车类型：0客房服务，1便利店，2餐饮服务，3情趣用品，4土特产")
-    })
-    @UserLoginToken
-    @PostMapping("emptyCart/{hotelId}/{cartType}")
-    public ReturnString emptyCartRedis(String token, @PathVariable Integer hotelId, @PathVariable Integer cartType) {
-        try {
-            Integer userId = tokenUtil.getUserId(token);
-            logger.info("开始请求->参数->酒店id：" + hotelId + "|购物车类型：" + cartType + "|用户id：" + userId);
-            // 清空购物车
-            redisCommonUtil.deleteCache("cart" + cartType + "-" + hotelId + "-" + userId);
-            return new ReturnString(0, "清空成功");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnString("清空出错");
-        }
-    }
-
-    // 数据库做法----------------------------------------------------------------------------------------------------------------------------------------
     @ApiOperation(value = "购物车添加")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
-            @ApiImplicitParam(paramType = "path", name = "skuId", dataType = "String", required = true, value = "商品skuID"),
+            @ApiImplicitParam(paramType = "path", name = "skuId", dataType = "String", required = true, value = "商品skuId"),
             @ApiImplicitParam(paramType = "path", name = "goodsCount", dataType = "String", required = true, value = "数量")
     })
     @UserLoginToken
     @PostMapping("addCart/{hotelId}/{skuId}/{goodsCount}")
     public ReturnString addCart(String token, @PathVariable Integer hotelId, @PathVariable Integer skuId, @PathVariable Integer goodsCount) {
         try {
-            Integer userId = tokenUtil.getUserId(token);
+            Long userId = tokenUtil.getUserId(token);
+            logger.info("开始请求->参数->酒店id：" + hotelId + "|商品skuId：" + skuId + "|用户id：" + userId + "|数量：" + goodsCount);
             // 先查询购物车数据是否存在
-            //zlCartService.findCartByWxuserIdAndHotelId
-            ZlCart cart = new ZlCart();
-            return null;
+            ZlCart cart = zlCartService.findCartByUserIdAndHotelIdAndSkuId(userId, hotelId, skuId);
+            if (cart == null) {
+                if (goodsCount == 0) {
+                    return new ReturnString("商品数量为0，不执行添加操作");
+                }
+                // 不存在新增一条购物车数据
+                cart = new ZlCart();
+                cart.setUserid(userId);
+                cart.setHotelid(hotelId);
+                cart.setSkuid(skuId);
+                cart.setGoodscount(goodsCount);
+                cart.setCreatedate(1);
+                cart.setUpdatedate(1);
+                zlCartService.addCart(cart);
+            } else {
+                // 存在更改数量，如果数量为0，则删除数据
+                if (goodsCount == 0) {
+                    zlCartService.deleteCartByGoodsCountZero(cart);
+                } else {
+                    // 更新数量
+                    cart.setGoodscount(goodsCount);
+                    cart.setUpdatedate(2);
+                    zlCartService.updateCartGoodsCount(cart);
+                }
+            }
+            return new ReturnString(0, "添加成功");
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("添加出错");

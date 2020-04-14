@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.model.ZlCart;
+import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 
@@ -9,4 +10,5 @@ import tk.mybatis.mapper.common.Mapper;
  */
 public interface ZlCartMapper extends Mapper<ZlCart> {
 
+    void updateCartGoodsCount(@Param("cartId") Long cartId, @Param("goodsCount") Integer goodsCount, @Param("updateDate") Integer updateDate);
 }
