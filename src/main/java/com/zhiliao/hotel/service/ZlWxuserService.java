@@ -7,7 +7,7 @@ import com.zhiliao.hotel.model.ZlWxuser;
  */
 public interface ZlWxuserService {
 
-    ZlWxuser findWxuserById(Long wxuserId);
+    ZlWxuser findWxuserByWxuserId(Long wxuserId);
 
     ZlWxuser findWxuserByWxOpenId(String openid);
 

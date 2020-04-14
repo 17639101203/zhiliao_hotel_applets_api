@@ -77,11 +77,8 @@ public class ZlWxuserController {
             String openid = res.getString("openid");
             // 通过openid查找用户信息
             ZlWxuser wxuser = zlWxuserService.findWxuserByWxOpenId(openid);
-            if (wxuser != null) {
-                Map<String, Object> dataMap = returnUserInfoData(wxuser);
-                return new ReturnString(dataMap);
-            } else {
-                // TODO: 相关注册操作
+            if (wxuser == null) {
+                // 用户不存在，新增注册用户
                 JSONObject res1 = getUserInfo(encryptedData, String.valueOf(res.get("session_key")), iv);
                 if (res1 == null) {
                     return new ReturnString("解析失败");
@@ -89,24 +86,25 @@ public class ZlWxuserController {
                 wxuser = new ZlWxuser();
                 wxuser.setWxopenid(openid);
                 wxuser.setWxunionid(res1.getString("unionId"));
-                wxuser.setCreatedate(1);
-                wxuser.setUpdatedate(1);
                 wxuser.setNickname(res1.getString("nickName"));
                 wxuser.setHeadimgurl(res1.getString("avatarUrl"));
                 wxuser.setSex(res1.getByte("gender"));
                 // 来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
                 wxuser.setComeformid(1);
+                // 删除状态:0正常;1删除
+                wxuser.setIsdelete(false);
+                wxuser.setCreatedate(1);
+                wxuser.setUpdatedate(1);
                 zlWxuserService.addWxuser(wxuser);
-                Map<String, Object> dataMap = returnUserInfoData(wxuser);
-                return new ReturnString(dataMap);
             }
+            return returnUserInfoData(wxuser);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("解析失败");
         }
     }
 
-    private Map<String, Object> returnUserInfoData(ZlWxuser wxuser) {
+    private ReturnString returnUserInfoData(ZlWxuser wxuser) {
         Map<String, Object> dataMap = new HashMap<>();
         String token = tokenUtil.getToken(wxuser);
         dataMap.put("token", token);
@@ -116,7 +114,7 @@ public class ZlWxuserController {
         dataMap.put("nickName", wxuser.getNickname());
         // 登录成功设置token过期时间 存3天
         redisCommonUtil.setCache(wxuser.getWxopenid(), token, 60 * 60 * 24 * 3);
-        return dataMap;
+        return new ReturnString(dataMap);
     }
 
     @UserLoginToken

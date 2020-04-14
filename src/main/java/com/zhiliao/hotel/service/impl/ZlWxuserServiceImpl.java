@@ -23,7 +23,7 @@ public class ZlWxuserServiceImpl implements ZlWxuserService {
     }
 
     @Override
-    public ZlWxuser findWxuserById(Long wxuserId) {
+    public ZlWxuser findWxuserByWxuserId(Long wxuserId) {
         ZlWxuser wxuser = new ZlWxuser();
         wxuser.setUserid(wxuserId);
         return zlWxuserMapper.selectOne(wxuser);

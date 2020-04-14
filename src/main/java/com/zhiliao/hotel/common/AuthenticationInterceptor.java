@@ -56,7 +56,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     throw new RuntimeException("401 错误token，没有访问权限，请重新登录");
                 }
                 // 查询用户是否存在
-                ZlWxuser wxuser = zlWxuserService.findWxuserById(Long.parseLong(wxuserId));
+                ZlWxuser wxuser = zlWxuserService.findWxuserByWxuserId(Long.parseLong(wxuserId));
                 if (wxuser == null) {
                     throw new RuntimeException("用户不存在，请重新登录");
                 }
