@@ -307,8 +307,4 @@ public class ZlWxuser implements Serializable {
     public void setUpdatedate(Integer updatedate) {
         this.updatedate = updatedate;
     }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
 }

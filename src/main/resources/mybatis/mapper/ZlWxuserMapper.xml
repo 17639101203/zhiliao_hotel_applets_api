@@ -8,7 +8,7 @@
    namespace：名称空间，由于映射文件可能有多个，为了防止crud语句的唯一标识被重复，需要设置空间名称。
  -->
 <mapper namespace="com.zhiliao.hotel.mapper.ZlWxuserMapper">
-    <resultMap id="weixinuserResultMap" type="com.zhiliao.hotel.model.ZlWxuser">
+    <resultMap id="wxuserResultMap" type="com.zhiliao.hotel.model.ZlWxuser">
         <!--主键的映射要单独配置 column:表中的主键的字段名称，property：对象中的对应的主键的属性名称-->
         <result column="UserID" jdbcType="BIGINT" property="userid" />
         <!--配置其他基本类型的属性-->

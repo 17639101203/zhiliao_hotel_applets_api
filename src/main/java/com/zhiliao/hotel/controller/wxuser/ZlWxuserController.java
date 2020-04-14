@@ -120,8 +120,8 @@ public class ZlWxuserController {
     @UserLoginToken
     @PostMapping("test")
     public ReturnString test(String token) {
-        Integer weixinuserId = tokenUtil.getWeixinuserId(token);
-        System.out.println(weixinuserId);
+        Integer wxuserId = tokenUtil.getWxuserId(token);
+        System.out.println(wxuserId);
         return new ReturnString(0, "你已通过验证");
     }
 

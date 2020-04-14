@@ -50,7 +50,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 }
                 String wxuserId;
                 try {
-                    // 获取token中的weixinuserId
+                    // 获取token中的wxuserId
                     wxuserId = JWT.decode(token).getAudience().get(0);
                 } catch (JWTDecodeException j) {
                     throw new RuntimeException("401 错误token，没有访问权限，请重新登录");
