@@ -1,12 +1,10 @@
 package com.zhiliao.hotel.controller.cart;
 
-import com.alibaba.fastjson.JSONArray;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
-import com.zhiliao.hotel.controller.cart.params.AddCartParam;
+import com.zhiliao.hotel.controller.cart.vo.UserCartVo;
 import com.zhiliao.hotel.model.ZlCart;
 import com.zhiliao.hotel.service.ZlCartService;
-import com.zhiliao.hotel.utils.RedisCommonUtil;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -20,10 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by xiegege on 2020/4/12.
@@ -88,6 +83,46 @@ public class ZlCartController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("添加出错");
+        }
+    }
+
+    @ApiOperation(value = "购物车查询")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
+            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产")
+    })
+    @UserLoginToken
+    @PostMapping("findUserCart/{hotelId}/{belongModule}")
+    public ReturnString findUserCart(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule) {
+        try {
+            Long userId = tokenUtil.getUserId(token);
+            logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|用户id：" + userId);
+            List<UserCartVo> userCartVoList = zlCartService.findUserCart(hotelId, userId, belongModule);
+            return new ReturnString(userCartVoList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("获取出错");
+        }
+    }
+
+    @ApiOperation(value = "购物车清空")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
+            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产")
+    })
+    @UserLoginToken
+    @PostMapping("emptyCart/{hotelId}/{belongModule}")
+    public ReturnString emptyCart(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule) {
+        try {
+            Long userId = tokenUtil.getUserId(token);
+            logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|用户id：" + userId);
+            zlCartService.emptyCart(hotelId, userId, belongModule);
+            return new ReturnString(0, "清空成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("清空出错");
         }
     }
 }
