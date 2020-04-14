@@ -1,11 +1,11 @@
-package com.zhiliao.hotel.controller.weixinuser;
+package com.zhiliao.hotel.controller.wxuser;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
-import com.zhiliao.hotel.model.SjWeixinuser;
-import com.zhiliao.hotel.service.SjWeixinuserService;
+import com.zhiliao.hotel.model.ZlWxuser;
+import com.zhiliao.hotel.service.ZlWxuserService;
 import com.zhiliao.hotel.utils.RedisCommonUtil;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
@@ -28,7 +28,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.*;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,23 +37,23 @@ import java.util.Map;
 
 @Api(tags = "微信用户接口")
 @RestController
-@RequestMapping("weixinuser")
-public class SjWeixinuserController {
+@RequestMapping("wxuser")
+public class ZlWxuserController {
 
-    private static final Logger logger = LoggerFactory.getLogger(SjWeixinuserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ZlWxuserController.class);
 
     @Value("${weChat.appid}")
     private String APP_ID;
     @Value("${weChat.secret}")
     private String SECRET;
 
-    private SjWeixinuserService sjWeixinuserService;
+    private ZlWxuserService zlWxuserService;
     private TokenUtil tokenUtil;
     private RedisCommonUtil redisCommonUtil;
 
     @Autowired
-    public SjWeixinuserController(SjWeixinuserService sjWeixinuserService, TokenUtil tokenUtil, RedisCommonUtil redisCommonUtil) {
-        this.sjWeixinuserService = sjWeixinuserService;
+    public ZlWxuserController(ZlWxuserService zlWxuserService, TokenUtil tokenUtil, RedisCommonUtil redisCommonUtil) {
+        this.zlWxuserService = zlWxuserService;
         this.tokenUtil = tokenUtil;
         this.redisCommonUtil = redisCommonUtil;
     }
@@ -66,8 +65,8 @@ public class SjWeixinuserController {
             @ApiImplicitParam(paramType = "query", name = "iv", dataType = "String", required = true, value = "偏移量")
     })
     @PassToken
-    @PostMapping("weixinUserLogin")
-    public ReturnString weixinUserLogin(String code, String encryptedData, String iv) {
+    @PostMapping("wxuserLogin")
+    public ReturnString wxuserLogin(String code, String encryptedData, String iv) {
         try {
             logger.info("开始请求->参数->code：" + code + "|加密秘钥：" + encryptedData + "|偏移量：" + iv);
             String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + APP_ID + "&secret=" + SECRET + "&js_code=" + code + "&grant_type=authorization_code";
@@ -77,9 +76,9 @@ public class SjWeixinuserController {
             }
             String openid = res.getString("openid");
             // 通过openid查找用户信息
-            SjWeixinuser sjWeixinuser = sjWeixinuserService.findWeixinuserByOpenId(openid);
-            if (sjWeixinuser != null) {
-                Map<String, Object> dataMap = returnUserInfoData(sjWeixinuser);
+            ZlWxuser wxuser = zlWxuserService.findWxuserByWxOpenId(openid);
+            if (wxuser != null) {
+                Map<String, Object> dataMap = returnUserInfoData(wxuser);
                 return new ReturnString(dataMap);
             } else {
                 // TODO: 相关注册操作
@@ -87,20 +86,18 @@ public class SjWeixinuserController {
                 if (res1 == null) {
                     return new ReturnString("解析失败");
                 }
-                sjWeixinuser = new SjWeixinuser();
-                sjWeixinuser.setOpenid(openid);
-                sjWeixinuser.setUnionid(res1.getString("unionId"));
-                sjWeixinuser.setAddtime(new Date().getTime());
-                sjWeixinuser.setUpdatatime(new Date().getTime());
-                sjWeixinuser.setNicknname(res1.getString("nickName"));
-                sjWeixinuser.setHeadimgurl(res1.getString("avatarUrl"));
-                sjWeixinuser.setSex(res1.getByte("gender"));
-                sjWeixinuser.setProvince(res1.getString("province"));
-                sjWeixinuser.setCity(res1.getString("city"));
+                wxuser = new ZlWxuser();
+                wxuser.setWxopenid(openid);
+                wxuser.setWxunionid(res1.getString("unionId"));
+                wxuser.setCreatedate(1);
+                wxuser.setUpdatedate(1);
+                wxuser.setNickname(res1.getString("nickName"));
+                wxuser.setHeadimgurl(res1.getString("avatarUrl"));
+                wxuser.setSex(res1.getByte("gender"));
                 // 来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
-                sjWeixinuser.setComeformid(1);
-                sjWeixinuserService.addWeixinuser(sjWeixinuser);
-                Map<String, Object> dataMap = returnUserInfoData(sjWeixinuser);
+                wxuser.setComeformid(1);
+                zlWxuserService.addWxuser(wxuser);
+                Map<String, Object> dataMap = returnUserInfoData(wxuser);
                 return new ReturnString(dataMap);
             }
         } catch (Exception e) {
@@ -109,16 +106,16 @@ public class SjWeixinuserController {
         }
     }
 
-    private Map<String, Object> returnUserInfoData(SjWeixinuser sjWeixinuser) {
+    private Map<String, Object> returnUserInfoData(ZlWxuser wxuser) {
         Map<String, Object> dataMap = new HashMap<>();
-        String token = tokenUtil.getToken(sjWeixinuser);
+        String token = tokenUtil.getToken(wxuser);
         dataMap.put("token", token);
         // 头像
-        dataMap.put("headImgUrl", sjWeixinuser.getHeadimgurl());
+        dataMap.put("headImgUrl", wxuser.getHeadimgurl());
         // 微信昵称
-        dataMap.put("nickName", sjWeixinuser.getNicknname());
+        dataMap.put("nickName", wxuser.getNickname());
         // 登录成功设置token过期时间 存3天
-        redisCommonUtil.setCache(sjWeixinuser.getOpenid(), token, 60 * 60 * 24 * 3);
+        redisCommonUtil.setCache(wxuser.getWxopenid(), token, 60 * 60 * 24 * 3);
         return dataMap;
     }
 

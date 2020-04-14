@@ -5,8 +5,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.zhiliao.hotel.model.SjWeixinuser;
-import com.zhiliao.hotel.service.SjWeixinuserService;
+import com.zhiliao.hotel.model.ZlWxuser;
+import com.zhiliao.hotel.service.ZlWxuserService;
 import com.zhiliao.hotel.utils.RedisCommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
-    private SjWeixinuserService sjWeixinuserService;
+    private ZlWxuserService zlWxuserService;
     @Autowired
     private RedisCommonUtil redisCommonUtil;
 
@@ -48,25 +48,25 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 if (token == null || "".equals(token)) {
                     throw new RuntimeException("无token，请重新登录");
                 }
-                String weixinuserId;
+                String wxuserId;
                 try {
                     // 获取token中的weixinuserId
-                    weixinuserId = JWT.decode(token).getAudience().get(0);
+                    wxuserId = JWT.decode(token).getAudience().get(0);
                 } catch (JWTDecodeException j) {
                     throw new RuntimeException("401 错误token，没有访问权限，请重新登录");
                 }
                 // 查询用户是否存在
-                SjWeixinuser sjWeixinuser = sjWeixinuserService.findWeixinuserById(Integer.parseInt(weixinuserId));
-                if (sjWeixinuser == null) {
+                ZlWxuser wxuser = zlWxuserService.findWxuserById(Long.parseLong(wxuserId));
+                if (wxuser == null) {
                     throw new RuntimeException("用户不存在，请重新登录");
                 }
                 // 对比redis缓存与用户传的token是否一致、是否过期
-                String redisToken = (String) redisCommonUtil.getCache(sjWeixinuser.getOpenid());
+                String redisToken = (String) redisCommonUtil.getCache(wxuser.getWxopenid());
                 if (redisToken == null || !token.equals(redisToken)) {
                     throw new RuntimeException("401 错误token，没有访问权限，请重新登录");
                 }
                 // 验证 token
-                JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(sjWeixinuser.getOpenid())).build();
+                JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(wxuser.getWxopenid())).build();
                 try {
                     jwtVerifier.verify(token);
                 } catch (JWTVerificationException e) {

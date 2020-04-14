@@ -3,7 +3,7 @@ package com.zhiliao.hotel.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.zhiliao.hotel.model.SjWeixinuser;
+import com.zhiliao.hotel.model.ZlWxuser;
 import org.springframework.stereotype.Component;
 
 
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class TokenUtil {
 
-    public String getToken(SjWeixinuser sjWeixinuser) {
+    public String getToken(ZlWxuser wxuser) {
         return JWT.create()
-                .withAudience(String.valueOf(sjWeixinuser.getId())) // 存入需要保存在token的信息
-                .sign(Algorithm.HMAC256(sjWeixinuser.getOpenid())); // 使用HMAC256生成token
+                .withAudience(String.valueOf(wxuser.getUserid())) // 存入需要保存在token的信息
+                .sign(Algorithm.HMAC256(wxuser.getWxopenid())); // 使用HMAC256生成token
     }
 
     public Integer getWeixinuserId(String token) {

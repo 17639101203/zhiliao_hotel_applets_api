@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+   mapper标签:配置各类声明
+   namespace：名称空间，由于映射文件可能有多个，为了防止crud语句的唯一标识被重复，需要设置空间名称。
+ -->
+<mapper namespace="com.zhiliao.hotel.mapper.ZlWxuserMapper">
+    <resultMap id="weixinuserResultMap" type="com.zhiliao.hotel.model.ZlWxuser">
+        <!--主键的映射要单独配置 column:表中的主键的字段名称，property：对象中的对应的主键的属性名称-->
+        <result column="UserID" jdbcType="BIGINT" property="userid" />
+        <!--配置其他基本类型的属性-->
+        <result column="WxOpenID" jdbcType="CHAR" property="wxopenid" />
+        <result column="WxUnionID" jdbcType="CHAR" property="wxunionid" />
+        <result column="WxQrcodeTicket" jdbcType="CHAR" property="wxqrcodeticket" />
+        <result column="WxQrcodeUpdateTime" jdbcType="INTEGER" property="wxqrcodeupdatetime" />
+        <result column="NickName" jdbcType="CHAR" property="nickname" />
+        <result column="HeadImgUrl" jdbcType="CHAR" property="headimgurl" />
+        <result column="Sex" jdbcType="TINYINT" property="sex" />
+        <result column="IsNew" jdbcType="BIT" property="isnew" />
+        <result column="Balance" jdbcType="DECIMAL" property="balance" />
+        <result column="RemainWithdrawCash" jdbcType="DECIMAL" property="remainwithdrawcash" />
+        <result column="WithdrewCash" jdbcType="DECIMAL" property="withdrewcash" />
+        <result column="Score" jdbcType="BIGINT" property="score" />
+        <result column="IsInfoCompleted" jdbcType="BIT" property="isinfocompleted" />
+        <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
+        <result column="AdminID" jdbcType="INTEGER" property="adminid" />
+        <result column="ComeFormID" jdbcType="INTEGER" property="comeformid" />
+        <result column="RoleType" jdbcType="TINYINT" property="roletype" />
+        <result column="UserLevel" jdbcType="TINYINT" property="userlevel" />
+        <result column="IsDelete" jdbcType="BIT" property="isdelete" />
+        <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
+        <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
+    </resultMap>
+
+</mapper>

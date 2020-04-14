@@ -1,7 +1,6 @@
 package com.zhiliao.hotel.controller.news;
 
 import com.zhiliao.hotel.common.ReturnString;
-import com.zhiliao.hotel.controller.weixinuser.SjWeixinuserController;
 import com.zhiliao.hotel.model.SjCbNews;
 import com.zhiliao.hotel.service.SjCbNewsService;
 import io.swagger.annotations.Api;
@@ -21,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/news/")
 public class SjCbNewsController {
-    private static final Logger logger = LoggerFactory.getLogger(SjWeixinuserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SjCbNewsController.class);
 
     @Autowired
     private SjCbNewsService sjCbNewsService;
@@ -29,7 +28,7 @@ public class SjCbNewsController {
     @ApiOperation(value = "酒店咨讯展示")
     @PostMapping("findByjiudianId")
     @ResponseBody
-    public ReturnString findByjiudianId(@ApiParam(name = "jiudianid", value = "需要查询咨讯的酒店id", required = true) Integer jiudianid){
+    public ReturnString findByjiudianId(@ApiParam(name = "jiudianid", value = "需要查询咨讯的酒店id", required = true) Integer jiudianid) {
         try {
             logger.info("酒店ID：" + jiudianid);
             List<SjCbNews> allJiuDianId = sjCbNewsService.findAllJiuDianId(jiudianid);
@@ -39,10 +38,11 @@ public class SjCbNewsController {
             return new ReturnString("查询失败");
         }
     }
+
     @ApiOperation(value = "酒店咨讯详情展示")
     @PostMapping("findById")
     @ResponseBody
-    public ReturnString findById(@ApiParam(name = "id", value = "查询详情咨讯的id", required = true) Integer id){
+    public ReturnString findById(@ApiParam(name = "id", value = "查询详情咨讯的id", required = true) Integer id) {
         try {
 
             SjCbNews sjCbNews = sjCbNewsService.findById(id);
