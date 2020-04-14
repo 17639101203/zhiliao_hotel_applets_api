@@ -19,12 +19,12 @@ public class TokenUtil {
                 .sign(Algorithm.HMAC256(wxuser.getWxopenid())); // 使用HMAC256生成token
     }
 
-    public Integer getWxuserId(String token) {
-        String wxuserId;
+    public Integer getUserId(String token) {
+        String userId;
         try {
             // 获取token中的userId
-            wxuserId = JWT.decode(token).getAudience().get(0);
-            return Integer.parseInt(wxuserId);
+            userId = JWT.decode(token).getAudience().get(0);
+            return Integer.parseInt(userId);
         } catch (JWTDecodeException j) {
             throw new RuntimeException("401 错误token，没有访问权限，请重新登录");
         }

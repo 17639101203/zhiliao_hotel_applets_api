@@ -48,15 +48,15 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 if (token == null || "".equals(token)) {
                     throw new RuntimeException("无token，请重新登录");
                 }
-                String wxuserId;
+                String userId;
                 try {
-                    // 获取token中的wxuserId
-                    wxuserId = JWT.decode(token).getAudience().get(0);
+                    // 获取token中的userId
+                    userId = JWT.decode(token).getAudience().get(0);
                 } catch (JWTDecodeException j) {
                     throw new RuntimeException("401 错误token，没有访问权限，请重新登录");
                 }
                 // 查询用户是否存在
-                ZlWxuser wxuser = zlWxuserService.findWxuserByWxuserId(Long.parseLong(wxuserId));
+                ZlWxuser wxuser = zlWxuserService.findWxuserByUserId(Long.parseLong(userId));
                 if (wxuser == null) {
                     throw new RuntimeException("用户不存在，请重新登录");
                 }
