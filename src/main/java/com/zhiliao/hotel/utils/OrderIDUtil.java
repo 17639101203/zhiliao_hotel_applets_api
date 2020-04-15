@@ -22,8 +22,8 @@ public class OrderIDUtil {
             OrderID = type + currentDate + uuid ;
             return OrderID;
         }
-           return null;
-        }
+        return null;
+    }
 
 
 

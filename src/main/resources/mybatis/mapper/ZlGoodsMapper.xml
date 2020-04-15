@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.ZlGoodsMapper">
+<mapper namespace="com.zhiliao.hotel.mapper.ZlGoodsMapper">
     <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlGoods">
         <!--
           WARNING - @mbg.generated
@@ -23,5 +23,15 @@
         <result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
     </resultMap>
 
+    <select id="findGoodsCategory" resultType="java.util.LinkedHashMap">
+        select
+            zgs.CategoryName,
+            case zg.IsRecommand when 0 then '不推荐' when 1 then '推荐' end IsRecommand
+        from zl_goods zg
+        left join zl_goodscategory zgs on zg.GoodsCategoryID=zgs.GoodsCategoryID
+        where zg.GoodsStatus=1 and zg.IsDelete=0
+        and zg.HotelID=#{hotelId} and zgs.BelongModule=#{belongModule}
+        order by zgs.Sort asc
+    </select>
 
 </mapper>

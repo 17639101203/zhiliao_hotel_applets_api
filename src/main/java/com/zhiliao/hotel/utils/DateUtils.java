@@ -1,7 +1,6 @@
 package com.zhiliao.hotel.utils;
 
 
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
@@ -332,6 +331,18 @@ public class DateUtils {
             list.add(i);
         }
         return list;
+    }
+
+    /**
+     * 将时间转换为时间戳
+     */
+    public static String dateToStamp(String s) throws ParseException{
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = simpleDateFormat.parse(s);
+        long ts = date.getTime();
+        res = String.valueOf(ts);
+        return res;
     }
 
     public static void main(String[] args) {
