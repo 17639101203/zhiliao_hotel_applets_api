@@ -6,6 +6,7 @@ import com.zhiliao.hotel.model.ZlCart;
 import com.zhiliao.hotel.service.ZlCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * Created by xiegege on 2020/4/14.
  */
 
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class ZlCartServiceImpl implements ZlCartService {
 
