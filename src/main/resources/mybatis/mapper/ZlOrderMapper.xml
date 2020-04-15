@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiliao.hotel.mapper.ZlOrderMapper">
+	<resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlOrder">
+		<id column="OrderID" jdbcType="BIGINT" property="orderid"/>
+		<result column="UserID" jdbcType="BIGINT" property="userid"/>
+		<result column="OrderSerialNo" jdbcType="CHAR" property="orderserialno"/>
+		<result column="HotelID" jdbcType="INTEGER" property="hotelid"/>
+		<result column="HotelName" jdbcType="CHAR" property="hotelname"/>
+		<result column="RoomID" jdbcType="INTEGER" property="roomid"/>
+		<result column="RoomNumber" jdbcType="CHAR" property="roomnumber"/>
+		<result column="GoodsCoverUrl" jdbcType="CHAR" property="goodscoverurl"/>
+		<result column="OrderType" jdbcType="TINYINT" property="ordertype"/>
+		<result column="Remark" jdbcType="CHAR" property="remark"/>
+		<result column="TotalPrice" jdbcType="DECIMAL" property="totalprice"/>
+		<result column="ActuallyPay" jdbcType="DECIMAL" property="actuallypay"/>
+		<result column="PayType" jdbcType="TINYINT" property="paytype"/>
+		<result column="DeliveryAddress" jdbcType="CHAR" property="deliveryaddress"/>
+		<result column="ComeFormID" jdbcType="INTEGER" property="comeformid"/>
+		<result column="TrackNumber" jdbcType="CHAR" property="tracknumber"/>
+		<result column="PayStatus" jdbcType="TINYINT" property="paystatus"/>
+		<result column="OrderStatus" jdbcType="TINYINT" property="orderstatus"/>
+		<result column="IsDelete" jdbcType="BIT" property="isdelete"/>
+		<result column="OperatorName" jdbcType="CHAR" property="operatorname"/>
+		<result column="OperatorIP" jdbcType="CHAR" property="operatorip"/>
+		<result column="OperatorRemark" jdbcType="VARCHAR" property="operatorremark"/>
+		<result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
+		<result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
+	</resultMap>
+
+
+	<select id="findAllOrder" resultType="com.zhiliao.hotel.model.ZlOrder">
+
+        SELECT * FROM zl_order WHERE UserID=#{userID} ORDER BY CreateDate DESC
+
+	</select>
+
+</mapper>
