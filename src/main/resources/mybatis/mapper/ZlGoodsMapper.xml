@@ -25,13 +25,13 @@
 
     <select id="findGoodsCategory" resultType="java.util.LinkedHashMap">
         select
-            zgs.CategoryName,
+            zgc.CategoryName,
             case zg.IsRecommand when 0 then '不推荐' when 1 then '推荐' end IsRecommand
         from zl_goods zg
-        left join zl_goodscategory zgs on zg.GoodsCategoryID=zgs.GoodsCategoryID
-        where zg.GoodsStatus=1 and zg.IsDelete=0
-        and zg.HotelID=#{hotelId} and zgs.BelongModule=#{belongModule}
-        order by zgs.Sort asc
+        left join zl_goodscategory zgc on zg.GoodsCategoryID=zgc.GoodsCategoryID
+        where zg.GoodsStatus=1 and zg.IsDelete=0 and zgc.IsDelete=0
+        and zg.HotelID=#{hotelId} and zgc.BelongModule=#{belongModule}
+        order by zgc.Sort asc
     </select>
 
 </mapper>

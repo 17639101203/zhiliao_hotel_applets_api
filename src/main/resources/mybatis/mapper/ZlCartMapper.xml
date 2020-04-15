@@ -32,7 +32,7 @@
         left join zl_goodssku zgs on zc.SkuID=zgs.SkuID
         left join zl_goods zg on zgs.GoodsID=zg.GoodsID
         left join zl_goodscategory zgc on zg.GoodsCategoryID=zgc.GoodsCategoryID
-        where zgs.IsDelete=0 and zg.GoodsStatus=1 and zg.IsDelete=0
+        where zgs.IsDelete=0 and zg.GoodsStatus=1 and zg.IsDelete=0 and zgc.IsDelete=0
         and zc.UserID=#{userId} and zc.HotelID=#{hotelId} and zgc.BelongModule=#{belongModule}
         order by zc.CreateDate desc
     </select>
