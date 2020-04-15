@@ -25,6 +25,11 @@ public class ZlCart implements Serializable {
     private Integer hotelid;
 
     /**
+     * 商品id
+     */
+    private Integer goodsid;
+
+    /**
      * skuID
      */
     private Integer skuid;
@@ -74,6 +79,14 @@ public class ZlCart implements Serializable {
 
     public void setHotelid(Integer hotelid) {
         this.hotelid = hotelid;
+    }
+
+    public Integer getGoodsid() {
+        return goodsid;
+    }
+
+    public void setGoodsid(Integer goodsid) {
+        this.goodsid = goodsid;
     }
 
     public Integer getSkuid() {

@@ -31,12 +31,10 @@ public class ZlCartController {
 
     private static final Logger logger = LoggerFactory.getLogger(ZlCartController.class);
 
-    private TokenUtil tokenUtil;
     private ZlCartService zlCartService;
 
     @Autowired
-    public ZlCartController(TokenUtil tokenUtil, ZlCartService zlCartService) {
-        this.tokenUtil = tokenUtil;
+    public ZlCartController(ZlCartService zlCartService) {
         this.zlCartService = zlCartService;
     }
 
@@ -44,17 +42,19 @@ public class ZlCartController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
+            @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id"),
             @ApiImplicitParam(paramType = "path", name = "skuId", dataType = "String", required = true, value = "商品skuId"),
             @ApiImplicitParam(paramType = "path", name = "goodsCount", dataType = "String", required = true, value = "数量")
     })
     @UserLoginToken
-    @PostMapping("addCart/{hotelId}/{skuId}/{goodsCount}")
-    public ReturnString addCart(String token, @PathVariable Integer hotelId, @PathVariable Integer skuId, @PathVariable Integer goodsCount) {
+    @PostMapping("addCart/{hotelId}/{goodsId}/{skuId}/{goodsCount}")
+    public ReturnString addCart(String token, @PathVariable Integer hotelId, @PathVariable Integer goodsId,
+                                @PathVariable Integer skuId, @PathVariable Integer goodsCount) {
         try {
-            Long userId = tokenUtil.getUserId(token);
-            logger.info("开始请求->参数->酒店id：" + hotelId + "|商品skuId：" + skuId + "|用户id：" + userId + "|数量：" + goodsCount);
+            Long userId = TokenUtil.getUserId(token);
+            logger.info("开始请求->参数->酒店id：" + hotelId + "|商品id：" + goodsId + "|商品skuId：" + skuId + "|用户id：" + userId + "|数量：" + goodsCount);
             // 先查询购物车数据是否存在
-            ZlCart cart = zlCartService.findCartByUserIdAndHotelIdAndSkuId(userId, hotelId, skuId);
+            ZlCart cart = zlCartService.findCartDoesItExist(userId, hotelId, goodsId, skuId);
             if (cart == null) {
                 if (goodsCount == 0) {
                     return new ReturnString("商品数量为0，不执行添加操作");
@@ -63,6 +63,7 @@ public class ZlCartController {
                 cart = new ZlCart();
                 cart.setUserid(userId);
                 cart.setHotelid(hotelId);
+                cart.setGoodsid(goodsId);
                 cart.setSkuid(skuId);
                 cart.setGoodscount(goodsCount);
                 cart.setCreatedate(1);
@@ -96,7 +97,7 @@ public class ZlCartController {
     @PostMapping("findUserCart/{hotelId}/{belongModule}")
     public ReturnString findUserCart(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule) {
         try {
-            Long userId = tokenUtil.getUserId(token);
+            Long userId = TokenUtil.getUserId(token);
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|用户id：" + userId);
             List<UserCartVo> userCartVoList = zlCartService.findUserCart(hotelId, userId, belongModule);
             return new ReturnString(userCartVoList);
@@ -116,7 +117,7 @@ public class ZlCartController {
     @PostMapping("emptyCart/{hotelId}/{belongModule}")
     public ReturnString emptyCart(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule) {
         try {
-            Long userId = tokenUtil.getUserId(token);
+            Long userId = TokenUtil.getUserId(token);
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|用户id：" + userId);
             zlCartService.emptyCart(hotelId, userId, belongModule);
             return new ReturnString(0, "清空成功");

@@ -11,6 +11,7 @@
         <result column="CartID" jdbcType="BIGINT" property="cartid"/>
         <result column="UserID" jdbcType="BIGINT" property="userid"/>
         <result column="HotelID" jdbcType="INTEGER" property="hotelid"/>
+        <result column="GoodsID" jdbcType="INTEGER" property="goodsid"/>
         <result column="SkuID" jdbcType="INTEGER" property="skuid"/>
         <result column="GoodsCount" jdbcType="INTEGER" property="goodscount"/>
         <result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
@@ -41,8 +42,7 @@
         in(
         select a.CartID from
         (select zc.CartID from zl_cart zc
-        left join zl_goodssku zgs on zc.SkuID=zgs.SkuID
-        left join zl_goods zg on zgs.GoodsID=zg.GoodsID
+        left join zl_goods zg on zc.GoodsID=zg.GoodsID
         left join zl_goodscategory zgc on zg.GoodsCategoryID=zgc.GoodsCategoryID
         where zc.UserID=#{userId} and zc.HotelID=#{hotelId} and zgc.BelongModule=#{belongModule}) a
         )
