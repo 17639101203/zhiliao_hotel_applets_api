@@ -30,9 +30,11 @@
 
 
 	<select id="findAllOrder" resultType="com.zhiliao.hotel.model.ZlOrder">
-
         SELECT * FROM zl_order WHERE UserID=#{userID} ORDER BY CreateDate DESC
+	</select>
 
+	<select id="findOrderByPayStatus" resultType="com.zhiliao.hotel.model.ZlOrder">
+        SELECT * FROM zl_order WHERE UserID=#{userID} AND PayStatus=#{payStatus} ORDER BY CreateDate DESC
 	</select>
 
 </mapper>
