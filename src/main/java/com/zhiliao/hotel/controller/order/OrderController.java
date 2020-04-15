@@ -3,9 +3,9 @@ package com.zhiliao.hotel.controller.order;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.model.ZlOrder;
-import com.zhiliao.hotel.model.ZlOrderdetail;
+import com.zhiliao.hotel.model.ZlOrderDetail;
+import com.zhiliao.hotel.service.ZlOrderDetailService;
 import com.zhiliao.hotel.service.ZlOrderService;
-import com.zhiliao.hotel.service.ZlOrderdetailService;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -33,10 +33,10 @@ public class OrderController{
     
     private TokenUtil tokenUtil;
     private ZlOrderService orderService;
-    private ZlOrderdetailService orderDetailService;
+    private ZlOrderDetailService orderDetailService;
     
     @Autowired
-    public OrderController(TokenUtil tokenUtil,ZlOrderService orderService,ZlOrderdetailService orderDetailService){
+    public OrderController(TokenUtil tokenUtil,ZlOrderService orderService,ZlOrderDetailService orderDetailService){
         this.tokenUtil=tokenUtil;
         this.orderService=orderService;
         this.orderDetailService=orderDetailService;
@@ -63,16 +63,15 @@ public class OrderController{
     @ApiOperation(value="订单详情")
     @PostMapping("Detail")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType="query", dataType="int", name="orderDetailID", value="订单详情的id", required=true)
+            @ApiImplicitParam(paramType="query", dataType="Long", name="orderID", value="订单ID", required=true)
     })
     @PassToken
     @ResponseBody
-    public ReturnString findOrderDetail(Long orderDetailID){
-        logger.info("订单详情ID："+orderDetailID);
+    public ReturnString findOrderDetail(Long orderID){
+        logger.info("订单ID："+orderID);
         try{
-            logger.info("订单详情ID："+orderDetailID);
-            List<ZlOrderdetail> orderList=orderDetailService.findOrder(orderDetailID);
-            return new ReturnString(orderList);
+            ZlOrderDetail orderDetail=orderDetailService.findOrder(orderID);
+            return new ReturnString(orderDetail);
         }catch(Exception e){
             e.printStackTrace();
             return new ReturnString("查询失败");

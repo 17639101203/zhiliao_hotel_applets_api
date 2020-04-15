@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhiliao.hotel.mapper.ZlOrderdetailMapper">
-	<resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlOrderdetail">
+<mapper namespace="com.zhiliao.hotel.mapper.ZlOrderDetailMapper">
+	<resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlOrderDetail">
 		<id column="OrderDetailID" jdbcType="BIGINT" property="orderdetailid"/>
 		<result column="OrderID" jdbcType="BIGINT" property="orderid"/>
 		<result column="UserID" jdbcType="BIGINT" property="userid"/>
@@ -16,7 +16,7 @@
 	</resultMap>
 
 
-	<select id="findOrder" resultType="com.zhiliao.hotel.model.ZlOrderdetail">
+	<select id="findOrder" resultType="com.zhiliao.hotel.model.ZlOrderDetail">
 
         SELECT * FROM zl_orderdetail WHERE OrderID=#{orderID}
 

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  * @author null
  * @date 2020-04-15
  */
-public class ZlOrderdetail implements Serializable {
+public class ZlOrderDetail implements Serializable {
     /**
      *
      */
