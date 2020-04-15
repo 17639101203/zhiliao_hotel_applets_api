@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiliao.hotel.mapper.ZlRepairMapper">
+  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.zlRepair">
+    <result column="RepairID" jdbcType="BIGINT" property="repairid" />
+    <result column="UserID" jdbcType="BIGINT" property="userid" />
+    <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
+    <result column="RoomID" jdbcType="INTEGER" property="roomid" />
+    <result column="RoomNumber" jdbcType="CHAR" property="roomnumber" />
+    <result column="Remark" jdbcType="VARCHAR" property="remark" />
+    <result column="ImgUrls" jdbcType="VARCHAR" property="imgurls" />
+    <result column="RepairStatus" jdbcType="TINYINT" property="repairstatus" />
+    <result column="IsDelete" jdbcType="BIT" property="isdelete" />
+    <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
+    <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
+  </resultMap>
+  <insert id="insertzlrepair" parameterType="com.zhiliao.hotel.model.zlRepair">
+    insert into zl_repair
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="repairid != null">
+        RepairID,
+      </if>
+      <if test="userid != null">
+        UserID,
+      </if>
+      <if test="hotelid != null">
+        HotelID,
+      </if>
+      <if test="roomid != null">
+        RoomID,
+      </if>
+      <if test="roomnumber != null">
+        RoomNumber,
+      </if>
+      <if test="remark != null">
+        Remark,
+      </if>
+      <if test="imgurls != null">
+        ImgUrls,
+      </if>
+      <if test="repairstatus != null">
+        RepairStatus,
+      </if>
+      <if test="isdelete != null">
+        IsDelete,
+      </if>
+      <if test="createdate != null">
+        CreateDate,
+      </if>
+      <if test="updatedate != null">
+        UpdateDate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="repairid != null">
+        #{repairid,jdbcType=BIGINT},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="hotelid != null">
+        #{hotelid,jdbcType=INTEGER},
+      </if>
+      <if test="roomid != null">
+        #{roomid,jdbcType=INTEGER},
+      </if>
+      <if test="roomnumber != null">
+        #{roomnumber,jdbcType=CHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurls != null">
+        #{imgurls,jdbcType=VARCHAR},
+      </if>
+      <if test="repairstatus != null">
+        #{repairstatus,jdbcType=TINYINT},
+      </if>
+      <if test="isdelete != null">
+        #{isdelete,jdbcType=BIT},
+      </if>
+      <if test="createdate != null">
+        #{createdate,jdbcType=INTEGER},
+      </if>
+      <if test="updatedate != null">
+        #{updatedate,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <!--  &lt;!&ndash;  根据用户ID查询报修信息&ndash;&gt;-->
+  <!--  <select id="querybaoxiuByUserID" resultMap="BaseResultMap">-->
+  <!--        select
+                f.KeFangID,f.baoxiuMsg,f.baoxiuImg,o.orderid,o.addtime
+              from
+                sj_fapiao f left join zl_order o on f.UserID = o.UserID
+              where
+                UserID=#{userid}-->
+  <!--    </select>-->
+
+</mapper>

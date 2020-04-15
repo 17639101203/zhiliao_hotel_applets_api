@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiliao.hotel.mapper.ZlRepairorderMapper">
+  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.zlRepairorder">
+    <result column="OrderID" jdbcType="BIGINT" property="orderid" />
+    <result column="UserID" jdbcType="BIGINT" property="userid" />
+    <result column="SerialNumber" jdbcType="CHAR" property="serialnumber" />
+    <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
+    <result column="HotelName" jdbcType="CHAR" property="hotelname" />
+    <result column="RoomID" jdbcType="INTEGER" property="roomid" />
+    <result column="RoomNumber" jdbcType="CHAR" property="roomnumber" />
+    <result column="ImgUrls" jdbcType="CHAR" property="imgurls" />
+    <result column="Remark" jdbcType="CHAR" property="remark" />
+    <result column="ComeFormID" jdbcType="INTEGER" property="comeformid" />
+    <result column="IsDelete" jdbcType="BIT" property="isdelete" />
+    <result column="OrderStatus" jdbcType="TINYINT" property="orderstatus" />
+    <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
+    <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
+  </resultMap>
+  <insert id="insertRepairorder" parameterType="com.zhiliao.hotel.model.zlRepairorder">
+    insert into zl_repairorder
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderid != null">
+        OrderID,
+      </if>
+      <if test="userid != null">
+        UserID,
+      </if>
+      <if test="serialnumber != null">
+        SerialNumber,
+      </if>
+      <if test="hotelid != null">
+        HotelID,
+      </if>
+      <if test="hotelname != null">
+        HotelName,
+      </if>
+      <if test="roomid != null">
+        RoomID,
+      </if>
+      <if test="roomnumber != null">
+        RoomNumber,
+      </if>
+      <if test="imgurls != null">
+        ImgUrls,
+      </if>
+      <if test="remark != null">
+        Remark,
+      </if>
+      <if test="comeformid != null">
+        ComeFormID,
+      </if>
+      <if test="isdelete != null">
+        IsDelete,
+      </if>
+      <if test="orderstatus != null">
+        OrderStatus,
+      </if>
+      <if test="createdate != null">
+        CreateDate,
+      </if>
+      <if test="updatedate != null">
+        UpdateDate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderid != null">
+        #{orderid,jdbcType=BIGINT},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="serialnumber != null">
+        #{serialnumber,jdbcType=CHAR},
+      </if>
+      <if test="hotelid != null">
+        #{hotelid,jdbcType=INTEGER},
+      </if>
+      <if test="hotelname != null">
+        #{hotelname,jdbcType=CHAR},
+      </if>
+      <if test="roomid != null">
+        #{roomid,jdbcType=INTEGER},
+      </if>
+      <if test="roomnumber != null">
+        #{roomnumber,jdbcType=CHAR},
+      </if>
+      <if test="imgurls != null">
+        #{imgurls,jdbcType=CHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=CHAR},
+      </if>
+      <if test="comeformid != null">
+        #{comeformid,jdbcType=INTEGER},
+      </if>
+      <if test="isdelete != null">
+        #{isdelete,jdbcType=BIT},
+      </if>
+      <if test="orderstatus != null">
+        #{orderstatus,jdbcType=TINYINT},
+      </if>
+      <if test="createdate != null">
+        #{createdate,jdbcType=INTEGER},
+      </if>
+      <if test="updatedate != null">
+        #{updatedate,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

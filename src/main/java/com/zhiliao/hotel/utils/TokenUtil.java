@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class TokenUtil {
 
-    public String getToken(ZlWxuser wxuser) {
+    public static String getToken(ZlWxuser wxuser) {
         return JWT.create()
                 .withAudience(String.valueOf(wxuser.getUserid())) // 存入需要保存在token的信息
                 .sign(Algorithm.HMAC256(wxuser.getWxopenid())); // 使用HMAC256生成token
     }
 
-    public Long getUserId(String token) {
+    public static Long getUserId(String token) {
         String userId;
         try {
             // 获取token中的userId
