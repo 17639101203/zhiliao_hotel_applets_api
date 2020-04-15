@@ -32,12 +32,10 @@ public class ZlCleanOrderController {
     private static final Logger logger = LoggerFactory.getLogger(ZlCleanOrderController.class);
 
     private ZlCleanOrderService zlCleanOrderService;
-    private TokenUtil tokenUtil;
 
     @Autowired
-    public ZlCleanOrderController(ZlCleanOrderService zlCleanOrderService, TokenUtil tokenUtil) {
+    public ZlCleanOrderController(ZlCleanOrderService zlCleanOrderService) {
         this.zlCleanOrderService = zlCleanOrderService;
-        this.tokenUtil = tokenUtil;
     }
 
     @ApiOperation(value = "清扫下单")
@@ -61,7 +59,7 @@ public class ZlCleanOrderController {
 //        int nowTime = Integer.valueOf(String.valueOf(System.currentTimeMillis()/1000));   //获取当前时间戳 单位:秒
 
         ZlCleanOrder zlCleanOrder = new ZlCleanOrder();
-        zlCleanOrder.setUserid(tokenUtil.getUserId(token));   //用户ID  根据token获取userId
+        zlCleanOrder.setUserid(TokenUtil.getUserId(token));   //用户ID  根据token获取userId
         zlCleanOrder.setSerialnumber(CreateOrderID("QS"));   //订单编号
         zlCleanOrder.setHotelid(hotelID);   //酒店ID
         zlCleanOrder.setHotelname(hotelName);   //酒店名

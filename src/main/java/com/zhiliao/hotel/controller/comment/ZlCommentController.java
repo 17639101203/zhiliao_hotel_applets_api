@@ -31,12 +31,10 @@ public class ZlCommentController {
     private static final Logger logger = LoggerFactory.getLogger(ZlCommentController.class);
 
     private ZlCommentService zlCommentService;
-    private TokenUtil tokenUtil;
 
     @Autowired
-    public ZlCommentController(ZlCommentService zlCommentService, TokenUtil tokenUtil) {
+    public ZlCommentController(ZlCommentService zlCommentService) {
         this.zlCommentService = zlCommentService;
-        this.tokenUtil = tokenUtil;
     }
 
     @ApiOperation(value = "添加点赞吐槽")
@@ -53,7 +51,7 @@ public class ZlCommentController {
 //        logger.info("点赞吐槽 "+" "+hotelID+" "+userID+" "+evaluation+" "+tagIDs+" "+level+" "+content);
         ZlComment zlComment = new ZlComment();
         zlComment.setHotelid(hotelID);   //酒店ID
-        zlComment.setUserid(tokenUtil.getUserId(token));   //用户ID  根据token获取userId
+        zlComment.setUserid(TokenUtil.getUserId(token));   //用户ID  根据token获取userId
         zlComment.setEvaluation((byte) evaluation.intValue());   //评论等级 1好评 2中评 3差评
         zlComment.setTagids(tagIDs);   //评论标签ID 多个用丨隔开
         zlComment.setContent(content);   //评论内容

@@ -30,14 +30,12 @@ import java.util.List;
 public class OrderController{
     
     private static final Logger logger=LoggerFactory.getLogger(OrderController.class);
-    
-    private TokenUtil tokenUtil;
+
     private ZlOrderService orderService;
     private ZlOrderDetailService orderDetailService;
     
     @Autowired
-    public OrderController(TokenUtil tokenUtil,ZlOrderService orderService,ZlOrderDetailService orderDetailService){
-        this.tokenUtil=tokenUtil;
+    public OrderController(ZlOrderService orderService,ZlOrderDetailService orderDetailService){
         this.orderService=orderService;
         this.orderDetailService=orderDetailService;
     }
@@ -53,7 +51,7 @@ public class OrderController{
         
         try{
             
-            Long userId=tokenUtil.getUserId(token);
+            Long userId=TokenUtil.getUserId(token);
             logger.info("我的全部订单id："+userId);
             if(userId==null){
                 return new ReturnString("用户不存在");
