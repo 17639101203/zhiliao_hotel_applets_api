@@ -18,6 +18,12 @@ public class GoodsListVo {
      * 商品详情
      */
     private String content;
+
+    /**
+     * 商品封面图片
+     */
+    private String coverImgUrl;
+
     /**
      * 原价
      */
@@ -42,7 +48,7 @@ public class GoodsListVo {
     /**
      * 点击量
      */
-    private Integer totalvisitcount;
+    private Integer totalVisitCount;
 
     public Integer getGoodsId() {
         return goodsId;
@@ -108,11 +114,19 @@ public class GoodsListVo {
         this.totalVirtualSoldCount = totalVirtualSoldCount;
     }
 
-    public Integer getTotalvisitcount() {
-        return totalvisitcount;
+    public Integer getTotalVisitCount() {
+        return totalVisitCount;
     }
 
-    public void setTotalvisitcount(Integer totalvisitcount) {
-        this.totalvisitcount = totalvisitcount;
+    public void setTotalVisitCount(Integer totalVisitCount) {
+        this.totalVisitCount = totalVisitCount;
+    }
+
+    public String getCoverImgUrl() {
+        return coverImgUrl;
+    }
+
+    public void setCoverImgUrl(String coverImgUrl) {
+        this.coverImgUrl = coverImgUrl;
     }
 }

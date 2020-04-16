@@ -55,7 +55,7 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
     public GoodsListVo findGoodsDetail(Integer goodsID) {
         GoodsListVo goodsListVo = zlGoodsMapper.findGoodsDetail(goodsID);
         if (goodsListVo != null) {
-            zlGoodsMapper.updateTotalVisitCount(goodsID, goodsListVo.getTotalvisitcount());
+            zlGoodsMapper.updateTotalVisitCount(goodsID, goodsListVo.getTotalVisitCount());
         }
         return goodsListVo;
     }
