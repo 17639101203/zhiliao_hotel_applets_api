@@ -44,6 +44,7 @@
         select
             zg.GoodsID,
             zg.GoodsName,
+            zg.CoverImgUrl,
             zg.OriginalPrice,
             zg.CurrentPrice,
             zg.TotalStockCount,
