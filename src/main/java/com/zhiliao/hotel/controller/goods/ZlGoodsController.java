@@ -1,6 +1,5 @@
 package com.zhiliao.hotel.controller.goods;
 
-import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
@@ -37,7 +36,7 @@ public class ZlGoodsController {
         this.zlGoodsService = zlGoodsService;
     }
 
-    @ApiOperation(value = "商品分类")
+    @ApiOperation(value = "获取商品分类")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
@@ -72,7 +71,7 @@ public class ZlGoodsController {
         }
     }
 
-    @ApiOperation(value = "商品分类列表数据")
+    @ApiOperation(value = "获取商品分类列表数据")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
@@ -97,14 +96,25 @@ public class ZlGoodsController {
         }
     }
 
-    /**
-     * 根据商品id查询详情数据
-     *
-     * @param token
-     * @param goodsID
-     * @return
-     */
-    @ApiOperation(value = "商品详情数据")
+    @ApiOperation(value = "获取商品规格")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id")
+    })
+    @UserLoginToken
+    @GetMapping("findGoodsSkuList/{goodsId}")
+    public ReturnString findGoodsSkuList(String token, @PathVariable Integer goodsId) {
+        try {
+            logger.info("开始请求->参数->商品id：" + goodsId);
+            List<Map<String, Object>> goodsSkuList = zlGoodsService.findGoodsSkuList(goodsId);
+            return new ReturnString(goodsSkuList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("获取出错");
+        }
+    }
+
+    @ApiOperation(value = "获取商品详情数据")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "goodsID", dataType = "String", required = true, value = "商品id")
@@ -120,5 +130,4 @@ public class ZlGoodsController {
             return new ReturnString("获取出错");
         }
     }
-
 }

@@ -35,7 +35,7 @@ public class ZlCartController {
         this.zlCartService = zlCartService;
     }
 
-    @ApiOperation(value = "购物车添加")
+    @ApiOperation(value = "用户购物车添加")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
@@ -84,7 +84,7 @@ public class ZlCartController {
         }
     }
 
-    @ApiOperation(value = "购物车查询")
+    @ApiOperation(value = "用户购物车查询")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
@@ -104,7 +104,7 @@ public class ZlCartController {
         }
     }
 
-    @ApiOperation(value = "购物车清空")
+    @ApiOperation(value = "用户购物车清空")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),

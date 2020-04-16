@@ -15,12 +15,7 @@ public interface ZlGoodsService {
 
     Map<String, Object> findGoodsList(Integer hotelId, Integer belongModule, Integer pageNo, Integer pageSize, String categoryName);
 
-    /**
-     * 根据商品id查询详情数据
-     *
-     * @param goodsID
-     * @return
-     */
-    GoodsListVo findGoodsDetail(Integer goodsID);
+    List<Map<String, Object>> findGoodsSkuList(Integer goodsId);
 
+    GoodsListVo findGoodsDetail(Integer goodsID);
 }

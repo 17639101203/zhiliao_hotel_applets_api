@@ -46,12 +46,11 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
         return dataMap;
     }
 
-    /**
-     * 根据商品id查询详情数据
-     *
-     * @param goodsID
-     * @return
-     */
+    @Override
+    public List<Map<String, Object>> findGoodsSkuList(Integer goodsId) {
+        return zlGoodsMapper.findGoodsSkuList(goodsId);
+    }
+
     @Override
     public GoodsListVo findGoodsDetail(Integer goodsID) {
         GoodsListVo goodsListVo = zlGoodsMapper.findGoodsDetail(goodsID);
