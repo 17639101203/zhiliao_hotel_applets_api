@@ -5,6 +5,7 @@ import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.cart.vo.UserCartVo;
 import com.zhiliao.hotel.model.ZlCart;
 import com.zhiliao.hotel.service.ZlCartService;
+import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -63,8 +64,8 @@ public class ZlCartController {
                 cart.setGoodsid(goodsId);
                 cart.setSkuid(skuId);
                 cart.setGoodscount(goodsCount);
-                cart.setCreatedate(1);
-                cart.setUpdatedate(1);
+                cart.setCreatedate(DateUtils.javaToPhpNowDateTime());
+                cart.setUpdatedate(DateUtils.javaToPhpNowDateTime());
                 zlCartService.addCart(cart);
             } else {
                 // 存在更改数量，如果数量为0，则删除数据
@@ -73,7 +74,7 @@ public class ZlCartController {
                 } else {
                     // 更新数量
                     cart.setGoodscount(goodsCount);
-                    cart.setUpdatedate(2);
+                    cart.setUpdatedate(DateUtils.javaToPhpNowDateTime());
                     zlCartService.updateCartGoodsCount(cart);
                 }
             }

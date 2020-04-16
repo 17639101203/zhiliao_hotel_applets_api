@@ -4,6 +4,7 @@ import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.model.ZlComment;
 import com.zhiliao.hotel.service.ZlCommentService;
+import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -15,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import static com.zhiliao.hotel.utils.DateUtils.getSystemTime;
 
 /**
  * @Author: Zhangyong
@@ -58,7 +57,7 @@ public class ZlCommentController {
         //zlComment.setType((byte) 0);   //评论类型 默认点赞吐槽为0
         //zlComment.setCommentstatus((byte) 0);   //评论状态 0:未通过 1:已通过
         //zlComment.setIsdelete(false);   //删除状态 0:正常 1:删除
-        zlComment.setCreatedate(Integer.valueOf(getSystemTime()));  //添加时间
+        zlComment.setCreatedate(DateUtils.javaToPhpNowDateTime());  //添加时间
         //zlComment.setUpdatedate(Integer.valueOf(getSystemTime()));  //更新时间
 
         Integer res = zlCommentService.addComment(zlComment);

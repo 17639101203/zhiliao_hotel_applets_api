@@ -37,8 +37,8 @@ public class ZlRepairServiceImpl implements ZlRepairService {
         repairorder.setComeformid(1);           //  来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
         repairorder.setIsdelete(false);     //  是否删除
         repairorder.setOrderstatus((byte)0);    // 订单状态：-1:已取消;0等待确认;1已确认;2已处理
-        repairorder.setCreatedate(Integer.parseInt(DateUtils.getSystemTime()));    //  下单时间
-        repairorder.setUpdatedate(Integer.parseInt(DateUtils.getSystemTime()));    //   修改时间
+        repairorder.setCreatedate(DateUtils.javaToPhpNowDateTime());    //  下单时间
+        repairorder.setUpdatedate(DateUtils.javaToPhpNowDateTime());    //   修改时间
         Integer i = zlRepairMapper.insertzlrepair(repair);
         if(i==1){
             zlRepairorderMapper.insertRepairorder(repairorder);

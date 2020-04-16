@@ -57,8 +57,8 @@ public class ZlRepairController {
             repair.setRemark(repairParam.getRemark());      //  备注信息
             repair.setRepairstatus((byte)0);        // 维修状态:0未维修;1维修中;2已维修
             repair.setIsdelete(false);         // 删除状态:false正常;true删除;
-            repair.setCreatedate(Integer.parseInt(DateUtils.getSystemTime()));     //添加日期
-            repair.setUpdatedate(Integer.parseInt(DateUtils.getSystemTime()));     //修改日期
+            repair.setCreatedate(DateUtils.javaToPhpNowDateTime());     //添加日期
+            repair.setUpdatedate(DateUtils.javaToPhpNowDateTime());     //修改日期
             service.addRepairMsg(repair,repairParam.getHotelname());
             return new ReturnString(0, "报修信息添加成功");
         } catch (Exception e) {
