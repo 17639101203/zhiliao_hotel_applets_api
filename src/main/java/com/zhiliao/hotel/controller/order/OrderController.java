@@ -30,14 +30,12 @@ import java.util.List;
 public class OrderController{
     
     private static final Logger logger=LoggerFactory.getLogger(OrderController.class);
-    
-    private TokenUtil tokenUtil;
+
     private ZlOrderService orderService;
     private ZlOrderDetailService orderDetailService;
     
     @Autowired
-    public OrderController(TokenUtil tokenUtil,ZlOrderService orderService,ZlOrderDetailService orderDetailService){
-        this.tokenUtil=tokenUtil;
+    public OrderController(ZlOrderService orderService,ZlOrderDetailService orderDetailService){
         this.orderService=orderService;
         this.orderDetailService=orderDetailService;
     }
@@ -45,19 +43,32 @@ public class OrderController{
     @ApiOperation(value="我的全部订单")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType="query", name="token", dataType="String", required=true, value="token"),
+            @ApiImplicitParam(paramType="query", name="payStatus", dataType="int", required=false, value="获取不同的订单：0无须支付;1:待支付;2已支付;3已取消;不传获取全部订单"),
     })
     @PassToken
     @PostMapping("all")
-    public ReturnString findAllOrder(String token){
+    public ReturnString findAllOrder(String token,Integer payStatus){
+        
         try{
-            Long userId=tokenUtil.getUserId(token);
+            
+            Long userId=TokenUtil.getUserId(token);
             logger.info("我的全部订单id："+userId);
-            List<ZlOrder> allOrderList=orderService.findAllOrder(userId);
-            return new ReturnString(allOrderList);
+            if(userId==null){
+                return new ReturnString("用户不存在");
+            }
+            List<ZlOrder> orderList=null;
+            if(payStatus==null){
+                orderList=orderService.findAllOrder(userId);
+                return new ReturnString(orderList);
+            }
+            orderList=orderService.findOrderByPayStatus(userId,payStatus);
+            return new ReturnString(orderList);
+            
         }catch(Exception e){
             e.printStackTrace();
             return new ReturnString("获取出错");
         }
+        
     }
     
     @ApiOperation(value="订单详情")

@@ -25,4 +25,9 @@ public class ZlOrderServiceIml implements ZlOrderService{
         return orderMapper.findAllOrder(userID);
     }
     
+    @Override
+    public List<ZlOrder> findOrderByPayStatus(Long userID,Integer payStatus){
+        return orderMapper.findOrderByPayStatus(userID,payStatus);
+    }
+    
 }

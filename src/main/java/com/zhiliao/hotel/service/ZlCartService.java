@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ZlCartService {
 
-    ZlCart findCartByUserIdAndHotelIdAndSkuId(Long userId, Integer hotelId, Integer skuId);
+    ZlCart findCartDoesItExist(Long userId, Integer hotelId, Integer goodsId, Integer skuId);
 
     void addCart(ZlCart cart);
 

@@ -26,10 +26,11 @@ public class ZlCartServiceImpl implements ZlCartService {
     }
 
     @Override
-    public ZlCart findCartByUserIdAndHotelIdAndSkuId(Long userId, Integer hotelId, Integer skuId) {
+    public ZlCart findCartDoesItExist(Long userId, Integer hotelId, Integer goodsId, Integer skuId) {
         ZlCart cart = new ZlCart();
         cart.setUserid(userId);
         cart.setHotelid(hotelId);
+        cart.setGoodsid(goodsId);
         cart.setSkuid(skuId);
         return zlCartMapper.selectOne(cart);
     }

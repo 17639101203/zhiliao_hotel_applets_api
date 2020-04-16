@@ -48,13 +48,11 @@ public class ZlWxuserController {
     private String SECRET;
 
     private ZlWxuserService zlWxuserService;
-    private TokenUtil tokenUtil;
     private RedisCommonUtil redisCommonUtil;
 
     @Autowired
-    public ZlWxuserController(ZlWxuserService zlWxuserService, TokenUtil tokenUtil, RedisCommonUtil redisCommonUtil) {
+    public ZlWxuserController(ZlWxuserService zlWxuserService, RedisCommonUtil redisCommonUtil) {
         this.zlWxuserService = zlWxuserService;
-        this.tokenUtil = tokenUtil;
         this.redisCommonUtil = redisCommonUtil;
     }
 
@@ -106,7 +104,7 @@ public class ZlWxuserController {
 
     private ReturnString returnUserInfoData(ZlWxuser wxuser) {
         Map<String, Object> dataMap = new HashMap<>();
-        String token = tokenUtil.getToken(wxuser);
+        String token = TokenUtil.getToken(wxuser);
         dataMap.put("token", token);
         // 头像
         dataMap.put("headImgUrl", wxuser.getHeadimgurl());
@@ -120,7 +118,7 @@ public class ZlWxuserController {
     @UserLoginToken
     @PostMapping("test")
     public ReturnString test(String token) {
-        Long userId = tokenUtil.getUserId(token);
+        Long userId = TokenUtil.getUserId(token);
         System.out.println(userId);
         return new ReturnString(0, "你已通过验证");
     }
