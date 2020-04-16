@@ -13,10 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -94,7 +91,7 @@ public class ZlCartController {
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产")
     })
     @UserLoginToken
-    @PostMapping("findUserCart/{hotelId}/{belongModule}")
+    @GetMapping("findUserCart/{hotelId}/{belongModule}")
     public ReturnString findUserCart(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule) {
         try {
             Long userId = TokenUtil.getUserId(token);

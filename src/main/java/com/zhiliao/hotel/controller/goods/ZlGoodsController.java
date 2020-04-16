@@ -42,7 +42,7 @@ public class ZlGoodsController {
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产")
     })
     @UserLoginToken
-    @PostMapping("findGoodsCategory/{hotelId}/{belongModule}")
+    @GetMapping("findGoodsCategory/{hotelId}/{belongModule}")
     public ReturnString findGoodsCategory(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule) {
         try {
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule);
@@ -81,7 +81,7 @@ public class ZlGoodsController {
 
     })
     @UserLoginToken
-    @PostMapping("findGoodsList/{hotelId}/{belongModule}/{pageNo}/{pageSize}")
+    @GetMapping("findGoodsList/{hotelId}/{belongModule}/{pageNo}/{pageSize}")
     public ReturnString findGoodsList(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule,
                                       @PathVariable Integer pageNo, @PathVariable Integer pageSize, String categoryName) {
         try {
