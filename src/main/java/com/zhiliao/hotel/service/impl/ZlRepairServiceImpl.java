@@ -4,6 +4,7 @@ import com.zhiliao.hotel.mapper.ZlRepairMapper;
 import com.zhiliao.hotel.mapper.ZlRepairorderMapper;
 import com.zhiliao.hotel.model.zlRepair;
 import com.zhiliao.hotel.model.zlRepairorder;
+import com.zhiliao.hotel.service.ZlRepairService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
