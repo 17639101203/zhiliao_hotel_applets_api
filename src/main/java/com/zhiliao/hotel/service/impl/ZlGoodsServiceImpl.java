@@ -45,4 +45,18 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
         dataMap.put("total", pageInfo.getTotal());
         return dataMap;
     }
+
+    @Override
+    public List<Map<String, Object>> findGoodsSkuList(Integer goodsId) {
+        return zlGoodsMapper.findGoodsSkuList(goodsId);
+    }
+
+    @Override
+    public GoodsListVo findGoodsDetail(Integer goodsID) {
+        GoodsListVo goodsListVo = zlGoodsMapper.findGoodsDetail(goodsID);
+        if (goodsListVo != null) {
+            zlGoodsMapper.updateTotalVisitCount(goodsID, goodsListVo.getTotalVisitCount());
+        }
+        return goodsListVo;
+    }
 }

@@ -4,6 +4,7 @@ import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.model.ZlCleanOrder;
 import com.zhiliao.hotel.service.ZlCleanOrderService;
+import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -76,7 +77,7 @@ public class ZlCleanOrderController {
         zlCleanOrder.setRemark(remark);   //其他需求备注
         //zlCleanOrder.setOrderstatus((byte) 0);   //订单状态 -1:已取消 0:等待确认 1:已确认 2:已处理
         //zlCleanOrder.setIsdelete(false);   //删除状态 0:正常 1:删除
-        zlCleanOrder.setCreatedate(Integer.valueOf(getSystemTime()));   //下单时间
+        zlCleanOrder.setCreatedate(DateUtils.javaToPhpNowDateTime());   //下单时间
         //zlCleanOrder.setUpdatedate(0);   //支付/取消时间
 
         Integer res = zlCleanOrderService.addCleanOrder(zlCleanOrder);

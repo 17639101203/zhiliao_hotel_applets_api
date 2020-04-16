@@ -13,12 +13,12 @@
         <result column="SupplierID" jdbcType="INTEGER" property="supplierid"/>
         <result column="CoverImgUrl" jdbcType="CHAR" property="coverimgurl"/>
         <result column="GoodsName" jdbcType="CHAR" property="goodsname"/>
-        <result column="OriginalPrice" jdbcType="DECIMAL" property="originalprice" />
-        <result column="CurrentPrice" jdbcType="DECIMAL" property="currentprice" />
-        <result column="TotalStockCount" jdbcType="INTEGER" property="totalstockcount" />
-        <result column="TotalSoldCount" jdbcType="INTEGER" property="totalsoldcount" />
-        <result column="TotalVirtualSoldCount" jdbcType="INTEGER" property="totalvirtualsoldcount" />
-        <result column="TotalVisitCount" jdbcType="INTEGER" property="totalvisitcount" />
+        <result column="OriginalPrice" jdbcType="DECIMAL" property="originalprice"/>
+        <result column="CurrentPrice" jdbcType="DECIMAL" property="currentprice"/>
+        <result column="TotalStockCount" jdbcType="INTEGER" property="totalstockcount"/>
+        <result column="TotalSoldCount" jdbcType="INTEGER" property="totalsoldcount"/>
+        <result column="TotalVirtualSoldCount" jdbcType="INTEGER" property="totalvirtualsoldcount"/>
+        <result column="TotalVisitCount" jdbcType="INTEGER" property="totalvisitcount"/>
         <result column="Content" jdbcType="LONGVARCHAR" property="content"/>
         <result column="NeedDelivery" jdbcType="BIT" property="needdelivery"/>
         <result column="IsRecommand" jdbcType="BIT" property="isrecommand"/>
@@ -44,6 +44,7 @@
         select
             zg.GoodsID,
             zg.GoodsName,
+            zg.CoverImgUrl,
             zg.OriginalPrice,
             zg.CurrentPrice,
             zg.TotalStockCount,
@@ -63,4 +64,48 @@
         </choose>
         order by zg.Sort asc
     </select>
+
+    <select id="findGoodsSkuList" resultType="java.util.LinkedHashMap">
+        select
+            zgs.GoodsID,
+            zgs.SkuID,
+            zgs.OriginalPrice,
+            zgs.CurrentPrice,
+            zgs.StockCount,
+            zgs.SoldCount,
+            zgs.VirtualSoldCount,
+            zgp.PropertyName,
+            zgs.IsDefault
+        from zl_goodssku zgs
+        left join zl_goodsproperty zgp on zgs.PropertyIDs=zgp.PropertyID
+        where zgs.GoodsID=#{goodsId} and zgs.IsDelete=0
+        order by zgs.CreateDate desc
+    </select>
+
+    <!--根据商品id商品详情数据-->
+    <select id="findGoodsDetail" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
+      SELECT
+          zg.GoodsID,
+          zg.CoverImgUrl,
+          zg.GoodsName,
+          zg.OriginalPrice,
+          zg.CurrentPrice,
+          zg.TotalSoldCount,
+          zg.TotalVirtualSoldCount,
+          zg.Content,
+          zg.TotalVisitCount
+        FROM
+          zl_goods zg
+        WHERE zg.GoodsID = #{goodsID}
+    </select>
+
+    <!--根据商品id更新商品点击量-->
+    <update id="updateTotalVisitCount">
+      UPDATE
+          zl_goods
+        SET
+          zl_goods.TotalVisitCount = #{totalvisitcount} +1
+        WHERE zl_goods.GoodsID = #{goodsID}
+    </update>
+
 </mapper>

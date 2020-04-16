@@ -5,6 +5,7 @@ import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.cart.vo.UserCartVo;
 import com.zhiliao.hotel.model.ZlCart;
 import com.zhiliao.hotel.service.ZlCartService;
+import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -35,7 +36,7 @@ public class ZlCartController {
         this.zlCartService = zlCartService;
     }
 
-    @ApiOperation(value = "购物车添加")
+    @ApiOperation(value = "用户购物车添加")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
@@ -63,8 +64,8 @@ public class ZlCartController {
                 cart.setGoodsid(goodsId);
                 cart.setSkuid(skuId);
                 cart.setGoodscount(goodsCount);
-                cart.setCreatedate(1);
-                cart.setUpdatedate(1);
+                cart.setCreatedate(DateUtils.javaToPhpNowDateTime());
+                cart.setUpdatedate(DateUtils.javaToPhpNowDateTime());
                 zlCartService.addCart(cart);
             } else {
                 // 存在更改数量，如果数量为0，则删除数据
@@ -73,7 +74,7 @@ public class ZlCartController {
                 } else {
                     // 更新数量
                     cart.setGoodscount(goodsCount);
-                    cart.setUpdatedate(2);
+                    cart.setUpdatedate(DateUtils.javaToPhpNowDateTime());
                     zlCartService.updateCartGoodsCount(cart);
                 }
             }
@@ -84,7 +85,7 @@ public class ZlCartController {
         }
     }
 
-    @ApiOperation(value = "购物车查询")
+    @ApiOperation(value = "用户购物车查询")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
@@ -104,7 +105,7 @@ public class ZlCartController {
         }
     }
 
-    @ApiOperation(value = "购物车清空")
+    @ApiOperation(value = "用户购物车清空")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),

@@ -6,6 +6,7 @@ import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.model.ZlWxuser;
 import com.zhiliao.hotel.service.ZlWxuserService;
+import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.RedisCommonUtil;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
@@ -91,8 +92,8 @@ public class ZlWxuserController {
                 wxuser.setComeformid(1);
                 // 删除状态:0正常;1删除
                 wxuser.setIsdelete(false);
-                wxuser.setCreatedate(1);
-                wxuser.setUpdatedate(1);
+                wxuser.setCreatedate(DateUtils.javaToPhpNowDateTime());
+                wxuser.setUpdatedate(DateUtils.javaToPhpNowDateTime());
                 zlWxuserService.addWxuser(wxuser);
             }
             return returnUserInfoData(wxuser);

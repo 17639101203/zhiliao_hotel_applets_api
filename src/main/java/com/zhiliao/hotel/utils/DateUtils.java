@@ -13,6 +13,16 @@ import java.util.*;
  */
 public class DateUtils {
 
+    public static void main(String[] args) {
+        Integer dateTime = DateUtils.javaToPhpNowDateTime();
+        System.out.println(dateTime);
+        Long l = DateUtils.phpToJavaDateTime(dateTime);
+        System.out.println(l);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format1 = format.format(l);
+        System.out.println(format1);
+    }
+
     /**
      * 获得当前日期 yyyy-MM-dd HH:mm:ss
      *
@@ -26,13 +36,19 @@ public class DateUtils {
     }
 
     /**
-     * 获取系统当前时间戳
+     * 获取系统当前时间戳（java转php时间戳）
      *
      * @return 1566889186
      */
-    public static String getSystemTime() {
-        String current = String.valueOf(System.currentTimeMillis()/1000);
-        return current;
+    public static Integer javaToPhpNowDateTime() {
+        return Math.toIntExact(System.currentTimeMillis() / 1000);
+    }
+
+    /**
+     * 数据库php时间戳转java时间戳
+     */
+    public static Long phpToJavaDateTime(Integer dateTime) {
+        return dateTime * 1000L;
     }
 
 
@@ -70,7 +86,7 @@ public class DateUtils {
      * 得到两个时间差
      *
      * @param start 开始时间
-     * @param end 结束时间
+     * @param end   结束时间
      * @return
      */
     public static long dateTogether(Date start, Date end) {
@@ -186,7 +202,7 @@ public class DateUtils {
     /**
      * 获取当前小时 ：2019-08-23 17
      *
-     * @return  2019-08-27 17
+     * @return 2019-08-27 17
      */
     public static String getCurrentHour() {
         GregorianCalendar calendar = new GregorianCalendar();
@@ -199,6 +215,7 @@ public class DateUtils {
 
     /**
      * 获取当前时间一个小时前
+     *
      * @return 2019-08-27 16
      */
     public static String getCurrentHourBefore() {
@@ -305,13 +322,14 @@ public class DateUtils {
 
 
     private static int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+
     /**
      * 获取今年月份数据
      * 说明 有的需求前端需要根据月份查询每月数据，此时后台给前端返回今年共有多少月份
      *
      * @return [1, 2, 3, 4, 5, 6, 7, 8]
      */
-    public static List getMonthList(){
+    public static List getMonthList() {
         List list = new ArrayList();
         for (int i = 1; i <= month; i++) {
             list.add(i);
@@ -322,9 +340,10 @@ public class DateUtils {
     /**
      * 返回当前年度季度list
      * 本年度截止目前共三个季度，然后根据1,2,3分别查询相关起止时间
+     *
      * @return [1, 2, 3]
      */
-    public static List getQuartList(){
+    public static List getQuartList() {
         int quart = month / 3 + 1;
         List list = new ArrayList();
         for (int i = 1; i <= quart; i++) {
@@ -336,7 +355,7 @@ public class DateUtils {
     /**
      * 将时间转换为时间戳
      */
-    public static String dateToStamp(String s) throws ParseException{
+    public static String dateToStamp(String s) throws ParseException {
         String res;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = simpleDateFormat.parse(s);
@@ -344,10 +363,4 @@ public class DateUtils {
         res = String.valueOf(ts);
         return res;
     }
-
-    public static void main(String[] args) {
-        System.out.println(DateUtils.getQuartList());
-    }
-
-
 }

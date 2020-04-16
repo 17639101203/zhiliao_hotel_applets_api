@@ -47,8 +47,8 @@ public class ZlInvoiceController {
             invoice.setRemark(ip.getRemark());  //备注信息
             invoice.setInvoicetype((byte) 0);   // 开票状态 -1:已取消;0:未开票;1开票中;2已开票
             invoice.setIsdelete(false);     // 是否删除
-            invoice.setCreatedate(Integer.parseInt(DateUtils.getSystemTime()));     //添加时间
-            invoice.setUpdatedate(Integer.parseInt(DateUtils.getSystemTime()));     //修改时间
+            invoice.setCreatedate(DateUtils.javaToPhpNowDateTime());     //添加时间
+            invoice.setUpdatedate(DateUtils.javaToPhpNowDateTime());     //修改时间
             if(ip.getMainbodytype()==1){      //个人开票
                 service.addInvoice(invoice);
                 logger.info("增值税普通发票开具成功");
