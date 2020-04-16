@@ -28,7 +28,7 @@ import java.util.List;
 public class OrderController{
     
     private static final Logger logger=LoggerFactory.getLogger(OrderController.class);
-
+    
     private ZlOrderService orderService;
     private ZlOrderDetailService orderDetailService;
     
@@ -42,7 +42,7 @@ public class OrderController{
     @ApiImplicitParams({
             @ApiImplicitParam(paramType="query", name="token", dataType="String", required=true, value="token"),
             @ApiImplicitParam(paramType="query", name="payStatus", dataType="int", required=false, value="获取不同的订单：0无须支付;1:待支付;2已支付;3已取消;不传获取全部订单"),
-            @ApiImplicitParam(paramType="query", name="pageNum", dataType="int", required=true, value="页码值"),
+            @ApiImplicitParam(paramType="query", name="pageNum", dataType="int", required=true, value="页码"),
             @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数"),
     })
     @PassToken
@@ -78,33 +78,34 @@ public class OrderController{
     @ApiOperation(value="订单详情")
     @PostMapping("Detail")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType="query", dataType="long", name="userID", value="用户ID", required=true),
             @ApiImplicitParam(paramType="query", dataType="long", name="orderID", value="订单ID", required=true)
     })
     @PassToken
     @ResponseBody
-    public ReturnString findOrderDetail(Long orderID){
-        logger.info("订单ID："+orderID);
+    public ReturnString findOrderDetail(Long userID,Long orderID){
+        logger.info("用户ID："+userID+"，订单ID："+orderID);
         try{
-            ZlOrderDetail orderDetail=orderDetailService.findOrder(orderID);
+            ZlOrderDetail orderDetail=orderDetailService.findOrder(userID,orderID);
             return new ReturnString(orderDetail);
         }catch(Exception e){
             e.printStackTrace();
             return new ReturnString("查询失败");
         }
     }
-
-    @ApiOperation(value = "取消订单")
+    
+    @ApiOperation(value="取消订单")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "订单id")
+            @ApiImplicitParam(paramType="query", name="token", dataType="String", required=true, value="token"),
+            @ApiImplicitParam(paramType="path", name="orderID", dataType="Long", required=true, value="订单id")
     })
     @PostMapping("quXiaoOrder/{orderID}")
     @ResponseBody
-    public ReturnString findByjiudianId(String token, @PathVariable Long orderID){
-        try {
+    public ReturnString findByjiudianId(String token,@PathVariable Long orderID){
+        try{
             orderService.byOrderId(orderID);
             return new ReturnString(0,"已取消");
-        } catch (Exception e) {
+        }catch(Exception e){
             e.printStackTrace();
             return new ReturnString("取消失败");
         }

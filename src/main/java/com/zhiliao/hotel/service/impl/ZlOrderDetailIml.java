@@ -19,8 +19,8 @@ public class ZlOrderDetailIml implements ZlOrderDetailService{
     private ZlOrderDetailMapper orderMapper;
     
     @Override
-    public ZlOrderDetail findOrder(Long orderID){
-        return orderMapper.findOrder(orderID);
+    public ZlOrderDetail findOrder(Long userID,Long orderID){
+        return orderMapper.findOrder(userID,orderID);
     }
     
 }

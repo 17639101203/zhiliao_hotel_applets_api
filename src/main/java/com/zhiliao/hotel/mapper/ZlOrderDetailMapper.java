@@ -10,8 +10,8 @@ import tk.mybatis.mapper.common.Mapper;
  */
 public interface ZlOrderDetailMapper extends Mapper<ZlOrderDetail>{
     
-    ZlOrderDetail findOrder(@Param("orderID") Long orderID);
-
+    ZlOrderDetail findOrder(@Param("userID") Long userID,@Param("orderID") Long orderID);
+    
     void byOrderdetailId(ZlOrder order);
     
 }

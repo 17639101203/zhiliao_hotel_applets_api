@@ -4,6 +4,6 @@ import com.zhiliao.hotel.model.ZlOrderDetail;
 
 public interface ZlOrderDetailService{
     
-    ZlOrderDetail findOrder(Long orderID);
+    ZlOrderDetail findOrder(Long userID,Long orderID);
     
 }
