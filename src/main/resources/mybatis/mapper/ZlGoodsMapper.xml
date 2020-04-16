@@ -13,6 +13,12 @@
         <result column="SupplierID" jdbcType="INTEGER" property="supplierid"/>
         <result column="CoverImgUrl" jdbcType="CHAR" property="coverimgurl"/>
         <result column="GoodsName" jdbcType="CHAR" property="goodsname"/>
+        <result column="OriginalPrice" jdbcType="DECIMAL" property="originalprice" />
+        <result column="CurrentPrice" jdbcType="DECIMAL" property="currentprice" />
+        <result column="TotalStockCount" jdbcType="INTEGER" property="totalstockcount" />
+        <result column="TotalSoldCount" jdbcType="INTEGER" property="totalsoldcount" />
+        <result column="TotalVirtualSoldCount" jdbcType="INTEGER" property="totalvirtualsoldcount" />
+        <result column="TotalVisitCount" jdbcType="INTEGER" property="totalvisitcount" />
         <result column="Content" jdbcType="LONGVARCHAR" property="content"/>
         <result column="NeedDelivery" jdbcType="BIT" property="needdelivery"/>
         <result column="IsRecommand" jdbcType="BIT" property="isrecommand"/>
@@ -34,4 +40,27 @@
         order by zgc.Sort asc
     </select>
 
+    <select id="findGoodsList" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
+        select
+            zg.GoodsID,
+            zg.GoodsName,
+            zg.OriginalPrice,
+            zg.CurrentPrice,
+            zg.TotalStockCount,
+            zg.TotalSoldCount,
+            zg.TotalVirtualSoldCount
+        from zl_goods zg
+        left join zl_goodscategory zgc on zg.GoodsCategoryID=zgc.GoodsCategoryID
+        where zg.GoodsStatus=1 and zg.IsDelete=0 and zgc.IsDelete=0
+        and zg.HotelID=#{hotelId} and zgc.BelongModule=#{belongModule}
+        <choose>
+            <when test='categoryName=="推荐"'>
+                and zg.IsRecommand=1
+            </when>
+            <otherwise>
+                and zgc.CategoryName=#{categoryName}
+            </otherwise>
+        </choose>
+        order by zg.Sort asc
+    </select>
 </mapper>

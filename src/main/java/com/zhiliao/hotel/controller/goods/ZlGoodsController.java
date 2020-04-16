@@ -7,11 +7,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -23,6 +22,11 @@ import java.util.*;
 @RestController
 @RequestMapping("goods")
 public class ZlGoodsController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ZlGoodsController.class);
+
+    // 允许最大的pageSize
+    private final static int MAX_PAGE_SIZE = 20;
 
     private ZlGoodsService zlGoodsService;
 
@@ -41,6 +45,7 @@ public class ZlGoodsController {
     @PostMapping("findGoodsCategory/{hotelId}/{belongModule}")
     public ReturnString findGoodsCategory(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule) {
         try {
+            logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule);
             List<Map<String, String>> goodsCategoryDataList = zlGoodsService.findGoodsCategory(hotelId, belongModule);
             String str = "推荐";
             List<String> goodsCategoryList = new ArrayList<>();
@@ -65,16 +70,25 @@ public class ZlGoodsController {
         }
     }
 
-    @ApiOperation(value = "商品列表")
+    @ApiOperation(value = "商品分类列表数据")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token")
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
+            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产"),
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "String", required = true, value = "页码"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "String", required = true, value = "每页大小"),
+            @ApiImplicitParam(paramType = "query", name = "categoryName", dataType = "String", required = true, value = "分类名称")
+
     })
     @UserLoginToken
-    @PostMapping("findGoodsList")
-    public ReturnString findGoodsList(String token) {
+    @PostMapping("findGoodsList/{hotelId}/{belongModule}/{pageNo}/{pageSize}")
+    public ReturnString findGoodsList(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule,
+                                      @PathVariable Integer pageNo, @PathVariable Integer pageSize, String categoryName) {
         try {
-
-            return new ReturnString(0, "获取成功");
+            logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|页码：" + pageNo + "|每页大小：" + pageSize + "|分类名称：" + categoryName);
+            pageSize = pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize;
+            Map<String, Object> goodsListVoList = zlGoodsService.findGoodsList(hotelId, belongModule, pageNo, pageSize, categoryName);
+            return new ReturnString(goodsListVoList);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取出错");

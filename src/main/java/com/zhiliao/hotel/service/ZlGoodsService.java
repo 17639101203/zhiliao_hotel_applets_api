@@ -10,4 +10,6 @@ import java.util.Map;
 public interface ZlGoodsService {
 
     List<Map<String, String>> findGoodsCategory(Integer hotelId, Integer belongModule);
+
+    Map<String, Object> findGoodsList(Integer hotelId, Integer belongModule, Integer pageNo, Integer pageSize, String categoryName);
 }
