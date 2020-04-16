@@ -1,7 +1,9 @@
 package com.zhiliao.hotel.controller.goods;
 
+import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.service.ZlGoodsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -94,4 +96,29 @@ public class ZlGoodsController {
             return new ReturnString("获取出错");
         }
     }
+
+    /**
+     * 根据商品id查询详情数据
+     *
+     * @param token
+     * @param goodsID
+     * @return
+     */
+    @ApiOperation(value = "商品详情数据")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "path", name = "goodsID", dataType = "String", required = true, value = "商品id")
+    })
+    @UserLoginToken
+    @GetMapping("findGoodsDetail/{goodsID}")
+    public ReturnString findGoodsDetail(String token, @PathVariable Integer goodsID) {
+        try {
+            GoodsListVo goodsListVo = zlGoodsService.findGoodsDetail(goodsID);
+            return new ReturnString(goodsListVo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("获取出错");
+        }
+    }
+
 }

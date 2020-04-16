@@ -45,4 +45,19 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
         dataMap.put("total", pageInfo.getTotal());
         return dataMap;
     }
+
+    /**
+     * 根据商品id查询详情数据
+     *
+     * @param goodsID
+     * @return
+     */
+    @Override
+    public GoodsListVo findGoodsDetail(Integer goodsID) {
+        GoodsListVo goodsListVo = zlGoodsMapper.findGoodsDetail(goodsID);
+        if (goodsListVo != null) {
+            zlGoodsMapper.updateTotalVisitCount(goodsID, goodsListVo.getTotalvisitcount());
+        }
+        return goodsListVo;
+    }
 }

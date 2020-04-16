@@ -15,6 +15,10 @@ public class GoodsListVo {
      */
     private String goodsName;
     /**
+     * 商品详情
+     */
+    private String content;
+    /**
      * 原价
      */
     private BigDecimal originalPrice;
@@ -35,6 +39,11 @@ public class GoodsListVo {
      */
     private Integer totalVirtualSoldCount;
 
+    /**
+     * 点击量
+     */
+    private Integer totalvisitcount;
+
     public Integer getGoodsId() {
         return goodsId;
     }
@@ -49,6 +58,14 @@ public class GoodsListVo {
 
     public void setGoodsName(String goodsName) {
         this.goodsName = goodsName;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public BigDecimal getOriginalPrice() {
@@ -89,5 +106,13 @@ public class GoodsListVo {
 
     public void setTotalVirtualSoldCount(Integer totalVirtualSoldCount) {
         this.totalVirtualSoldCount = totalVirtualSoldCount;
+    }
+
+    public Integer getTotalvisitcount() {
+        return totalvisitcount;
+    }
+
+    public void setTotalvisitcount(Integer totalvisitcount) {
+        this.totalvisitcount = totalvisitcount;
     }
 }
