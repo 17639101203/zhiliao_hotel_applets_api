@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.zhiliao.hotel.mapper.ZlOrderDetailMapper;
 import com.zhiliao.hotel.mapper.ZlOrderMapper;
 import com.zhiliao.hotel.model.ZlOrder;
@@ -25,15 +26,19 @@ public class ZlOrderServiceIml implements ZlOrderService{
     private ZlOrderDetailMapper orderDetailMapper;
     
     @Override
-    public List<ZlOrder> findAllOrder(Long userID){
+    public List<ZlOrder> findAllOrder(Long userID,Integer pageNum,Integer pageSize){
+        //pageNum代表页码值，pageSize代表每页条数
+        PageHelper.startPage(pageNum,pageSize);
         return orderMapper.findAllOrder(userID);
     }
     
     @Override
-    public List<ZlOrder> findOrderByPayStatus(Long userID,Integer payStatus){
+    public List<ZlOrder> findOrderByPayStatus(Long userID,Integer payStatus,Integer pageNum,Integer pageSize){
+        //pageNum代表页码值，pageSize代表每页条数
+        PageHelper.startPage(pageNum,pageSize);
         return orderMapper.findOrderByPayStatus(userID,payStatus);
     }
-
+    
     @Override
     public void byOrderId(Long orderID) {
         ZlOrder order = orderMapper.findById(orderID);

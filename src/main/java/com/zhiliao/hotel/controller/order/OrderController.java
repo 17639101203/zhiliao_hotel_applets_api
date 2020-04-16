@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.controller.order;
 
+import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.model.ZlOrder;
@@ -41,10 +42,12 @@ public class OrderController{
     @ApiImplicitParams({
             @ApiImplicitParam(paramType="query", name="token", dataType="String", required=true, value="token"),
             @ApiImplicitParam(paramType="query", name="payStatus", dataType="int", required=false, value="获取不同的订单：0无须支付;1:待支付;2已支付;3已取消;不传获取全部订单"),
+            @ApiImplicitParam(paramType="query", name="pageNum", dataType="int", required=true, value="页码值"),
+            @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数"),
     })
     @PassToken
     @PostMapping("all")
-    public ReturnString findAllOrder(String token,Integer payStatus){
+    public ReturnString findAllOrder(String token,Integer payStatus,Integer pageNum,Integer pageSize){
         
         try{
             
@@ -54,12 +57,16 @@ public class OrderController{
                 return new ReturnString("用户不存在");
             }
             List<ZlOrder> orderList=null;
+            PageInfo pageInfo=null;
             if(payStatus==null){
-                orderList=orderService.findAllOrder(userId);
-                return new ReturnString(orderList);
+                orderList=orderService.findAllOrder(userId,pageNum,pageSize);
+                pageInfo=new PageInfo(orderList);
+                return new ReturnString(pageInfo.getList());
             }
-            orderList=orderService.findOrderByPayStatus(userId,payStatus);
-            return new ReturnString(orderList);
+            
+            orderList=orderService.findOrderByPayStatus(userId,payStatus,pageNum,pageSize);
+            pageInfo=new PageInfo(orderList);
+            return new ReturnString(pageInfo.getList());
             
         }catch(Exception e){
             e.printStackTrace();
@@ -71,7 +78,7 @@ public class OrderController{
     @ApiOperation(value="订单详情")
     @PostMapping("Detail")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType="query", dataType="Long", name="orderID", value="订单ID", required=true)
+            @ApiImplicitParam(paramType="query", dataType="long", name="orderID", value="订单ID", required=true)
     })
     @PassToken
     @ResponseBody
