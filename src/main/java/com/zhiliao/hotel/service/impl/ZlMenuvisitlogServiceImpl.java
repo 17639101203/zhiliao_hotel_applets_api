@@ -3,6 +3,7 @@ package com.zhiliao.hotel.service.impl;
 import com.zhiliao.hotel.mapper.ZlMenuvisitlogMapper;
 import com.zhiliao.hotel.model.ZlMenuvisitlog;
 import com.zhiliao.hotel.service.ZlMenuvisitlogService;
+import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.HttpContextUtils;
 import com.zhiliao.hotel.utils.IPUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +34,14 @@ public class ZlMenuvisitlogServiceImpl implements ZlMenuvisitlogService {
 
         ZlMenuvisitlog zlMenuvisitlog = new ZlMenuvisitlog();
         //菜单id
-        zlMenuvisitlog.setMenuId(menuId);
+        zlMenuvisitlog.setMenuid(menuId);
         //用户id
-        zlMenuvisitlog.setUserId(userId);
+        zlMenuvisitlog.setUserid(userId);
         //用户ip
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
-        zlMenuvisitlog.setUserIp(IPUtils.getIpAddr(request));
+        zlMenuvisitlog.setUserip(IPUtils.getIpAddr(request));
         //创建时间
-        zlMenuvisitlog.setCreateDate(System.currentTimeMillis()/1000);
+        zlMenuvisitlog.setCreatedate(DateUtils.javaToPhpNowDateTime());
 
         zlMenuvisitlogMapper.insertSelective(zlMenuvisitlog);
 

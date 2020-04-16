@@ -11,6 +11,5 @@ import tk.mybatis.mapper.common.Mapper;
  * @date 2020/4/15 9:05
  */
 public interface ZlMenuvisitlogMapper extends Mapper<ZlMenuvisitlog> {
-    @Insert("")
-    void add(ZlMenuvisitlog zlMenuvisitlog);
+
 }
