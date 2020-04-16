@@ -9,5 +9,7 @@ public interface ZlOrderService{
     List<ZlOrder> findAllOrder(Long userID);
     
     List<ZlOrder> findOrderByPayStatus(Long userID,Integer payStatus);
+
+    void byOrderId(Long orderID);
     
 }

@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlOrderDetailMapper">
-	<resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlOrderDetail">
-		<id column="OrderDetailID" jdbcType="BIGINT" property="orderdetailid"/>
-		<result column="OrderID" jdbcType="BIGINT" property="orderid"/>
-		<result column="UserID" jdbcType="BIGINT" property="userid"/>
-		<result column="GoodsID" jdbcType="INTEGER" property="goodsid"/>
-		<result column="GoodsName" jdbcType="VARCHAR" property="goodsname"/>
-		<result column="GoodsCoverUrl" jdbcType="VARCHAR" property="goodscoverurl"/>
-		<result column="Price" jdbcType="DECIMAL" property="price"/>
-		<result column="GoodsCount" jdbcType="INTEGER" property="goodscount"/>
-		<result column="IsDelete" jdbcType="BIT" property="isdelete"/>
-		<result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
-		<result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
-	</resultMap>
+    <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlOrderDetail">
+        <id column="OrderDetailID" jdbcType="BIGINT" property="orderdetailid"/>
+        <result column="OrderID" jdbcType="BIGINT" property="orderid"/>
+        <result column="UserID" jdbcType="BIGINT" property="userid"/>
+        <result column="GoodsID" jdbcType="INTEGER" property="goodsid"/>
+        <result column="GoodsName" jdbcType="VARCHAR" property="goodsname"/>
+        <result column="GoodsCoverUrl" jdbcType="VARCHAR" property="goodscoverurl"/>
+        <result column="Price" jdbcType="DECIMAL" property="price"/>
+        <result column="GoodsCount" jdbcType="INTEGER" property="goodscount"/>
+        <result column="IsDelete" jdbcType="BIT" property="isdelete"/>
+        <result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
+        <result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
+    </resultMap>
 
 
-	<select id="findOrder" resultType="com.zhiliao.hotel.model.ZlOrderDetail">
+    <select id="findOrder" resultType="com.zhiliao.hotel.model.ZlOrderDetail">
 
         SELECT * FROM zl_orderdetail WHERE OrderID=#{orderID}
 
 	</select>
 
+    <update id="byOrderdetailId" parameterType="com.zhiliao.hotel.model.ZlOrder">
+    	update zl_order set UpdateDate = #{updatedate} where OrderID = #{orderid}
+  	</update>
 </mapper>

@@ -37,4 +37,10 @@
         SELECT * FROM zl_order WHERE UserID=#{userID} AND PayStatus=#{payStatus} ORDER BY CreateDate DESC
 	</select>
 
+	<select id="findById" resultType="com.zhiliao.hotel.model.ZlOrder">
+    select * from zl_order where OrderID = #{orderid}
+  </select>
+	<update id="byOrderId" parameterType="com.zhiliao.hotel.model.ZlOrder">
+    update zl_order set OrderStatus = #{orderstatus},UpdateDate = #{updatedate} where OrderID = #{orderid}
+  </update>
 </mapper>

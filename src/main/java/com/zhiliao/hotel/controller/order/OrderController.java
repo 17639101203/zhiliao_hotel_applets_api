@@ -14,10 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -86,6 +83,23 @@ public class OrderController{
         }catch(Exception e){
             e.printStackTrace();
             return new ReturnString("查询失败");
+        }
+    }
+
+    @ApiOperation(value = "取消订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "订单id")
+    })
+    @PostMapping("quXiaoOrder/{orderID}")
+    @ResponseBody
+    public ReturnString findByjiudianId(String token, @PathVariable Long orderID){
+        try {
+            orderService.byOrderId(orderID);
+            return new ReturnString(0,"已取消");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("取消失败");
         }
     }
     

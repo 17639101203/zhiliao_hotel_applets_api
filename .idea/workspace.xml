@@ -2,30 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="786d9c81-04a8-4d56-9e87-0719a6fe2011" name="Default Changelist" comment="第二次提交">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/goods/ZlGoodsController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlGoodsMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/model/ZlGoods.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/ZlGoodsService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/ZlGoodsServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlGoodsMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/MAIBENBEN.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/MAIBENBEN.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/news/zlNewsController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/zlNewsMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/model/zlNews.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/zlNewsServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/zlNewsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/timer/EggTimer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/zlNewsMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-dev.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mybatis/generatorConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/generatorConfig.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application-dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application-dev.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/zhiliao/hotel/common/AuthenticationInterceptor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/zhiliao/hotel/common/AuthenticationInterceptor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/zhiliao/hotel/controller/SjWeixinuserController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/zhiliao/hotel/mapper/SjWeixinuserMapper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/zhiliao/hotel/model/SjWeixinuser.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/zhiliao/hotel/service/SjWeixinuserService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/zhiliao/hotel/service/impl/SjWeixinuserServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/zhiliao/hotel/utils/TokenUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/zhiliao/hotel/utils/TokenUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mybatis/generatorConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mybatis/generatorConfig.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mybatis/mapper/SjWeixinuserMapper.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/news/SjCbNewsController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/order/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/order/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/SjCbNewsMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlOrderDetailMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlOrderDetailMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlOrderMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlOrderMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/model/SjCbNews.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/SjCbNewsService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/ZlOrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/ZlOrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/SjCbNewsServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/ZlOrderServiceIml.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/ZlOrderServiceIml.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/SjCbNewsMapper.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlOrderMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlOrderMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlOrderdetailMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlOrderdetailMapper.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,15 +60,15 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="localRepository" value="E:\java_repository\repository" />
-        <option name="mavenHome" value="E:/Program Files (x86)/Javaapp/apache-maven-3.5.2-bin/apache-maven-3.5.2" />
-        <option name="userSettingsFile" value="E:\Program Files (x86)\Javaapp\apache-maven-3.5.2-bin\apache-maven-3.5.2\conf\settings.xml" />
+        <option name="localRepository" value="E:\develop\maven\repository" />
+        <option name="mavenHome" value="E:/develop/maven/apache-maven-3.5.2" />
+        <option name="userSettingsFile" value="E:\develop\maven\apache-maven-3.5.2\conf\settings.xml" />
       </MavenGeneralSettings>
     </option>
     <option name="importingSettings">
       <MavenImportingSettings>
         <option name="importAutomatically" value="true" />
-        <option name="jdkForImporter" value="#JAVA_HOME" />
+        <option name="jdkForImporter" value="1.8" />
         <option name="vmOptionsForImporter" value="-Xmx768m" />
       </MavenImportingSettings>
     </option>
@@ -85,6 +82,7 @@
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
@@ -99,7 +97,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../shopManageApi/shopManageApi" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/mybatis/mapper" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -111,23 +109,28 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
-  </component>
-  <component name="ReactorSettings">
-    <option name="notificationShown" value="true" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.importing" />
   </component>
   <component name="RebelAgentSelection">
     <selection>jr</selection>
   </component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="com.zhiliao.hotel.mapper" />
-      <recent name="com.zhiliao.hotel.service" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\work1\zhiliao_hotel_applets_api\src\main\resources\mybatis\mapper" />
       <recent name="E:\data\zhiliao\zhiliao-hotel-applets-api\src\main\resources" />
       <recent name="E:\data\zhiliao\zhiliao-hotel-applets-api\src\main\java\com\zhiliao\hotel" />
       <recent name="E:\data\zhiliao\zhiliao-hotel-applets-api\src\test\java" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.zhiliao.hotel.timer" />
+      <recent name="com.zhiliao.hotel.service.impl" />
+      <recent name="com.zhiliao.hotel.service" />
+      <recent name="com.zhiliao.hotel.mapper" />
+      <recent name="com.zhiliao.hotel.model" />
+    </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.zhiliao.hotel.mapper" />
+      <recent name="com.zhiliao.hotel.service" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Generator">
@@ -168,6 +171,18 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
   <component name="SvnConfiguration">
     <configuration>C:\Users\MAIBENBEN\AppData\Roaming\Subversion</configuration>
   </component>
@@ -188,6 +203,13 @@
       <workItem from="1586740207684" duration="21251000" />
       <workItem from="1586826069443" duration="23011000" />
       <workItem from="1586912119275" duration="7589000" />
+      <workItem from="1586940504961" duration="95000" />
+      <workItem from="1586940604883" duration="1182000" />
+      <workItem from="1586998273319" duration="1051000" />
+      <workItem from="1586999849518" duration="429000" />
+      <workItem from="1587000344507" duration="27000" />
+      <workItem from="1587000486389" duration="684000" />
+      <workItem from="1587001650637" duration="1989000" />
     </task>
     <task id="LOCAL-00001" summary="第二次提交">
       <created>1586483082485</created>
@@ -383,9 +405,10 @@
       <screen x="1920" y="0" width="1920" height="1050" />
     </state>
     <state x="2349" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586589878242" />
-    <state x="690" y="274" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1586835970985">
-      <screen x="0" y="0" width="1920" height="1050" />
+    <state x="690" y="271" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1587001825636">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="690" y="271" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1587001825636" />
     <state x="2610" y="274" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586509642216" />
     <state x="690" y="274" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1586835970985" />
     <state x="715" y="233" key="#xdebugger.evaluate" timestamp="1586744444505">
@@ -394,9 +417,10 @@
     <state x="715" y="233" key="#xdebugger.evaluate/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1586744444505" />
     <state x="2635" y="233" key="#xdebugger.evaluate/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586587552437" />
     <state x="715" y="233" key="#xdebugger.evaluate/0.0.1920.1050@0.0.1920.1050" timestamp="1586674866344" />
-    <state x="544" y="124" width="1293" height="806" key="CommitChangelistDialog2" timestamp="1586921771860">
-      <screen x="0" y="0" width="1920" height="1050" />
+    <state x="544" y="123" width="1293" height="806" key="CommitChangelistDialog2" timestamp="1587003770137">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="544" y="123" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1587003770137" />
     <state x="2464" y="124" key="CommitChangelistDialog2/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586764774604" />
     <state x="544" y="124" width="1293" height="806" key="CommitChangelistDialog2/0.0.1920.1050@0.0.1920.1050" timestamp="1586921771860" />
     <state width="845" height="466" key="DebuggerActiveHint" timestamp="1586745787411">
@@ -410,9 +434,10 @@
     </state>
     <state x="2107" y="89" width="1536" height="868" key="DiffContextDialog/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586748704491" />
     <state x="187" y="89" width="1536" height="868" key="DiffContextDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1586912931447" />
-    <state x="1232" y="186" key="FileChooserDialogImpl" timestamp="1586855630873">
-      <screen x="0" y="0" width="1920" height="1050" />
+    <state x="1232" y="184" key="FileChooserDialogImpl" timestamp="1587000260288">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="1232" y="184" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1587000260288" />
     <state x="2660" y="283" key="FileChooserDialogImpl/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586764473072" />
     <state x="1232" y="186" key="FileChooserDialogImpl/0.0.1920.1050@0.0.1920.1050" timestamp="1586855630873" />
     <state width="1877" height="213" key="GridCell.Tab.0.bottom" timestamp="1586916805054">
@@ -500,9 +525,10 @@
     </state>
     <state x="2611" y="238" key="RollbackChangesDialog/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586489811861" />
     <state x="691" y="238" key="RollbackChangesDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1586769049988" />
-    <state x="2383" y="170" key="SettingsEditor" timestamp="1586569755651">
-      <screen x="1920" y="0" width="1920" height="1050" />
+    <state x="463" y="0" key="SettingsEditor" timestamp="1587000519857">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="463" y="0" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1587000519857" />
     <state x="2383" y="170" key="SettingsEditor/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586569755651" />
     <state x="463" y="170" key="SettingsEditor/0.0.1920.1050@0.0.1920.1050" timestamp="1586432983942" />
     <state x="552" y="261" key="Vcs.Push.Dialog.v2" timestamp="1586921777256">
@@ -510,9 +536,14 @@
     </state>
     <state x="2472" y="261" key="Vcs.Push.Dialog.v2/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586764851297" />
     <state x="552" y="261" key="Vcs.Push.Dialog.v2/0.0.1920.1050@0.0.1920.1050" timestamp="1586921777256" />
-    <state x="754" y="443" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586921627712">
-      <screen x="0" y="0" width="1920" height="1050" />
+    <state x="515" y="44" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1587002396843">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="515" y="44" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1587002396843" />
+    <state x="754" y="439" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587003730100">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="754" y="439" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587003730100" />
     <state x="2674" y="443" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586764657328" />
     <state x="754" y="443" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1050@0.0.1920.1050" timestamp="1586921627712" />
     <state x="754" y="443" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1586826600001" />
