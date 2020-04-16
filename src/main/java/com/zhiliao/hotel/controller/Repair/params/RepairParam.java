@@ -26,11 +26,18 @@ public class RepairParam {
 
 
     /**
+     * 酒店名
+     */
+    @ApiModelProperty(value = "酒店名", required = true)
+    private String hotelname;
+
+
+
+    /**
      * 报修信息
      */
     @ApiModelProperty(value = "报修信息", required = true)
     private String remark;
-
 
     public Integer getHotelid() {
         return hotelid;
@@ -56,6 +63,14 @@ public class RepairParam {
         this.roomnumber = roomnumber;
     }
 
+    public String getHotelname() {
+        return hotelname;
+    }
+
+    public void setHotelname(String hotelname) {
+        this.hotelname = hotelname;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -70,6 +85,7 @@ public class RepairParam {
                 "hotelid=" + hotelid +
                 ", roomid=" + roomid +
                 ", roomnumber='" + roomnumber + '\'' +
+                ", hotelname='" + hotelname + '\'' +
                 ", remark='" + remark + '\'' +
                 '}';
     }

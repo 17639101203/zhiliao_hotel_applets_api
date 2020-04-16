@@ -46,11 +46,10 @@ public class ZlRepairController {
             List<String> list = (List) returnString.getData();
             StringBuffer Imgurls  = new StringBuffer();
             list.forEach(item -> {
-                Imgurls.append(item+"|");
+                Imgurls.append(item+"|");   // 遍历集合，生成图片地址，并用 | 隔开
                 System.out.println(item);
             });
             repair.setImgurls(Imgurls.toString());     // 获得图片地址，多个用|隔开
-            System.out.println(Imgurls.toString());
             repair.setUserid(userid);             //  用户ID
             repair.setHotelid(repairParam.getHotelid());        //酒店ID
             repair.setRoomid(repairParam.getRoomid());      // 房间ID
@@ -60,7 +59,7 @@ public class ZlRepairController {
             repair.setIsdelete(false);         // 删除状态:false正常;true删除;
             repair.setCreatedate(Integer.parseInt(DateUtils.getSystemTime()));     //添加日期
             repair.setUpdatedate(Integer.parseInt(DateUtils.getSystemTime()));     //修改日期
-            service.addRepairMsg(repair);
+            service.addRepairMsg(repair,repairParam.getHotelname());
             return new ReturnString(0, "报修信息添加成功");
         } catch (Exception e) {
             e.printStackTrace();

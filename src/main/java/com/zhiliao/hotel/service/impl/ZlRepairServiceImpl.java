@@ -24,12 +24,12 @@ public class ZlRepairServiceImpl implements ZlRepairService {
 
     @Override
     @Transactional
-    public void addRepairMsg(zlRepair repair) throws IOException {
+    public void addRepairMsg(zlRepair repair,String hotelname) throws IOException {
         zlRepairorder repairorder = new zlRepairorder();
         repairorder.setUserid(repair.getUserid());   //  用户ID
         repairorder.setSerialnumber(OrderIDUtil.CreateOrderID("BX"));   // 订单ID
         repairorder.setHotelid(repair.getHotelid());        // 酒店ID
-        repairorder.setHotelname("酒店名");  //酒店名
+        repairorder.setHotelname(hotelname);  //酒店名
         repairorder.setRoomid(repair.getRoomid());  // 房间ID
         repairorder.setRoomnumber(repair.getRoomnumber());  //房间号
         repairorder.setImgurls(repair.getImgurls());    // 图片路径
@@ -47,4 +47,6 @@ public class ZlRepairServiceImpl implements ZlRepairService {
             System.out.println("报修信息添加失败");
         }
     }
+
+
 }
