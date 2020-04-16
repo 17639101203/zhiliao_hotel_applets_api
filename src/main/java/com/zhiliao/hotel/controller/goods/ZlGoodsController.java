@@ -73,7 +73,7 @@ public class ZlGoodsController {
     @PostMapping("findGoodsList")
     public ReturnString findGoodsList(String token) {
         try {
-            System.out.println();
+
             return new ReturnString(0, "获取成功");
         } catch (Exception e) {
             e.printStackTrace();
