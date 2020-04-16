@@ -15,11 +15,9 @@ spring:
   datasource:
     driver: com.mysql.jdbc.Driver
     druid:
-      url: jdbc:mysql://127.0.0.1:3306/zhiliao?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
+      url: jdbc:mysql://127.0.0.1:3306/zhiliaotest?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
       username: root
-      password: 123456
-#      username: testqmwl
-#      password: SnlAhd4hxoKO40O
+      password: root
       initial-size: 5
       max-active: 20
       min-idle: 10
