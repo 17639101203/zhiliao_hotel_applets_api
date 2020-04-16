@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface ZlRepairService {
 
-    public void addRepairMsg(zlRepair repair) throws IOException;
+    public void addRepairMsg(zlRepair repair,String hotelname) throws IOException;
 }
