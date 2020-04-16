@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * 商品表
@@ -38,6 +39,36 @@ public class ZlGoods implements Serializable {
      * 商品名称
      */
     private String goodsname;
+
+    /**
+     * 原价
+     */
+    private BigDecimal originalprice;
+
+    /**
+     * 现价
+     */
+    private BigDecimal currentprice;
+
+    /**
+     * 总库存
+     */
+    private Integer totalstockcount;
+
+    /**
+     * 总销量
+     */
+    private Integer totalsoldcount;
+
+    /**
+     * 总虚拟销量
+     */
+    private Integer totalvirtualsoldcount;
+
+    /**
+     * 点击量
+     */
+    private Integer totalvisitcount;
 
     /**
      * 商品详情
@@ -134,6 +165,54 @@ public class ZlGoods implements Serializable {
 
     public void setGoodsname(String goodsname) {
         this.goodsname = goodsname;
+    }
+
+    public BigDecimal getOriginalprice() {
+        return originalprice;
+    }
+
+    public void setOriginalprice(BigDecimal originalprice) {
+        this.originalprice = originalprice;
+    }
+
+    public BigDecimal getCurrentprice() {
+        return currentprice;
+    }
+
+    public void setCurrentprice(BigDecimal currentprice) {
+        this.currentprice = currentprice;
+    }
+
+    public Integer getTotalstockcount() {
+        return totalstockcount;
+    }
+
+    public void setTotalstockcount(Integer totalstockcount) {
+        this.totalstockcount = totalstockcount;
+    }
+
+    public Integer getTotalsoldcount() {
+        return totalsoldcount;
+    }
+
+    public void setTotalsoldcount(Integer totalsoldcount) {
+        this.totalsoldcount = totalsoldcount;
+    }
+
+    public Integer getTotalvirtualsoldcount() {
+        return totalvirtualsoldcount;
+    }
+
+    public void setTotalvirtualsoldcount(Integer totalvirtualsoldcount) {
+        this.totalvirtualsoldcount = totalvirtualsoldcount;
+    }
+
+    public Integer getTotalvisitcount() {
+        return totalvisitcount;
+    }
+
+    public void setTotalvisitcount(Integer totalvisitcount) {
+        this.totalvisitcount = totalvisitcount;
     }
 
     public String getContent() {
