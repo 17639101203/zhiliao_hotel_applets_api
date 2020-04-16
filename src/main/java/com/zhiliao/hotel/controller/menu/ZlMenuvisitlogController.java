@@ -33,12 +33,13 @@ public class ZlMenuvisitlogController {
     })
     @PassToken
     @PostMapping("/add/{menuId}/{userId}")
-    public ReturnString findBanner(@PathVariable Integer menuId,@PathVariable Integer userId) {
+    public ReturnString findBanner(@PathVariable Integer menuId, @PathVariable Integer userId) {
         try {
             zlMenuvisitlogService.add(menuId, userId);
-            return new ReturnString("添加成功");
+            return new ReturnString(0, "添加成功");
         } catch (Exception e) {
-            return new ReturnString("添加失败 "+ e);
+            e.printStackTrace();
+            return new ReturnString("添加失败 " + e);
         }
     }
 }
