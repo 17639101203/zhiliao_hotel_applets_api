@@ -7,8 +7,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class AESUtil {
 
     public static void main(String args[]) throws Exception {
-        String content = "123456";
-
+        String content = "2020-04-17 16:35:00";
         //加密
         String encrypted = encrypt(content);
         //解密
@@ -21,9 +20,9 @@ public class AESUtil {
         System.out.println("解密后：" + decrypted);
     }
 
-    private static String KEY = "yiyuanShop666888";
+    private static String KEY = "zhiliao666888999";
 
-    private static String IV = "yiyuanShop666888";
+    private static String IV = "zhiliao666888999";
 
     /**
      * 加密返回的数据转换成 String 类型

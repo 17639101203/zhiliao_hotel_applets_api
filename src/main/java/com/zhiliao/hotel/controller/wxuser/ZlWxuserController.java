@@ -59,13 +59,14 @@ public class ZlWxuserController {
 
     @ApiOperation(value = "微信用户登录")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "query", name = "code", dataType = "String", required = true, value = "code"),
             @ApiImplicitParam(paramType = "query", name = "encryptedData", dataType = "String", required = true, value = "加密秘钥"),
             @ApiImplicitParam(paramType = "query", name = "iv", dataType = "String", required = true, value = "偏移量")
     })
     @PassToken
     @PostMapping("wxuserLogin")
-    public ReturnString wxuserLogin(String code, String encryptedData, String iv) {
+    public ReturnString wxuserLogin(String token, String code, String encryptedData, String iv) {
         try {
             logger.info("开始请求->参数->code：" + code + "|加密秘钥：" + encryptedData + "|偏移量：" + iv);
             String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + APP_ID + "&secret=" + SECRET + "&js_code=" + code + "&grant_type=authorization_code";
