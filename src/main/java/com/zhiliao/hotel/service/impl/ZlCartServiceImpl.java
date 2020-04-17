@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class ZlCartServiceImpl implements ZlCartService {
 
-    private ZlCartMapper zlCartMapper;
+    private final ZlCartMapper zlCartMapper;
 
     @Autowired
     public ZlCartServiceImpl(ZlCartMapper zlCartMapper) {

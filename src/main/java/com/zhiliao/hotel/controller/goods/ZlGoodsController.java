@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.controller.goods;
 
+import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
@@ -88,8 +89,8 @@ public class ZlGoodsController {
         try {
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|页码：" + pageNo + "|每页大小：" + pageSize + "|分类名称：" + categoryName);
             pageSize = pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize;
-            Map<String, Object> goodsListVoList = zlGoodsService.findGoodsList(hotelId, belongModule, pageNo, pageSize, categoryName);
-            return new ReturnString(goodsListVoList);
+            PageInfoResult goodsList = zlGoodsService.findGoodsList(hotelId, belongModule, pageNo, pageSize, categoryName);
+            return new ReturnString(goodsList);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取出错");

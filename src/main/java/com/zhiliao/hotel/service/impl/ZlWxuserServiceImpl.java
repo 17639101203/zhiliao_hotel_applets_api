@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ZlWxuserServiceImpl implements ZlWxuserService {
 
-    private ZlWxuserMapper zlWxuserMapper;
+    private final ZlWxuserMapper zlWxuserMapper;
 
     @Autowired
     public ZlWxuserServiceImpl(ZlWxuserMapper zlWxuserMapper) {
