@@ -29,7 +29,7 @@ public class ZlCartController {
 
     private static final Logger logger = LoggerFactory.getLogger(ZlCartController.class);
 
-    private ZlCartService zlCartService;
+    private final ZlCartService zlCartService;
 
     @Autowired
     public ZlCartController(ZlCartService zlCartService) {

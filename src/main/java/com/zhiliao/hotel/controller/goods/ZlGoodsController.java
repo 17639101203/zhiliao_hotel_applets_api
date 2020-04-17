@@ -29,7 +29,7 @@ public class ZlGoodsController {
     // 允许最大的pageSize
     private final static int MAX_PAGE_SIZE = 20;
 
-    private ZlGoodsService zlGoodsService;
+    private final ZlGoodsService zlGoodsService;
 
     @Autowired
     public ZlGoodsController(ZlGoodsService zlGoodsService) {

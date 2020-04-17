@@ -48,8 +48,8 @@ public class ZlWxuserController {
     @Value("${weChat.secret}")
     private String SECRET;
 
-    private ZlWxuserService zlWxuserService;
-    private RedisCommonUtil redisCommonUtil;
+    private final ZlWxuserService zlWxuserService;
+    private final RedisCommonUtil redisCommonUtil;
 
     @Autowired
     public ZlWxuserController(ZlWxuserService zlWxuserService, RedisCommonUtil redisCommonUtil) {
