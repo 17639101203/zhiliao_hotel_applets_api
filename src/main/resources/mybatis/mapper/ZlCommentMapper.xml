@@ -89,4 +89,8 @@
     </trim>
   </insert>
 
+  <select id="getTags" resultType="com.zhiliao.hotel.model.ZlTag">
+    select * from zl_tag where HotelID = #{zlTag.hotelid} and IsDelete = 0
+  </select>
+
 </mapper>

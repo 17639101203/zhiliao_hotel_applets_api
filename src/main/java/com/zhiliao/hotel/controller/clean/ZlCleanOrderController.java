@@ -66,7 +66,7 @@ public class ZlCleanOrderController {
         zlCleanOrder.setHotelname(hotelName);   //酒店名
         zlCleanOrder.setRoomid(roomID);   //房间ID
         zlCleanOrder.setRoomnumber(roomNumber);   //房间号
-        zlCleanOrder.setComeformid(comeformID);   //来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
+        zlCleanOrder.setComeformid(comeformID);   //来自1小程序C端，2小程序B端，3公众号, 4民宿，5好评返现，6分时酒店
         Long bookTime = null;
         if(bookDay.equals("今天")){
             bookTime = getTimeByDate(getDateByString() +" "+bookDate+":00")/1000;
