@@ -1,7 +1,11 @@
 package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.model.ZlComment;
+import com.zhiliao.hotel.model.ZlTag;
+import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
+
+import java.util.List;
 
 /**
  * @Author: Zhangyong
@@ -12,5 +16,7 @@ import tk.mybatis.mapper.common.Mapper;
 public interface ZlCommentMapper extends Mapper<ZlComment> {
 
     int addComment(ZlComment zlComment);
+
+    List<ZlTag> getTags(@Param("zlTag") ZlTag zlTag);
 
 }

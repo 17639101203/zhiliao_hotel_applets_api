@@ -2,10 +2,13 @@ package com.zhiliao.hotel.service.impl;
 
 import com.zhiliao.hotel.mapper.ZlCommentMapper;
 import com.zhiliao.hotel.model.ZlComment;
+import com.zhiliao.hotel.model.ZlTag;
 import com.zhiliao.hotel.service.ZlCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @Author: Zhangyong
@@ -22,5 +25,10 @@ public class ZlCommentServiceImpl implements ZlCommentService {
     @Override
     public Integer addComment(ZlComment zlComment) {
         return zlCommentMapper.insertSelective(zlComment);
+    }
+
+    @Override
+    public List<ZlTag> getTags(ZlTag zlTag) {
+        return zlCommentMapper.getTags(zlTag);
     }
 }

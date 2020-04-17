@@ -1,6 +1,9 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.model.ZlComment;
+import com.zhiliao.hotel.model.ZlTag;
+
+import java.util.List;
 
 /**
  * @Author: Zhangyong
@@ -8,8 +11,14 @@ import com.zhiliao.hotel.model.ZlComment;
  * @Description:
  */
 public interface ZlCommentService {
-    /*
-        点赞吐槽
+
+    /**
+        添加点赞吐槽
      */
-    public Integer addComment(ZlComment zlComment);
+    Integer addComment(ZlComment zlComment);
+
+    /**
+        获取点赞吐槽标签
+    */
+    List<ZlTag> getTags(ZlTag zlTag);
 }
