@@ -13,7 +13,7 @@ public class PageInfoResult {
     // 当前页
     private int pageNo;
     // 当前页的数量
-    private int pageSize;
+    private int currentPageNumber;
     // 总记录数
     private long totalItem;
     // 总页数
@@ -29,12 +29,12 @@ public class PageInfoResult {
         this.pageNo = pageNo;
     }
 
-    public int getPageSize() {
-        return pageSize;
+    public int getCurrentPageNumber() {
+        return currentPageNumber;
     }
 
-    public void setPageSize(int pageSize) {
-        this.pageSize=pageSize;
+    public void setCurrentPageNumber(int currentPageNumber) {
+        this.currentPageNumber = currentPageNumber;
     }
 
     public long getTotalItem() {
@@ -42,7 +42,7 @@ public class PageInfoResult {
     }
 
     public void setTotalItem(long totalItem) {
-        this.totalItem=totalItem;
+        this.totalItem = totalItem;
     }
 
     public int getTotalPages() {
@@ -50,7 +50,7 @@ public class PageInfoResult {
     }
 
     public void setTotalPages(int totalPages) {
-        this.totalPages=totalPages;
+        this.totalPages = totalPages;
     }
 
     public List<Object> getList() {
@@ -64,7 +64,7 @@ public class PageInfoResult {
     public static PageInfoResult getPageInfoResult(PageInfo pageInfo) {
         PageInfoResult result = new PageInfoResult();
         result.setPageNo(pageInfo.getPageNum());
-        result.setPageSize(pageInfo.getSize());
+        result.setCurrentPageNumber(pageInfo.getSize());
         result.setTotalItem(pageInfo.getTotal());
         result.setTotalPages(pageInfo.getPages());
         result.setList(pageInfo.getList());

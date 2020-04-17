@@ -22,7 +22,7 @@ import java.util.Map;
 public class ZlGoodsServiceImpl implements ZlGoodsService {
 
 
-    private ZlGoodsMapper zlGoodsMapper;
+    private final ZlGoodsMapper zlGoodsMapper;
 
     @Autowired
     public ZlGoodsServiceImpl(ZlGoodsMapper zlGoodsMapper) {
