@@ -1,9 +1,8 @@
 package com.zhiliao.hotel.controller.order;
 
-import com.github.pagehelper.PageInfo;
+import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
-import com.zhiliao.hotel.model.ZlOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.ZlOrderDetailService;
 import com.zhiliao.hotel.service.ZlOrderService;
@@ -16,8 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  *
@@ -38,35 +35,26 @@ public class OrderController{
         this.orderDetailService=orderDetailService;
     }
     
-    @ApiOperation(value="我的全部订单")
+    @ApiOperation(value="我的订单", notes="可传入不同的请求参数，查询各种类型的全部订单。例如：获取用户全部订单（不区分订单类型）列表的数据，传入token即可。")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType="query", name="token", dataType="String", required=true, value="token"),
-            @ApiImplicitParam(paramType="query", name="payStatus", dataType="int", required=false, value="获取不同的订单：0无须支付;1:待支付;2已支付;3已取消;不传获取全部订单"),
-            @ApiImplicitParam(paramType="query", name="pageNum", dataType="int", required=true, value="页码"),
+            @ApiImplicitParam(paramType="query", name="orderType", dataType="int", required=false, value="订单类型：1.商品订单；2.设施订单；3清扫订单；4.报修订单。"),
+            @ApiImplicitParam(paramType="query", name="orderStatus", dataType="int", required=false, value="订单状态：-1.已取消；0.待确认；1.已确认；2.已发货；3.已签收/已完成。"),
+            @ApiImplicitParam(paramType="query", name="payStatus", dataType="int", required=false, value="支付状态：0：无须支付；1：待支付；2：已支付。"),
+            @ApiImplicitParam(paramType="query", name="payType", dataType="int", required=false, value="支付方式：0.无支付方式；1.微信；2.支付宝；3.银行卡；4.其它。"),
+            @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码"),
             @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数"),
     })
     @PassToken
     @PostMapping("all")
-    public ReturnString findAllOrder(String token,Integer payStatus,Integer pageNum,Integer pageSize){
+    public ReturnString findAllOrder(String token,Integer orderType,Integer orderStatus,Integer payStatus,Integer payType,Integer pageNo,Integer pageSize){
         
         try{
             
             Long userId=TokenUtil.getUserId(token);
-            logger.info("我的全部订单id："+userId);
-            if(userId==null){
-                return new ReturnString("用户不存在");
-            }
-            List<ZlOrder> orderList=null;
-            PageInfo pageInfo=null;
-            if(payStatus==null){
-                orderList=orderService.findAllOrder(userId,pageNum,pageSize);
-                pageInfo=new PageInfo(orderList);
-                return new ReturnString(pageInfo.getList());
-            }
-            
-            orderList=orderService.findOrderByPayStatus(userId,payStatus,pageNum,pageSize);
-            pageInfo=new PageInfo(orderList);
-            return new ReturnString(pageInfo.getList());
+            logger.info("我的订单，用户ID："+userId);
+            PageInfoResult allOrder=orderService.findAllOrder(userId,orderType,orderStatus,payStatus,payType,pageNo,pageSize);
+            return new ReturnString(allOrder);
             
         }catch(Exception e){
             e.printStackTrace();

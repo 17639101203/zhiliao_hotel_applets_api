@@ -30,11 +30,27 @@
 
 
 	<select id="findAllOrder" resultType="com.zhiliao.hotel.model.ZlOrder">
-        SELECT * FROM zl_order WHERE UserID=#{userID} ORDER BY CreateDate DESC
-	</select>
 
-	<select id="findOrderByPayStatus" resultType="com.zhiliao.hotel.model.ZlOrder">
-        SELECT * FROM zl_order WHERE UserID=#{userID} AND PayStatus=#{payStatus} ORDER BY CreateDate DESC
+		SELECT * FROM zl_order WHERE UserID=#{userID}
+
+		<if test="orderType != null">
+			AND OrderType = #{orderType}
+		</if>
+
+		<if test="orderStatus != null">
+			AND OrderStatus = #{orderStatus}
+		</if>
+
+		<if test="payStatus != null">
+			AND PayStatus = #{payStatus}
+		</if>
+
+		<if test="payType != null">
+			AND PayType = #{payType}
+		</if>
+
+		ORDER BY CreateDate DESC
+
 	</select>
 
 	<select id="findById" resultType="com.zhiliao.hotel.model.ZlOrder">
