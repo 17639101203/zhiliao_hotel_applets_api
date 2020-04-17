@@ -5,4 +5,12 @@
 <mapper namespace="com.zhiliao.hotel.mapper.ZlHotelRoomMapper">
 
 
+        <select id="getById" resultType="com.zhiliao.hotel.model.ZlHotelroom">
+
+        select  * from   zl_hotelroom where RoomID =#{roomId} and RoomStatus=1
+        and HotelID =(select HotelID FROM zl_hotel where HotelID=#{hotelId})
+
+ </select>
+
+
 </mapper>

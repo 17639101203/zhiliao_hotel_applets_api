@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiliao.hotel.mapper.ZlHotelMapper">
+
+    <resultMap id="zlMap" type="com.zhiliao.hotel.model.ZlHotel">
+     <id column="ID" property="id"></id>
+    <result column="Status" property="Status"></result>
+        <result column="ProvinceID" property="ProvinceID"></result>
+        <result column="CityID" property="CityID"></result>
+        <result column="DistrictID" property="DistrictID"></result>
+        <result column="Title" property="Title"></result>
+        <result column="Img" property="Img"></result>
+        <result column="Address" property="Address"></result>
+        <result column="AddressX" property="AddressX"></result>
+        <result column="AddressY" property="AddressY"></result>
+        <result column="Tel" property="Tel"></result>
+        <result column="GuaZhangStatus" property="GuaZhangStatus"></result>
+        <result column="LeastPrice" property="LeastPrice"></result>
+        <result column="Shipping" property="Shipping"></result>
+        <result column="ShowMiniBa" property="ShowMiniBa"></result>
+        <result column="ShowFuWu" property="ShowFuWu"></result>
+        <result column="ShowTuiFang" property="ShowTuiFang"></result>
+        <result column="ShowKaiPiao" property="ShowKaiPiao"></result>
+        <result column="ShowYuDing" property="ShowYuDing"></result>
+        <result column="ShowQingSao" property="ShowQingSao"></result>
+        <result column="Fabiaoimg" property="Fabiaoimg"></result>
+        <result column="Banner" property="Banner"></result>
+        <result column="About" property="About"></result>
+        <result column="Jiudianqrcode" property="Jiudianqrcode"></result>
+        <result column="jiesuanType" property="jiesuanType"></result>
+        <result column="minibaJiesuan" property="minibaJiesuan"></result>
+        <result column="eatJiesuan" property="eatJiesuan"></result>
+        <result column="sexJiesuan" property="sexJiesuan"></result>
+        <result column="specialJiesuan" property="specialJiesuan"></result>
+        <result column="type" property="type"></result>
+        <result column="bankname" property="bankname"></result>
+        <result column="banknum" property="banknum"></result>
+        <result column="bankuser" property="bankuser"></result>
+        <result column="contract" property="contract"></result>
+        <result column="typercode" property="typercode"></result>
+        <result column="todaymoney" property="todaymoney"></result>
+
+        <result column="allmoney" property="allmoney"></result>
+        <result column="weather" property="weather"></result>
+        <result column="is_join" property="is_join"></result>
+
+
+    </resultMap>
+<!--    <sql id="selectColumn">-->
+<!--    jd.ID as id,jd.Status,ProvinceID,jd.Title,jd.Img,-->
+<!--    Address,AddressX,AddressY,jd.Tel,GuaZhangStatus,LeastPrice,-->
+<!--    Shipping,ShowMiniBa,ShowTuiFang,ShowFuWu-->
+<!--    ,ShowTuiFang,ShowKaiPiao,ShowYuDing,Banner,Jiudianqrcode,-->
+<!--    jiesuanType,minibaJiesuan,eatJiesuan,sexJiesuan,specialJiesuan,-->
+<!--    type,typercode-->
+
+<!--    </sql>-->
+
+
+    <select id="getById" resultType="com.zhiliao.hotel.model.ZlHotel">
+
+        select * from zl_hotel jd
+        where jd.HotelID=#{hotelId} and HotelStatus=1
+    </select>
+
+</mapper>

@@ -363,4 +363,11 @@ public class DateUtils {
         res = String.valueOf(ts);
         return res;
     }
+
+    public static Long getCurrentTimestamp() throws ParseException {
+        SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = simpleDateFormat.format(new Date());
+        Date date=simpleDateFormat.parse(format);
+        return date.getTime()/1000L;
+    }
 }
