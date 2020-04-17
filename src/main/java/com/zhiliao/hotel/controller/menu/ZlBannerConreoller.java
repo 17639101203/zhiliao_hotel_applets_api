@@ -34,12 +34,13 @@ public class ZlBannerConreoller {
 
     @ApiOperation(value = "查询所属轮播图")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "String", required = true, value = "酒店ID"),
             @ApiImplicitParam(paramType = "path", name = "menuID", dataType = "String", required = true, value = "菜单ID"),
     })
     @PassToken
     @GetMapping("/findBanner/{hotelID}/{menuID}")
-    public ReturnString findBanner(@PathVariable Integer hotelID,@PathVariable Integer menuID) {
+    public ReturnString findBanner(String token, @PathVariable Integer hotelID,@PathVariable Integer menuID) {
         try {
             List<ZlBanner> zlBanners = zlBannerService.findBanner(hotelID,menuID);
             return new ReturnString(JSON.toJSON(zlBanners));

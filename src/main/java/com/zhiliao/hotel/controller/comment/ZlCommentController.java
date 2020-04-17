@@ -1,7 +1,7 @@
 package com.zhiliao.hotel.controller.comment;
 
-import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
+import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.model.ZlComment;
 import com.zhiliao.hotel.service.ZlCommentService;
 import com.zhiliao.hotel.utils.DateUtils;
@@ -45,7 +45,7 @@ public class ZlCommentController {
             @ApiImplicitParam(paramType = "query", name = "content", dataType = "int", required = false, value = "评价内容")
     })
     @PostMapping("addComment")
-    @PassToken
+    @UserLoginToken
     public ReturnString addComment(Integer hotelID, String token, Integer evaluation, String tagIDs, String content) {
 //        logger.info("点赞吐槽 "+" "+hotelID+" "+userID+" "+evaluation+" "+tagIDs+" "+level+" "+content);
         ZlComment zlComment = new ZlComment();

@@ -3,6 +3,7 @@ package com.zhiliao.hotel.controller.order;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
+import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.ZlOrderDetailService;
 import com.zhiliao.hotel.service.ZlOrderService;
@@ -45,7 +46,7 @@ public class OrderController{
             @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码"),
             @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数"),
     })
-    @PassToken
+    @UserLoginToken
     @PostMapping("all")
     public ReturnString findAllOrder(String token,Integer orderType,Integer orderStatus,Integer payStatus,Integer payType,Integer pageNo,Integer pageSize){
         
@@ -66,12 +67,13 @@ public class OrderController{
     @ApiOperation(value="订单详情")
     @PostMapping("Detail")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType="query", dataType="long", name="userID", value="用户ID", required=true),
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType="query", dataType="long", name="orderID", value="订单ID", required=true)
     })
-    @PassToken
+    @UserLoginToken
     @ResponseBody
-    public ReturnString findOrderDetail(Long userID,Long orderID){
+    public ReturnString findOrderDetail(String token,Long orderID){
+        Long userID = TokenUtil.getUserId(token);
         logger.info("用户ID："+userID+"，订单ID："+orderID);
         try{
             ZlOrderDetail orderDetail=orderDetailService.findOrder(userID,orderID);
@@ -88,6 +90,7 @@ public class OrderController{
             @ApiImplicitParam(paramType="path", name="orderID", dataType="Long", required=true, value="订单id")
     })
     @PostMapping("quXiaoOrder/{orderID}")
+    @UserLoginToken
     @ResponseBody
     public ReturnString findByjiudianId(String token,@PathVariable Long orderID){
         try{

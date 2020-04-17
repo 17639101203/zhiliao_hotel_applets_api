@@ -1,9 +1,9 @@
 package com.zhiliao.hotel.controller.hotel;
 
 
-import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 
+import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.service.ZlHotelService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -31,9 +31,10 @@ public class ZlHotelController {
 
 
 
-    @PassToken
+    @UserLoginToken
     @GetMapping("getHotelList")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "String", required = true, value = "酒店ID"),
             @ApiImplicitParam(paramType = "query", name = "roomId", dataType = "String", required = false, value = "客房ID"),
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "凭证"),

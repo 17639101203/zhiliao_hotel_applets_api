@@ -30,11 +30,12 @@ public class ZlHotelRoomController {
 
     @ApiOperation(value = "查询wifi")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "String", required = true, value = "酒店ID")
     })
     @PassToken
     @GetMapping("/findWiFi/{hotelid}")
-    public ReturnString findWiFi(@PathVariable Integer hotelid){
+    public ReturnString findWiFi(String token, @PathVariable Integer hotelid){
         try {
             Map<String,String> wifi = zlHotelRoomService.findWiFi(hotelid);
             return new ReturnString(wifi);

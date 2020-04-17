@@ -28,12 +28,13 @@ public class ZlMenuvisitlogController {
 
     @ApiOperation(value = "添加记录")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "menuId", dataType = "String", required = true, value = "菜单ID"),
             @ApiImplicitParam(paramType = "path", name = "userId", dataType = "String", required = true, value = "用户ID")
     })
     @PassToken
     @PostMapping("/add/{menuId}/{userId}")
-    public ReturnString findBanner(@PathVariable Integer menuId, @PathVariable Integer userId) {
+    public ReturnString findBanner(String token, @PathVariable Integer menuId, @PathVariable Integer userId) {
         try {
             zlMenuvisitlogService.add(menuId, userId);
             return new ReturnString(0, "添加成功");

@@ -1,7 +1,7 @@
 package com.zhiliao.hotel.controller.clean;
 
-import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
+import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.model.ZlCleanOrder;
 import com.zhiliao.hotel.service.ZlCleanOrderService;
 import com.zhiliao.hotel.utils.DateUtils;
@@ -52,7 +52,7 @@ public class ZlCleanOrderController {
             @ApiImplicitParam(paramType = "query", name = "remark", dataType = "String", required = false, value = "其他需求备注")
     })
     @PostMapping("addQingsaoOrder")
-    @PassToken
+    @UserLoginToken
     public ReturnString addCleanOrder(String token, Integer hotelID, String hotelName, Integer roomID, String roomNumber,Integer comeformID, String bookDay, String bookDate, String remark) {
 //        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");   //设置日期格式
 //        String uuid = UUID.randomUUID().toString().replaceAll("-","");   //把uuid生成的"-"去掉
