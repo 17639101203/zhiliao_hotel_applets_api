@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiliao.hotel.mapper.ZlRepairorderMyMapper">
+  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.zlRepairorder">
+    <result column="OrderID" jdbcType="BIGINT" property="orderid" />
+    <result column="UserID" jdbcType="BIGINT" property="userid" />
+    <result column="SerialNumber" jdbcType="CHAR" property="serialnumber" />
+    <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
+    <result column="HotelName" jdbcType="CHAR" property="hotelname" />
+    <result column="RoomID" jdbcType="INTEGER" property="roomid" />
+    <result column="RoomNumber" jdbcType="CHAR" property="roomnumber" />
+    <result column="ImgUrls" jdbcType="CHAR" property="imgurls" />
+    <result column="Remark" jdbcType="CHAR" property="remark" />
+    <result column="ComeFormID" jdbcType="INTEGER" property="comeformid" />
+    <result column="IsDelete" jdbcType="BIT" property="isdelete" />
+    <result column="OrderStatus" jdbcType="TINYINT" property="orderstatus" />
+    <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
+    <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
+  </resultMap>
+
+  <select id="findAllByUserId" resultType="com.zhiliao.hotel.model.zlRepairorder">
+    select OrderID, UserID, SerialNumber,
+    HotelID, HotelName, RoomID,
+    RoomNumber, ImgUrls, Remark,
+    ComeFormID, IsDelete, OrderStatus,
+    CreateDate, UpdateDate
+    from zl_repairorder
+    where 1 = 1
+    <if test="userId != null">
+      and UserID = #{userId}
+    </if>
+    <if test="orderstatus != null">
+      and OrderStatus = #{orderstatus}
+    </if>
+    order by CreateDate DESC
+  </select>
+
+
+  <select id="findDetail" resultType="com.zhiliao.hotel.model.zlRepairorder">
+    select OrderID, UserID, SerialNumber,
+    HotelID, HotelName, RoomID,
+    RoomNumber, ImgUrls, Remark,
+    ComeFormID, IsDelete, OrderStatus,
+    CreateDate, UpdateDate
+    from zl_repairorder
+    where OrderID = #{orderID}
+  </select>
+</mapper>

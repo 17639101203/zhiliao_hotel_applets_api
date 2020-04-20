@@ -2,6 +2,7 @@ package com.zhiliao.hotel.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.mapper.ZlRepairMapper;
 import com.zhiliao.hotel.mapper.ZlRepairorderMapper;
 import com.zhiliao.hotel.model.zlRepair;
@@ -51,32 +52,4 @@ public class ZlRepairServiceImpl implements ZlRepairService {
         }
     }
 
-
-    /**
-     * 报修服务订单查询
-     * @param userId
-     * @param orderstatus
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    @Override
-    public List<zlRepairorder> findAllByUserId(Long userId, Integer orderstatus, Integer pageNum, Integer pageSize) {
-        PageHelper.startPage(pageNum,pageSize);
-        List<zlRepairorder> repairOrders = zlRepairorderMapper.findAllByUserId(userId,orderstatus);
-        for (int i = 0; i < repairOrders.size(); i++) {
-            zlRepairorder zlRepairOrder = repairOrders.get(i);
-            zlRepairOrder.setFuwutype("报修服务");
-        }
-        PageInfo pageInfo = new PageInfo(repairOrders);
-
-        return pageInfo.getList();
-    }
-
-    @Override
-    public zlRepairorder orderDetail(Long orderID) {
-        zlRepairorder repairOrder = zlRepairorderMapper.findDetail(orderID);
-        repairOrder.setFuwutype("报修");
-        return repairOrder;
-    }
 }

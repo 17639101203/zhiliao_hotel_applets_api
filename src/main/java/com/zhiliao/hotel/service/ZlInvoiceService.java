@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.service;
 
+import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.model.zlInvoice;
 
 import java.util.List;
@@ -29,22 +30,6 @@ public interface ZlInvoiceService {
      */
     public void deleteInvoice(Long userid, Integer invoiceid);
 
-    /**
-     * 获取发票订单
-     * @param userId
-     * @param invoicestatus
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    List<zlInvoice> findAllByUserId(Long userId, Integer invoicestatus, Integer pageNum, Integer pageSize);
-
-    /**
-     * 订单详情
-     * @param invoiceid
-     * @return
-     */
-    zlInvoice orderDetail(Integer invoiceid);
 }
 
 

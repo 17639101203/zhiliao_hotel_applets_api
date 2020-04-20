@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.controller.news;
 
 import com.github.pagehelper.PageInfo;
+import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.controller.wxuser.ZlWxuserController;
@@ -30,29 +31,29 @@ public class zlNewsController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "Integer", required = true, value = "酒品id"),
-            @ApiImplicitParam(paramType="query", name="pageNum", dataType="int", required=true, value="页码值"),
+            @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码值"),
             @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数"),
     })
     @PostMapping("findByjiudianId/{hotelID}")
     @ResponseBody
     @PassToken
-    public ReturnString findByjiudianId(String token, @PathVariable Integer hotelID,Integer pageNum,Integer pageSize){
+    public ReturnString findByjiudianId(String token, @PathVariable Integer hotelID,Integer pageNo,Integer pageSize){
         try {
             logger.info("酒店ID：" + hotelID);
-            List<zlNews> allJiuDianId;
+            PageInfoResult allJiuDianId;
             PageInfo pageInfo;
             Integer type = 1;
             Integer status = 1;
             if (hotelID == 0){
-                allJiuDianId = zlNewsService.findAllJiuDianId(hotelID,type,status,pageNum,pageSize);
-                pageInfo = new PageInfo(allJiuDianId);
+                allJiuDianId = zlNewsService.findAllJiuDianId(hotelID,type,status,pageNo,pageSize);
+
             }else {
                 type = 2;
-                allJiuDianId = zlNewsService.findAllJiuDianId(hotelID, type,status,pageNum,pageSize);
-                pageInfo = new PageInfo(allJiuDianId);
+                allJiuDianId = zlNewsService.findAllJiuDianId(hotelID, type,status,pageNo,pageSize);
+
             }
 
-            return new ReturnString(pageInfo.getList());
+            return new ReturnString(allJiuDianId);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取失败");

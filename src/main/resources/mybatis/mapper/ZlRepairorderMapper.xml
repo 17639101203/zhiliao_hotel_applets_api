@@ -119,31 +119,4 @@
             UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and InvoiceStatus in  (0,1);
     </select>-->
 
-  <select id="findAllByUserId" resultType="com.zhiliao.hotel.model.zlRepairorder">
-    select OrderID, UserID, SerialNumber,
-    HotelID, HotelName, RoomID,
-    RoomNumber, ImgUrls, Remark,
-    ComeFormID, IsDelete, OrderStatus,
-    CreateDate, UpdateDate
-    from zl_repairorder
-    where 1 = 1
-    <if test="userId != null">
-      and UserID = #{userId}
-    </if>
-    <if test="orderstatus != null">
-      and OrderStatus = #{orderstatus}
-    </if>
-    order by CreateDate DESC
-  </select>
-
-
-  <select id="findDetail" resultType="com.zhiliao.hotel.model.zlRepairorder">
-    select OrderID, UserID, SerialNumber,
-    HotelID, HotelName, RoomID,
-    RoomNumber, ImgUrls, Remark,
-    ComeFormID, IsDelete, OrderStatus,
-    CreateDate, UpdateDate
-    from zl_repairorder
-    where OrderID = #{orderID}
-  </select>
 </mapper>

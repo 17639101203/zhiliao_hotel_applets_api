@@ -9,8 +9,5 @@ public interface ZlRepairorderMapper {
 
     public Integer insertRepairorder(zlRepairorder repairorder);
 
-    List<zlRepairorder> findAllByUserId(@Param("userId") Long userId, @Param("orderstatus") Integer orderstatus);
-
-    zlRepairorder findDetail(@Param("orderID") Long orderID);
 
 }

@@ -5,10 +5,11 @@ import com.zhiliao.hotel.model.zlRepair;
 import com.zhiliao.hotel.model.zlRepairorder;
 
 import java.io.IOException;
-import java.util.List;
 
-public interface ZlRepairService {
+public interface ZlRepairMyService {
 
-    public void addRepairMsg(zlRepair repair,String hotelname) throws IOException;
 
+    PageInfoResult findAllByUserId(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize);
+
+    zlRepairorder orderDetail(Long orderID);
 }

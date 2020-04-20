@@ -2,6 +2,7 @@ package com.zhiliao.hotel.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.mapper.ZlInvoiceMapper;
 import com.zhiliao.hotel.model.zlInvoice;
 import com.zhiliao.hotel.service.ZlInvoiceService;
@@ -46,19 +47,4 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
         }
     }
 
-    @Override
-    public List<zlInvoice> findAllByUserId(Long userId, Integer invoicestatus, Integer pageNum, Integer pageSize) {
-        PageHelper.startPage(pageNum,pageSize);
-        List<zlInvoice> invoices = mapper.findAllByUserId(userId,invoicestatus);
-        for (int i = 0; i < invoices.size(); i++) {
-            zlInvoice invoice = invoices.get(i);
-            invoice.setFuwutype("发票服务");
-        }
-        return new PageInfo(invoices).getList();
-    }
-
-    @Override
-    public zlInvoice orderDetail(Integer invoiceid) {
-        return mapper.orderDetail(invoiceid);
-    }
 }
