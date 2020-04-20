@@ -37,11 +37,9 @@ public class ZlHotelController {
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "String", required = true, value = "酒店ID"),
             @ApiImplicitParam(paramType = "query", name = "roomId", dataType = "String", required = false, value = "客房ID"),
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "凭证"),
-            @ApiImplicitParam(paramType = "query", name = "type", dataType = "String", required = true, value = "类型 1.C端  2.B端"),
     })
-    public ReturnString getHotelList(String hotelId, String roomId, String type, String token) throws ParseException {
-        ReturnString returnString = zlHotelService.getById(hotelId, roomId, type,token);
+    public ReturnString getHotelList(String hotelId, String roomId, String token) throws ParseException {
+        ReturnString returnString = zlHotelService.getById(hotelId, roomId,token);
         return returnString;
     }
 

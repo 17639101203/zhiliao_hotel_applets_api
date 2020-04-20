@@ -67,10 +67,12 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
 
     @Override
-    public ReturnString getById(String hotelId, String roomId, String type, String token) throws ParseException {
+    public ReturnString getById(String hotelId, String roomId, String token) throws ParseException {
         List<ZlXcxmenu> zlXcxMenuList = null;
         ZlHotelroom zlHotelroom = null;
-        if (!StringUtils.isEmpty(type) && type.equals("2")) {
+        String state="1";
+        if(state.equals("1")){
+        if (!StringUtils.isEmpty(roomId)) {
             zlHotelroom = zlHotelRoomMapper.getById(roomId, hotelId);
             ZlUserloginlog zlUserloginlog = new ZlUserloginlog();
 
@@ -135,6 +137,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
             //存储数据至缓存中
             redisTemplate.boundValueOps(RedisConstant.REDIS_HOTEL_KEY + ":" + hotelId).set(sjJiuDianJson, 100, TimeUnit.SECONDS);
             return new ReturnString(sjJiuDianIn1);
+           }
         }
         return new ReturnString("数据加载失败");
     }
