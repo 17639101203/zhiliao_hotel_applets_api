@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="786d9c81-04a8-4d56-9e87-0719a6fe2011" name="Default Changelist" comment="第二次提交">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/news/zlNewsController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/zlNewsMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/model/zlNews.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/zlNewsServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/zlNewsService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/timer/EggTimer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/zlNewsMapper.xml" afterDir="false" />
+    <list default="true" id="786d9c81-04a8-4d56-9e87-0719a6fe2011" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/news/SjCbNewsController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/order/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/order/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/SjCbNewsMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlOrderDetailMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlOrderDetailMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlOrderMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlOrderMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/model/SjCbNews.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/SjCbNewsService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/ZlOrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/ZlOrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/SjCbNewsServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/ZlOrderServiceIml.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/ZlOrderServiceIml.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/SjCbNewsMapper.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlOrderMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlOrderMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlOrderdetailMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlOrderdetailMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/Repair/ZlRepairController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/Repair/ZlRepairController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/clean/ZlCleanOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/clean/ZlCleanOrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/invoice/ZlInvoiceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/invoice/ZlInvoiceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/news/zlNewsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/controller/news/zlNewsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlCleanOrderMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlCleanOrderMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlInvoiceMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlInvoiceMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlRepairorderMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/mapper/ZlRepairorderMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/model/ZlCleanOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/model/ZlCleanOrder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/model/zlInvoice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/model/zlInvoice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/model/zlRepairorder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/model/zlRepairorder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/ZlCleanOrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/ZlCleanOrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/ZlInvoiceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/ZlInvoiceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/ZlRepairService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/ZlRepairService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/ZlCleanOrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/ZlCleanOrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/ZlInvoiceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/ZlInvoiceServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/ZlRepairServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/ZlRepairServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/zlNewsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/impl/zlNewsServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/zlNewsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zhiliao/hotel/service/zlNewsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlCleanOrderMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlCleanOrderMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlInvoiceMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlInvoiceMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlRepairorderMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/mapper/ZlRepairorderMapper.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +110,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.importing" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
   </component>
   <component name="RebelAgentSelection">
     <selection>jr</selection>
@@ -209,7 +210,15 @@
       <workItem from="1586999849518" duration="429000" />
       <workItem from="1587000344507" duration="27000" />
       <workItem from="1587000486389" duration="684000" />
-      <workItem from="1587001650637" duration="1989000" />
+      <workItem from="1587001650637" duration="2271000" />
+      <workItem from="1587005468308" duration="3348000" />
+      <workItem from="1587015467087" duration="3945000" />
+      <workItem from="1587087389349" duration="369000" />
+      <workItem from="1587089885320" duration="660000" />
+      <workItem from="1587101350207" duration="2458000" />
+      <workItem from="1587106755093" duration="37000" />
+      <workItem from="1587111016780" duration="1472000" />
+      <workItem from="1587342948676" duration="2336000" />
     </task>
     <task id="LOCAL-00001" summary="第二次提交">
       <created>1586483082485</created>
@@ -330,7 +339,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586856513161</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="咨讯，取消订单，定时器">
+      <created>1587003865936</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1587003865936</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -379,7 +395,8 @@
     <MESSAGE value="购物车结构" />
     <MESSAGE value="购物车添加接口修改" />
     <MESSAGE value="购物车查询、清空接口" />
-    <option name="LAST_COMMIT_MESSAGE" value="购物车查询、清空接口" />
+    <MESSAGE value="咨讯，取消订单，定时器" />
+    <option name="LAST_COMMIT_MESSAGE" value="咨讯，取消订单，定时器" />
   </component>
   <component name="WindowStateProjectService">
     <state x="552" y="186" key="#Project_Structure" timestamp="1586828245399">
@@ -391,9 +408,10 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="414" y="183" width="1165" height="684" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1586740835016" />
-    <state x="765" y="218" key="#com.intellij.ide.util.MemberChooser" timestamp="1586919517653">
-      <screen x="0" y="0" width="1920" height="1050" />
+    <state x="765" y="216" key="#com.intellij.ide.util.MemberChooser" timestamp="1587343081691">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="765" y="216" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1587343081691" />
     <state x="2685" y="218" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586590996031" />
     <state x="765" y="218" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1050@0.0.1920.1050" timestamp="1586919517653" />
     <state x="690" y="305" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1586919529688">
@@ -417,10 +435,10 @@
     <state x="715" y="233" key="#xdebugger.evaluate/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1586744444505" />
     <state x="2635" y="233" key="#xdebugger.evaluate/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586587552437" />
     <state x="715" y="233" key="#xdebugger.evaluate/0.0.1920.1050@0.0.1920.1050" timestamp="1586674866344" />
-    <state x="544" y="123" width="1293" height="806" key="CommitChangelistDialog2" timestamp="1587003770137">
+    <state x="537" y="0" width="1293" height="806" key="CommitChangelistDialog2" timestamp="1587003865460">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="544" y="123" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1587003770137" />
+    <state x="537" y="0" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1587003865460" />
     <state x="2464" y="124" key="CommitChangelistDialog2/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586764774604" />
     <state x="544" y="124" width="1293" height="806" key="CommitChangelistDialog2/0.0.1920.1050@0.0.1920.1050" timestamp="1586921771860" />
     <state width="845" height="466" key="DebuggerActiveHint" timestamp="1586745787411">
@@ -525,25 +543,26 @@
     </state>
     <state x="2611" y="238" key="RollbackChangesDialog/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586489811861" />
     <state x="691" y="238" key="RollbackChangesDialog/0.0.1920.1050@0.0.1920.1050" timestamp="1586769049988" />
-    <state x="463" y="0" key="SettingsEditor" timestamp="1587000519857">
+    <state x="463" y="0" key="SettingsEditor" timestamp="1587113759988">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="463" y="0" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1587000519857" />
+    <state x="463" y="0" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1587113759988" />
     <state x="2383" y="170" key="SettingsEditor/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586569755651" />
     <state x="463" y="170" key="SettingsEditor/0.0.1920.1050@0.0.1920.1050" timestamp="1586432983942" />
-    <state x="552" y="261" key="Vcs.Push.Dialog.v2" timestamp="1586921777256">
-      <screen x="0" y="0" width="1920" height="1050" />
+    <state x="552" y="259" key="Vcs.Push.Dialog.v2" timestamp="1587003870130">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="552" y="259" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587003870130" />
     <state x="2472" y="261" key="Vcs.Push.Dialog.v2/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586764851297" />
     <state x="552" y="261" key="Vcs.Push.Dialog.v2/0.0.1920.1050@0.0.1920.1050" timestamp="1586921777256" />
     <state x="515" y="44" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1587002396843">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="515" y="44" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1587002396843" />
-    <state x="754" y="439" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587003730100">
+    <state x="754" y="439" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587345127160">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="754" y="439" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587003730100" />
+    <state x="754" y="439" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587345127160" />
     <state x="2674" y="443" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586764657328" />
     <state x="754" y="443" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1050@0.0.1920.1050" timestamp="1586921627712" />
     <state x="754" y="443" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1586826600001" />
@@ -552,6 +571,14 @@
     </state>
     <state x="2567" y="280" width="626" height="490" key="find.popup/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586591452565" />
     <state x="647" y="280" width="626" height="490" key="find.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1586913372153" />
+    <state x="161" y="200" key="new project wizard" timestamp="1587106620416">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="161" y="200" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1587106620416" />
+    <state x="642" y="84" key="refactoring.ChangeSignatureDialog" timestamp="1587006621008">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="642" y="84" key="refactoring.ChangeSignatureDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1587006621008" />
     <state x="616" y="243" key="run.anything.popup" timestamp="1586435939844">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>

@@ -8,7 +8,7 @@ import java.util.List;
  * 咨讯service接口
  */
 public interface zlNewsService {
-    List<zlNews> findAllJiuDianId(Integer hotelID, Integer type, Integer status);
+    List<zlNews> findAllJiuDianId(Integer pageNum,Integer pageSize, Integer hotelID, Integer type, Integer status);
 
     zlNews findById(Integer newsid);
 }

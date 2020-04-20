@@ -109,7 +109,7 @@
     </trim>
   </insert>
 
-  <!--  根据用户ID查询发票-->
+  <!--&lt;!&ndash;  根据用户ID查询发票&ndash;&gt;
   <select id="queryByHotelName" resultMap="BaseResultMap">
         select
             h.HotelName
@@ -117,5 +117,33 @@
             zl_invoice i left join zl_hotel h on i.HotelID = h.HotelID
         where
             UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and InvoiceStatus in  (0,1);
-    </select>
+    </select>-->
+
+  <select id="findAllByUserId" resultType="com.zhiliao.hotel.model.zlRepairorder">
+    select OrderID, UserID, SerialNumber,
+    HotelID, HotelName, RoomID,
+    RoomNumber, ImgUrls, Remark,
+    ComeFormID, IsDelete, OrderStatus,
+    CreateDate, UpdateDate
+    from zl_repairorder
+    where 1 = 1
+    <if test="userId != null">
+      and UserID = #{userId}
+    </if>
+    <if test="orderstatus != null">
+      and OrderStatus = #{orderstatus}
+    </if>
+    order by CreateDate DESC
+  </select>
+
+
+  <select id="findDetail" resultType="com.zhiliao.hotel.model.zlRepairorder">
+    select OrderID, UserID, SerialNumber,
+    HotelID, HotelName, RoomID,
+    RoomNumber, ImgUrls, Remark,
+    ComeFormID, IsDelete, OrderStatus,
+    CreateDate, UpdateDate
+    from zl_repairorder
+    where OrderID = #{orderID}
+  </select>
 </mapper>

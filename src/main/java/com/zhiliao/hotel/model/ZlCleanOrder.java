@@ -78,6 +78,18 @@ public class ZlCleanOrder implements Serializable {
      * 支付/取消时间
      */
     private Integer updatedate;
+    /**
+     * 服务类型
+     */
+    private String fuwutype;
+
+    public String getFuwutype() {
+        return fuwutype;
+    }
+
+    public void setFuwutype(String fuwutype) {
+        this.fuwutype = fuwutype;
+    }
 
     public Long getOrderid() {
         return orderid;
@@ -208,6 +220,7 @@ public class ZlCleanOrder implements Serializable {
                 ", isdelete=" + isdelete +
                 ", createdate=" + createdate +
                 ", updatedate=" + updatedate +
+                ", fuwutype=" + fuwutype +
                 '}';
     }
 
@@ -226,6 +239,7 @@ public class ZlCleanOrder implements Serializable {
         this.isdelete = isdelete;
         this.createdate = createdate;
         this.updatedate = updatedate;
+        this.fuwutype = fuwutype;
     }
 
     public ZlCleanOrder() {

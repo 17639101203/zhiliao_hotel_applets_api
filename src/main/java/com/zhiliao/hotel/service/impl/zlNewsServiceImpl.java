@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.zhiliao.hotel.model.zlNews;
 import com.zhiliao.hotel.service.zlNewsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,9 @@ public class zlNewsServiceImpl implements zlNewsService {
 
 
     @Override
-    public List<zlNews> findAllJiuDianId(Integer hotelID, Integer type, Integer status) {
+    public List<zlNews> findAllJiuDianId(Integer pageNum,Integer pageSize, Integer hotelID, Integer type, Integer status) {
+        //分页插件 pageNum:起始页，pageSize：每页显示条数
+        PageHelper.startPage(pageNum,pageSize);
         return zlNewsMapper.findAllJiuDianId(hotelID,type,status);
     }
 

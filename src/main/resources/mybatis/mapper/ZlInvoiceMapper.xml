@@ -155,4 +155,28 @@
         where
             UserID=#{userid,jdbcType=BIGINT} and InvoiceID=#{invoiceid,jdbcType=INTEGER}
     </delete>
+
+  <select id="findAllByUserId" resultType="com.zhiliao.hotel.model.zlInvoice">
+    select InvoiceID, UserID, InvoiceType,
+    MainBodyType, Title, Identifier,
+    Tel, Remark, InvoiceStatus,
+    IsDelete, CreateDate, UpdateDate
+    from zl_invoice
+    where 1 = 1
+    <if test="userId != null and userId != '' ">
+      and UserID = #{userId}
+    </if>
+    <if test="invoicestatus != null and invoicestatus != '' ">
+      and InvoiceStatus = #{invoicestatus}
+    </if>
+  </select>
+
+  <select id="orderDetail" resultType="com.zhiliao.hotel.model.zlInvoice">
+    select InvoiceID, UserID, InvoiceType,
+    MainBodyType, Title, Identifier,
+    Tel, Remark, InvoiceStatus,
+    IsDelete, CreateDate, UpdateDate
+    from zl_invoice
+    where InvoiceID = #{invoiceid}
+  </select>
 </mapper>
