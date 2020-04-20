@@ -94,48 +94,4 @@ public class ZlCleanOrderController {
 
     }
 
-    @ApiOperation(value = "清扫服务订单展示")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType = "query", name = "orderstatus", dataType = "Integer", required = true, value = "不传：查询全部，-1：取消，0：等待确认，1：已确认，2已处理"),
-            @ApiImplicitParam(paramType="query", name="pageNum", dataType="int", required=true, value="页码值"),
-            @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数")
-    })
-    @PostMapping("findByUserId")
-    @ResponseBody
-    @PassToken
-    public ReturnString findAllUserId(String token ,Integer orderstatus,Integer pageNum,Integer pageSize){
-        try {
-            Long userId = TokenUtil.getUserId(token);
-            logger.info("用户id" + userId);
-            if (userId == null){
-                return new ReturnString("用户不存在");
-            }
-            List<ZlCleanOrder> cleanorders = zlCleanOrderService.findAllByStatus(userId,orderstatus,pageNum,pageSize);;
-            return new ReturnString(cleanorders);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnString("获取失败");
-        }
-    }
-
-
-
-    @ApiOperation(value="订单详情")
-    @PostMapping("detail")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType="query", dataType="long", name="orderID", value="清扫服务订单ID", required=true)
-    })
-    @PassToken
-    @ResponseBody
-    public ReturnString cleanOrderDetail(Long orderID){
-        try {
-            ZlCleanOrder cleanorder = zlCleanOrderService.orderDetail(orderID);
-            return new ReturnString(cleanorder);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnString("获取失败");
-        }
-    }
-
 }

@@ -557,9 +557,14 @@
       <screen x="1920" y="0" width="1920" height="1050" />
     </state>
     <state x="2460" y="262" key="IDE.errors.dialog/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586575932699" />
-    <state x="2589" y="241" key="MultipleFileMergeDialog" timestamp="1586592979685">
-      <screen x="1920" y="0" width="1920" height="1050" />
+    <state x="252" y="153" key="MergeDialog" timestamp="1587376127659">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="252" y="153" key="MergeDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1587376127659" />
+    <state x="669" y="239" key="MultipleFileMergeDialog" timestamp="1587376127664">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="669" y="239" key="MultipleFileMergeDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1587376127664" />
     <state x="2589" y="241" key="MultipleFileMergeDialog/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586592979684" />
     <state x="691" y="238" key="RollbackChangesDialog" timestamp="1586769049988">
       <screen x="0" y="0" width="1920" height="1050" />
@@ -582,10 +587,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="515" y="44" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1587002396843" />
-    <state x="754" y="439" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587376048815">
+    <state x="754" y="439" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587376098780">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="754" y="439" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587376048815" />
+    <state x="754" y="439" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587376098780" />
     <state x="2674" y="443" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1586764657328" />
     <state x="754" y="443" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1050@0.0.1920.1050" timestamp="1586921627712" />
     <state x="754" y="443" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1920.1050/0.0.1920.1050@0.0.1920.1050" timestamp="1586826600001" />
