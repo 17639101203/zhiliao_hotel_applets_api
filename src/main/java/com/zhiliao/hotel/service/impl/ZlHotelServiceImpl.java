@@ -13,6 +13,7 @@ import com.zhiliao.hotel.model.*;
 import com.zhiliao.hotel.service.ZlBannerService;
 import com.zhiliao.hotel.service.ZlHotelService;
 import com.zhiliao.hotel.utils.DateUtils;
+import com.zhiliao.hotel.utils.GsonUtils;
 import com.zhiliao.hotel.utils.IPUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -63,8 +64,6 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
     @Resource
     private ZlBannerService zlBannerService;
-
-
 
 
     @Override
@@ -133,14 +132,12 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 zlHotelIn.setHotelroom(zlHotelroom);
             }
 
-            Gson gson = new Gson().newBuilder().create();
+            String hotelJson = GsonUtils.objToJson(zlHotelIn);
 
-            String sjJiuDianJson = gson.toJson(zlHotelIn);
-
-            ZlHotelIn sjJiuDianIn1 = gson.fromJson(sjJiuDianJson, ZlHotelIn.class);
+            ZlHotelIn sjJiuDianIn1 = GsonUtils.gsonMaps(hotelJson, ZlHotelIn.class);
 
             //存储数据至缓存中
-            redisTemplate.boundValueOps(RedisConstant.REDIS_HOTEL_KEY + ":" + hotelId).set(sjJiuDianJson, 100, TimeUnit.SECONDS);
+            redisTemplate.boundValueOps(RedisConstant.REDIS_HOTEL_KEY + ":" + hotelId).set(hotelJson, 100, TimeUnit.SECONDS);
             return new ReturnString(sjJiuDianIn1);
            }
         }
