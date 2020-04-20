@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.service.impl;
 
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -105,10 +106,14 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         ZlHotel zlHotel = zlHotelMapper.getById(hotelId);
      
         if (zlHotel != null) {
+
+            //根据酒店ID获取菜单
             zlXcxMenuList = zlXcxMenuMapper.getMenuList(String.valueOf(zlHotel.getHotelid()));
 
+            //根据酒店ID获取轮播图，对应酒店不足情况后补剩余 默认为三张
             List<ZlBanner> zlBanner = zlBannerService.findBanner(Integer.valueOf(hotelId),0);
 
+            //根据酒店Id获取公告
             List<zlNews> zlNews = zlNewsMapper.findAllJiuDianId(zlHotel.getHotelid(), 1, 1);
 
             ZlHotelIn zlHotelIn = new ZlHotelIn();
@@ -130,7 +135,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
             Gson gson = new Gson().newBuilder().create();
 
-            String sjJiuDianJson = gson.toJson(zlHotelIn).toString();
+            String sjJiuDianJson = gson.toJson(zlHotelIn);
 
             ZlHotelIn sjJiuDianIn1 = gson.fromJson(sjJiuDianJson, ZlHotelIn.class);
 
