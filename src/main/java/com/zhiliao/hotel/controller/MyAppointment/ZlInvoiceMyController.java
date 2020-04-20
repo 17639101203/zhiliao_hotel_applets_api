@@ -4,11 +4,8 @@ import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
-import com.zhiliao.hotel.controller.invoice.params.InvoiceParam;
-import com.zhiliao.hotel.model.zlInvoice;
+import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.service.ZlInvoiceMyService;
-import com.zhiliao.hotel.service.ZlInvoiceService;
-import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -18,8 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Api(tags = "开票模块接口")
 @RestController
@@ -66,7 +61,7 @@ public class ZlInvoiceMyController {
     @ResponseBody
     public ReturnString repairOrderDetail(Integer invoiceid){
         try {
-            zlInvoice invoice = service.orderDetail(invoiceid);
+            ZlInvoice invoice = service.orderDetail(invoiceid);
             return new ReturnString(invoice);
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,13 +1,17 @@
 package com.zhiliao.hotel.mapper;
 
-import com.zhiliao.hotel.model.zlRepairorder;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import com.zhiliao.hotel.model.ZlRepairorder;
 
 public interface ZlRepairorderMapper {
 
-    public Integer insertRepairorder(zlRepairorder repairorder);
+    public Integer insertRepairorder(ZlRepairorder repairorder);
 
 
+
+    /**
+     * 根据用户名查询订单生成时间最近的订单
+     * @param UserID
+     * @return
+     */
+    public ZlRepairorder queryByUserIdDescByOrderId(Long UserID);
 }

@@ -1,9 +1,7 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.model.zlInvoice;
-
-import java.util.List;
+import com.zhiliao.hotel.model.ZlInvoice;
 
 
 public interface ZlInvoiceMyService {
@@ -24,7 +22,7 @@ public interface ZlInvoiceMyService {
      * @param invoiceid
      * @return
      */
-    zlInvoice orderDetail(Integer invoiceid);
+    ZlInvoice orderDetail(Integer invoiceid);
 }
 
 

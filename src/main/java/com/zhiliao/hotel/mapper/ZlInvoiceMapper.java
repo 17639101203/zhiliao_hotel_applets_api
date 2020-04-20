@@ -1,6 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
-import com.zhiliao.hotel.model.zlInvoice;
+import com.zhiliao.hotel.model.ZlInvoice;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -12,14 +12,14 @@ public interface ZlInvoiceMapper  {
      * @param invoice  发票对象
      * @return  返回1代表新增成功
      */
-    public  Integer  insertInvoice(zlInvoice invoice);
+    public  Integer  insertInvoice(ZlInvoice invoice);
 
     /**
      * 根据用户ID查询发票
      * @param userid    用户ID
      * @return    发票对象
      */
-    public List<zlInvoice> queryInvoiceByUserID(Long userid);
+    public List<ZlInvoice> queryInvoiceByUserID(Long userid);
 
 
     /**

@@ -1,6 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
-import com.zhiliao.hotel.model.zlRepairorder;
+import com.zhiliao.hotel.model.ZlRepairorder;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -8,8 +8,8 @@ import java.util.List;
 public interface ZlRepairorderMyMapper {
 
 
-    List<zlRepairorder> findAllByUserId(@Param("userId") Long userId, @Param("orderstatus") Integer orderstatus);
+    List<ZlRepairorder> findAllByUserId(@Param("userId") Long userId, @Param("orderstatus") Integer orderstatus);
 
-    zlRepairorder findDetail(@Param("orderID") Long orderID);
+    ZlRepairorder findDetail(@Param("orderID") Long orderID);
 
 }

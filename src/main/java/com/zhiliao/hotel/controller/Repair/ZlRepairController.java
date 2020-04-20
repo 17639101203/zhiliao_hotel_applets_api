@@ -1,19 +1,15 @@
 package com.zhiliao.hotel.controller.Repair;
 
-import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.Repair.params.RepairParam;
 import com.zhiliao.hotel.controller.file.UploadFileController;
-import com.zhiliao.hotel.model.zlRepair;
-import com.zhiliao.hotel.model.zlRepairorder;
+import com.zhiliao.hotel.model.ZlRepair;
+import com.zhiliao.hotel.model.ZlRepairorder;
 import com.zhiliao.hotel.service.ZlRepairService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +38,7 @@ public class ZlRepairController {
     public ReturnString addrepair(RepairParam repairParam,
                                   @RequestParam("multipartFiles") MultipartFile[] multipartFiles,
                                   @RequestParam String token) {
-            zlRepair repair = new zlRepair();
+            ZlRepair repair = new ZlRepair();
         try {
             // 解析token获取userid
             Long userid = TokenUtil.getUserId(token);
@@ -71,6 +67,24 @@ public class ZlRepairController {
             logger.error("报修信息添加失败");
             return new ReturnString(1, "报修信息添加失败，请重新再试");
         }
+    }
+
+
+    @ApiOperation(value = "查询报修订单详情方法")
+    @PostMapping("queryRepairOrder")
+    @UserLoginToken
+    public ReturnString addrepair(@RequestParam String token){
+        try {
+            // 解析token获取userid
+            Long userid = TokenUtil.getUserId(token);
+            ZlRepairorder zlRepairorder = service.queryRepairOrder(userid);
+            return new ReturnString(zlRepairorder);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("报修订单信息查询失败");
+            return new ReturnString(1, "报修订单信息查询失败，请重新再试");
+        }
+
     }
 
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlInvoiceMyMapper">
-  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.zlInvoice">
+  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlInvoice">
     <result column="InvoiceID" jdbcType="INTEGER" property="invoiceid" />
     <result column="UserID" jdbcType="BIGINT" property="userid" />
     <result column="InvoiceType" jdbcType="TINYINT" property="invoicetype" />
@@ -22,7 +22,7 @@
   </resultMap>
 
 
-  <select id="findAllByUserId" resultType="com.zhiliao.hotel.model.zlInvoice">
+  <select id="findAllByUserId" resultType="com.zhiliao.hotel.model.ZlInvoice">
     select InvoiceID, UserID, InvoiceType,
     MainBodyType, Title, Identifier,
     Tel, Remark, InvoiceStatus,
@@ -37,7 +37,7 @@
     </if>
   </select>
 
-  <select id="orderDetail" resultType="com.zhiliao.hotel.model.zlInvoice">
+  <select id="orderDetail" resultType="com.zhiliao.hotel.model.ZlInvoice">
     select InvoiceID, UserID, InvoiceType,
     MainBodyType, Title, Identifier,
     Tel, Remark, InvoiceStatus,

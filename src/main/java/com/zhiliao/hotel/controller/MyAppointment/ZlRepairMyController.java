@@ -3,14 +3,9 @@ package com.zhiliao.hotel.controller.MyAppointment;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
-import com.zhiliao.hotel.common.UserLoginToken;
-import com.zhiliao.hotel.controller.Repair.params.RepairParam;
 import com.zhiliao.hotel.controller.file.UploadFileController;
-import com.zhiliao.hotel.model.zlRepair;
-import com.zhiliao.hotel.model.zlRepairorder;
+import com.zhiliao.hotel.model.ZlRepairorder;
 import com.zhiliao.hotel.service.ZlRepairMyService;
-import com.zhiliao.hotel.service.ZlRepairService;
-import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -20,9 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Api(tags = "报修模块接口")
 @RestController
@@ -72,7 +64,7 @@ public class ZlRepairMyController {
     @ResponseBody
     public ReturnString repairOrderDetail(Long orderID){
         try {
-            zlRepairorder repairOrder = service.orderDetail(orderID);
+            ZlRepairorder repairOrder = service.orderDetail(orderID);
             return new ReturnString(repairOrder);
         } catch (Exception e) {
             e.printStackTrace();

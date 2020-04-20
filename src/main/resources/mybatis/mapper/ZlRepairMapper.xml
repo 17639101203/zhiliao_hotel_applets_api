@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlRepairMapper">
-  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.zlRepair">
+  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlRepair">
     <result column="RepairID" jdbcType="BIGINT" property="repairid" />
     <result column="UserID" jdbcType="BIGINT" property="userid" />
     <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
@@ -11,10 +11,11 @@
     <result column="ImgUrls" jdbcType="VARCHAR" property="imgurls" />
     <result column="RepairStatus" jdbcType="TINYINT" property="repairstatus" />
     <result column="IsDelete" jdbcType="BIT" property="isdelete" />
+    <result column="AppointmentDate" jdbcType="INTEGER" property="appointmentdate" />
     <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
     <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
   </resultMap>
-  <insert id="insertzlrepair" parameterType="com.zhiliao.hotel.model.zlRepair">
+  <insert id="insertzlrepair" parameterType="com.zhiliao.hotel.model.ZlRepair">
     insert into zl_repair
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="repairid != null">
@@ -22,6 +23,9 @@
       </if>
       <if test="userid != null">
         UserID,
+      </if>
+      <if test="appointmentdate != null">
+        AppointmentDate,
       </if>
       <if test="hotelid != null">
         HotelID,
@@ -67,6 +71,9 @@
       <if test="roomnumber != null">
         #{roomnumber,jdbcType=CHAR},
       </if>
+      <if test="appointmentdate != null">
+        #{appointmentdate,jdbcType=INTEGER},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -88,14 +95,6 @@
     </trim>
   </insert>
 
-  <!--  &lt;!&ndash;  根据用户ID查询报修信息&ndash;&gt;-->
-  <!--  <select id="querybaoxiuByUserID" resultMap="BaseResultMap">-->
-  <!--        select
-                f.KeFangID,f.baoxiuMsg,f.baoxiuImg,o.orderid,o.addtime
-              from
-                sj_fapiao f left join zl_order o on f.UserID = o.UserID
-              where
-                UserID=#{userid}-->
-  <!--    </select>-->
+
 
 </mapper>

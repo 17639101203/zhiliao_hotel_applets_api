@@ -1,15 +1,12 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.model.zlRepair;
-import com.zhiliao.hotel.model.zlRepairorder;
-
-import java.io.IOException;
+import com.zhiliao.hotel.model.ZlRepairorder;
 
 public interface ZlRepairMyService {
 
 
     PageInfoResult findAllByUserId(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize);
 
-    zlRepairorder orderDetail(Long orderID);
+    ZlRepairorder orderDetail(Long orderID);
 }
