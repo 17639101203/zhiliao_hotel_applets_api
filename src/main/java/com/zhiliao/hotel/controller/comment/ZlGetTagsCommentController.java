@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.controller.comment;
 
+import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.model.ZlTag;
@@ -44,7 +45,7 @@ public class ZlGetTagsCommentController {
             @ApiImplicitParam(paramType = "query", name = "hotelID", dataType = "int", required = true, value = "酒店ID"),
     })
     @PostMapping("getTags")
-    @UserLoginToken
+    @PassToken
     public ReturnString getTags(String token, Integer hotelID) {
         ZlTag zlTag = new ZlTag();
         zlTag.setHotelid(hotelID);

@@ -41,8 +41,8 @@ public class ZlCommentController {
             @ApiImplicitParam(paramType = "query", name = "hotelID", dataType = "int", required = true, value = "酒店ID"),
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "query", name = "evaluation", dataType = "int", required = true, value = "评价等级"),
-            @ApiImplicitParam(paramType = "query", name = "tagIDs", dataType = "String", required = false, value = "评价标签ID"),
-            @ApiImplicitParam(paramType = "query", name = "content", dataType = "int", required = false, value = "评价内容")
+            @ApiImplicitParam(paramType = "query", name = "tagIDs", dataType = "String", required = false, value = "评价标签ID 多个用丨隔开"),
+            @ApiImplicitParam(paramType = "query", name = "content", dataType = "String", required = false, value = "评价内容")
     })
     @PostMapping("addComment")
     @UserLoginToken

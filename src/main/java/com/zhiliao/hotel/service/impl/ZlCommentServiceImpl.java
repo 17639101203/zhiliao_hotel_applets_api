@@ -29,7 +29,7 @@ public class ZlCommentServiceImpl implements ZlCommentService {
 
     @Override
     public Integer addComment(ZlComment zlComment) {
-        return zlCommentMapper.insertSelective(zlComment);
+        return zlCommentMapper.addComment(zlComment);
     }
 
     @Override
