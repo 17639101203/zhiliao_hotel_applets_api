@@ -6,8 +6,7 @@ package com.zhiliao.hotel.common.constant;
  */
 public interface RedisConstant {
 
-    public final  static String REDIS_HOTEL_KEY="REDIS_HOTELID";
-
+    //banner key
     public final  static String BANNER_KEY="banner";
 
 }
