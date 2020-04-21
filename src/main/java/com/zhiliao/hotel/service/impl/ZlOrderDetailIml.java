@@ -15,9 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ZlOrderDetailIml implements ZlOrderDetailService{
     
+
+    private final ZlOrderDetailMapper orderMapper;
+
     @Autowired
-    private ZlOrderDetailMapper orderMapper;
-    
+    public ZlOrderDetailIml(ZlOrderDetailMapper orderMapper) {
+        this.orderMapper = orderMapper;
+    }
+
     @Override
     public ZlOrderDetail findOrder(Long userID,Long orderID){
         return orderMapper.findOrder(userID,orderID);

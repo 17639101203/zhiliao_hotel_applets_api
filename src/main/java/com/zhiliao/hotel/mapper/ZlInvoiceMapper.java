@@ -12,14 +12,14 @@ public interface ZlInvoiceMapper  {
      * @param invoice  发票对象
      * @return  返回1代表新增成功
      */
-    public  Integer  insertInvoice(ZlInvoice invoice);
+    Integer  insertInvoice(ZlInvoice invoice);
 
     /**
      * 根据用户ID查询发票
      * @param userid    用户ID
      * @return    发票对象
      */
-    public List<ZlInvoice> queryInvoiceByUserID(Long userid);
+    List<ZlInvoice> queryInvoiceByUserID(Long userid);
 
 
     /**
@@ -28,6 +28,6 @@ public interface ZlInvoiceMapper  {
      * @param invoiceid    发票ID
      * @return  返回1 为删除成功
      */
-    public Integer deleteInvoice(@Param("userid") Long userid,@Param("invoiceid")Integer invoiceid);
+    Integer deleteInvoice(@Param("userid") Long userid,@Param("invoiceid")Integer invoiceid);
 
 }

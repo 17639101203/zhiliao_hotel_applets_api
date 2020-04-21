@@ -1,4 +1,4 @@
-package com.zhiliao.hotel.controller.MyAppointment;
+package com.zhiliao.hotel.controller.myAppointment;
 
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
@@ -28,9 +28,12 @@ public class MyAppointmentController {
 
     private static final Logger logger = LoggerFactory.getLogger(MyAppointmentController.class);
 
+    private final MyAppointmentService myAppointmentService;
 
     @Autowired
-    private MyAppointmentService myAppointmentService;
+    public MyAppointmentController(MyAppointmentService myAppointmentService) {
+        this.myAppointmentService = myAppointmentService;
+    }
 
     @ApiOperation(value = "清扫服务订单展示")
     @ApiImplicitParams({
@@ -60,11 +63,12 @@ public class MyAppointmentController {
     @ApiOperation(value="清扫订单详情")
     @PostMapping("cleanDetail")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType="query", dataType="long", name="orderID", value="清扫服务订单ID", required=true)
     })
     @PassToken
     @ResponseBody
-    public ReturnString cleanOrderDetail(Long orderID){
+    public ReturnString cleanOrderDetail(String token ,Long orderID){
         try {
             ZlCleanOrder cleanorder = myAppointmentService.cleanOrderDetail(orderID);
             return new ReturnString(cleanorder);
@@ -88,9 +92,6 @@ public class MyAppointmentController {
         try {
             Long userId = TokenUtil.getUserId(token);
             logger.info("用户id" + userId);
-            if (userId == null){
-                return new ReturnString("用户不存在");
-            }
             PageInfoResult invoices = myAppointmentService.invoiceFindAll(userId,invoicestatus,pageNo,pageSize);
             return new ReturnString(invoices);
         } catch (Exception e) {
@@ -102,11 +103,12 @@ public class MyAppointmentController {
     @ApiOperation(value="发票订单详情")
     @PostMapping("invoiceDetail")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType="query", dataType="Integer", name="invoiceid", value="发票订单ID", required=true)
     })
     @PassToken
     @ResponseBody
-    public ReturnString invoiceOrderDetail(Integer invoiceid){
+    public ReturnString invoiceOrderDetail(String token, Integer invoiceid){
         try {
             ZlInvoice invoice = myAppointmentService.invoiceOrderDetail(invoiceid);
             return new ReturnString(invoice);
@@ -130,9 +132,6 @@ public class MyAppointmentController {
         try {
             Long userId = TokenUtil.getUserId(token);
             logger.info("用户id" + userId);
-            if (userId == null){
-                return new ReturnString("用户不存在");
-            }
             PageInfoResult repairOrders = myAppointmentService.repairFindAll(userId,orderstatus,pageNo,pageSize);
             return new ReturnString(repairOrders);
         } catch (Exception e) {
@@ -144,11 +143,12 @@ public class MyAppointmentController {
     @ApiOperation(value="订单详情")
     @PostMapping("repairDetail")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType="query", dataType="long", name="orderID", value="清扫服务订单ID", required=true)
     })
     @PassToken
     @ResponseBody
-    public ReturnString repairOrderDetail(Long orderID){
+    public ReturnString repairOrderDetail(String token, Long orderID){
         try {
             ZlRepairorder repairOrder = myAppointmentService.repairOrderDetail(orderID);
             return new ReturnString(repairOrder);

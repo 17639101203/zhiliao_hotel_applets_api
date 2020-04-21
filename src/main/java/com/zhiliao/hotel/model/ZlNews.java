@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author null
  * @date 2020-04-14
  */
-public class zlNews implements Serializable {
+public class ZlNews implements Serializable {
     /**
      * 主键
      */

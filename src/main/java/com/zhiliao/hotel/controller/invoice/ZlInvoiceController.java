@@ -21,8 +21,13 @@ import java.util.List;
 @RequestMapping("invoice")
 public class ZlInvoiceController {
 
+
+    private final ZlInvoiceService service;
+
     @Autowired
-    private ZlInvoiceService service;
+    public ZlInvoiceController(ZlInvoiceService service) {
+        this.service = service;
+    }
 
     private static final Logger logger = LoggerFactory.getLogger(ZlInvoiceController.class);
 

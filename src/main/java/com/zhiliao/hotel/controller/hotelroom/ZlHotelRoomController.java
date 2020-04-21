@@ -22,11 +22,15 @@ import java.util.Map;
  */
 @Api(tags = "wifi接口")
 @RestController
-@RequestMapping("/zl/hotelroom")
+@RequestMapping("hotelroom")
 public class ZlHotelRoomController {
 
+    private final ZlHotelRoomService zlHotelRoomService;
+
     @Autowired
-    private ZlHotelRoomService zlHotelRoomService;
+    public ZlHotelRoomController(ZlHotelRoomService zlHotelRoomService) {
+        this.zlHotelRoomService = zlHotelRoomService;
+    }
 
     @ApiOperation(value = "查询wifi")
     @ApiImplicitParams({
@@ -34,7 +38,7 @@ public class ZlHotelRoomController {
             @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "String", required = true, value = "酒店ID")
     })
     @PassToken
-    @GetMapping("/findWiFi/{hotelid}")
+    @GetMapping("findWiFi/{hotelid}")
     public ReturnString findWiFi(String token, @PathVariable Integer hotelid){
         try {
             Map<String,String> wifi = zlHotelRoomService.findWiFi(hotelid);

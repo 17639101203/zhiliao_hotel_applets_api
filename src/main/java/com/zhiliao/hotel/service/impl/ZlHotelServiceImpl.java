@@ -3,7 +3,6 @@ package com.zhiliao.hotel.service.impl;
 
 import com.google.common.collect.Lists;
 
-import com.google.common.reflect.TypeToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.constant.RedisConstant;
 import com.zhiliao.hotel.controller.hotel.in.ZlHotelIn;
@@ -18,15 +17,14 @@ import com.zhiliao.hotel.utils.TokenUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.*;
 import java.text.ParseException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -35,35 +33,41 @@ import java.util.concurrent.TimeUnit;
  * @author chenrong
  * @created date 2020/4/10
  */
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class ZlHotelServiceImpl implements ZlHotelService {
 
-    @Resource
-    private ZlHotelMapper zlHotelMapper;
+    private final ZlHotelMapper zlHotelMapper;
 
-    @Resource
-    private RedisTemplate redisTemplate;
+    private final RedisTemplate redisTemplate;
 
-    @Resource
-    private ZlHotelRoomMapper zlHotelRoomMapper;
+    private final ZlHotelRoomMapper zlHotelRoomMapper;
 
-    @Resource
-    private ZlXcxMenuMapper zlXcxMenuMapper;
+    private final ZlXcxMenuMapper zlXcxMenuMapper;
 
-    @Resource
-    private ZlUserloginlogMapper zlUserloginlogMapper;
+    private final ZlUserloginlogMapper zlUserloginlogMapper;
 
-    @Resource
-    private HttpServletRequest request;
+    private final HttpServletRequest request;
 
-    @Resource
-    private ZlWxuserMapper zlWxuserMapper;
+    private final ZlWxuserMapper zlWxuserMapper;
 
-    @Resource
-    private com.zhiliao.hotel.mapper.zlNewsMapper zlNewsMapper;
+    private final ZlNewsMapper zlNewsMapper;
 
-    @Resource
-    private ZlBannerService zlBannerService;
+    private final ZlBannerService zlBannerService;
+
+    @Autowired
+    public ZlHotelServiceImpl(ZlHotelMapper zlHotelMapper, RedisTemplate redisTemplate, ZlHotelRoomMapper zlHotelRoomMapper, ZlXcxMenuMapper zlXcxMenuMapper,
+                              ZlUserloginlogMapper zlUserloginlogMapper, HttpServletRequest request, ZlWxuserMapper zlWxuserMapper, ZlNewsMapper zlNewsMapper, ZlBannerService zlBannerService) {
+        this.zlHotelMapper = zlHotelMapper;
+        this.redisTemplate = redisTemplate;
+        this.zlHotelRoomMapper = zlHotelRoomMapper;
+        this.zlXcxMenuMapper = zlXcxMenuMapper;
+        this.zlUserloginlogMapper = zlUserloginlogMapper;
+        this.request = request;
+        this.zlWxuserMapper = zlWxuserMapper;
+        this.zlNewsMapper = zlNewsMapper;
+        this.zlBannerService = zlBannerService;
+    }
 
     @Override
     public ReturnString getById(String hotelId, String roomId, String token) throws ParseException {
@@ -119,7 +123,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 zlHotelIn.setZlBannerList(zlBanners);
 
                 //根据酒店Id获取公告
-                List<zlNews> zlNews = zlNewsMapper.findAllJiuDianId(zlHotel.getHotelid(), 1, 1);
+                List<ZlNews> zlNews = zlNewsMapper.findAllJiuDianId(zlHotel.getHotelid(), 1, 1);
 
                 //拷贝元数据
                 BeanUtils.copyProperties(zlHotel, zlHotelIn);

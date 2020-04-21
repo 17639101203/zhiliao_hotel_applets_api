@@ -20,12 +20,17 @@ import java.util.List;
 @Transactional(rollbackFor=Exception.class)
 @Service
 public class ZlOrderServiceIml implements ZlOrderService{
-    
+
+    private final ZlOrderMapper orderMapper;
+
+    private final ZlOrderDetailMapper orderDetailMapper;
+
     @Autowired
-    private ZlOrderMapper orderMapper;
-    @Autowired
-    private ZlOrderDetailMapper orderDetailMapper;
-    
+    public ZlOrderServiceIml(ZlOrderMapper orderMapper, ZlOrderDetailMapper orderDetailMapper) {
+        this.orderMapper = orderMapper;
+        this.orderDetailMapper = orderDetailMapper;
+    }
+
     @Override
     public PageInfoResult findAllOrder(Long userID,Integer orderType,Integer orderStatus,Integer payStatus,Integer payType,Integer pageNo,Integer pageSize){
         PageHelper.startPage(pageNo,pageSize);

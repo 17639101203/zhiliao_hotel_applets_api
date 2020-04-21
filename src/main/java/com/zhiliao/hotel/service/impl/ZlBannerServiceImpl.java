@@ -5,6 +5,7 @@ import com.zhiliao.hotel.model.ZlBanner;
 import com.zhiliao.hotel.service.ZlBannerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,12 +15,16 @@ import java.util.List;
  * @Classname ZlBannerServiceImpl
  * @date 2020/4/14 10:37
  */
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class ZlBannerServiceImpl implements ZlBannerService {
 
-    @Autowired
-    private ZlBannerMapper zlBannerMapper;
+    private final ZlBannerMapper zlBannerMapper;
 
+    @Autowired
+    public ZlBannerServiceImpl(ZlBannerMapper zlBannerMapper) {
+        this.zlBannerMapper = zlBannerMapper;
+    }
 
     /**
      * 查询所属轮播图

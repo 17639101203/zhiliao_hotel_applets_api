@@ -2,14 +2,12 @@ package com.zhiliao.hotel.controller.hotel.in;
 
 import com.zhiliao.hotel.model.ZlBanner;
 import com.zhiliao.hotel.model.ZlHotelroom;
+import com.zhiliao.hotel.model.ZlNews;
 import com.zhiliao.hotel.model.ZlXcxmenu;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
-import  com.zhiliao.hotel.model.zlNews;
 
 /**
  * @chenrong
@@ -431,17 +429,17 @@ public class ZlHotelIn implements Serializable {
         this.hotelroom = hotelroom;
     }
 
-    public List<com.zhiliao.hotel.model.zlNews> getZlNews() {
+    public List<ZlNews> getZlNews() {
         return zlNews;
     }
 
-    public void setZlNews(List<com.zhiliao.hotel.model.zlNews> zlNews) {
+    public void setZlNews(List<ZlNews> zlNews) {
         this.zlNews = zlNews;
     }
 
     /**
      * 酒店公告信息
      */
-    private List<zlNews> zlNews;
+    private List<ZlNews> zlNews;
 
 }

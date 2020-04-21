@@ -25,11 +25,15 @@ import java.util.List;
 @RequestMapping("repair")
 public class ZlRepairController {
 
-    @Autowired
-    private ZlRepairService service;
+    private final ZlRepairService service;
+
+    private final UploadFileController fileController;
 
     @Autowired
-    private UploadFileController fileController;
+    public ZlRepairController(ZlRepairService service, UploadFileController fileController) {
+        this.service = service;
+        this.fileController = fileController;
+    }
 
     private static final Logger logger = LoggerFactory.getLogger(ZlRepairController.class);
 

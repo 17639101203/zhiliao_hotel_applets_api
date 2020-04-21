@@ -13,26 +13,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
+@Transactional(rollbackFor=Exception.class)
 @Service
 public class ZlRepairServiceImpl implements ZlRepairService {
 
-    @Autowired
-    private ZlRepairMapper zlRepairMapper;
+    private final ZlRepairMapper zlRepairMapper;
+
+    private final ZlRepairorderMapper zlRepairorderMapper;
 
     @Autowired
-    private ZlRepairorderMapper zlRepairorderMapper;
-
-    @Override
-    @Transactional
-    public Integer addRepairMsg(ZlRepair repair) throws IOException {
-        Integer i = zlRepairMapper.insertzlrepair(repair);
-        return i;
+    public ZlRepairServiceImpl(ZlRepairMapper zlRepairMapper, ZlRepairorderMapper zlRepairorderMapper) {
+        this.zlRepairMapper = zlRepairMapper;
+        this.zlRepairorderMapper = zlRepairorderMapper;
     }
 
-
+    @Override
+    public Integer addRepairMsg(ZlRepair repair) throws IOException {
+        return zlRepairMapper.insertzlrepair(repair);
+    }
 
     @Override
-    @Transactional
     public void addRepairOrderMsg(ZlRepair repair,String hotelname) {
         ZlRepairorder repairorder = new ZlRepairorder();
         repairorder.setUserid(repair.getUserid());   //  用户ID
@@ -60,11 +60,8 @@ public class ZlRepairServiceImpl implements ZlRepairService {
 
     }
 
-
     @Override
     public ZlRepairorder queryRepairOrder(Long Userid) {
-        ZlRepairorder zlRepairorder = zlRepairorderMapper.queryByUserIdDescByOrderId(Userid);
-        return zlRepairorder;
+        return zlRepairorderMapper.queryByUserIdDescByOrderId(Userid);
     }
-
 }

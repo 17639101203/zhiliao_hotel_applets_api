@@ -13,7 +13,7 @@ public interface ZlRepairService {
      * @return
      * @throws IOException
      */
-    public Integer addRepairMsg(ZlRepair repair) throws IOException;
+    Integer addRepairMsg(ZlRepair repair) throws IOException;
 
 
     /**
@@ -21,7 +21,7 @@ public interface ZlRepairService {
      * @param Userid
      * @return
      */
-    public ZlRepairorder queryRepairOrder(Long Userid);
+    ZlRepairorder queryRepairOrder(Long Userid);
 
 
     /**
@@ -29,5 +29,5 @@ public interface ZlRepairService {
      * @param repair    报修信息
      * @param hotelname 酒店名
      */
-    public void addRepairOrderMsg(ZlRepair repair,String hotelname);
+    void addRepairOrderMsg(ZlRepair repair,String hotelname);
 }

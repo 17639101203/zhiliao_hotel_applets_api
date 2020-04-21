@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface ZlRepairorderMyMapper {
 
-
     List<ZlRepairorder> findAllByUserId(@Param("userId") Long userId, @Param("orderstatus") Integer orderstatus);
 
     ZlRepairorder findDetail(@Param("orderID") Long orderID);

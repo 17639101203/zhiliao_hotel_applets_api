@@ -1,7 +1,6 @@
 package com.zhiliao.hotel.controller.order;
 
 import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.model.ZlOrderDetail;
@@ -23,19 +22,19 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags="订单接口")
 @RestController
 @RequestMapping("order")
-public class OrderController{
+public class ZlOrderController{
     
-    private static final Logger logger=LoggerFactory.getLogger(OrderController.class);
+    private static final Logger logger=LoggerFactory.getLogger(ZlOrderController.class);
     
-    private ZlOrderService orderService;
-    private ZlOrderDetailService orderDetailService;
+    private final ZlOrderService orderService;
+    private final ZlOrderDetailService orderDetailService;
     
     @Autowired
-    public OrderController(ZlOrderService orderService,ZlOrderDetailService orderDetailService){
+    public ZlOrderController(ZlOrderService orderService,ZlOrderDetailService orderDetailService){
         this.orderService=orderService;
         this.orderDetailService=orderDetailService;
     }
-    
+
     @ApiOperation(value="我的订单", notes="可传入不同的请求参数，查询各种类型的全部订单。例如：获取用户全部订单（不区分订单类型）列表的数据，传入token即可。")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType="query", name="token", dataType="String", required=true, value="token"),

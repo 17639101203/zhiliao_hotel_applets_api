@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "菜单点击记录接口")
 @RestController
-@RequestMapping("/log")
+@RequestMapping("log")
 public class ZlMenuvisitlogController {
 
     @Autowired
@@ -33,7 +33,7 @@ public class ZlMenuvisitlogController {
             @ApiImplicitParam(paramType = "path", name = "userId", dataType = "String", required = true, value = "用户ID")
     })
     @PassToken
-    @PostMapping("/add/{menuId}/{userId}")
+    @PostMapping("add/{menuId}/{userId}")
     public ReturnString findBanner(String token, @PathVariable Integer menuId, @PathVariable Integer userId) {
         try {
             zlMenuvisitlogService.add(menuId, userId);

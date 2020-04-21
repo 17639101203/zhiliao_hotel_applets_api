@@ -1,9 +1,7 @@
 package com.zhiliao.hotel.controller.comment;
 
-import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
-import com.zhiliao.hotel.model.ZlComment;
 import com.zhiliao.hotel.model.ZlTag;
 import com.zhiliao.hotel.service.ZlCommentService;
 import com.zhiliao.hotel.utils.TokenUtil;
@@ -33,7 +31,7 @@ public class ZlGetTagsCommentController {
 
     private static final Logger logger = LoggerFactory.getLogger(ZlGetTagsCommentController.class);
 
-    private ZlCommentService zlCommentService;
+    private final ZlCommentService zlCommentService;
 
     @Autowired
     public ZlGetTagsCommentController(ZlCommentService zlCommentService, TokenUtil tokenUtil) {
@@ -48,14 +46,9 @@ public class ZlGetTagsCommentController {
     @PostMapping("getTags")
     @UserLoginToken
     public ReturnString getTags(String token, Integer hotelID) {
-
         ZlTag zlTag = new ZlTag();
         zlTag.setHotelid(hotelID);
-
         List<ZlTag> zlTagList = zlCommentService.getTags(zlTag);
-
-            return new ReturnString(zlTagList);
-
+        return new ReturnString(zlTagList);
     }
-
 }

@@ -12,5 +12,5 @@ import java.text.ParseException;
  */
 public interface ZlHotelService   {
 
-    public ReturnString getById(String hotelId, String roomId, String token) throws ParseException;
+    ReturnString getById(String hotelId, String roomId, String token) throws ParseException;
 }

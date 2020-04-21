@@ -15,10 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 import static com.zhiliao.hotel.utils.DateUtils.*;
 import static com.zhiliao.hotel.utils.OrderIDUtil.CreateOrderID;
@@ -35,7 +32,7 @@ public class ZlCleanOrderController {
 
     private static final Logger logger = LoggerFactory.getLogger(ZlCleanOrderController.class);
 
-    private ZlCleanOrderService zlCleanOrderService;
+    private final ZlCleanOrderService zlCleanOrderService;
 
     @Autowired
     public ZlCleanOrderController(ZlCleanOrderService zlCleanOrderService) {
@@ -56,7 +53,7 @@ public class ZlCleanOrderController {
     })
     @PostMapping("addQingsaoOrder")
     @UserLoginToken
-    public ReturnString addCleanOrder(String token, Integer hotelID, String hotelName, Integer roomID, String roomNumber,Integer comeformID, String bookDay, String bookDate, String remark) {
+    public ReturnString addCleanOrder(String token, Integer hotelID, String hotelName, Integer roomID, String roomNumber, Integer comeformID, String bookDay, String bookDate, String remark) {
 //        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");   //设置日期格式
 //        String uuid = UUID.randomUUID().toString().replaceAll("-","");   //把uuid生成的"-"去掉
 //        String serialNumber = hotelID +""+ roomID + df.format(new Date()) + uuid.substring(0,6);   //订单号:酒店ID+房间ID+日期+uuid的前6位
@@ -71,10 +68,10 @@ public class ZlCleanOrderController {
         zlCleanOrder.setRoomnumber(roomNumber);   //房间号
         zlCleanOrder.setComeformid(comeformID);   //来自1小程序C端，2小程序B端，3公众号, 4民宿，5好评返现，6分时酒店
         Long bookTime = null;
-        if(bookDay.equals("今天")){
-            bookTime = getTimeByDate(getDateByString() +" "+bookDate+":00")/1000;
-        }else if(bookDay.equals("明天")){
-            bookTime = getTimeByDate(getDateByString() +" "+bookDate+":00")/1000+86400;
+        if (bookDay.equals("今天")) {
+            bookTime = getTimeByDate(getDateByString() + " " + bookDate + ":00") / 1000;
+        } else if (bookDay.equals("明天")) {
+            bookTime = getTimeByDate(getDateByString() + " " + bookDate + ":00") / 1000 + 86400;
         }
         zlCleanOrder.setBookdate(bookTime.intValue());   //预定时间
         zlCleanOrder.setRemark(remark);   //其他需求备注

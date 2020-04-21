@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
+@Transactional(rollbackFor=Exception.class)
 @Service
 public class ZlUserloginlogServiceImpl implements ZlUserloginlogService {
 
@@ -15,7 +16,6 @@ public class ZlUserloginlogServiceImpl implements ZlUserloginlogService {
     private ZlUserloginlogMapper zlUserloginlogMapper;
 
     @Override
-    @Transactional
     public int insert(ZlUserloginlog zlUserloginlog) {
         return zlUserloginlogMapper.insert(zlUserloginlog);
     }

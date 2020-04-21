@@ -8,6 +8,7 @@ import com.zhiliao.hotel.utils.HttpContextUtils;
 import com.zhiliao.hotel.utils.IPUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,11 +19,16 @@ import javax.servlet.http.HttpServletRequest;
  * @Classname ZlUserloginlogServiceImpl
  * @date 2020/4/15 8:58
  */
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class ZlMenuvisitlogServiceImpl implements ZlMenuvisitlogService {
 
+    private final ZlMenuvisitlogMapper zlMenuvisitlogMapper;
+
     @Autowired
-    private ZlMenuvisitlogMapper zlMenuvisitlogMapper;
+    public ZlMenuvisitlogServiceImpl(ZlMenuvisitlogMapper zlMenuvisitlogMapper) {
+        this.zlMenuvisitlogMapper = zlMenuvisitlogMapper;
+    }
 
     /**
      * 添加菜单点击记录

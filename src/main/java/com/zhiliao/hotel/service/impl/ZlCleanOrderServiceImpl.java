@@ -21,8 +21,12 @@ import java.util.List;
 @Service
 public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
 
+    private final ZlCleanOrderMapper zlCleanOrderMapper;
+
     @Autowired
-    private ZlCleanOrderMapper zlCleanOrderMapper;
+    public ZlCleanOrderServiceImpl(ZlCleanOrderMapper zlCleanOrderMapper) {
+        this.zlCleanOrderMapper = zlCleanOrderMapper;
+    }
 
     @Override
     public Integer addCleanOrder(ZlCleanOrder zlCleanOrder) {

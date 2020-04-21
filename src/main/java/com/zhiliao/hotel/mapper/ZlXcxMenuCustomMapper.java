@@ -13,6 +13,6 @@ import java.util.List;
  */
 public interface ZlXcxMenuCustomMapper extends Mapper<ZlXcxmenucustom> {
 
-    public List<ZlXcxmenucustom> getMenuList(@Param("hotelId") String hotelId);
+    List<ZlXcxmenucustom> getMenuList(@Param("hotelId") String hotelId);
 
 }

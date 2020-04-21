@@ -1,15 +1,14 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.model.zlNews;
+import com.zhiliao.hotel.model.ZlNews;
 
-import java.util.List;
 
 /**
  * 咨讯service接口
  */
-public interface zlNewsService {
+public interface ZlNewsService {
     PageInfoResult findAllJiuDianId(Integer pageNo, Integer pageSize, Integer hotelID, Integer type, Integer status);
 
-    zlNews findById(Integer newsid);
+    ZlNews findById(Integer newsid);
 }

@@ -26,14 +26,18 @@ import java.util.List;
 @Service
 public class MyAppointmentServiceImpl implements MyAppointmentService {
 
-    @Autowired
-    private ZlCleanOrderMyMapper zlCleanOrderMyMapper;
+    private final ZlCleanOrderMyMapper zlCleanOrderMyMapper;
+
+    private final ZlInvoiceMyMapper zlInvoiceMyMapper;
+
+    private final ZlRepairorderMyMapper zlRepairorderMyMapper;
 
     @Autowired
-    private ZlInvoiceMyMapper zlInvoiceMyMapper;
-
-    @Autowired
-    private ZlRepairorderMyMapper zlRepairorderMyMapper;
+    public MyAppointmentServiceImpl(ZlCleanOrderMyMapper zlCleanOrderMyMapper, ZlInvoiceMyMapper zlInvoiceMyMapper, ZlRepairorderMyMapper zlRepairorderMyMapper) {
+        this.zlCleanOrderMyMapper = zlCleanOrderMyMapper;
+        this.zlInvoiceMyMapper = zlInvoiceMyMapper;
+        this.zlRepairorderMyMapper = zlRepairorderMyMapper;
+    }
 
     /**
      * 获取所有清扫订单

@@ -4,9 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
-import com.zhiliao.hotel.controller.wxuser.ZlWxuserController;
-import com.zhiliao.hotel.model.zlNews;
-import com.zhiliao.hotel.service.zlNewsService;
+import com.zhiliao.hotel.model.ZlNews;
+import com.zhiliao.hotel.service.ZlNewsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -16,16 +15,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Api(tags = "咨讯接口")
 @RestController
 @RequestMapping("news")
-public class zlNewsController {
-    private static final Logger logger = LoggerFactory.getLogger(zlNewsController.class);
+public class ZlNewsController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ZlNewsController.class);
+
+    private final ZlNewsService zlNewsService;
 
     @Autowired
-    private zlNewsService zlNewsService;
+    public ZlNewsController(com.zhiliao.hotel.service.ZlNewsService zlNewsService) {
+        this.zlNewsService = zlNewsService;
+    }
 
     @ApiOperation(value = "酒店咨讯展示")
     @ApiImplicitParams({
@@ -52,7 +55,6 @@ public class zlNewsController {
                 allJiuDianId = zlNewsService.findAllJiuDianId(hotelID, type,status,pageNo,pageSize);
 
             }
-
             return new ReturnString(allJiuDianId);
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,7 +72,7 @@ public class zlNewsController {
     public ReturnString findById(String token, @PathVariable Integer newsid){
         try {
             logger.info("咨讯id： " +newsid);
-            zlNews zlNews = zlNewsService.findById(newsid);
+            ZlNews zlNews = zlNewsService.findById(newsid);
             return new ReturnString(zlNews);
         } catch (Exception e) {
             e.printStackTrace();

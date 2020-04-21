@@ -9,13 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class ZlInvoiceServiceImpl implements ZlInvoiceService {
 
+    private final ZlInvoiceMapper mapper;
+
     @Autowired
-    private ZlInvoiceMapper mapper;
-
-
+    public ZlInvoiceServiceImpl(ZlInvoiceMapper mapper) {
+        this.mapper = mapper;
+    }
 
     @Override
     @Transactional

@@ -29,7 +29,7 @@ public class ZlCommentController {
 
     private static final Logger logger = LoggerFactory.getLogger(ZlCommentController.class);
 
-    private ZlCommentService zlCommentService;
+    private final ZlCommentService zlCommentService;
 
     @Autowired
     public ZlCommentController(ZlCommentService zlCommentService) {

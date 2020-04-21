@@ -19,8 +19,13 @@ import java.util.List;
 @Service
 public class ZlCommentServiceImpl implements ZlCommentService {
 
+
+    private final ZlCommentMapper zlCommentMapper;
+
     @Autowired
-    private ZlCommentMapper zlCommentMapper;
+    public ZlCommentServiceImpl(ZlCommentMapper zlCommentMapper) {
+        this.zlCommentMapper = zlCommentMapper;
+    }
 
     @Override
     public Integer addComment(ZlComment zlComment) {

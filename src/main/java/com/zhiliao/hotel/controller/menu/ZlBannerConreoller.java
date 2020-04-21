@@ -28,9 +28,12 @@ import java.util.List;
 @RequestMapping("banner")
 public class ZlBannerConreoller {
 
-    @Autowired
-    private ZlBannerService zlBannerService;
+    private final ZlBannerService zlBannerService;
 
+    @Autowired
+    public ZlBannerConreoller(ZlBannerService zlBannerService) {
+        this.zlBannerService = zlBannerService;
+    }
 
     @ApiOperation(value = "查询所属轮播图")
     @ApiImplicitParams({
@@ -39,7 +42,7 @@ public class ZlBannerConreoller {
             @ApiImplicitParam(paramType = "path", name = "menuID", dataType = "String", required = true, value = "菜单ID"),
     })
     @PassToken
-    @GetMapping("/findBanner/{hotelID}/{menuID}")
+    @GetMapping("findBanner/{hotelID}/{menuID}")
     public ReturnString findBanner(String token, @PathVariable Integer hotelID,@PathVariable Integer menuID) {
         try {
             List<ZlBanner> zlBanners = zlBannerService.findBanner(hotelID,menuID);

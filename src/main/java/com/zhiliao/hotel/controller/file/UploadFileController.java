@@ -2,7 +2,6 @@ package com.zhiliao.hotel.controller.file;
 
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
-import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.utils.UploadFileContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -13,13 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +41,7 @@ public class UploadFileController {
     /**
      * 传入文件，返回文件路径 mapkey值为：filePathBase
      */
-    @ApiOperation(value = "")
+    @ApiOperation(value = "文件上传")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token")
     })
