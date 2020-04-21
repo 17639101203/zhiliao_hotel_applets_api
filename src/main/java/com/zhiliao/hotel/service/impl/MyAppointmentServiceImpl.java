@@ -7,8 +7,8 @@ import com.zhiliao.hotel.mapper.ZlCleanOrderMyMapper;
 import com.zhiliao.hotel.mapper.ZlInvoiceMyMapper;
 import com.zhiliao.hotel.mapper.ZlRepairorderMyMapper;
 import com.zhiliao.hotel.model.ZlCleanOrder;
-import com.zhiliao.hotel.model.zlInvoice;
-import com.zhiliao.hotel.model.zlRepairorder;
+import com.zhiliao.hotel.model.ZlInvoice;
+import com.zhiliao.hotel.model.ZlRepairorder;
 import com.zhiliao.hotel.service.MyAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,12 +80,12 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     @Override
     public PageInfoResult invoiceFindAll(Long userId, Integer invoicestatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
-        List<zlInvoice> invoices = zlInvoiceMyMapper.findAllByUserId(userId,invoicestatus);
+        List<ZlInvoice> invoices = zlInvoiceMyMapper.findAllByUserId(userId,invoicestatus);
         for (int i = 0; i < invoices.size(); i++) {
-            zlInvoice invoice = invoices.get(i);
+            ZlInvoice invoice = invoices.get(i);
             invoice.setFuwutype("发票服务");
         }
-        PageInfo<zlInvoice> pageInfo = new PageInfo<>(invoices);
+        PageInfo<ZlInvoice> pageInfo = new PageInfo<>(invoices);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
@@ -95,7 +95,7 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
      * @return
      */
     @Override
-    public zlInvoice invoiceOrderDetail(Integer invoiceid) {
+    public ZlInvoice invoiceOrderDetail(Integer invoiceid) {
         return zlInvoiceMyMapper.orderDetail(invoiceid);
     }
 
@@ -110,12 +110,12 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     @Override
     public PageInfoResult repairFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
-        List<zlRepairorder> repairOrders = zlRepairorderMyMapper.findAllByUserId(userId,orderstatus);
+        List<ZlRepairorder> repairOrders = zlRepairorderMyMapper.findAllByUserId(userId,orderstatus);
         for (int i = 0; i < repairOrders.size(); i++) {
-            zlRepairorder zlRepairOrder = repairOrders.get(i);
+            ZlRepairorder zlRepairOrder = repairOrders.get(i);
             zlRepairOrder.setFuwutype("报修服务");
         }
-        PageInfo<zlRepairorder> pageInfo = new PageInfo<>(repairOrders);
+        PageInfo<ZlRepairorder> pageInfo = new PageInfo<>(repairOrders);
 
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
@@ -126,8 +126,8 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
      * @return
      */
     @Override
-    public zlRepairorder repairOrderDetail(Long orderID) {
-        zlRepairorder repairOrder = zlRepairorderMyMapper.findDetail(orderID);
+    public ZlRepairorder repairOrderDetail(Long orderID) {
+        ZlRepairorder repairOrder = zlRepairorderMyMapper.findDetail(orderID);
         repairOrder.setFuwutype("报修");
         return repairOrder;
     }

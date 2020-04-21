@@ -2,8 +2,8 @@ package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.model.ZlCleanOrder;
-import com.zhiliao.hotel.model.zlInvoice;
-import com.zhiliao.hotel.model.zlRepairorder;
+import com.zhiliao.hotel.model.ZlInvoice;
+import com.zhiliao.hotel.model.ZlRepairorder;
 
 public interface MyAppointmentService {
     /**
@@ -38,7 +38,7 @@ public interface MyAppointmentService {
      * @param invoiceid
      * @return
      */
-    zlInvoice invoiceOrderDetail(Integer invoiceid);
+    ZlInvoice invoiceOrderDetail(Integer invoiceid);
 
     /**
      * 获取报修订单
@@ -55,5 +55,5 @@ public interface MyAppointmentService {
      * @param orderID
      * @return
      */
-    zlRepairorder repairOrderDetail(Long orderID);
+    ZlRepairorder repairOrderDetail(Long orderID);
 }

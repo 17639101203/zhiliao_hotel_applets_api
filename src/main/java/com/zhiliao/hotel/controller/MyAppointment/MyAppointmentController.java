@@ -5,8 +5,8 @@ import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.model.ZlCleanOrder;
-import com.zhiliao.hotel.model.zlInvoice;
-import com.zhiliao.hotel.model.zlRepairorder;
+import com.zhiliao.hotel.model.ZlInvoice;
+import com.zhiliao.hotel.model.ZlRepairorder;
 import com.zhiliao.hotel.service.*;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
@@ -108,7 +108,7 @@ public class MyAppointmentController {
     @ResponseBody
     public ReturnString invoiceOrderDetail(Integer invoiceid){
         try {
-            zlInvoice invoice = myAppointmentService.invoiceOrderDetail(invoiceid);
+            ZlInvoice invoice = myAppointmentService.invoiceOrderDetail(invoiceid);
             return new ReturnString(invoice);
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,7 +150,7 @@ public class MyAppointmentController {
     @ResponseBody
     public ReturnString repairOrderDetail(Long orderID){
         try {
-            zlRepairorder repairOrder = myAppointmentService.repairOrderDetail(orderID);
+            ZlRepairorder repairOrder = myAppointmentService.repairOrderDetail(orderID);
             return new ReturnString(repairOrder);
         } catch (Exception e) {
             e.printStackTrace();
