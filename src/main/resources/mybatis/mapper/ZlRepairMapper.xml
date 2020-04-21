@@ -11,7 +11,6 @@
     <result column="ImgUrls" jdbcType="VARCHAR" property="imgurls" />
     <result column="RepairStatus" jdbcType="TINYINT" property="repairstatus" />
     <result column="IsDelete" jdbcType="BIT" property="isdelete" />
-    <result column="AppointmentDate" jdbcType="INTEGER" property="appointmentdate" />
     <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
     <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
   </resultMap>
@@ -23,9 +22,6 @@
       </if>
       <if test="userid != null">
         UserID,
-      </if>
-      <if test="appointmentdate != null">
-        AppointmentDate,
       </if>
       <if test="hotelid != null">
         HotelID,
@@ -71,9 +67,6 @@
       <if test="roomnumber != null">
         #{roomnumber,jdbcType=CHAR},
       </if>
-      <if test="appointmentdate != null">
-        #{appointmentdate,jdbcType=INTEGER},
-      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -95,6 +88,14 @@
     </trim>
   </insert>
 
-
+  <!--  &lt;!&ndash;  根据用户ID查询报修信息&ndash;&gt;-->
+  <!--  <select id="querybaoxiuByUserID" resultMap="BaseResultMap">-->
+  <!--        select
+                f.KeFangID,f.baoxiuMsg,f.baoxiuImg,o.orderid,o.addtime
+              from
+                sj_fapiao f left join zl_order o on f.UserID = o.UserID
+              where
+                UserID=#{userid}-->
+  <!--    </select>-->
 
 </mapper>
