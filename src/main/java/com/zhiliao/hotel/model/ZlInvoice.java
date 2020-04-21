@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author null
  * @date 2020-04-14
  */
-public class zlInvoice implements Serializable {
+public class ZlInvoice implements Serializable {
     /**
      * 发票ID
      */

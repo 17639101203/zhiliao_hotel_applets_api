@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlRepairorderMapper">
-  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.zlRepairorder">
+  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlRepairorder">
     <result column="OrderID" jdbcType="BIGINT" property="orderid" />
     <result column="UserID" jdbcType="BIGINT" property="userid" />
     <result column="SerialNumber" jdbcType="CHAR" property="serialnumber" />
@@ -14,10 +14,11 @@
     <result column="ComeFormID" jdbcType="INTEGER" property="comeformid" />
     <result column="IsDelete" jdbcType="BIT" property="isdelete" />
     <result column="OrderStatus" jdbcType="TINYINT" property="orderstatus" />
+    <result column="AppointmentDate" jdbcType="INTEGER" property="appointmentdate" />
     <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
     <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
   </resultMap>
-  <insert id="insertRepairorder" parameterType="com.zhiliao.hotel.model.zlRepairorder">
+  <insert id="insertRepairorder" parameterType="com.zhiliao.hotel.model.ZlRepairorder">
     insert into zl_repairorder
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="orderid != null">
@@ -25,6 +26,9 @@
       </if>
       <if test="userid != null">
         UserID,
+      </if>
+      <if test="appointmentdate != null">
+        AppointmentDate,
       </if>
       <if test="serialnumber != null">
         SerialNumber,
@@ -70,6 +74,9 @@
       <if test="userid != null">
         #{userid,jdbcType=BIGINT},
       </if>
+      <if test="appointmentdate != null">
+        #{appointmentdate,jdbcType=INTEGER},
+      </if>
       <if test="serialnumber != null">
         #{serialnumber,jdbcType=CHAR},
       </if>
@@ -109,14 +116,17 @@
     </trim>
   </insert>
 
-  <!--&lt;!&ndash;  根据用户ID查询发票&ndash;&gt;
-  <select id="queryByHotelName" resultMap="BaseResultMap">
+  <!--  根据用户名查询订单生成时间最近的订单-->
+  <select id="queryByUserIdDescByOrderId" resultMap="BaseResultMap">
         select
-            h.HotelName
+            OrderID,RoomNumber,AppointmentDate,Remark,SerialNumber,CreateDate
         from
-            zl_invoice i left join zl_hotel h on i.HotelID = h.HotelID
+            zl_repairorder
         where
-            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and InvoiceStatus in  (0,1);
-    </select>-->
-
+            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and OrderStatus='0'
+        ORDER by
+            CreateDate desc
+        limit
+            0,1;
+    </select>
 </mapper>

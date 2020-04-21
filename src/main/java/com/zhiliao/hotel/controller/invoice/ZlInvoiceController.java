@@ -1,17 +1,13 @@
 package com.zhiliao.hotel.controller.invoice;
 
-import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceParam;
-import com.zhiliao.hotel.model.zlInvoice;
+import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.service.ZlInvoiceService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +30,7 @@ public class ZlInvoiceController {
     @UserLoginToken
     @PostMapping("addinvoice")
     public ReturnString addInvoice(@RequestBody InvoiceParam ip, @RequestParam("token") String token){
-        zlInvoice invoice = new zlInvoice();
+        ZlInvoice invoice = new ZlInvoice();
         try {
 
             // 解析token获取userid
@@ -79,7 +75,7 @@ public class ZlInvoiceController {
     @GetMapping("findinvoice")
     public ReturnString findInvoice(String token){
         Long userid = TokenUtil.getUserId(token);
-        List<zlInvoice> list = service.queryByUserID(userid);
+        List<ZlInvoice> list = service.queryByUserID(userid);
         if(list==null){
             return new ReturnString(1,"未查询到发票信息！");
         }

@@ -1,14 +1,14 @@
 package com.zhiliao.hotel.service;
 
-import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.model.zlRepair;
-import com.zhiliao.hotel.model.zlRepairorder;
+import com.zhiliao.hotel.model.ZlRepair;
+import com.zhiliao.hotel.model.ZlRepairorder;
 
 import java.io.IOException;
-import java.util.List;
 
 public interface ZlRepairService {
 
-    public void addRepairMsg(zlRepair repair,String hotelname) throws IOException;
+    public void addRepairMsg(ZlRepair repair, String hotelname) throws IOException;
 
+
+    public ZlRepairorder queryRepairOrder(Long Userid);
 }

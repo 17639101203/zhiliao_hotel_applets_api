@@ -1,10 +1,7 @@
 package com.zhiliao.hotel.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.mapper.ZlInvoiceMapper;
-import com.zhiliao.hotel.model.zlInvoice;
+import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.service.ZlInvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +19,7 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
 
     @Override
     @Transactional
-    public void addInvoice(zlInvoice Invoice) {
+    public void addInvoice(ZlInvoice Invoice) {
 
         Integer i = mapper.insertInvoice(Invoice);
         if(i!=1) {
@@ -31,8 +28,8 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     }
 
     @Override
-    public List<zlInvoice> queryByUserID(Long userid) {
-        List<zlInvoice> list = mapper.queryInvoiceByUserID(userid);
+    public List<ZlInvoice> queryByUserID(Long userid) {
+        List<ZlInvoice> list = mapper.queryInvoiceByUserID(userid);
         if(list==null){
             throw new RuntimeException("开票抬头查询失败,请重新再试！");
         }

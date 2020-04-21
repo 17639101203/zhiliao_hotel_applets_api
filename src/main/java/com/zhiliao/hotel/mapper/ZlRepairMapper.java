@@ -1,8 +1,8 @@
 package com.zhiliao.hotel.mapper;
 
-import com.zhiliao.hotel.model.zlRepair;
+import com.zhiliao.hotel.model.ZlRepair;
 
 public interface ZlRepairMapper {
 
-    public Integer insertzlrepair(zlRepair zlrepair);
+    public Integer insertzlrepair(ZlRepair zlrepair);
 }

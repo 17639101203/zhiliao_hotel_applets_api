@@ -1,12 +1,9 @@
 package com.zhiliao.hotel.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.mapper.ZlRepairMapper;
 import com.zhiliao.hotel.mapper.ZlRepairorderMapper;
-import com.zhiliao.hotel.model.zlRepair;
-import com.zhiliao.hotel.model.zlRepairorder;
+import com.zhiliao.hotel.model.ZlRepair;
+import com.zhiliao.hotel.model.ZlRepairorder;
 import com.zhiliao.hotel.service.ZlRepairService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.List;
 
 @Service
 public class ZlRepairServiceImpl implements ZlRepairService {
@@ -28,8 +24,8 @@ public class ZlRepairServiceImpl implements ZlRepairService {
 
     @Override
     @Transactional
-    public void addRepairMsg(zlRepair repair,String hotelname) throws IOException {
-        zlRepairorder repairorder = new zlRepairorder();
+    public void addRepairMsg(ZlRepair repair, String hotelname) throws IOException {
+        ZlRepairorder repairorder = new ZlRepairorder();
         repairorder.setUserid(repair.getUserid());   //  用户ID
         repairorder.setSerialnumber(OrderIDUtil.CreateOrderID("BX"));   // 订单ID
         repairorder.setHotelid(repair.getHotelid());        // 酒店ID
@@ -50,6 +46,12 @@ public class ZlRepairServiceImpl implements ZlRepairService {
         }else{
             System.out.println("报修信息添加失败");
         }
+    }
+
+    @Override
+    public ZlRepairorder queryRepairOrder(Long Userid) {
+        ZlRepairorder zlRepairorder = zlRepairorderMapper.queryByUserIdDescByOrderId(Userid);
+        return zlRepairorder;
     }
 
 }
