@@ -76,7 +76,7 @@ public class ZlInvoiceController {
     public ReturnString findInvoice(String token){
         Long userid = TokenUtil.getUserId(token);
         List<ZlInvoice> list = service.queryByUserID(userid);
-        if(list==null){
+        if(list==null || list.size()==0){
             return new ReturnString(1,"未查询到发票信息！");
         }
         return new ReturnString(list);

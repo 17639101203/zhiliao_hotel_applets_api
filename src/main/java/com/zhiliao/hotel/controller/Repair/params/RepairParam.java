@@ -39,6 +39,14 @@ public class RepairParam {
     @ApiModelProperty(value = "报修信息", required = true)
     private String remark;
 
+
+    /**
+     * 预约时间
+     */
+    @ApiModelProperty(value = "预约时间", required = true)
+    private Integer appointmentdate;
+
+
     public Integer getHotelid() {
         return hotelid;
     }
@@ -79,6 +87,14 @@ public class RepairParam {
         this.remark = remark;
     }
 
+    public Integer getAppointmentdate() {
+        return appointmentdate;
+    }
+
+    public void setAppointmentdate(Integer appointmentdate) {
+        this.appointmentdate = appointmentdate;
+    }
+
     @Override
     public String toString() {
         return "RepairParam{" +
@@ -87,6 +103,7 @@ public class RepairParam {
                 ", roomnumber='" + roomnumber + '\'' +
                 ", hotelname='" + hotelname + '\'' +
                 ", remark='" + remark + '\'' +
+                ", appointmentdate=" + appointmentdate +
                 '}';
     }
 }

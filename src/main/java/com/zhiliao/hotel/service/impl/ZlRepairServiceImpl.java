@@ -24,7 +24,16 @@ public class ZlRepairServiceImpl implements ZlRepairService {
 
     @Override
     @Transactional
-    public void addRepairMsg(ZlRepair repair, String hotelname) throws IOException {
+    public Integer addRepairMsg(ZlRepair repair) throws IOException {
+        Integer i = zlRepairMapper.insertzlrepair(repair);
+        return i;
+    }
+
+
+
+    @Override
+    @Transactional
+    public void addRepairOrderMsg(ZlRepair repair,String hotelname) {
         ZlRepairorder repairorder = new ZlRepairorder();
         repairorder.setUserid(repair.getUserid());   //  用户ID
         repairorder.setSerialnumber(OrderIDUtil.CreateOrderID("BX"));   // 订单ID
@@ -33,20 +42,24 @@ public class ZlRepairServiceImpl implements ZlRepairService {
         repairorder.setRoomid(repair.getRoomid());  // 房间ID
         repairorder.setRoomnumber(repair.getRoomnumber());  //房间号
         repairorder.setImgurls(repair.getImgurls());    // 图片路径
+        repairorder.setAppointmentdate(repair.getAppointmentdate());  // 预约时间
         repairorder.setRemark(repair.getRemark());      // 备注信息
         repairorder.setComeformid(1);           //  来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
         repairorder.setIsdelete(false);     //  是否删除
         repairorder.setOrderstatus((byte)0);    // 订单状态：-1:已取消;0等待确认;1已确认;2已处理
         repairorder.setCreatedate(DateUtils.javaToPhpNowDateTime());    //  下单时间
         repairorder.setUpdatedate(DateUtils.javaToPhpNowDateTime());    //   修改时间
-        Integer i = zlRepairMapper.insertzlrepair(repair);
-        if(i==1){
+        // 插入图片数据到报修表
+        Integer i = zlRepairMapper.insertzlrepairImgUrls(repair.getImgurls(),repair.getUserid(),repair.getCreatedate());
+        if(i == 1){
+            // 插入数据至报修订单表
             zlRepairorderMapper.insertRepairorder(repairorder);
-            System.out.println("报修信息添加成功");
-        }else{
-            System.out.println("报修信息添加失败");
+        }else {
+            throw new RuntimeException("图片数据插入失败，请重新再试");
         }
+
     }
+
 
     @Override
     public ZlRepairorder queryRepairOrder(Long Userid) {

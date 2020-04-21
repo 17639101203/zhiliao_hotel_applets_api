@@ -7,8 +7,27 @@ import java.io.IOException;
 
 public interface ZlRepairService {
 
-    public void addRepairMsg(ZlRepair repair, String hotelname) throws IOException;
+    /**
+     * 新增报修信息
+     * @param repair   报修信息
+     * @return
+     * @throws IOException
+     */
+    public Integer addRepairMsg(ZlRepair repair) throws IOException;
 
 
+    /**
+     * 查询报修订单信息
+     * @param Userid
+     * @return
+     */
     public ZlRepairorder queryRepairOrder(Long Userid);
+
+
+    /**
+     * 新增报修订单信息，报修图片地址添加
+     * @param repair    报修信息
+     * @param hotelname 酒店名
+     */
+    public void addRepairOrderMsg(ZlRepair repair,String hotelname);
 }
