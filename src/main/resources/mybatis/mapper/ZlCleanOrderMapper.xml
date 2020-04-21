@@ -110,21 +110,5 @@
     </trim>
   </insert>
 
-  <select id="OrderDetail" resultType="com.zhiliao.hotel.model.ZlCleanOrder">
-    select OrderID,RoomNumber,BookDate,OrderStatus, UpdateDate from zl_cleanorder where OrderID = #{orderID}
-  </select>
-
-  <select id="findAllByStatus" resultType="com.zhiliao.hotel.model.ZlCleanOrder">
-    select
-    OrderID,HotelName,UserID,SerialNumber,BookDate,OrderStatus,CreateDate
-    from zl_cleanorder where 1 = 1
-    <if test="userId != null">
-      and UserID = #{userId}
-    </if>
-    <if test="orderstatus != null">
-      and OrderStatus = #{orderstatus}
-    </if>
-    order by CreateDate DESC
-  </select>
 
 </mapper>

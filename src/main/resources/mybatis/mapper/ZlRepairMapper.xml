@@ -89,13 +89,13 @@
   </insert>
 
   <!--  &lt;!&ndash;  根据用户ID查询报修信息&ndash;&gt;-->
-  <!--  <select id="querybaoxiuByUserID" resultMap="BaseResultMap">-->
-  <!--        select
+    <select id="querybaoxiuByUserID" resultMap="BaseResultMap">
+          select
                 f.KeFangID,f.baoxiuMsg,f.baoxiuImg,o.orderid,o.addtime
               from
                 sj_fapiao f left join zl_order o on f.UserID = o.UserID
               where
-                UserID=#{userid}-->
-  <!--    </select>-->
+                UserID=#{userid}
+      </select>
 
 </mapper>
