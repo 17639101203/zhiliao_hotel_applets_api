@@ -110,5 +110,8 @@
     </trim>
   </insert>
 
+  <select id="selectCleanDetails" resultType="com.zhiliao.hotel.model.ZlCleanOrder">
+    SELECT * FROM zl_cleanorder WHERE UserID = #{userID} AND SerialNumber = #{serialNumber}
+  </select>
 
 </mapper>

@@ -51,7 +51,7 @@ public class ZlCleanOrderController {
             @ApiImplicitParam(paramType = "query", name = "bookDate", dataType = "String", required = true, value = "预约时间 格式HH:mm"),
             @ApiImplicitParam(paramType = "query", name = "remark", dataType = "String", required = false, value = "其他需求备注")
     })
-    @PostMapping("addQingsaoOrder")
+    @PostMapping("addCleanOrder")
     @UserLoginToken
     public ReturnString addCleanOrder(String token, Integer hotelID, String hotelName, Integer roomID, String roomNumber, Integer comeformID, String bookDay, String bookDate, String remark) {
 //        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");   //设置日期格式
@@ -88,7 +88,26 @@ public class ZlCleanOrderController {
             logger.error("下单失败");
             return new ReturnString(-1, "下单失败");
         }
+    }
 
+    @ApiOperation(value = "查询清扫订单详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "query", name = "serialNumber", dataType = "String", required = true, value = "订单编号"),
+    })
+    @PostMapping("selectCleanDetails")
+    @UserLoginToken
+    public ReturnString selectCleanDetails(String token, String serialNumber) {
+
+        Long userID = TokenUtil.getUserId(token);   //用户ID  根据token获取userId
+        ZlCleanOrder zlCleanOrder = zlCleanOrderService.selectCleanDetails(userID, serialNumber);
+
+        if (zlCleanOrder.getUserid() != null) {
+            return new ReturnString(0, "查询成功");
+        } else {
+            logger.error("查询失败");
+            return new ReturnString(-1, "查询失败");
+        }
     }
 
 }

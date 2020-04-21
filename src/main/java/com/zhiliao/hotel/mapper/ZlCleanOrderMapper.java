@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface ZlCleanOrderMapper extends Mapper<ZlCleanOrder> {
 
-    int addCleanOrder(ZlCleanOrder zlCleanOrder);
+    Integer addCleanOrder(ZlCleanOrder zlCleanOrder);
 
+    ZlCleanOrder selectCleanDetails(@Param("userID") Long userID, @Param("serialNumber") String serialNumber);
 }

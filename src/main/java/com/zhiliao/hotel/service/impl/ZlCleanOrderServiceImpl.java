@@ -33,5 +33,10 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
         return zlCleanOrderMapper.addCleanOrder(zlCleanOrder);
     }
 
+    @Override
+    public ZlCleanOrder selectCleanDetails(Long userID, String serialNumber) {
+        return zlCleanOrderMapper.selectCleanDetails(userID, serialNumber);
+    }
+
 
 }

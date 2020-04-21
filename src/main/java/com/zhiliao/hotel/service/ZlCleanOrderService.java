@@ -11,9 +11,18 @@ import java.util.List;
  * @Description:
  */
 public interface ZlCleanOrderService {
-    /*
-        点赞吐槽
+    /**
+     * 清扫下单
+     * @param zlCleanOrder
+     * @return
      */
     public Integer addCleanOrder(ZlCleanOrder zlCleanOrder);
 
+    /**
+     * 清扫订单详情
+     * @param userID
+     * @param serialNumber
+     * @return
+     */
+    public ZlCleanOrder selectCleanDetails(Long userID, String serialNumber);
 }
