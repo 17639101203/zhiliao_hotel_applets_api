@@ -52,7 +52,7 @@ public class ZlUserloginlog implements Serializable {
     /**
      * 渠道来源:
      */
-    private Byte comefromid;
+    private int comefromid;
 
     /**
      * 创建时间(登录时间)
@@ -267,7 +267,7 @@ public class ZlUserloginlog implements Serializable {
      *
      * @mbg.generated Tue Apr 14 11:28:55 CST 2020
      */
-    public Byte getComefromid() {
+    public int getComefromid() {
         return comefromid;
     }
 
@@ -279,7 +279,7 @@ public class ZlUserloginlog implements Serializable {
      *
      * @mbg.generated Tue Apr 14 11:28:55 CST 2020
      */
-    public void setComefromid(Byte comefromid) {
+    public void setComefromid(int comefromid) {
         this.comefromid = comefromid;
     }
 

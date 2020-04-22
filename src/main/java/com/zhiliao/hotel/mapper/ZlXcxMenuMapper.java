@@ -13,7 +13,11 @@ import java.util.List;
  */
 public interface ZlXcxMenuMapper extends Mapper<ZlXcxmenu> {
 
-    List<ZlXcxmenu> getZlXcxMenuList(@Param("menuId") String menuId);
 
+    /**
+     * 根据酒店Id获取菜单数据
+     * @param hotelId
+     * @return
+     */
     List<ZlXcxmenu> getMenuList(@Param("hotelId") String hotelId);
 }

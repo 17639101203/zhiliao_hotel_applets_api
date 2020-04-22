@@ -53,7 +53,7 @@
     <if test="status != null and status != '' ">
       and Status = #{status}
     </if>
-    order by Sort，CreateDate DESC
+    order by Sort,CreateDate DESC
 
   </select>
   <select id="findById" resultType="com.zhiliao.hotel.model.ZlNews">

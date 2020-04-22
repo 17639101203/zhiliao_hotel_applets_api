@@ -25,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 
 /**
@@ -71,9 +73,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
     @Override
     public ReturnString getById(String hotelId, String roomId, String token) throws ParseException {
-        List<ZlXcxmenu> zlXcxMenuList = null;
         ZlHotelroom zlHotelroom = null;
-        List<ZlBanner> zlBanners = null;
         //固定 小程序渠道 1为C端
         String state = "1";
         if (state.equals("1")) {
@@ -91,12 +91,12 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                     zlUserloginlog.setUserid(weiXinUserId);
                     zlUserloginlog.setNickname(zlWxuser.getNickname());
                     zlUserloginlog.setLoginip(IPUtils.getIpAddr(request));
-
+                    zlUserloginlog.setRoomnumber("房间名测试cr123");
                     //根据用户所属酒店Id
                     ZlHotel zlHotel = zlHotelMapper.getById(String.valueOf(zlWxuser.getHotelid()));
                     zlUserloginlog.setHotelname(zlHotel.getHotelname());
                     zlUserloginlog.setHotelid(Integer.valueOf(hotelId));
-                    zlUserloginlog.setCreatedate(DateUtils.getCurrentTimestamp());
+                    zlUserloginlog.setCreatedate(Long.valueOf(DateUtils.javaToPhpNowDateTime()));
                 }
                 zlUserloginlog.setRoomid(Integer.valueOf(roomId));
                 //客房扫描率录入
@@ -105,40 +105,35 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
             ZlHotel zlHotel = zlHotelMapper.getById(hotelId);
             if (zlHotel != null) {
-                //根据酒店ID获取菜单
-                zlXcxMenuList = zlXcxMenuMapper.getMenuList(String.valueOf(zlHotel.getHotelid()));
-
                 ZlHotelIn zlHotelIn = new ZlHotelIn();
 
+                //获取缓存value
                 String bannerValue = (String) redisTemplate.boundValueOps(RedisConstant.BANNER_KEY + ":" + hotelId).get();
-                //非空直接读取缓存
-                if (!StringUtils.isEmpty(bannerValue)) {
-                    zlBanners = GsonUtils.jsonToList(bannerValue, ZlBanner.class);
-                } else {
-                    //根据酒店ID获取轮播图，对应酒店不足情况后补剩余 默认为三张
-                    zlBanners = zlBannerService.findBanner(Integer.valueOf(hotelId), 0);
-                    redisTemplate.boundValueOps(RedisConstant.BANNER_KEY + ":" + hotelId).set(GsonUtils.objToJson(zlBanners));
+
+                //判断缓存中是否有数据，没数据直接往数据库查
+                List<ZlBanner> zlBanners1 = Optional.ofNullable(bannerValue).map((val) -> GsonUtils.jsonToList(bannerValue, ZlBanner.class)).
+                        orElse(zlBannerService.findBanner(Integer.valueOf(hotelId), 0));
+
+                //判断缓存没数据情况则添加
+                if (!Optional.ofNullable(bannerValue).isPresent()) {
+                    redisTemplate.boundValueOps(RedisConstant.BANNER_KEY + ":" + hotelId).set(GsonUtils.objToJson(zlBanners1));
                 }
                 //获取轮播图数据
-                zlHotelIn.setZlBannerList(zlBanners);
-
-                //根据酒店Id获取公告
-                List<ZlNews> zlNews = zlNewsMapper.findAllJiuDianId(zlHotel.getHotelid(), 1, 1);
+                zlHotelIn.setZlBannerList(zlBanners1);
 
                 //拷贝元数据
                 BeanUtils.copyProperties(zlHotel, zlHotelIn);
 
-                //获取菜单数据
-                zlHotelIn.setZlXcxmenus(CollectionUtils.isEmpty(zlXcxMenuList) && zlXcxMenuList.size() <= 0 ?
-                        Lists.newArrayList() : zlXcxMenuList);
+                //根据酒店ID获取菜单
+                List<ZlXcxmenu> zlXcxMenuList = zlXcxMenuMapper.getMenuList(String.valueOf(zlHotel.getHotelid()));
+                zlHotelIn.setZlXcxmenus(zlXcxMenuList);
 
-                //获取多条公告数据
+                //根据酒店Id获取公告
+                List<ZlNews> zlNews = zlNewsMapper.findAllJiuDianId(zlHotel.getHotelid(), 1, 1);
                 zlHotelIn.setZlNews(zlNews);
 
-                //客房Id非空情况则获取客房数据
-                if (zlHotelroom != null) {
-                    zlHotelIn.setHotelroom(zlHotelroom);
-                }
+                //获取客房数据
+                zlHotelIn.setHotelroom(zlHotelroom);
 
                 String hotelJson = GsonUtils.objToJson(zlHotelIn);
 

@@ -6,7 +6,7 @@
 
     <select id="getMenuList" resultType="com.zhiliao.hotel.model.ZlXcxmenu">
 
-    select * from zl_xcxmenu  zl where zl.HotelID=#{hotelId} and MenuStatus=1
+    select * from zl_xcxmenu  zl where zl.HotelID=#{hotelId} and MenuStatus=1 and IsDelete=0
 
     </select>
 
