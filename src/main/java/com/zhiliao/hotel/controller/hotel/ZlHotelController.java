@@ -6,11 +6,11 @@ import com.zhiliao.hotel.service.ZlHotelService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.text.ParseException;
 
 /**
@@ -21,15 +21,11 @@ import java.text.ParseException;
  */
 @Api(tags = "酒店服务调用")
 @RestController
-@RequestMapping("hotel")
+@RequestMapping("/zl/hotel")
 public class ZlHotelController {
 
-    private final ZlHotelService zlHotelService;
-
-    @Autowired
-    public ZlHotelController(ZlHotelService zlHotelService) {
-        this.zlHotelService = zlHotelService;
-    }
+    @Resource
+    private ZlHotelService zlHotelService;
 
     @UserLoginToken
     @GetMapping("getHotelList")

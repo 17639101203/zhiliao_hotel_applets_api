@@ -7,6 +7,7 @@ import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.model.*;
 import com.zhiliao.hotel.service.ZlBannerService;
 import com.zhiliao.hotel.service.ZlHotelService;
+import com.zhiliao.hotel.service.ZlUserloginlogService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.GsonUtils;
 import com.zhiliao.hotel.utils.IPUtils;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.List;
@@ -40,7 +42,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
     private final ZlXcxMenuMapper zlXcxMenuMapper;
 
-    private final ZlUserloginlogMapper zlUserloginlogMapper;
+    private final ZlUserloginlogService zlUserloginlogService;
 
     private final HttpServletRequest request;
 
@@ -52,12 +54,12 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
     @Autowired
     public ZlHotelServiceImpl(ZlHotelMapper zlHotelMapper, RedisTemplate redisTemplate, ZlHotelRoomMapper zlHotelRoomMapper, ZlXcxMenuMapper zlXcxMenuMapper,
-                              ZlUserloginlogMapper zlUserloginlogMapper, HttpServletRequest request, ZlWxuserMapper zlWxuserMapper, ZlNewsMapper zlNewsMapper, ZlBannerService zlBannerService) {
+                              ZlUserloginlogService zlUserloginlogService, HttpServletRequest request, ZlWxuserMapper zlWxuserMapper, ZlNewsMapper zlNewsMapper, ZlBannerService zlBannerService) {
         this.zlHotelMapper = zlHotelMapper;
         this.redisTemplate = redisTemplate;
         this.zlHotelRoomMapper = zlHotelRoomMapper;
         this.zlXcxMenuMapper = zlXcxMenuMapper;
-        this.zlUserloginlogMapper = zlUserloginlogMapper;
+        this.zlUserloginlogService = zlUserloginlogService;
         this.request = request;
         this.zlWxuserMapper = zlWxuserMapper;
         this.zlNewsMapper = zlNewsMapper;
@@ -93,7 +95,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 }
                 zlUserloginlog.setRoomid(Integer.valueOf(roomId));
                 //客房扫描率录入
-                zlUserloginlogMapper.insert(zlUserloginlog);
+                zlUserloginlogService.insert(zlUserloginlog);
             }
 
             ZlHotel zlHotel = zlHotelMapper.getById(hotelId);
