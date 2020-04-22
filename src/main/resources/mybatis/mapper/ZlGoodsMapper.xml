@@ -78,7 +78,7 @@
             zgs.IsDefault
         from zl_goodssku zgs
         left join zl_goodsproperty zgp on zgs.PropertyIDs=zgp.PropertyID
-        where zgs.GoodsID=#{goodsId} and zgs.IsDelete=0
+        where zgs.GoodsID=#{goodsId} and zgs.IsDelete=0 and zgp.IsDelete=0
         order by zgs.CreateDate desc
     </select>
 
