@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * 酒店客房控制层
- * @author chenrong
+ * @author 邓涵晨
  * @created date 2020/4/14
  */
 @Api(tags = "wifi接口")

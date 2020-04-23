@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * 酒店客房数据层
- * @author  chenrong
+ * @author 邓涵晨
  * @created date 2020/4/14
  */
 public interface ZlHotelRoomMapper extends Mapper<ZlHotelroom> {
