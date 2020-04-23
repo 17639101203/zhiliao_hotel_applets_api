@@ -64,6 +64,19 @@ public class ZlComment implements Serializable {
      */
     private Integer updatedate;
 
+    /**
+     * 酒店名称
+     */
+    private String hotelname;
+
+    public String getHotelname() {
+        return hotelname;
+    }
+
+    public void setHotelname(String hotelname) {
+        this.hotelname = hotelname;
+    }
+
     public Integer getCommentid() {
         return commentid;
     }
@@ -166,10 +179,11 @@ public class ZlComment implements Serializable {
                 ", isdelete=" + isdelete +
                 ", createdate=" + createdate +
                 ", updatedate=" + updatedate +
+                ", hotelname=" + hotelname +
                 '}';
     }
 
-    public ZlComment(Integer commentid, Integer hotelid, Long userid, Byte evaluation, String tagids, String content, Byte type, Byte commentstatus, Boolean isdelete, Integer createdate, Integer updatedate) {
+    public ZlComment(Integer commentid, Integer hotelid, Long userid, Byte evaluation, String tagids, String content, Byte type, Byte commentstatus, Boolean isdelete, Integer createdate, Integer updatedate,String hotelname) {
         this.commentid = commentid;
         this.hotelid = hotelid;
         this.userid = userid;
@@ -181,6 +195,7 @@ public class ZlComment implements Serializable {
         this.isdelete = isdelete;
         this.createdate = createdate;
         this.updatedate = updatedate;
+        this.hotelname = hotelname;
     }
 
     public ZlComment() {

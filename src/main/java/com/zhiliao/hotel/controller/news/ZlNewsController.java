@@ -64,7 +64,7 @@ public class ZlNewsController {
     @ApiOperation(value = "酒店咨讯详情展示")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType = "path", name = "id", dataType = "Integer", required = true, value = "咨讯id")
+            @ApiImplicitParam(paramType = "path", name = "newsid", dataType = "Integer", required = true, value = "咨讯id")
     })
     @PostMapping("findById/{newsid}")
     @ResponseBody

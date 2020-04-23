@@ -28,7 +28,7 @@
     Tel, Remark, InvoiceStatus,
     IsDelete, CreateDate, UpdateDate
     from zl_invoice
-    where 1 = 1
+    where 1 = 1 and IsDelete = '0'
     <if test="userId != null and userId != '' ">
       and UserID = #{userId}
     </if>
