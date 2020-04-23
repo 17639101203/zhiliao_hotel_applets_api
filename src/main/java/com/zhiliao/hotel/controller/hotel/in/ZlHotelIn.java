@@ -1,10 +1,7 @@
 package com.zhiliao.hotel.controller.hotel.in;
 
-import com.zhiliao.hotel.model.ZlBanner;
-import com.zhiliao.hotel.model.ZlHotelroom;
-import com.zhiliao.hotel.model.ZlNews;
-import com.zhiliao.hotel.model.ZlXcxmenu;
-
+import com.zhiliao.hotel.model.*;
+import org.springframework.beans.BeanUtils;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,6 +13,14 @@ import java.util.List;
 
 public class ZlHotelIn implements Serializable {
 
+
+    public ZlHotelIn(){
+        super();
+    }
+
+    public ZlHotelIn(ZlHotel zlHotel){
+        BeanUtils.copyProperties(zlHotel,this);
+    }
 
     /**
      *  酒店ID
