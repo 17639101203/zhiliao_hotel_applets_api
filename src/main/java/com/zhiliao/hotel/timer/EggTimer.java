@@ -34,8 +34,8 @@ public class EggTimer {
             private void playSound() {
                 ZlOrder order = zlOrderMapper.findById(orderid);
                 if (order != null){
-                    order.setOrderstatus((byte) -1);
-                    order.setUpdatedate((int) new Date().getTime());
+                    order.setOrderStatus((byte) -1);
+                    order.setUpdateDate((int) new Date().getTime());
                 }
                 //修改订单表状态及时间
                 zlOrderMapper.byOrderId(order);

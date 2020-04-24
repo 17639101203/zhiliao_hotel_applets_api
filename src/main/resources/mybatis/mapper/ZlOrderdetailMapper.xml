@@ -1,28 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlOrderDetailMapper">
-	<resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlOrderDetail">
-		<id column="OrderDetailID" jdbcType="BIGINT" property="orderdetailid"/>
-		<result column="OrderID" jdbcType="BIGINT" property="orderid"/>
-		<result column="UserID" jdbcType="BIGINT" property="userid"/>
-		<result column="GoodsID" jdbcType="INTEGER" property="goodsid"/>
-		<result column="GoodsName" jdbcType="VARCHAR" property="goodsname"/>
-		<result column="GoodsCoverUrl" jdbcType="VARCHAR" property="goodscoverurl"/>
-		<result column="Price" jdbcType="DECIMAL" property="price"/>
-		<result column="GoodsCount" jdbcType="INTEGER" property="goodscount"/>
-		<result column="IsDelete" jdbcType="BIT" property="isdelete"/>
-		<result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
-		<result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
-	</resultMap>
 
-
-	<select id="findOrder" resultType="com.zhiliao.hotel.model.ZlOrderDetail">
+    <select id="findOrder" resultType="com.zhiliao.hotel.model.ZlOrderDetail">
 
         SELECT * FROM zl_orderdetail WHERE UserID=#{userID} AND OrderID=#{orderID}
 
 	</select>
 
-	<update id="byOrderdetailId" parameterType="com.zhiliao.hotel.model.ZlOrder">
+    <update id="byOrderdetailId" parameterType="com.zhiliao.hotel.model.ZlOrder">
     	update zl_order set UpdateDate = #{updatedate} where OrderID = #{orderid}
   	</update>
+
+    <insert id="insertOrderDetail" parameterType="com.zhiliao.hotel.model.ZlOrderDetail" useGeneratedKeys="true"
+            keyProperty="orderDetailID">
+        insert into zl_orderdetail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+           <!-- <if test="orderDetailID != null">
+                orderDetailID,
+            </if>-->
+            <if test="orderID != null">
+                OrderID,
+            </if>
+            <if test="userID != null">
+                UserID,
+            </if>
+            <if test="goodsID != null">
+                GoodsID,
+            </if>
+            <if test="goodsName != null">
+                GoodsName,
+            </if>
+            <if test="goodsCoverUrl != null">
+                GoodsCoverUrl,
+            </if>
+            <if test="price != null">
+                Price,
+            </if>
+            <if test="goodsCount != null">
+                GoodsCount,
+            </if>
+            <if test="isDelete != null">
+                IsDelete,
+            </if>
+            <if test="createDate != null">
+                CreateDate,
+            </if>
+            <if test="updateDate != null">
+                UpdateDate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <!--<if test="orderDetailID != null">
+                #{orderDetailID,jdbcType=BIGINT},
+            </if>-->
+            <if test="orderID != null">
+                #{orderID,jdbcType=BIGINT},
+            </if>
+            <if test="userID != null">
+                #{userID,jdbcType=BIGINT},
+            </if>
+            <if test="goodsID != null">
+                #{goodsID,jdbcType=INTEGER},
+            </if>
+            <if test="goodsName != null">
+                #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsCoverUrl != null">
+                #{goodsCoverUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsCount != null">
+                #{goodsCount,jdbcType=INTEGER},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=BIT},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=INTEGER},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=INTEGER},
+            </if>
+        </trim>
+
+    </insert>
+
+    <!--<insert id="insertOrderDetail" parameterType="java.util.List" useGeneratedKeys="true">
+        insert into zl_orderdetail(
+        OrderDetailID,
+        OrderID,
+        UserID,
+        GoodsID,
+        GoodsName,
+        GoodsCoverUrl,
+        Price,
+        GoodsCount,
+        IsDelete,
+        CreateDate,
+        UpdateDate
+        )values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.orderDetailID},
+            #{item.orderID},
+            #{item.userID},
+            #{item.goodsID},
+            #{item.goodsName},
+            #{item.goodsCoverUrl},
+            #{item.price},
+            #{item.goodsCount},
+            #{item.isDelete},
+            #{item.createDate},
+            #{item.updateDate},
+            )
+        </foreach>
+    </insert>-->
+
 </mapper>

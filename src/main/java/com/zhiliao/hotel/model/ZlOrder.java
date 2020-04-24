@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- *
- *
  * @author null
  * @date 2020-04-15
  */
@@ -13,47 +11,47 @@ public class ZlOrder implements Serializable {
     /**
      * 订单ID
      */
-    private Long orderid;
+    private Long orderID;
 
     /**
      * 用户ID
      */
-    private Long userid;
+    private Long userID;
 
     /**
      * 订单编号
      */
-    private String orderserialno;
+    private String orderSerialNo;
 
     /**
      * 酒店ID
      */
-    private Integer hotelid;
+    private Integer hotelID;
 
     /**
      * 酒店名
      */
-    private String hotelname;
+    private String hotelName;
 
     /**
      * 房间ID
      */
-    private Integer roomid;
+    private Integer roomID;
 
     /**
      * 房间号
      */
-    private String roomnumber;
+    private String roomNumber;
 
     /**
      * 第一张商品/设施图片地址
      */
-    private String goodscoverurl;
+    private String goodsCoverUrl;
 
     /**
      * 1:商品订单;2设施订单;3清扫订单;4报修订单
      */
-    private Byte ordertype;
+    private Integer orderType;
 
     /**
      * 备注信息
@@ -63,349 +61,275 @@ public class ZlOrder implements Serializable {
     /**
      * 总价
      */
-    private BigDecimal totalprice;
+    private BigDecimal totalPrice;
 
     /**
      * 实际支付金额
      */
-    private BigDecimal actuallypay;
+    private BigDecimal actuallyPay;
 
     /**
      * 支付方式0: 无支付方式;1微信;2支付宝;3银行卡;4其它
      */
-    private Byte paytype;
+    private Integer payType;
 
     /**
      * 配送地址(省市区合并完的详细地址), 不为空时表示土特产需要配送
      */
-    private String deliveryaddress;
+    private String deliveryAddress;
 
     /**
      * 来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
      */
-    private Integer comeformid;
+    private Integer comeFormID;
+
+    /**
+     * 快递ID
+     */
+    private Integer expressID;
 
     /**
      * 物流编号
      */
-    private String tracknumber;
+    private String trackNumber;
 
     /**
      * 支付状态：0无须支付;1:待支付;2已支付
      */
-    private Byte paystatus;
+    private Integer payStatus;
 
     /**
      * 订单状态：-1:已取消;0待确认;1已确认;2 已发货；3已签收/已完成
      */
-    private Byte orderstatus;
+    private Byte orderStatus;
 
     /**
      * 删除状态:0正常;1删除;
      */
-    private Boolean isdelete;
+    private Integer isDelete;
 
     /**
      * 操作员
      */
-    private String operatorname;
+    private String operatorName;
 
     /**
      * 操作员IP
      */
-    private String operatorip;
+    private String operatorIP;
 
     /**
      * 操作员备注
      */
-    private String operatorremark;
+    private String operatorRemark;
 
     /**
      * 下单时间
      */
-    private Integer createdate;
+    private Integer createDate;
 
     /**
      * 支付/取消时间
      */
-    private Integer updatedate;
+    private Integer updateDate;
 
-    
-    private static final long serialVersionUID = 1L;
-
-    
-    public Long getOrderid() {
-        return orderid;
+    public Long getOrderID() {
+        return orderID;
     }
 
-    
-    public void setOrderid(Long orderid) {
-        this.orderid = orderid;
+    public void setOrderID(Long orderID) {
+        this.orderID = orderID;
     }
 
-    
-    public Long getUserid() {
-        return userid;
+    public Long getUserID() {
+        return userID;
     }
 
-    
-    public void setUserid(Long userid) {
-        this.userid = userid;
+    public void setUserID(Long userID) {
+        this.userID = userID;
     }
 
-    
-    public String getOrderserialno() {
-        return orderserialno;
+    public String getOrderSerialNo() {
+        return orderSerialNo;
     }
 
-    
-    public void setOrderserialno(String orderserialno) {
-        this.orderserialno = orderserialno == null ? null : orderserialno.trim();
+    public void setOrderSerialNo(String orderSerialNo) {
+        this.orderSerialNo = orderSerialNo;
     }
 
-    
-    public Integer getHotelid() {
-        return hotelid;
+    public Integer getHotelID() {
+        return hotelID;
     }
 
-    
-    public void setHotelid(Integer hotelid) {
-        this.hotelid = hotelid;
+    public void setHotelID(Integer hotelID) {
+        this.hotelID = hotelID;
     }
 
-    
-    public String getHotelname() {
-        return hotelname;
+    public String getHotelName() {
+        return hotelName;
     }
 
-    
-    public void setHotelname(String hotelname) {
-        this.hotelname = hotelname == null ? null : hotelname.trim();
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 
-    
-    public Integer getRoomid() {
-        return roomid;
+    public Integer getRoomID() {
+        return roomID;
     }
 
-    
-    public void setRoomid(Integer roomid) {
-        this.roomid = roomid;
+    public void setRoomID(Integer roomID) {
+        this.roomID = roomID;
     }
 
-    
-    public String getRoomnumber() {
-        return roomnumber;
+    public String getRoomNumber() {
+        return roomNumber;
     }
 
-    
-    public void setRoomnumber(String roomnumber) {
-        this.roomnumber = roomnumber == null ? null : roomnumber.trim();
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
     }
 
-    
-    public String getGoodscoverurl() {
-        return goodscoverurl;
+    public String getGoodsCoverUrl() {
+        return goodsCoverUrl;
     }
 
-    
-    public void setGoodscoverurl(String goodscoverurl) {
-        this.goodscoverurl = goodscoverurl == null ? null : goodscoverurl.trim();
+    public void setGoodsCoverUrl(String goodsCoverUrl) {
+        this.goodsCoverUrl = goodsCoverUrl;
     }
 
-    
-    public Byte getOrdertype() {
-        return ordertype;
+    public Integer getOrderType() {
+        return orderType;
     }
 
-    
-    public void setOrdertype(Byte ordertype) {
-        this.ordertype = ordertype;
+    public void setOrderType(Integer orderType) {
+        this.orderType = orderType;
     }
 
-    
     public String getRemark() {
         return remark;
     }
 
-    
     public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+        this.remark = remark;
     }
 
-    
-    public BigDecimal getTotalprice() {
-        return totalprice;
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
     }
 
-    
-    public void setTotalprice(BigDecimal totalprice) {
-        this.totalprice = totalprice;
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
-    
-    public BigDecimal getActuallypay() {
-        return actuallypay;
+    public BigDecimal getActuallyPay() {
+        return actuallyPay;
     }
 
-    
-    public void setActuallypay(BigDecimal actuallypay) {
-        this.actuallypay = actuallypay;
+    public void setActuallyPay(BigDecimal actuallyPay) {
+        this.actuallyPay = actuallyPay;
     }
 
-    
-    public Byte getPaytype() {
-        return paytype;
+    public Integer getPayType() {
+        return payType;
     }
 
-    
-    public void setPaytype(Byte paytype) {
-        this.paytype = paytype;
+    public void setPayType(Integer payType) {
+        this.payType = payType;
     }
 
-    
-    public String getDeliveryaddress() {
-        return deliveryaddress;
+    public String getDeliveryAddress() {
+        return deliveryAddress;
     }
 
-    
-    public void setDeliveryaddress(String deliveryaddress) {
-        this.deliveryaddress = deliveryaddress == null ? null : deliveryaddress.trim();
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 
-    
-    public Integer getComeformid() {
-        return comeformid;
+    public Integer getComeFormID() {
+        return comeFormID;
     }
 
-    
-    public void setComeformid(Integer comeformid) {
-        this.comeformid = comeformid;
+    public void setComeFormID(Integer comeFormID) {
+        this.comeFormID = comeFormID;
     }
 
-    
-    public String getTracknumber() {
-        return tracknumber;
+    public Integer getExpressID() {
+        return expressID;
     }
 
-    
-    public void setTracknumber(String tracknumber) {
-        this.tracknumber = tracknumber == null ? null : tracknumber.trim();
+    public void setExpressID(Integer expressID) {
+        this.expressID = expressID;
     }
 
-    
-    public Byte getPaystatus() {
-        return paystatus;
+    public String getTrackNumber() {
+        return trackNumber;
     }
 
-    
-    public void setPaystatus(Byte paystatus) {
-        this.paystatus = paystatus;
+    public void setTrackNumber(String trackNumber) {
+        this.trackNumber = trackNumber;
     }
 
-    
-    public Byte getOrderstatus() {
-        return orderstatus;
+    public Byte getOrderStatus() {
+        return orderStatus;
     }
 
-    
-    public void setOrderstatus(Byte orderstatus) {
-        this.orderstatus = orderstatus;
+    public void setOrderStatus(Byte orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
-    
-    public Boolean getIsdelete() {
-        return isdelete;
+    public Integer getIsDelete() {
+        return isDelete;
     }
 
-    
-    public void setIsdelete(Boolean isdelete) {
-        this.isdelete = isdelete;
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
     }
 
-    
-    public String getOperatorname() {
-        return operatorname;
+    public String getOperatorName() {
+        return operatorName;
     }
 
-    
-    public void setOperatorname(String operatorname) {
-        this.operatorname = operatorname == null ? null : operatorname.trim();
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
     }
 
-    
-    public String getOperatorip() {
-        return operatorip;
+    public String getOperatorIP() {
+        return operatorIP;
     }
 
-    
-    public void setOperatorip(String operatorip) {
-        this.operatorip = operatorip == null ? null : operatorip.trim();
+    public void setOperatorIP(String operatorIP) {
+        this.operatorIP = operatorIP;
     }
 
-    
-    public String getOperatorremark() {
-        return operatorremark;
+    public String getOperatorRemark() {
+        return operatorRemark;
     }
 
-    
-    public void setOperatorremark(String operatorremark) {
-        this.operatorremark = operatorremark == null ? null : operatorremark.trim();
+    public void setOperatorRemark(String operatorRemark) {
+        this.operatorRemark = operatorRemark;
     }
 
-    
-    public Integer getCreatedate() {
-        return createdate;
+    public Integer getCreateDate() {
+        return createDate;
     }
 
-    
-    public void setCreatedate(Integer createdate) {
-        this.createdate = createdate;
+    public void setCreateDate(Integer createDate) {
+        this.createDate = createDate;
     }
 
-    
-    public Integer getUpdatedate() {
-        return updatedate;
+    public Integer getUpdateDate() {
+        return updateDate;
     }
 
-    
-    public void setUpdatedate(Integer updatedate) {
-        this.updatedate = updatedate;
+    public void setUpdateDate(Integer updateDate) {
+        this.updateDate = updateDate;
     }
 
-    
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", orderid=").append(orderid);
-        sb.append(", userid=").append(userid);
-        sb.append(", orderserialno=").append(orderserialno);
-        sb.append(", hotelid=").append(hotelid);
-        sb.append(", hotelname=").append(hotelname);
-        sb.append(", roomid=").append(roomid);
-        sb.append(", roomnumber=").append(roomnumber);
-        sb.append(", goodscoverurl=").append(goodscoverurl);
-        sb.append(", ordertype=").append(ordertype);
-        sb.append(", remark=").append(remark);
-        sb.append(", totalprice=").append(totalprice);
-        sb.append(", actuallypay=").append(actuallypay);
-        sb.append(", paytype=").append(paytype);
-        sb.append(", deliveryaddress=").append(deliveryaddress);
-        sb.append(", comeformid=").append(comeformid);
-        sb.append(", tracknumber=").append(tracknumber);
-        sb.append(", paystatus=").append(paystatus);
-        sb.append(", orderstatus=").append(orderstatus);
-        sb.append(", isdelete=").append(isdelete);
-        sb.append(", operatorname=").append(operatorname);
-        sb.append(", operatorip=").append(operatorip);
-        sb.append(", operatorremark=").append(operatorremark);
-        sb.append(", createdate=").append(createdate);
-        sb.append(", updatedate=").append(updatedate);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+    public Integer getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(Integer payStatus) {
+        this.payStatus = payStatus;
     }
 }

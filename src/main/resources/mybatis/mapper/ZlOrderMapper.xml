@@ -1,62 +1,192 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlOrderMapper">
-	<resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlOrder">
-		<id column="OrderID" jdbcType="BIGINT" property="orderid"/>
-		<result column="UserID" jdbcType="BIGINT" property="userid"/>
-		<result column="OrderSerialNo" jdbcType="CHAR" property="orderserialno"/>
-		<result column="HotelID" jdbcType="INTEGER" property="hotelid"/>
-		<result column="HotelName" jdbcType="CHAR" property="hotelname"/>
-		<result column="RoomID" jdbcType="INTEGER" property="roomid"/>
-		<result column="RoomNumber" jdbcType="CHAR" property="roomnumber"/>
-		<result column="GoodsCoverUrl" jdbcType="CHAR" property="goodscoverurl"/>
-		<result column="OrderType" jdbcType="TINYINT" property="ordertype"/>
-		<result column="Remark" jdbcType="CHAR" property="remark"/>
-		<result column="TotalPrice" jdbcType="DECIMAL" property="totalprice"/>
-		<result column="ActuallyPay" jdbcType="DECIMAL" property="actuallypay"/>
-		<result column="PayType" jdbcType="TINYINT" property="paytype"/>
-		<result column="DeliveryAddress" jdbcType="CHAR" property="deliveryaddress"/>
-		<result column="ComeFormID" jdbcType="INTEGER" property="comeformid"/>
-		<result column="TrackNumber" jdbcType="CHAR" property="tracknumber"/>
-		<result column="PayStatus" jdbcType="TINYINT" property="paystatus"/>
-		<result column="OrderStatus" jdbcType="TINYINT" property="orderstatus"/>
-		<result column="IsDelete" jdbcType="BIT" property="isdelete"/>
-		<result column="OperatorName" jdbcType="CHAR" property="operatorname"/>
-		<result column="OperatorIP" jdbcType="CHAR" property="operatorip"/>
-		<result column="OperatorRemark" jdbcType="VARCHAR" property="operatorremark"/>
-		<result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
-		<result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
-	</resultMap>
 
+    <select id="findAllOrder" resultType="com.zhiliao.hotel.model.ZlOrder">
 
-	<select id="findAllOrder" resultType="com.zhiliao.hotel.model.ZlOrder">
+        SELECT * FROM zl_order WHERE UserID=#{userID}
 
-		SELECT * FROM zl_order WHERE UserID=#{userID}
+        <if test="orderType != null">
+            AND OrderType = #{orderType}
+        </if>
 
-		<if test="orderType != null">
-			AND OrderType = #{orderType}
-		</if>
+        <if test="orderStatus != null">
+            AND OrderStatus = #{orderStatus}
+        </if>
 
-		<if test="orderStatus != null">
-			AND OrderStatus = #{orderStatus}
-		</if>
+        <if test="payStatus != null">
+            AND PayStatus = #{payStatus}
+        </if>
 
-		<if test="payStatus != null">
-			AND PayStatus = #{payStatus}
-		</if>
+        <if test="payType != null">
+            AND PayType = #{payType}
+        </if>
 
-		<if test="payType != null">
-			AND PayType = #{payType}
-		</if>
+        ORDER BY CreateDate DESC
 
-		ORDER BY CreateDate DESC
+    </select>
 
-	</select>
-
-	<select id="findById" resultType="com.zhiliao.hotel.model.ZlOrder">
+    <select id="findById" resultType="com.zhiliao.hotel.model.ZlOrder">
     select * from zl_order where OrderID = #{orderid}
   </select>
-	<update id="byOrderId" parameterType="com.zhiliao.hotel.model.ZlOrder">
+    <update id="byOrderId" parameterType="com.zhiliao.hotel.model.ZlOrder">
     update zl_order set OrderStatus = #{orderstatus},UpdateDate = #{updatedate} where OrderID = #{orderid}
   </update>
+
+    <insert id="insertOrder" parameterType="com.zhiliao.hotel.model.ZlOrder" useGeneratedKeys="true"
+            keyProperty="orderID">
+        insert into zl_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <!--<if test="orderID != null">
+                OrderID,
+            </if>-->
+            <if test="userID != null">
+                UserID,
+            </if>
+            <if test="orderSerialNo != null">
+                OrderSerialNo,
+            </if>
+            <if test="hotelID != null">
+                HotelID,
+            </if>
+            <if test="hotelName != null">
+                HotelName,
+            </if>
+            <if test="roomID != null">
+                RoomID,
+            </if>
+            <if test="roomNumber != null">
+                RoomNumber,
+            </if>
+            <if test="goodsCoverUrl != null">
+                GoodsCoverUrl,
+            </if>
+            <if test="orderType != null">
+                OrderType,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="totalPrice != null">
+                TotalPrice,
+            </if>
+            <if test="actuallyPay != null">
+                ActuallyPay,
+            </if>
+            <if test="payType != null">
+                PayType,
+            </if>
+            <if test="deliveryAddress != null">
+                DeliveryAddress,
+            </if>
+            <if test="comeFormID != null">
+                ComeFormID,
+            </if>
+            <if test="expressID != null">
+                ExpressID,
+            </if>
+            <if test="trackNumber != null">
+                TrackNumber,
+            </if>
+            <if test="payStatus != null">
+                PayStatus,
+            </if>
+            <if test="isDelete != null">
+                IsDelete,
+            </if>
+            <if test="operatorName != null">
+                OperatorName,
+            </if>
+            <if test="operatorIP != null">
+                OperatorIP,
+            </if>
+            <if test="operatorRemark != null">
+                OperatorRemark,
+            </if>
+            <if test="createDate != null">
+                CreateDate,
+            </if>
+            <if test="updateDate != null">
+                UpdateDate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <!--<if test="orderID != null">
+                #{orderID,jdbcType=BIGINT},
+            </if>-->
+            <if test="userID != null">
+                #{userID,jdbcType=BIGINT},
+            </if>
+            <if test="orderSerialNo != null">
+                #{orderSerialNo,jdbcType=CHAR},
+            </if>
+            <if test="hotelID != null">
+                #{hotelID,jdbcType=INTEGER},
+            </if>
+            <if test="hotelName != null">
+                #{hotelName,jdbcType=CHAR},
+            </if>
+            <if test="roomID != null">
+                #{roomID,jdbcType=INTEGER},
+            </if>
+            <if test="roomNumber != null">
+                #{roomNumber,jdbcType=CHAR},
+            </if>
+            <if test="goodsCoverUrl != null">
+                #{goodsCoverUrl,jdbcType=CHAR},
+            </if>
+            <if test="orderType != null">
+                #{orderType,jdbcType=TINYINT},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=CHAR},
+            </if>
+            <if test="totalPrice != null">
+                #{totalPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="actuallyPay != null">
+                #{actuallyPay,jdbcType=DECIMAL},
+            </if>
+            <if test="payType != null">
+                #{payType,jdbcType=TINYINT},
+            </if>
+            <if test="deliveryAddress != null">
+                #{deliveryAddress,jdbcType=CHAR},
+            </if>
+            <if test="comeFormID != null">
+                #{comeFormID,jdbcType=INTEGER},
+            </if>
+            <if test="expressID != null">
+                #{expressID,jdbcType=MEDIUMINT},
+            </if>
+            <if test="trackNumber != null">
+                #{trackNumber,jdbcType=CHAR},
+            </if>
+            <if test="payStatus != null">
+                #{payStatus,jdbcType=TINYINT},
+            </if>
+            <if test="orderStatus != null">
+                #{orderStatus,jdbcType=TINYINT},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=BIT},
+            </if>
+            <if test="operatorName != null">
+                #{operatorName,jdbcType=CHAR},
+            </if>
+            <if test="operatorIP != null">
+                #{operatorIP,jdbcType=CHAR},
+            </if>
+            <if test="operatorRemark != null">
+                #{operatorRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=INTEGER},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=INTEGER}
+            </if>
+        </trim>
+
+    </insert>
 </mapper>

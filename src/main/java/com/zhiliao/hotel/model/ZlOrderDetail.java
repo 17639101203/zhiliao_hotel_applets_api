@@ -13,32 +13,32 @@ public class ZlOrderDetail implements Serializable {
     /**
      *
      */
-    private Long orderdetailid;
+    private Long orderDetailID;
 
     /**
      *
      */
-    private Long orderid;
+    private Long orderID;
 
     /**
      * 用户ID
      */
-    private Long userid;
+    private Long userID;
 
     /**
      * 商品ID/设施ID (由OrderType决定)
      */
-    private Integer goodsid;
+    private Integer goodsID;
 
     /**
      * 商品名称
      */
-    private String goodsname;
+    private String goodsName;
 
     /**
      * 商品图片
      */
-    private String goodscoverurl;
+    private String goodsCoverUrl;
 
     /**
      * 单价
@@ -48,156 +48,108 @@ public class ZlOrderDetail implements Serializable {
     /**
      * 数量
      */
-    private Integer goodscount;
+    private Integer goodsCount;
 
     /**
      * 删除状态:0正常;1删除;
      */
-    private Boolean isdelete;
+    private Integer isDelete;
 
     /**
      * 下单时间
      */
-    private Integer createdate;
+    private Integer createDate;
 
     /**
      * 支付/取消时间
      */
-    private Integer updatedate;
+    private Integer updateDate;
 
-    
-    private static final long serialVersionUID = 1L;
-
-    
-    public Long getOrderdetailid() {
-        return orderdetailid;
+    public Long getOrderDetailID() {
+        return orderDetailID;
     }
 
-    
-    public void setOrderdetailid(Long orderdetailid) {
-        this.orderdetailid = orderdetailid;
+    public void setOrderDetailID(Long orderDetailID) {
+        this.orderDetailID = orderDetailID;
     }
 
-    
-    public Long getOrderid() {
-        return orderid;
+    public Long getOrderID() {
+        return orderID;
     }
 
-    
-    public void setOrderid(Long orderid) {
-        this.orderid = orderid;
+    public void setOrderID(Long orderID) {
+        this.orderID = orderID;
     }
 
-    
-    public Long getUserid() {
-        return userid;
+    public Long getUserID() {
+        return userID;
     }
 
-    
-    public void setUserid(Long userid) {
-        this.userid = userid;
+    public void setUserID(Long userID) {
+        this.userID = userID;
     }
 
-    
-    public Integer getGoodsid() {
-        return goodsid;
+    public Integer getGoodsID() {
+        return goodsID;
     }
 
-    
-    public void setGoodsid(Integer goodsid) {
-        this.goodsid = goodsid;
+    public void setGoodsID(Integer goodsID) {
+        this.goodsID = goodsID;
     }
 
-    
-    public String getGoodsname() {
-        return goodsname;
+    public String getGoodsName() {
+        return goodsName;
     }
 
-    
-    public void setGoodsname(String goodsname) {
-        this.goodsname = goodsname == null ? null : goodsname.trim();
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
     }
 
-    
-    public String getGoodscoverurl() {
-        return goodscoverurl;
+    public String getGoodsCoverUrl() {
+        return goodsCoverUrl;
     }
 
-    
-    public void setGoodscoverurl(String goodscoverurl) {
-        this.goodscoverurl = goodscoverurl == null ? null : goodscoverurl.trim();
+    public void setGoodsCoverUrl(String goodsCoverUrl) {
+        this.goodsCoverUrl = goodsCoverUrl;
     }
 
-    
     public BigDecimal getPrice() {
         return price;
     }
 
-    
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    
-    public Integer getGoodscount() {
-        return goodscount;
+    public Integer getGoodsCount() {
+        return goodsCount;
     }
 
-    
-    public void setGoodscount(Integer goodscount) {
-        this.goodscount = goodscount;
+    public void setGoodsCount(Integer goodsCount) {
+        this.goodsCount = goodsCount;
     }
 
-    
-    public Boolean getIsdelete() {
-        return isdelete;
+    public Integer getIsDelete() {
+        return isDelete;
     }
 
-    
-    public void setIsdelete(Boolean isdelete) {
-        this.isdelete = isdelete;
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
     }
 
-    
-    public Integer getCreatedate() {
-        return createdate;
+    public Integer getCreateDate() {
+        return createDate;
     }
 
-    
-    public void setCreatedate(Integer createdate) {
-        this.createdate = createdate;
+    public void setCreateDate(Integer createDate) {
+        this.createDate = createDate;
     }
 
-    
-    public Integer getUpdatedate() {
-        return updatedate;
+    public Integer getUpdateDate() {
+        return updateDate;
     }
 
-    
-    public void setUpdatedate(Integer updatedate) {
-        this.updatedate = updatedate;
-    }
-
-    
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", orderdetailid=").append(orderdetailid);
-        sb.append(", orderid=").append(orderid);
-        sb.append(", userid=").append(userid);
-        sb.append(", goodsid=").append(goodsid);
-        sb.append(", goodsname=").append(goodsname);
-        sb.append(", goodscoverurl=").append(goodscoverurl);
-        sb.append(", price=").append(price);
-        sb.append(", goodscount=").append(goodscount);
-        sb.append(", isdelete=").append(isdelete);
-        sb.append(", createdate=").append(createdate);
-        sb.append(", updatedate=").append(updatedate);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+    public void setUpdateDate(Integer updateDate) {
+        this.updateDate = updateDate;
     }
 }
