@@ -15,7 +15,7 @@ public class OrderSerialNoUtil {
     }
 
     /**
-     * 由年月日时分秒+3位随机数
+     * 由年月日时分秒+6位随机数
      * 生成流水号
      *
      * @return

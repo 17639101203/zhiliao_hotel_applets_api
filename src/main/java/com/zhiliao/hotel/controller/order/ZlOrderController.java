@@ -118,7 +118,6 @@ public class ZlOrderController {
     })
     @PostMapping("submitOrder/{hotelID}/{hotelName}/{roomID}/{roomNumber}")
     @UserLoginToken
-//    @PassToken
     @ResponseBody
     public ReturnString submitOrder(
             String token,
@@ -135,7 +134,6 @@ public class ZlOrderController {
         hotelBasicVO.setRoomNumber(roomNumber);
         //获取用户id
         Long userID = TokenUtil.getUserId(token);
-//        Long userID = System.currentTimeMillis();
 
         try {
             List<ZlOrder> zlOrderList = orderService.submitOrder(userID, hotelBasicVO, GoodsInfoMap);
