@@ -36,7 +36,7 @@ public class ZlRepairServiceImpl implements ZlRepairService {
     public void addRepairOrderMsg(ZlRepair repair,String hotelname) {
         ZlRepairorder repairorder = new ZlRepairorder();
         repairorder.setUserid(repair.getUserid());   //  用户ID
-        repairorder.setSerialnumber(OrderIDUtil.CreateOrderID("BX"));   // 订单ID
+        repairorder.setSerialnumber(OrderIDUtil.createOrderID("BX"));   // 订单ID
         repairorder.setHotelid(repair.getHotelid());        // 酒店ID
         repairorder.setHotelname(hotelname);  //酒店名
         repairorder.setRoomid(repair.getRoomid());  // 房间ID
