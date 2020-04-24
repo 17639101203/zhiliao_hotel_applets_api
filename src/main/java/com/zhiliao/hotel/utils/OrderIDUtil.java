@@ -1,30 +1,32 @@
 package com.zhiliao.hotel.utils;
 
-
-import java.util.UUID;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class OrderIDUtil {
 
 
     /**
      * 生成订单ID
-     * @param type  业务类型 例： 清扫  QS
+     *
+     * @param type 业务类型 例： 清扫  QS
      * @return
      */
-    public static String CreateOrderID(String type) {
-        // 获取当前日期年月日
-        String currentDate = DateUtils.getDateByString().replaceAll("-","");
-        String uuid = UUID.randomUUID().toString().replaceAll("-","").substring(0,6);//把uuid生成的"-"去掉,并保留前六位
-        String OrderID;
-        // 取出redis中是否有当日最大sn
-        if (type!=null && type!="") {
-            OrderID = type + currentDate + uuid ;
-            return OrderID;
-        }
-        return null;
+    public static String createOrderID(String type) {
+        // 获取当前日期年月日yyyyMMdd
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        Date date = new Date();
+        String currentDate = format.format(date);
+        // 截取后五位时间戳
+        String time = String.valueOf(date.getTime());
+        time = time.substring(time.length() - 5);
+        // 生成五位随机数
+        int random = (int) ((Math.random() * 9 + 1) * 10000);
+        return type + currentDate + time + random;
     }
 
-
-
+    public static void main(String[] args) {
+        String orderID = createOrderID("BL");
+        System.out.println(orderID);
+    }
 }

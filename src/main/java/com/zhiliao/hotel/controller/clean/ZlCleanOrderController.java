@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.zhiliao.hotel.utils.DateUtils.*;
-import static com.zhiliao.hotel.utils.OrderIDUtil.CreateOrderID;
+import static com.zhiliao.hotel.utils.OrderIDUtil.createOrderID;
 
 /**
  * @Author: Zhangyong
@@ -61,7 +61,7 @@ public class ZlCleanOrderController {
 
         ZlCleanOrder zlCleanOrder = new ZlCleanOrder();
         zlCleanOrder.setUserid(TokenUtil.getUserId(token));   //用户ID  根据token获取userId
-        zlCleanOrder.setSerialnumber(CreateOrderID("QS"));   //订单编号
+        zlCleanOrder.setSerialnumber(createOrderID("QS"));   //订单编号
         zlCleanOrder.setHotelid(hotelID);   //酒店ID
         zlCleanOrder.setHotelname(hotelName);   //酒店名
         zlCleanOrder.setRoomid(roomID);   //房间ID
