@@ -9,7 +9,7 @@ public class GoodsListVo {
     /**
      * 商品id
      */
-    private Integer goodsId;
+    private Integer goodsID;
     /**
      * 商品名称
      */
@@ -50,12 +50,12 @@ public class GoodsListVo {
      */
     private Integer totalVisitCount;
 
-    public Integer getGoodsId() {
-        return goodsId;
+    public Integer getGoodsID() {
+        return goodsID;
     }
 
-    public void setGoodsId(Integer goodsId) {
-        this.goodsId = goodsId;
+    public void setGoodsID(Integer goodsID) {
+        this.goodsID = goodsID;
     }
 
     public String getGoodsName() {
@@ -72,6 +72,14 @@ public class GoodsListVo {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getCoverImgUrl() {
+        return coverImgUrl;
+    }
+
+    public void setCoverImgUrl(String coverImgUrl) {
+        this.coverImgUrl = coverImgUrl;
     }
 
     public BigDecimal getOriginalPrice() {
@@ -120,13 +128,5 @@ public class GoodsListVo {
 
     public void setTotalVisitCount(Integer totalVisitCount) {
         this.totalVisitCount = totalVisitCount;
-    }
-
-    public String getCoverImgUrl() {
-        return coverImgUrl;
-    }
-
-    public void setCoverImgUrl(String coverImgUrl) {
-        this.coverImgUrl = coverImgUrl;
     }
 }

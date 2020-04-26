@@ -16,7 +16,7 @@ public interface ZlGoodsService {
 
     PageInfoResult findGoodsList(Integer hotelId, Integer belongModule, Integer pageNo, Integer pageSize, String categoryName);
 
-    List<Map<String, Object>> findGoodsSkuList(Integer goodsId);
+    List<Map<String, Object>> findGoodsSkuList(Integer hotelId,Integer goodsId);
 
-    GoodsListVo findGoodsDetail(Integer goodsID);
+    GoodsListVo findGoodsDetail(Integer hotelId, Integer goodsID);
 }

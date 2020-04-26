@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.controller.goods;
 
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
@@ -43,7 +44,8 @@ public class ZlGoodsController {
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产")
     })
-    @UserLoginToken
+//    @UserLoginToken
+    @PassToken
     @GetMapping("findGoodsCategory/{hotelId}/{belongModule}")
     public ReturnString findGoodsCategory(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule) {
         try {
@@ -79,10 +81,11 @@ public class ZlGoodsController {
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产"),
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "String", required = true, value = "页码"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "String", required = true, value = "每页大小"),
-            @ApiImplicitParam(paramType = "query", name = "categoryName", dataType = "String", required = true, value = "分类名称")
+            @ApiImplicitParam(paramType = "query", name = "categoryName", dataType = "String", required = true, value = "分类名称(all代表查所有)")
 
     })
-    @UserLoginToken
+//    @UserLoginToken
+    @PassToken
     @GetMapping("findGoodsList/{hotelId}/{belongModule}/{pageNo}/{pageSize}")
     public ReturnString findGoodsList(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule,
                                       @PathVariable Integer pageNo, @PathVariable Integer pageSize, String categoryName) {
@@ -100,14 +103,16 @@ public class ZlGoodsController {
     @ApiOperation(value = "获取商品规格")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
             @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id")
     })
-    @UserLoginToken
-    @GetMapping("findGoodsSkuList/{goodsId}")
-    public ReturnString findGoodsSkuList(String token, @PathVariable Integer goodsId) {
+//    @UserLoginToken
+    @PassToken
+    @GetMapping("findGoodsSkuList/{hotelId}/{goodsId}")
+    public ReturnString findGoodsSkuList(String token, @PathVariable Integer hotelId, @PathVariable Integer goodsId) {
         try {
             logger.info("开始请求->参数->商品id：" + goodsId);
-            List<Map<String, Object>> goodsSkuList = zlGoodsService.findGoodsSkuList(goodsId);
+            List<Map<String, Object>> goodsSkuList = zlGoodsService.findGoodsSkuList(hotelId,goodsId);
             return new ReturnString(goodsSkuList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,13 +123,15 @@ public class ZlGoodsController {
     @ApiOperation(value = "获取商品详情数据")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
             @ApiImplicitParam(paramType = "path", name = "goodsID", dataType = "String", required = true, value = "商品id")
     })
-    @UserLoginToken
-    @GetMapping("findGoodsDetail/{goodsID}")
-    public ReturnString findGoodsDetail(String token, @PathVariable Integer goodsID) {
+//    @UserLoginToken
+    @PassToken
+    @GetMapping("findGoodsDetail/{hotelId}/{goodsID}")
+    public ReturnString findGoodsDetail(String token, @PathVariable Integer hotelId, @PathVariable Integer goodsID) {
         try {
-            GoodsListVo goodsListVo = zlGoodsService.findGoodsDetail(goodsID);
+            GoodsListVo goodsListVo = zlGoodsService.findGoodsDetail(hotelId, goodsID);
             return new ReturnString(goodsListVo);
         } catch (Exception e) {
             e.printStackTrace();

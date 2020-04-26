@@ -44,13 +44,13 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
     }
 
     @Override
-    public List<Map<String, Object>> findGoodsSkuList(Integer goodsId) {
-        return zlGoodsMapper.findGoodsSkuList(goodsId);
+    public List<Map<String, Object>> findGoodsSkuList(Integer hotelId, Integer goodsId) {
+        return zlGoodsMapper.findGoodsSkuList(hotelId, goodsId);
     }
 
     @Override
-    public GoodsListVo findGoodsDetail(Integer goodsID) {
-        GoodsListVo goodsListVo = zlGoodsMapper.findGoodsDetail(goodsID);
+    public GoodsListVo findGoodsDetail(Integer hotelId, Integer goodsID) {
+        GoodsListVo goodsListVo = zlGoodsMapper.findGoodsDetail(hotelId,goodsID);
         if (goodsListVo != null) {
             zlGoodsMapper.updateTotalVisitCount(goodsID, goodsListVo.getTotalVisitCount());
         }
