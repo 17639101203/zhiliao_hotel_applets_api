@@ -37,7 +37,7 @@ public class ZlCouponUserController {
 
         try{
             Long userId= TokenUtil.getUserId(token);
-            logger.info("我的评价，用户ID："+userId);
+            logger.info("我的优惠卷，用户ID："+userId);
             PageInfoResult result = couponUserService.listCouponUser(userId,pageNo,pageSize);
             return new ReturnString(result);
 

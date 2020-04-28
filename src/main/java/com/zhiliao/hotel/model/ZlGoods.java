@@ -86,7 +86,7 @@ public class ZlGoods implements Serializable {
     private Boolean isrecommand;
 
     /**
-     * 0:下架;1上架
+     * 0:下架;1上架;-1:紧急下架
      */
     private Byte goodsstatus;
 

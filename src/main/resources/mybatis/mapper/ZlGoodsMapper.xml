@@ -30,32 +30,6 @@
     </resultMap>
 
     <select id="findGoodsCategory" resultType="java.util.LinkedHashMap">
-        SELECT
-          zgc.CategoryName,
-          CASE
-            zg.IsRecommand
-            WHEN 0
-            THEN '不推荐'
-            WHEN 1
-            THEN '推荐'
-          END IsRecommand
-        FROM
-          zl_hotelgoods zhg
-          LEFT JOIN zl_goods zg
-            ON zhg.GoodsID = zg.GoodsID
-          LEFT JOIN zl_goodscategory zgc
-            ON zhg.GoodsCategoryID = zgc.GoodsCategoryID
-        WHERE zhg.GoodsStatus = 1
-          AND zhg.IsDelete = 0
-          AND zg.GoodsStatus = 1
-          AND zg.IsDelete = 0
-          AND zgc.CategoryStatus = 1
-          AND zgc.IsDelete = 0
-          AND zg.HotelID = #{hotelId} and zgc.BelongModule=#{belongModule}
-        ORDER BY zhg.CreateDate ASC
-    </select>
-
-    <!--<select id="findGoodsCategory" resultType="java.util.LinkedHashMap">
         select
             zgc.CategoryName,
             case zg.IsRecommand when 0 then '不推荐' when 1 then '推荐' end IsRecommand
@@ -64,55 +38,18 @@
         where zg.GoodsStatus=1 and zg.IsDelete=0 and zgc.IsDelete=0
         and zg.HotelID=#{hotelId} and zgc.BelongModule=#{belongModule}
         order by zgc.Sort asc
-    </select>-->
-
-    <select id="findGoodsList" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
-        SELECT
-        zhg.GoodsID,
-        zg.GoodsName,
-        zg.CoverImgUrl,
-        zg.TotalStockCount,
-        zg.TotalVirtualSoldCount,
-        zg.OriginalPrice,
-        zg.CurrentPrice
-        FROM
-        zl_hotelgoods zhg
-        LEFT JOIN zl_goods zg
-        ON zhg.GoodsID = zg.GoodsID
-        AND zhg.HotelID = zg.HotelID
-        LEFT JOIN zl_goodscategory zgc
-        ON zhg.GoodsCategoryID = zgc.GoodsCategoryID
-        WHERE zhg.GoodsStatus = 1
-        AND zhg.IsDelete = 0
-        AND zg.GoodsStatus = 1
-        AND zg.IsDelete = 0
-        AND zhg.HotelID=#{hotelId} and zgc.BelongModule=#{belongModule}
-        <choose>
-            <when test='categoryName!="all"'>
-                <choose>
-                    <when test='categoryName=="推荐"'>
-                        and zg.IsRecommand=1
-                    </when>
-                    <otherwise>
-                        and zgc.CategoryName=#{categoryName}
-                    </otherwise>
-                </choose>
-            </when>
-        </choose>
-        GROUP BY zhg.GoodsID
-        ORDER BY zhg.CreateDate ASC
     </select>
 
-    <!--<select id="findGoodsList" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
+    <select id="findGoodsList" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
         select
-            zg.GoodsID,
-            zg.GoodsName,
-            zg.CoverImgUrl,
-            zg.OriginalPrice,
-            zg.CurrentPrice,
-            zg.TotalStockCount,
-            zg.TotalSoldCount,
-            zg.TotalVirtualSoldCount
+        zg.GoodsID,
+        zg.GoodsName,
+        zg.CoverImgUrl,
+        zg.OriginalPrice,
+        zg.CurrentPrice,
+        zg.TotalStockCount,
+        zg.TotalSoldCount,
+        zg.TotalVirtualSoldCount
         from zl_goods zg
         left join zl_goodscategory zgc on zg.GoodsCategoryID=zgc.GoodsCategoryID
         where zg.GoodsStatus=1 and zg.IsDelete=0 and zgc.IsDelete=0
@@ -126,31 +63,6 @@
             </otherwise>
         </choose>
         order by zg.Sort asc
-    </select>-->
-
-    <select id="findGoodsSkuList" resultType="java.util.LinkedHashMap">
-        SELECT
-          zhg.GoodsID,
-          zhg.SkuID,
-          zgp.PropertyName,
-          zgs.OriginalPrice,
-          zgs.CurrentPrice,
-          zhg.StockCount,
-          zhg.SoldCount,
-          zgs.VirtualSoldCount
-        FROM
-          zl_hotelgoods zhg
-          LEFT JOIN zl_goodssku zgs
-          ON zhg.SkuID = zgs.SkuID
-          LEFT JOIN zl_goodsproperty zgp
-          ON zgs.PropertyIDs = zgp.PropertyID
-            WHERE zhg.GoodsID = #{goodsId}
-            AND zhg.HotelID=#{hotelId}
-            AND zhg.GoodsStatus = 1
-            AND zhg.IsDelete = 0
-            AND zgs.IsDelete = 0
-            AND zgp.IsDelete = 0
-            ORDER BY zhg.CreateDate DESC
     </select>
 
     <!--<select id="findGoodsSkuList" resultType="java.util.LinkedHashMap">
@@ -168,11 +80,34 @@
         left join zl_goodsproperty zgp on zgs.PropertyIDs=zgp.PropertyID
         where zgs.GoodsID=#{goodsId} and zgs.IsDelete=0 and zgp.IsDelete=0
         order by zgs.CreateDate desc
-    </select>-->
+    </select>
+    -->
+    <select id="findGoodsSkuList" resultType="java.util.LinkedHashMap">
+        SELECT
+            a.GoodsID,
+            b.SkuID,
+            b.OriginalPrice,
+            b.CurrentPrice,
+            b.SoldCount,
+            b.IsDefault,
+            c.GoodsName,
+            c.TotalStockCount,
+            c.TotalSoldCount,
+            d.PropertyName,
+            d.ImgUrl
+        FROM
+	        zl_hotelgoods a
+	    LEFT JOIN zl_goodssku b ON a.SkuID = b.SkuID
+        LEFT JOIN zl_goods c ON a.GoodsID = c.GoodsID
+        AND b.GoodsID = c.GoodsID
+        LEFT JOIN zl_goodsproperty d ON b.PropertyIDs = d.PropertyID
+        WHERE
+            a.GoodsID = #{goodsId} and a.HotelID = #{hotelId} and a.IsDelete = 0 and b.IsDelete = 0 and c.IsDelete = 0 and d.IsDelete = 0
+    </select>
 
     <!--根据商品id商品详情数据-->
     <select id="findGoodsDetail" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
-     SELECT
+      SELECT
           zg.GoodsID,
           zg.CoverImgUrl,
           zg.GoodsName,
@@ -184,15 +119,7 @@
           zg.TotalVisitCount
         FROM
           zl_goods zg
-        WHERE zg.GoodsID IN
-          (SELECT
-            zhg.GoodsID
-          FROM
-            zl_hotelgoods zhg
-            WHERE GoodsStatus = 1 AND IsDelete = 0)
-          AND zg.HotelID = #{hotelId}
-          AND zg.GoodsID = #{goodsID}
-          AND zg.GoodsStatus = 1 AND zg.IsDelete = 0
+        WHERE zg.GoodsID = #{goodsID}
     </select>
 
     <!--根据商品id更新商品点击量-->
