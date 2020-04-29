@@ -2,6 +2,7 @@ package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
+import com.zhiliao.hotel.model.ZlOrderDetail;
 
 import java.util.List;
 import java.util.Map;
@@ -19,4 +20,6 @@ public interface ZlGoodsService {
     List<Map<String, Object>> findGoodsSkuList(Integer hotelId,Integer goodsId);
 
     GoodsListVo findGoodsDetail(Integer hotelId, Integer goodsID);
+
+    void updateGoodsCount(List<ZlOrderDetail> zlOrderDetailList);
 }

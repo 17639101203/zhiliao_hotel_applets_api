@@ -74,6 +74,8 @@ public class ZlOrderServiceIml implements ZlOrderService {
         Set<String> keySet = goodsInfoMap.keySet();
 
         BigDecimal totalPrice = new BigDecimal(0);
+        //调用工具类生成订单编号
+        String orderSerialNo = OrderSerialNoUtil.CreateOrderSerialNo("");
         for (String key : keySet) {
             List<GoodsInfoVO> goodsInfoVOList = goodsInfoMap.get(key);
             String coverImgUrl = goodsInfoVOList.get(0).getCoverImgUrl();
@@ -89,8 +91,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
             zlOrder.setPayStatus(1);
             zlOrder.setIsDelete(0);
             zlOrder.setCreateDate(Math.toIntExact(System.currentTimeMillis() / 1000));
-            //调用工具类生成订单编号
-            String orderSerialNo = OrderSerialNoUtil.CreateOrderSerialNo(key);
+
             zlOrder.setOrderSerialNo(orderSerialNo);
 
             orderMapper.insertOrder(zlOrder);
@@ -110,5 +111,16 @@ public class ZlOrderServiceIml implements ZlOrderService {
             }
         }
         return zlOrderList;
+    }
+
+    @Override
+    public void updateOrder(String out_trade_no) {
+        orderMapper.updateOrder(out_trade_no);
+    }
+
+    @Override
+    public List<ZlOrderDetail> getOrderDetail(String out_trade_no) {
+        List<ZlOrderDetail> zlOrderDetailList = orderMapper.getOrderDetail(out_trade_no);
+        return zlOrderDetailList;
     }
 }

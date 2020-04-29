@@ -187,6 +187,26 @@
                 #{updateDate,jdbcType=INTEGER}
             </if>
         </trim>
-
     </insert>
+
+    <select id="getOrderDetail" resultType="com.zhiliao.hotel.model.ZlOrderDetail">
+        SELECT
+          GoodsID,
+          GoodsCount,
+          TotalPrice
+        FROM
+          zl_orderdetail
+        WHERE OrderID = #{out_trade_no}
+        ORDER BY GoodsID ASC
+    </select>
+
+    <update id="updateOrder">
+        UPDATE
+          zl_order
+        SET
+          PayStatus = 2,
+          OrderStatus = 1
+        WHERE OrderSerialNo = #{out_trade_no}
+    </update>
+
 </mapper>

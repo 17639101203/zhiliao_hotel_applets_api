@@ -204,4 +204,31 @@
         WHERE zl_goods.GoodsID = #{goodsID}
     </update>
 
+    <update id="updateGoods">
+        UPDATE
+          zl_goods
+        SET
+          TotalStockCount = TotalStockCount - #{goodsCount},
+          TotalSoldCount = TotalSoldCount + #{goodsCount}
+        WHERE GoodsID = #{goodsID}
+    </update>
+
+    <update id="updateGoodsSku">
+        UPDATE
+          zl_goods
+        SET
+          StockCount = TotalStockCount - #{goodsCount},
+          SoldCount = TotalSoldCount + #{goodsCount}
+        WHERE GoodsID = #{goodsID}
+    </update>
+
+    <update id="updateHotelGoods">
+        UPDATE
+          zl_goods
+        SET
+          StockCount = TotalStockCount - #{goodsCount},
+          SoldCount = TotalSoldCount + #{goodsCount}
+        WHERE GoodsID = #{goodsID}
+    </update>
+
 </mapper>

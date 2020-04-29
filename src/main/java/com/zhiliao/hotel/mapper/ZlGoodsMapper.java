@@ -23,4 +23,10 @@ public interface ZlGoodsMapper extends Mapper<ZlGoods> {
     GoodsListVo findGoodsDetail(@Param("hotelId") Integer hotelId, @Param("goodsID") Integer goodsID);
 
     void updateTotalVisitCount(@Param("goodsID") Integer goodsID, @Param("totalvisitcount") Integer totalvisitcount);
+
+    void updateGoods(Integer goodsID, Integer goodsCount);
+
+    void updateGoodsSku(Integer goodsID, Integer goodsCount);
+
+    void updateHotelGoods(Integer goodsID, Integer goodsCount);
 }

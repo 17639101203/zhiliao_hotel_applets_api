@@ -8,6 +8,7 @@ import com.zhiliao.hotel.controller.order.vo.GoodsInfoVO;
 import com.zhiliao.hotel.controller.order.vo.HotelBasicVO;
 import com.zhiliao.hotel.model.ZlOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
+import com.zhiliao.hotel.service.WxPayService;
 import com.zhiliao.hotel.service.ZlOrderDetailService;
 import com.zhiliao.hotel.service.ZlOrderService;
 import com.zhiliao.hotel.utils.TokenUtil;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +37,7 @@ public class ZlOrderController {
 
     private final ZlOrderService orderService;
     private final ZlOrderDetailService orderDetailService;
+    private WxPayService wxPayService;
 
     @Autowired
     public ZlOrderController(ZlOrderService orderService, ZlOrderDetailService orderDetailService) {
@@ -121,10 +124,10 @@ public class ZlOrderController {
     @ResponseBody
     public ReturnString submitOrder(
             String token,
-                                    @PathVariable("hotelID") Integer hotelID,
-                                    @PathVariable("hotelName") String hotelName,
-                                    @PathVariable("roomID") Integer roomID,
-                                    @PathVariable("roomNumber") String roomNumber
+            @PathVariable("hotelID") Integer hotelID,
+            @PathVariable("hotelName") String hotelName,
+            @PathVariable("roomID") Integer roomID,
+            @PathVariable("roomNumber") String roomNumber
             , @RequestBody Map<String, List<GoodsInfoVO>> GoodsInfoMap) {
         //封装对象
         HotelBasicVO hotelBasicVO = new HotelBasicVO();
@@ -138,6 +141,54 @@ public class ZlOrderController {
         try {
             List<ZlOrder> zlOrderList = orderService.submitOrder(userID, hotelBasicVO, GoodsInfoMap);
             return new ReturnString(zlOrderList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("提交失败");
+        }
+    }
+
+    @ApiOperation(value = "微信下单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "path", name = "openid", dataType = "String", required = true, value = "用户标识"),
+            @ApiImplicitParam(paramType = "path", name = "body", dataType = "String", required = true, value = "商品描述"),
+            @ApiImplicitParam(paramType = "path", name = "total_fee", dataType = "Integer", required = true, value = "商品描述"),
+            @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号")
+    })
+    @PostMapping("wxPay/{openid}/{body}/{total_fee}/{out_trade_no}")
+    @UserLoginToken
+    @ResponseBody
+    public ReturnString wxPay(
+            String token,
+            @PathVariable("openid") String openid,
+            @PathVariable("body") String body,
+            @PathVariable("total_fee") Integer total_fee,
+            @PathVariable("out_trade_no") String out_trade_no,
+            HttpServletRequest request) {
+
+        try {
+            Map<String, Object> response = wxPayService.wxPay(openid, body, total_fee, out_trade_no, request);
+            return new ReturnString(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("提交失败");
+        }
+    }
+
+    @ApiOperation(value = "支付回调")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "query", name = "sign", dataType = "String", required = true, value = "签名"),
+            @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号")
+
+    })
+    @PostMapping("wxPayReturn")
+    @UserLoginToken
+    @ResponseBody
+    public ReturnString wxPayReturn(String token, @PathVariable("sign") String sign, @PathVariable("out_trade_no") String out_trade_no) {
+        try {
+            Map<String, Object> response = wxPayService.wxPayReturn(sign, out_trade_no);
+            return new ReturnString(response);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("提交失败");

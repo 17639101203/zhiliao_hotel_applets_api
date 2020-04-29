@@ -4,6 +4,7 @@ import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.order.vo.GoodsInfoVO;
 import com.zhiliao.hotel.controller.order.vo.HotelBasicVO;
 import com.zhiliao.hotel.model.ZlOrder;
+import com.zhiliao.hotel.model.ZlOrderDetail;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -17,4 +18,7 @@ public interface ZlOrderService {
 
     List<ZlOrder> submitOrder(Long userID, HotelBasicVO hotelBasicVO, Map<String, List<GoodsInfoVO>> goodsInfoMap);
 
+    void updateOrder(String out_trade_no);
+
+    List<ZlOrderDetail> getOrderDetail(String out_trade_no);
 }
