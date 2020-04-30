@@ -1,6 +1,7 @@
-package com.zhiliao.hotel.controller.order.util;
+package com.zhiliao.hotel.controller.myOrder.util;
 
 import com.github.wxpay.sdk.WXPayConfig;
+import com.github.wxpay.sdk.WXPayConstants;
 import com.github.wxpay.sdk.WXPayConstants.SignType;
 
 import java.io.BufferedReader;

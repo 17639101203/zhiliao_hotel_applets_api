@@ -90,7 +90,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                     //根据用户所属酒店Id
                     ZlHotel zlHotel = zlHotelMapper.getById(String.valueOf(zlWxuser.getHotelid()));
                     //酒店名称
-                    zlUserloginlog.setHotelname(zlHotel.getHotelname());
+                    zlUserloginlog.setHotelname(zlHotel.getHotelName());
                     //酒店id
                     zlUserloginlog.setHotelid(Integer.valueOf(hotelId));
                     //获取当前时间戳

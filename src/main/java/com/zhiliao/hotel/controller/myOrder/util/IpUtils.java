@@ -1,4 +1,4 @@
-package com.zhiliao.hotel.controller.order.util;
+package com.zhiliao.hotel.controller.myOrder.util;
 
 import org.apache.commons.lang.StringUtils;
 

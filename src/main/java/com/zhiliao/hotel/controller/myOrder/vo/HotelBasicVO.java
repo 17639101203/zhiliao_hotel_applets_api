@@ -1,4 +1,4 @@
-package com.zhiliao.hotel.controller.order.vo;
+package com.zhiliao.hotel.controller.myOrder.vo;
 
 import io.swagger.annotations.ApiModel;
 

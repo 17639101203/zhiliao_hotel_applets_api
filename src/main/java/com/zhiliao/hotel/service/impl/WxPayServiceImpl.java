@@ -1,11 +1,11 @@
 package com.zhiliao.hotel.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zhiliao.hotel.controller.order.ZlOrderController;
+import com.zhiliao.hotel.controller.myOrder.ZlOrderController;
+import com.zhiliao.hotel.controller.myOrder.util.IpUtils;
+import com.zhiliao.hotel.controller.myOrder.util.PayUtil;
+import com.zhiliao.hotel.controller.myOrder.util.StringUtils;
 import com.zhiliao.hotel.controller.order.config.WxPayConfig;
-import com.zhiliao.hotel.controller.order.util.IpUtils;
-import com.zhiliao.hotel.controller.order.util.PayUtil;
-import com.zhiliao.hotel.controller.order.util.StringUtils;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.WxPayService;
 import com.zhiliao.hotel.service.ZlGoodsService;

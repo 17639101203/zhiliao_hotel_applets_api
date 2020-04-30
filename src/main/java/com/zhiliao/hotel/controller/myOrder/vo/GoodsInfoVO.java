@@ -1,4 +1,4 @@
-package com.zhiliao.hotel.controller.order.vo;
+package com.zhiliao.hotel.controller.myOrder.vo;
 
 import java.math.BigDecimal;
 

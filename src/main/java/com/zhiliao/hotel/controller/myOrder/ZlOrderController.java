@@ -1,11 +1,10 @@
-package com.zhiliao.hotel.controller.order;
+package com.zhiliao.hotel.controller.myOrder;
 
 import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
-import com.zhiliao.hotel.controller.order.vo.GoodsInfoVO;
-import com.zhiliao.hotel.controller.order.vo.HotelBasicVO;
+import com.zhiliao.hotel.controller.myOrder.vo.GoodsInfoVO;
+import com.zhiliao.hotel.controller.myOrder.vo.HotelBasicVO;
 import com.zhiliao.hotel.model.ZlOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.WxPayService;
