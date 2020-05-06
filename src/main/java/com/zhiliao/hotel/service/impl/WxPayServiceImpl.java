@@ -1,6 +1,5 @@
 package com.zhiliao.hotel.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.zhiliao.hotel.controller.myOrder.ZlOrderController;
 import com.zhiliao.hotel.controller.myOrder.util.IpUtils;
 import com.zhiliao.hotel.controller.myOrder.util.PayUtil;
@@ -33,11 +32,12 @@ public class WxPayServiceImpl implements WxPayService {
 
     private static final Logger logger = LoggerFactory.getLogger(ZlOrderController.class);
 
-    //生成的随机字符串
-    private String nonce_str = StringUtils.getRandomStringByLength(32);
 
     @Override
     public Map<String, Object> wxPay(String openid, String body, Integer total_fee, String out_trade_no, HttpServletRequest request) {
+
+        //生成的随机字符串
+        String nonce_str = StringUtils.getRandomStringByLength(32);
 
         //获取本机的IP地址
         String spbill_create_ip = IpUtils.getIpAddr(request);
@@ -87,7 +87,7 @@ public class WxPayServiceImpl implements WxPayService {
         // 将解析结果存储在HashMap中
         Map map = null;
         try {
-            map = PayUtil.stringToMap(result);
+            map = PayUtil.xmlToMap(result);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -96,22 +96,28 @@ public class WxPayServiceImpl implements WxPayService {
 
         //返回给移动端需要的参数
         Map<String, Object> response = new HashMap<String, Object>();
-        if (return_code == "SUCCESS" || return_code.equals(return_code)) {
-            // 业务结果
-            String prepay_id = (String) map.get("prepay_id");//返回的预付单信息
-            response.put("nonceStr", nonce_str);
-            response.put("package", "prepay_id=" + prepay_id);
-            Long timeStamp = System.currentTimeMillis() / 1000;
-            response.put("timeStamp", timeStamp + "");//这边要将返回的时间戳转化成字符串，不然小程序端调用wx.requestPayment方法会报签名错误
+        if ("SUCCESS".equals(return_code)) {
+            String result_code = (String) map.get("result_code");
+            if ("SUCCESS".equals(result_code)) {
+                // 业务结果
+                String prepayId = (String) map.get("prepay_id");//返回的预付单信息
+                String nonceStr = (String) map.get("nonce_str");//微信返回的随机字符串
+                response.put("prepayId", prepayId);
+                response.put("nonceStr", nonceStr);
+                response.put("appid", WxPayConfig.appid);
+                response.put("signType", WxPayConfig.SIGNTYPE);
+                Long timeStamp = System.currentTimeMillis() / 1000;
+                response.put("timeStamp", timeStamp + "");//这边要将返回的时间戳转化成字符串，不然小程序端调用wx.requestPayment方法会报签名错误
 
-            String stringSignTemp = "appId=" + WxPayConfig.appid + "&nonceStr=" + nonce_str + "&package=prepay_id=" + prepay_id + "&signType=" + WxPayConfig.SIGNTYPE + "&timeStamp=" + timeStamp;
-            //再次签名，这个签名用于小程序端调用wx.requesetPayment方法
-            String paySign = PayUtil.sign(stringSignTemp, WxPayConfig.key, "utf-8").toUpperCase();
-            logger.info("=======================第二次签名：" + paySign + "=====================");
+                String stringSignTemp = "appId=" + WxPayConfig.appid + "&nonceStr=" + nonceStr + "&prepayId=" + prepayId + "&signType=" + WxPayConfig.SIGNTYPE + "&timeStamp=" + timeStamp;
+                //再次签名，这个签名用于小程序端调用wx.requesetPayment方法
+                String paySign = PayUtil.sign(stringSignTemp, WxPayConfig.key, "utf-8").toUpperCase();
+                logger.info("=======================第二次签名：" + paySign + "=====================");
 
-            response.put("paySign", paySign);
+                response.put("paySign", paySign);
+            }
         }
-        response.put("appid", WxPayConfig.appid);
+
         return response;
     }
 
@@ -122,9 +128,12 @@ public class WxPayServiceImpl implements WxPayService {
     @Override
     public Map<String, Object> wxPayReturn(String sign, String out_trade_no) {
 
-        String xmlBack = "";
+        //生成的随机字符串
+        String nonce_str = StringUtils.getRandomStringByLength(32);
 
+        String xmlBack = "";
         //拼接查询订单接口使用的xml数据
+
         String xml = "<xml>" + "<appid>" + WxPayConfig.appid + "</appid>"
                 + "<mch_id>" + WxPayConfig.mch_id + "</mch_id>"
                 + "<nonce_str>" + nonce_str + "</nonce_str>"
@@ -133,13 +142,37 @@ public class WxPayServiceImpl implements WxPayService {
                 + "</xml>";
 
         //调用查询订单接口，并接受返回的结果
-        String result = PayUtil.httpRequest(WxPayConfig.notify_url, "POST", xml);
-
+        String result = null;
         try {
-            Map<String, String> returnMap = PayUtil.xmlToMap(result);
-            if (payUtil.isPayResultNotifySignatureValid(returnMap)) {
-                String return_code = returnMap.get("return_code");//状态
-                if (return_code.equals("SUCCESS")) {
+            //调用微信的订单查询接口
+            result = PayUtil.httpRequest(WxPayConfig.notify_url, "POST", xml);
+        } catch (Exception e) {
+            logger.info("调用微信订单查询接口失败,订单号为:", out_trade_no);
+            e.printStackTrace();
+        }
+
+        Map<String, String> returnMap = null;
+        try {
+            returnMap = PayUtil.xmlToMap(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String return_code = (String) returnMap.get("return_code");
+        String result_code = (String) returnMap.get("result_code");
+        String trade_state = (String) returnMap.get("trade_state");//订单状态
+
+        if ("SUCCESS".equals(return_code) && "SUCCESS".equals(result_code)) {
+            if ("SUCCESS".equals(trade_state)) {  //支付成功
+                boolean bool = false;
+                try {
+                    bool = payUtil.isPayResultNotifySignatureValid(returnMap);
+                } catch (Exception e) {
+                    // 签名错误，如果数据里没有sign字段，也认为是签名错误
+                    logger.error("手机支付回调通知签名错误");
+                    xmlBack = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[手机支付回调通知签名错误]]></return_msg>" + "</xml> ";
+                }
+                if (bool) {
                     //修改数据库表状态
                     //查询下单商品信息
                     List<ZlOrderDetail> zlOrderDetailList = zlOrderService.getOrderDetail(out_trade_no);
@@ -156,21 +189,20 @@ public class WxPayServiceImpl implements WxPayService {
                         logger.info("微信手机支付回调成功订单号:{}", out_trade_no);
                         xmlBack = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
                     } else {
-                        logger.info("微信手机支付回调失败订单号:{}", out_trade_no);
-                        xmlBack = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[订单号为空]]></return_msg>" + "</xml> ";
+                        logger.info("订单金额不符,订单号:", out_trade_no);
+                        xmlBack = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[订单金额不符]]></return_msg>" + "</xml> ";
                     }
                 } else {
-                    logger.info("微信手机支付回调失败订单号:{}", out_trade_no);
-                    xmlBack = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[订单号为空]]></return_msg>" + "</xml> ";
+                    // 签名错误，如果数据里没有sign字段，也认为是签名错误
+                    logger.error("手机支付回调通知签名错误,订单号:", out_trade_no);
+                    xmlBack = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[手机支付回调通知签名错误]]></return_msg>" + "</xml> ";
                 }
             } else {
-                // 签名错误，如果数据里没有sign字段，也认为是签名错误
-                logger.error("手机支付回调通知签名错误");
-                xmlBack = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[手机支付回调通知签名错误]]></return_msg>" + "</xml> ";
+                logger.error("手机支付回调通知失败,订单号:", out_trade_no);
+                xmlBack = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[手机支付回调通知失败]]></return_msg>" + "</xml> ";
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("手机支付回调通知失败", e);
+        } else {
+            logger.error("手机支付回调通知失败");
             xmlBack = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[手机支付回调通知失败]]></return_msg>" + "</xml> ";
         }
         Map<String, Object> map = new HashMap<>();

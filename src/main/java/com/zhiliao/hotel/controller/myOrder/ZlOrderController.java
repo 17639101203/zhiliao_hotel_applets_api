@@ -151,7 +151,7 @@ public class ZlOrderController {
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "openid", dataType = "String", required = true, value = "用户标识"),
             @ApiImplicitParam(paramType = "path", name = "body", dataType = "String", required = true, value = "商品描述"),
-            @ApiImplicitParam(paramType = "path", name = "total_fee", dataType = "Integer", required = true, value = "商品描述"),
+            @ApiImplicitParam(paramType = "path", name = "total_fee", dataType = "Integer", required = true, value = "标价金额"),
             @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号")
     })
     @PostMapping("wxPay/{openid}/{body}/{total_fee}/{out_trade_no}")
