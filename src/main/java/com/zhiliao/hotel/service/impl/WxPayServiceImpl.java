@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.service.impl;
 
 import com.zhiliao.hotel.controller.myOrder.ZlOrderController;
+import com.zhiliao.hotel.controller.myOrder.rabbit.producer.PayProducer;
 import com.zhiliao.hotel.controller.myOrder.util.IpUtils;
 import com.zhiliao.hotel.controller.myOrder.util.PayUtil;
 import com.zhiliao.hotel.controller.myOrder.util.StringUtils;
@@ -11,6 +12,8 @@ import com.zhiliao.hotel.service.ZlGoodsService;
 import com.zhiliao.hotel.service.ZlOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +35,8 @@ public class WxPayServiceImpl implements WxPayService {
 
     private static final Logger logger = LoggerFactory.getLogger(ZlOrderController.class);
 
+    @Autowired
+    private PayProducer payProducer;
 
     @Override
     public Map<String, Object> wxPay(String openid, String body, Integer total_fee, String out_trade_no, HttpServletRequest request) {
@@ -115,17 +120,126 @@ public class WxPayServiceImpl implements WxPayService {
                 logger.info("=======================第二次签名：" + paySign + "=====================");
 
                 response.put("paySign", paySign);
+                //向生产者提供参数,查询订单支付结果
+                payProducer.payOrderNotice(paySign, out_trade_no);
             }
         }
 
         return response;
     }
 
+    @Autowired
     private PayUtil payUtil;
+
+    @Autowired
     private ZlOrderService zlOrderService;
+
+    @Autowired
     private ZlGoodsService zlGoodsService;
 
     @Override
+    public Map<String, Object> wxPayReturn(String sign, String out_trade_no) {
+
+        //定义返回值noticeMap
+        Map<String, Object> noticeMap = null;
+
+        //生成的随机字符串
+        String nonce_str = StringUtils.getRandomStringByLength(32);
+
+        String xmlBack = "";
+        //拼接查询订单接口使用的xml数据
+
+        String xml = "<xml>" + "<appid>" + WxPayConfig.appid + "</appid>"
+                + "<mch_id>" + WxPayConfig.mch_id + "</mch_id>"
+                + "<nonce_str>" + nonce_str + "</nonce_str>"
+                + "<out_trade_no>" + out_trade_no + "</out_trade_no>"
+                + "<sign>" + sign + "</sign>"
+                + "</xml>";
+
+        //调用查询订单接口，并接受返回的结果
+        String result = null;
+        try {
+            //调用微信的订单查询接口
+            result = PayUtil.httpRequest(WxPayConfig.notify_url, "POST", xml);
+        } catch (Exception e) {
+            logger.info("调用微信订单查询接口失败,订单号为:", out_trade_no);
+            e.printStackTrace();
+        }
+
+        Map<String, String> returnMap = null;
+        try {
+            returnMap = PayUtil.xmlToMap(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String return_code = (String) returnMap.get("return_code");
+        String result_code = (String) returnMap.get("result_code");
+        String trade_state = (String) returnMap.get("trade_state");//订单状态
+
+        if ("SUCCESS".equals(return_code) && "SUCCESS".equals(result_code)) {
+            if ("SUCCESS".equals(trade_state)) {  //支付成功
+                boolean bool = false;
+                try {
+                    bool = payUtil.isPayResultNotifySignatureValid(returnMap);
+                } catch (Exception e) {
+                    // 签名错误，如果数据里没有sign字段，也认为是签名错误
+                    logger.error("手机支付回调通知签名错误");
+                    xmlBack = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[手机支付回调通知签名错误]]></return_msg>" + "</xml> ";
+                }
+                if (bool) {
+                    //修改数据库表状态
+                    //查询下单商品信息
+                    List<ZlOrderDetail> zlOrderDetailList = zlOrderService.getOrderDetail(out_trade_no);
+
+                    //比较实际付款价格和总价是否一致
+                    BigDecimal totalPrice = null;
+                    for (ZlOrderDetail zlOrderDetail : zlOrderDetailList) {
+                        totalPrice = totalPrice.add(zlOrderDetail.getPrice().multiply(BigDecimal.valueOf(zlOrderDetail.getGoodsCount())));
+                    }
+                    Integer total_fee = Integer.valueOf(returnMap.get("total_fee"));
+                    if (totalPrice.intValue() == total_fee / 100) {
+                        noticeMap.put("bool", true);
+                        noticeMap.put("zlOrderDetailList", zlOrderDetailList);
+                        return noticeMap;
+                        /*zlGoodsService.updateGoodsCount(zlOrderDetailList);
+                        zlOrderService.updateOrder(out_trade_no);
+                        logger.info("微信手机支付回调成功订单号:{}", out_trade_no);
+                        xmlBack = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";*/
+                    } else {
+                        logger.info("订单金额不符,订单号:", out_trade_no);
+                        xmlBack = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[订单金额不符]]></return_msg>" + "</xml> ";
+                        throw new RuntimeException("订单金额不符");
+                    }
+                } else {
+                    // 签名错误，如果数据里没有sign字段，也认为是签名错误
+                    logger.error("手机支付回调通知签名错误,订单号:", out_trade_no);
+                    xmlBack = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[手机支付回调通知签名错误]]></return_msg>" + "</xml> ";
+                    throw new RuntimeException("签名错误");
+                }
+            } else {
+                logger.error("手机支付回调通知失败,订单号:", out_trade_no);
+                xmlBack = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[手机支付回调通知失败]]></return_msg>" + "</xml> ";
+                throw new RuntimeException("手机支付回调通知失败");
+            }
+        } else {
+            logger.error("手机支付回调通知失败");
+            xmlBack = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[手机支付回调通知失败]]></return_msg>" + "</xml> ";
+            throw new RuntimeException("手机支付回调通知失败");
+        }
+        /*Map<String, Object> map = new HashMap<>();
+        map.put("xmlBack", xmlBack);*/
+    }
+
+    //更改数据库信息及状态
+    public void updateTable(Map<String, Object> map) {
+        List<ZlOrderDetail> zlOrderDetailList = (List<ZlOrderDetail>) map.get("zlOrderDetailList");
+        String out_trade_no = (String) map.get("out_trade_no");
+        zlGoodsService.updateGoodsCount(zlOrderDetailList);
+        zlOrderService.updateOrder(out_trade_no);
+    }
+
+    /*@Override
     public Map<String, Object> wxPayReturn(String sign, String out_trade_no) {
 
         //生成的随机字符串
@@ -209,5 +323,5 @@ public class WxPayServiceImpl implements WxPayService {
         map.put("xmlBack", xmlBack);
 
         return map;
-    }
+    }*/
 }
