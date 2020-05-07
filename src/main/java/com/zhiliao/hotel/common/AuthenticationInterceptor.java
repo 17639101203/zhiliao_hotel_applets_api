@@ -27,6 +27,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) {
+
         // 如果不是映射到方法直接通过
         if (!(object instanceof HandlerMethod)) {
             return true;
@@ -38,6 +39,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         if (token == null || "".equals(token)) {
             throw new RuntimeException("未接收到token信息");
         }
+
         // 检查是否有passToken注释，有则进行校验
         if (method.isAnnotationPresent(PassToken.class)) {
             PassToken passToken = method.getAnnotation(PassToken.class);
@@ -56,13 +58,13 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     if (minute > 10 || minute < -10) {
                         throw new RuntimeException("错误token，没有访问权限");
                     }
-                    return true;
                 } catch (Exception e) {
                     throw new RuntimeException("错误token，没有访问权限");
                 }
+                return true;
             }
-            return false;
         }
+
         // 检查有没有需要用户权限的注解
         if (method.isAnnotationPresent(UserLoginToken.class)) {
             UserLoginToken userLoginToken = method.getAnnotation(UserLoginToken.class);
