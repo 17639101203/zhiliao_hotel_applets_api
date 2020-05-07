@@ -13,7 +13,7 @@ public class OrderIDUtil {
      * @return
      */
     public static String createOrderID(String type) {
-        // 获取当前日期年月日yyyyMMdd
+        // 获取当前日期年月日时分yyyyMMddHHmm
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
         Date date = new Date();
         String currentDate = format.format(date);
