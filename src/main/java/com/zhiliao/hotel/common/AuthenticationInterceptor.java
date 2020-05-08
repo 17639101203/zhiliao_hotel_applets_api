@@ -51,7 +51,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 try {
                     String decrypt = AESUtil.decrypt(token);
                     if ("".equals(decrypt)) {
-                        setHttpServletResponseMessage(httpServletResponse, "错误token（passToken），没有访问权限!");
+                        setHttpServletResponseMessage(httpServletResponse, 403, "错误token（passToken），没有访问权限!");
                         return false;
                     }
                     // 判断解析出的时间，时间差是否大于小于10分钟
@@ -60,11 +60,11 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     //相差的分钟
                     long minute = (System.currentTimeMillis() - tokenDateTime) / (1000 * 60);
                     if (minute > 10 || minute < -10) {
-                        setHttpServletResponseMessage(httpServletResponse, "过期token（passToken），没有访问权限!");
+                        setHttpServletResponseMessage(httpServletResponse, 403, "过期token（passToken），没有访问权限!");
                         return false;
                     }
                 } catch (Exception e) {
-                    setHttpServletResponseMessage(httpServletResponse, "错误token（passToken），没有访问权限!");
+                    setHttpServletResponseMessage(httpServletResponse, 403, "错误token（passToken），没有访问权限!");
                     e.printStackTrace();
                     return false;
                 }
@@ -81,20 +81,20 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     // 获取token中的userId
                     userId = JWT.decode(token).getAudience().get(0);
                 } catch (JWTDecodeException e) {
-                    setHttpServletResponseMessage(httpServletResponse, "错误token，没有访问权限，请重新登录!");
+                    setHttpServletResponseMessage(httpServletResponse, 401, "错误token，没有访问权限，请重新登录!");
                     e.printStackTrace();
                     return false;
                 }
                 // 查询用户是否存在
                 ZlWxuser wxuser = zlWxuserService.findWxuserByUserId(Long.parseLong(userId));
                 if (wxuser == null) {
-                    setHttpServletResponseMessage(httpServletResponse, "没有访问权限，用户不存在!");
+                    setHttpServletResponseMessage(httpServletResponse, 401, "没有访问权限，用户不存在!");
                     return false;
                 }
                 // 对比redis缓存与用户传的token是否一致、是否过期
                 String redisToken = (String) redisCommonUtil.getCache(wxuser.getWxopenid());
                 if (redisToken == null || !token.equals(redisToken)) {
-                    setHttpServletResponseMessage(httpServletResponse, "没有访问权限，用户未登录或登录已过期!");
+                    setHttpServletResponseMessage(httpServletResponse, 401, "没有访问权限，用户未登录或登录已过期!");
                     return false;
                 }
                 // 验证 token
@@ -102,7 +102,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 try {
                     jwtVerifier.verify(token);
                 } catch (JWTVerificationException e) {
-                    setHttpServletResponseMessage(httpServletResponse, "错误token，没有访问权限，请重新登录!");
+                    setHttpServletResponseMessage(httpServletResponse, 401, "错误token，没有访问权限，请重新登录!");
                     e.printStackTrace();
                     return false;
                 }
@@ -112,13 +112,13 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         return false;
     }
 
-    private void setHttpServletResponseMessage(HttpServletResponse httpServletResponse, String message) {
+    private void setHttpServletResponseMessage(HttpServletResponse httpServletResponse, Integer code, String message) {
         try {
             httpServletResponse.setCharacterEncoding("utf-8");
             httpServletResponse.setContentType("application/json; charset=utf-8");
             PrintWriter writer = httpServletResponse.getWriter();
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("status", 401);
+            jsonObject.addProperty("status", code);
             jsonObject.addProperty("msg", message);
             jsonObject.addProperty("success", false);
             writer.write(jsonObject.toString());
