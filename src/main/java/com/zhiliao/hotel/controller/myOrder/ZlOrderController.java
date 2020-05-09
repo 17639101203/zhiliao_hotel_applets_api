@@ -1,13 +1,19 @@
 package com.zhiliao.hotel.controller.myOrder;
 
+import com.github.wxpay.sdk.WXPay;
+import com.github.wxpay.sdk.WXPayConfig;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.controller.myOrder.config.WxPayConfig;
+import com.zhiliao.hotel.controller.myOrder.param.WxPayRefundParam;
+import com.zhiliao.hotel.controller.myOrder.util.PayUtil;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsInfoVO;
 import com.zhiliao.hotel.controller.myOrder.vo.HotelBasicVO;
 import com.zhiliao.hotel.model.ZlOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.WxPayService;
+import com.zhiliao.hotel.service.ZlGoodsService;
 import com.zhiliao.hotel.service.ZlOrderDetailService;
 import com.zhiliao.hotel.service.ZlOrderService;
 import com.zhiliao.hotel.utils.TokenUtil;
@@ -20,7 +26,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,9 +48,23 @@ public class ZlOrderController {
 
     private static final Logger logger = LoggerFactory.getLogger(ZlOrderController.class);
 
-    private final ZlOrderService orderService;
-    private final ZlOrderDetailService orderDetailService;
+    @Autowired
+    private ZlOrderService orderService;
+
+    @Autowired
+    private ZlOrderDetailService orderDetailService;
+
+    @Autowired
     private WxPayService wxPayService;
+
+    @Autowired
+    private PayUtil payUtil;
+
+    @Autowired
+    private ZlOrderService zlOrderService;
+
+    @Autowired
+    private ZlGoodsService zlGoodsService;
 
     @Autowired
     public ZlOrderController(ZlOrderService orderService, ZlOrderDetailService orderDetailService) {
@@ -174,19 +202,169 @@ public class ZlOrderController {
         }
     }
 
-    @ApiOperation(value = "支付回调")
+    @ApiOperation(value = "微信支付账单查询：该接口不做复杂的业务处理，仅根据商户订单号查询订单情况返回支付结果")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType = "query", name = "sign", dataType = "String", required = true, value = "签名"),
             @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号")
 
     })
     @PostMapping("wxPayReturn")
     @UserLoginToken
     @ResponseBody
-    public ReturnString wxPayReturn(String token, @PathVariable("sign") String sign, @PathVariable("out_trade_no") String out_trade_no) {
+    public ReturnString wxPayReturn(String token, @PathVariable("out_trade_no") String out_trade_no) {
+
+        WXPayConfig wxPayConfig = new WXPayConfig() {
+            @Override
+            public String getAppID() {
+                return WxPayConfig.appid;
+            }
+
+            @Override
+            public String getMchID() {
+                return WxPayConfig.mch_id;
+            }
+
+            @Override
+            public String getKey() {
+                return WxPayConfig.key;
+            }
+
+            @Override
+            public InputStream getCertStream() {
+                return null;
+            }
+
+            @Override
+            public int getHttpConnectTimeoutMs() {
+                return 0;
+            }
+
+            @Override
+            public int getHttpReadTimeoutMs() {
+                return 0;
+            }
+        };
+
+        Map<String, String> result = null;
+
         try {
-            Map<String, Object> response = wxPayService.wxPayReturn(sign, out_trade_no);
+            //创建sdk客户端
+            WXPay wxPay = new WXPay(wxPayConfig);
+            Map<String, String> map = new HashMap<>();
+            map.put("out_trade_no", out_trade_no);//商户内部的订单号
+            //调用微信的订单查询接口
+            result = wxPay.orderQuery(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("调用微信订单查询接口失败");
+        }
+        String return_code = result.get("return_code");
+        String result_code = result.get("result_code");
+        String trade_state = result.get("trade_state");//订单状态
+
+        if ("SUCCESS".equals(return_code) && "SUCCESS".equals(result_code)) {
+
+            if ("SUCCESS".equals(trade_state)) {  //支付成功
+                return new ReturnString("支付成功");
+            } else if ("CLOSED".equals(trade_state)) {//交易关闭
+                return new ReturnString("交易关闭");
+            } else if ("USERPAYING".equals(trade_state)) {//支付中
+                return new ReturnString("支付中");
+            } else if ("PAYERROR".equals(trade_state)) {//支付失败
+                return new ReturnString("支付失败");
+            }
+        }
+        return new ReturnString("不可识别的微信订单状态");
+    }
+
+    @ApiOperation(value = "支付回调")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+
+    })
+    @UserLoginToken
+    @PostMapping("autoPayReturn")
+    @ResponseBody
+    public ReturnString autoPayReturn(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader((ServletInputStream) request.getInputStream()));
+        String line = null;
+        StringBuilder sb = new StringBuilder();
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        br.close();
+        //sb为微信返回的xml
+        String notityXml = sb.toString();
+        String resXml = "";
+        System.out.println("接收到的报文：" + notityXml);
+        // 将解析结果存储在HashMap中
+        Map returnMap = null;
+        try {
+            returnMap = PayUtil.xmlToMap(notityXml);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String return_code = (String) returnMap.get("return_code");
+        String out_trade_no = (String) returnMap.get("out_trade_no");//订单号
+
+        if ("SUCCESS".equals(return_code)) {
+            //验证签名是否正确
+            Map<String, String> validParams = PayUtil.paraFilter(returnMap);  //回调验签时需要去除sign和空值参数
+            String validStr = PayUtil.createLinkString(validParams);//把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+            String sign = PayUtil.sign(validStr, WxPayConfig.key, "utf-8").toUpperCase();//拼装生成服务器端验证的签名
+            // 因为微信回调会有八次之多,所以当第一次回调成功了,那么我们就不再执行逻辑了
+
+            //根据微信官网的介绍，此处不仅对回调的参数进行验签，还需要对返回的金额与系统订单的金额进行比对等
+            if (sign.equals(returnMap.get("sign"))) {
+                //查询下单商品信息
+                List<ZlOrderDetail> zlOrderDetailList = zlOrderService.getOrderDetail(out_trade_no);
+                //比较实际付款价格和总价是否一致
+                BigDecimal totalPrice = null;
+                for (ZlOrderDetail zlOrderDetail : zlOrderDetailList) {
+                    totalPrice = totalPrice.add(zlOrderDetail.getPrice().multiply(BigDecimal.valueOf(zlOrderDetail.getGoodsCount())));
+                }
+                Integer total_fee = (Integer) returnMap.get("total_fee");
+                if (totalPrice.intValue() == total_fee) {
+                    zlGoodsService.updateGoodsCount(zlOrderDetailList);
+                    zlOrderService.updateOrder(out_trade_no);
+                    logger.info("微信手机支付回调成功订单号:{}", out_trade_no);
+                    resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+                } else {
+                    logger.info("订单金额不符,订单号:", out_trade_no);
+                    resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[订单金额不符]]></return_msg>" + "</xml> ";
+//                    throw new RuntimeException("订单金额不符");
+                }
+            } else {
+                resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[微信支付回调失败!签名不一致]]></return_msg>" + "</xml> ";
+//                throw new RuntimeException("微信支付回调失败!签名不一致");
+            }
+        } else {
+            resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
+                    + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+        }
+        System.out.println(resXml);
+        System.out.println("微信支付回调数据结束");
+
+        BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
+        out.write(resXml.getBytes());
+        out.flush();
+        out.close();
+
+        return new ReturnString(resXml);
+
+    }
+
+    @ApiOperation(value = "微信支付退款")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token")
+    })
+    @PostMapping("wxPayRefund")
+    @UserLoginToken
+    @ResponseBody
+    public ReturnString wxPayRefund(String token, @RequestBody WxPayRefundParam wxPayRefundParam) {
+        try {
+            Map<String, Object> response = wxPayService.wxPayRefund(wxPayRefundParam);
             return new ReturnString(response);
         } catch (Exception e) {
             e.printStackTrace();

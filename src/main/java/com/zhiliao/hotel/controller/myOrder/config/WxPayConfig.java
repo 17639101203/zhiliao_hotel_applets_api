@@ -1,4 +1,4 @@
-package com.zhiliao.hotel.controller.order.config;
+package com.zhiliao.hotel.controller.myOrder.config;
 
 /**
  * @program: zhiliao_hotel_applets_api
@@ -16,7 +16,7 @@ public class WxPayConfig {
     public static final String key = "";
 
     //支付成功后的服务器回调url,此处进行手动回调
-    public static final String notify_url = "https://api.mch.weixin.qq.com/pay/orderquery";
+    public static final String notify_url = "https://www.zlkj.com/pay/autoPayReturn";
 
     //签名方式
     public static final String SIGNTYPE = "MD5";
@@ -24,5 +24,7 @@ public class WxPayConfig {
     public static final String TRADETYPE = "JSAPI";
     //微信统一下单接口地址
     public static final String pay_url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+    //微信退款接口地址
+    public static final String refund_url = "https://api.mch.weixin.qq.com/secapi/pay/refund";
 
 }

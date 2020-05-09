@@ -35,10 +35,10 @@ public class PayConsumer {
     @Autowired
     PayProducer payProducer;
 
+//    int count = 0;
 
     @RabbitListener(queues = "payOrderNotice")
     public void payOrderNoticeReceive(Message message) {
-        int count = 0;
         Map<String, String> map = (Map<String, String>) SerializationUtils.deserialize(message.getBody());
         String sign = map.get("sign");
         String out_trade_no = map.get("out_trade_no");
@@ -50,9 +50,14 @@ public class PayConsumer {
                 if (bool) {
                     payProducer.successNotice(noticeMap);
                 } else {
-                    count++;
+                    /*count++;
                     if (count > 5) {
                         throw new RuntimeException("查询支付结果失败!");
+                    }*/
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                     payProducer.payOrderNotice(sign, out_trade_no);
                 }

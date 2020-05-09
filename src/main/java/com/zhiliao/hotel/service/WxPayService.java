@@ -1,5 +1,7 @@
 package com.zhiliao.hotel.service;
 
+import com.zhiliao.hotel.controller.myOrder.param.WxPayRefundParam;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -13,6 +15,8 @@ public interface WxPayService {
 
     Map<String, Object> wxPay(String openid, String body, Integer total_fee, String out_trade_no, HttpServletRequest request);
 
-    Map<String, Object> wxPayReturn(String sign, String out_trade_no);
+    Map<String, Object> wxPayRefund(WxPayRefundParam wxPayRefundParam);
+
+//    Map<String, Object> wxPayReturn(String sign, String out_trade_no);
 
 }
