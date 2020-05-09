@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.google.gson.JsonObject;
 import com.zhiliao.hotel.model.ZlWxuser;
 import com.zhiliao.hotel.service.ZlWxuserService;
 import com.zhiliao.hotel.utils.AESUtil;
@@ -15,6 +16,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 
@@ -48,7 +51,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 try {
                     String decrypt = AESUtil.decrypt(token);
                     if ("".equals(decrypt)) {
-                        throw new RuntimeException("错误token，没有访问权限");
+                        setHttpServletResponseMessage(httpServletResponse, 403, "错误token（passToken），没有访问权限!");
+                        return false;
                     }
                     // 判断解析出的时间，时间差是否大于小于10分钟
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -56,10 +60,13 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     //相差的分钟
                     long minute = (System.currentTimeMillis() - tokenDateTime) / (1000 * 60);
                     if (minute > 10 || minute < -10) {
-                        throw new RuntimeException("错误token，没有访问权限");
+                        setHttpServletResponseMessage(httpServletResponse, 403, "过期token（passToken），没有访问权限!");
+                        return false;
                     }
                 } catch (Exception e) {
-                    throw new RuntimeException("错误token，没有访问权限");
+                    setHttpServletResponseMessage(httpServletResponse, 403, "错误token（passToken），没有访问权限!");
+                    e.printStackTrace();
+                    return false;
                 }
                 return true;
             }
@@ -73,29 +80,50 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 try {
                     // 获取token中的userId
                     userId = JWT.decode(token).getAudience().get(0);
-                } catch (JWTDecodeException j) {
-                    throw new RuntimeException("错误token，没有访问权限，请重新登录");
+                } catch (JWTDecodeException e) {
+                    setHttpServletResponseMessage(httpServletResponse, 401, "错误token，没有访问权限，请重新登录!");
+                    e.printStackTrace();
+                    return false;
                 }
                 // 查询用户是否存在
                 ZlWxuser wxuser = zlWxuserService.findWxuserByUserId(Long.parseLong(userId));
                 if (wxuser == null) {
-                    throw new RuntimeException("用户不存在，请重新登录");
+                    setHttpServletResponseMessage(httpServletResponse, 401, "没有访问权限，用户不存在!");
+                    return false;
                 }
                 // 对比redis缓存与用户传的token是否一致、是否过期
                 String redisToken = (String) redisCommonUtil.getCache(wxuser.getWxopenid());
                 if (redisToken == null || !token.equals(redisToken)) {
-                    throw new RuntimeException("错误token，没有访问权限，请重新登录");
+                    setHttpServletResponseMessage(httpServletResponse, 401, "没有访问权限，用户未登录或登录已过期!");
+                    return false;
                 }
                 // 验证 token
                 JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(wxuser.getWxopenid())).build();
                 try {
                     jwtVerifier.verify(token);
                 } catch (JWTVerificationException e) {
-                    throw new RuntimeException("错误token，没有访问权限，请重新登录");
+                    setHttpServletResponseMessage(httpServletResponse, 401, "错误token，没有访问权限，请重新登录!");
+                    e.printStackTrace();
+                    return false;
                 }
                 return true;
             }
         }
         return false;
+    }
+
+    private void setHttpServletResponseMessage(HttpServletResponse httpServletResponse, Integer code, String message) {
+        try {
+            httpServletResponse.setCharacterEncoding("utf-8");
+            httpServletResponse.setContentType("application/json; charset=utf-8");
+            PrintWriter writer = httpServletResponse.getWriter();
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("status", code);
+            jsonObject.addProperty("msg", message);
+            jsonObject.addProperty("success", false);
+            writer.write(jsonObject.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
