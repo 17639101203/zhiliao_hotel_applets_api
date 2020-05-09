@@ -108,18 +108,18 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 String bannerValue = (String) redisTemplate.boundValueOps(RedisConstant.BANNER_KEY + ":" + hotelId).get();
 
                 //判断缓存中是否有数据，没数据直接往数据库查
-                List<ZlBanner> zlBanners1 = Optional.ofNullable(bannerValue).map((val) -> GsonUtils.jsonToList(bannerValue, ZlBanner.class)).
+                List<ZlBanner> zlBanners = Optional.ofNullable(bannerValue).map((val) -> GsonUtils.jsonToList(bannerValue, ZlBanner.class)).
                         orElse(zlBannerService.findBanner(Integer.valueOf(hotelId), 0));
 
                 //判断缓存没数据情况则添加
                 if (!Optional.ofNullable(bannerValue).isPresent()) {
-                    redisTemplate.boundValueOps(RedisConstant.BANNER_KEY + ":" + hotelId).set(GsonUtils.objToJson(zlBanners1));
+                    redisTemplate.boundValueOps(RedisConstant.BANNER_KEY + ":" + hotelId).set(GsonUtils.objToJson(zlBanners));
                 }
                 //获取轮播图数据
-                zlHotel.setZlBannerList(zlBanners1);
+                zlHotel.setZlBannerList(zlBanners);
 
                 //根据酒店ID获取菜单
-                List<ZlXcxmenu> zlXcxMenuList = zlXcxMenuMapper.getMenuList(String.valueOf(zlHotel.getHotelid()));
+                List<ZlXcxmenu> zlXcxMenuList = zlXcxMenuMapper.getMenuList(hotelId);
                 zlHotel.setZlXcxmenus(zlXcxMenuList);
 
                 //根据酒店Id获取公告

@@ -22,6 +22,8 @@ public class ZlHotelIn implements Serializable {
         BeanUtils.copyProperties(zlHotel,this);
     }
 
+
+
     /**
      *  酒店ID
      */
