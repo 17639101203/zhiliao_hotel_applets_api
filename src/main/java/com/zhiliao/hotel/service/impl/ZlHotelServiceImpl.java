@@ -119,15 +119,15 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 zlHotel.setZlBannerList(zlBanners);
 
                 //根据酒店ID获取菜单
-                List<ZlXcxmenu> zlXcxMenuList = zlXcxMenuMapper.getMenuList(hotelId);
-                zlHotel.setZlXcxmenus(zlXcxMenuList);
+                List<ZlXcxmenu> zlXcxMenuList = zlXcxMenuMapper.getMenuList(String.valueOf(zlHotel.getHotelID()));
+                zlHotel.setZlXcxMenus(zlXcxMenuList);
 
                 //根据酒店Id获取公告
-                List<ZlNews> zlNews = zlNewsMapper.findAllJiuDianId(zlHotel.getHotelid(), 1, 1);
+                List<ZlNews> zlNews = zlNewsMapper.findAllJiuDianId(zlHotel.getHotelID(), 1, 1);
                 zlHotel.setZlNews(zlNews);
 
                 //获取客房数据
-                zlHotel.setHotelroom(zlHotelroom);
+                zlHotel.setHotelRoom(zlHotelroom);
 
                 ZlHotelIn hotelData = GsonUtils.gsonMaps(GsonUtils.objToJson(zlHotel), ZlHotelIn.class);
 
