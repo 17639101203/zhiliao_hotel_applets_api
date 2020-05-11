@@ -19,6 +19,7 @@ import java.util.Map;
 
 import com.github.wxpay.sdk.WXPayUtil;
 import com.google.gson.Gson;
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -39,6 +40,7 @@ import org.apache.commons.codec.digest.DigestUtils;
  * @author: 姬慧慧
  * @create: 2020-04-28 11:05
  **/
+@Component
 public class PayUtil {
 
     private SignType signType;

@@ -2,14 +2,12 @@ package com.zhiliao.hotel.service.impl;
 
 import com.zhiliao.hotel.controller.myOrder.ZlOrderController;
 import com.zhiliao.hotel.controller.myOrder.param.WxPayRefundParam;
-import com.zhiliao.hotel.controller.myOrder.rabbit.producer.PayProducer;
 import com.zhiliao.hotel.controller.myOrder.util.IpUtils;
 import com.zhiliao.hotel.controller.myOrder.util.PayUtil;
 import com.zhiliao.hotel.controller.myOrder.util.StringUtils;
 import com.zhiliao.hotel.controller.myOrder.config.WxPayConfig;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.WxPayService;
-import com.zhiliao.hotel.service.ZlGoodsService;
 import com.zhiliao.hotel.service.ZlOrderService;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -22,7 +20,6 @@ import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +30,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,8 +46,6 @@ public class WxPayServiceImpl implements WxPayService {
 
     private static final Logger logger = LoggerFactory.getLogger(ZlOrderController.class);
 
-    @Autowired
-    private PayProducer payProducer;
 
     @Override
     public Map<String, Object> wxPay(String openid, String body, Integer total_fee, String out_trade_no, HttpServletRequest request) {
