@@ -23,6 +23,12 @@ import java.text.SimpleDateFormat;
 
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
+    /**
+     * 公共密钥，保存在服务器，客户端不会知道密钥，以防被攻击
+     * WX_USER_SECRET使用了AES加密
+     */
+    public static final String WX_USER_SECRET = "5E8DE3C1B420ACDBC1149F4819E7CF27";
+
     @Autowired
     private ZlWxuserService zlWxuserService;
     @Autowired
@@ -98,7 +104,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     return false;
                 }
                 // 验证 token
-                JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(wxuser.getWxopenid())).build();
+                JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(WX_USER_SECRET)).build();
                 try {
                     jwtVerifier.verify(token);
                 } catch (JWTVerificationException e) {
