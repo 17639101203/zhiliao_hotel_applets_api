@@ -46,7 +46,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         // 从url中取出token
         String token = httpServletRequest.getParameter("token");
         if (token == null || "".equals(token)) {
-            throw new RuntimeException("未接收到token信息");
+            setHttpServletResponseMessage(httpServletResponse, -1, "未接收到token信息!");
+            return false;
         }
 
         // 检查是否有passToken注释，有则进行校验
@@ -124,9 +125,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             httpServletResponse.setContentType("application/json; charset=utf-8");
             PrintWriter writer = httpServletResponse.getWriter();
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("status", code);
-            jsonObject.addProperty("msg", message);
-            jsonObject.addProperty("success", false);
+            jsonObject.addProperty("code", code);
+            jsonObject.addProperty("message", message);
             writer.write(jsonObject.toString());
         } catch (IOException e) {
             e.printStackTrace();
