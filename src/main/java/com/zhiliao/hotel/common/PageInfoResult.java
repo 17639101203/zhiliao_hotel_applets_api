@@ -8,7 +8,7 @@ import java.util.List;
  * 分页结果集
  * Created by xiegege on 2020/4/17.
  */
-public class PageInfoResult {
+public class PageInfoResult<T> {
 
     // 当前页
     private int pageNo;
@@ -19,7 +19,7 @@ public class PageInfoResult {
     // 总页数
     private int totalPages;
     // 结果集
-    private List<Object> list;
+    private List<T> list;
 
     public int getPageNo() {
         return pageNo;
@@ -53,11 +53,11 @@ public class PageInfoResult {
         this.totalPages = totalPages;
     }
 
-    public List<Object> getList() {
+    public List<T> getList() {
         return list;
     }
 
-    public void setList(List<Object> list) {
+    public void setList(List<T> list) {
         this.list = list;
     }
 
