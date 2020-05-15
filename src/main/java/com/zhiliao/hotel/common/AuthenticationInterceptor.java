@@ -21,6 +21,13 @@ import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 
+
+/**
+ * 接口拦截器
+ * @PassToken 无需登录权限，直接放行
+ * @NoLoginRequiredToken 无需登录权限，但需要接口保护。例如：发短信接口
+ * @UserLoginToken 需要用户登录后访问的接口权限
+ */
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     /**
@@ -43,6 +50,15 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
         HandlerMethod handlerMethod = (HandlerMethod) object;
         Method method = handlerMethod.getMethod();
+
+        // 检查是否有passToken注释，有则直接放行
+        if (method.isAnnotationPresent(PassToken.class)) {
+            PassToken passToken = method.getAnnotation(PassToken.class);
+            if (passToken.required()) {
+                return true;
+            }
+        }
+
         // 从url中取出token
         String token = httpServletRequest.getParameter("token");
         if (token == null || "".equals(token)) {
@@ -50,15 +66,15 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
 
-        // 检查是否有passToken注释，有则进行校验
-        if (method.isAnnotationPresent(PassToken.class)) {
-            PassToken passToken = method.getAnnotation(PassToken.class);
-            if (passToken.required()) {
+        // 检查是否有NoLoginRequiredToken注释，有则进行校验
+        if (method.isAnnotationPresent(NoLoginRequiredToken.class)) {
+            NoLoginRequiredToken noLoginRequiredToken = method.getAnnotation(NoLoginRequiredToken.class);
+            if (noLoginRequiredToken.required()) {
                 // 进行AES解密校验
                 try {
                     String decrypt = AESUtil.decrypt(token);
                     if ("".equals(decrypt)) {
-                        setHttpServletResponseMessage(httpServletResponse, 403, "错误token（passToken），没有访问权限!");
+                        setHttpServletResponseMessage(httpServletResponse, 403, "错误token（NoLoginRequiredToken），没有访问权限!");
                         return false;
                     }
                     // 判断解析出的时间，时间差是否大于小于10分钟
@@ -67,11 +83,11 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     //相差的分钟
                     long minute = (System.currentTimeMillis() - tokenDateTime) / (1000 * 60);
                     if (minute > 10 || minute < -10) {
-                        setHttpServletResponseMessage(httpServletResponse, 403, "过期token（passToken），没有访问权限!");
+                        setHttpServletResponseMessage(httpServletResponse, 403, "过期token（NoLoginRequiredToken），没有访问权限!");
                         return false;
                     }
                 } catch (Exception e) {
-                    setHttpServletResponseMessage(httpServletResponse, 403, "错误token（passToken），没有访问权限!");
+                    setHttpServletResponseMessage(httpServletResponse, 403, "错误token（NoLoginRequiredToken），没有访问权限!");
                     e.printStackTrace();
                     return false;
                 }
