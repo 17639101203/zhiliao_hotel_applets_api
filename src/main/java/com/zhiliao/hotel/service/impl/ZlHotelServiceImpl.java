@@ -79,7 +79,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 Long weiXinUserId = TokenUtil.getUserId(token);
                 if (weiXinUserId != null) {
                     //客房扫描率录入
-                    addZlUserloginlog(weiXinUserId,Integer.valueOf(roomId));
+                    addZlUserLoginLog(weiXinUserId,Integer.valueOf(roomId));
                 }
             }
 
@@ -118,7 +118,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         return new ReturnString("数据加载失败");
     }
 
-    private boolean addZlUserloginlog(Long userId,Integer roomId){
+    private boolean addZlUserLoginLog(Long userId,Integer roomId){
         ZlUserloginlog zlUserloginlog=new ZlUserloginlog();
         ZlWxuser zlWxuser = zlWxuserService.findWxuserByUserId(userId);
         //用户id
