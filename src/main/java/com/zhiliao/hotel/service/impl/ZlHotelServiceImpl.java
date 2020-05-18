@@ -3,6 +3,7 @@ package com.zhiliao.hotel.service.impl;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.constant.RedisConstant;
 import com.zhiliao.hotel.controller.hotel.in.ZlHotelIn;
+import com.zhiliao.hotel.controller.hotel.in.ZlUserloginlogSave;
 import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.model.*;
 import com.zhiliao.hotel.service.ZlBannerService;
@@ -14,6 +15,7 @@ import com.zhiliao.hotel.utils.GsonUtils;
 import com.zhiliao.hotel.utils.IPUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -73,33 +75,12 @@ public class ZlHotelServiceImpl implements ZlHotelService {
             if (!StringUtils.isEmpty(roomId)) {
                 //根据酒店id，客房id
                 zlHotelroom = zlHotelRoomMapper.getById(roomId, hotelId);
-                ZlUserloginlog zlUserloginlog = new ZlUserloginlog();
                 //获取 token得到微信用户Id
                 Long weiXinUserId = TokenUtil.getUserId(token);
                 if (weiXinUserId != null) {
-                    //根据微信用户id查询
-                    ZlWxuser zlWxuser = zlWxuserService.findWxuserByUserId(weiXinUserId);
-                    //用户id
-                    zlUserloginlog.setUserid(weiXinUserId);
-                    //微信用户昵称
-                    zlUserloginlog.setNickname(zlWxuser.getNickname());
-                    //获取当前登录ip地址
-                    zlUserloginlog.setLoginip(IPUtils.getIpAddr(request));
-                    //客房名称
-                    zlUserloginlog.setRoomnumber("房间名测试cr123");
-                    //根据用户所属酒店Id
-                    ZlHotel zlHotel = zlHotelMapper.getById(String.valueOf(zlWxuser.getHotelid()));
-                    //酒店名称
-                    zlUserloginlog.setHotelname(zlHotel.getHotelName());
-                    //酒店id
-                    zlUserloginlog.setHotelid(Integer.valueOf(hotelId));
-                    //获取当前时间戳
-                    zlUserloginlog.setCreatedate(Long.valueOf(DateUtils.javaToPhpNowDateTime()));
-                    //客房Id
-                    zlUserloginlog.setRoomid(Integer.valueOf(roomId));
+                    //客房扫描率录入
+                    addZlUserloginlog(weiXinUserId,Integer.valueOf(roomId));
                 }
-                //客房扫描率录入
-                zlUserloginlogService.insert(zlUserloginlog);
             }
 
             ZlHotelIn zlHotel = new ZlHotelIn(zlHotelMapper.getById(hotelId));
@@ -136,4 +117,30 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         }
         return new ReturnString("数据加载失败");
     }
+
+    private boolean addZlUserloginlog(Long userId,Integer roomId){
+        ZlUserloginlog zlUserloginlog=new ZlUserloginlog();
+        ZlWxuser zlWxuser = zlWxuserService.findWxuserByUserId(userId);
+        //用户id
+        zlUserloginlog.setUserid(zlWxuser.getUserid());
+        //微信用户昵称
+        zlUserloginlog.setNickname(zlWxuser.getNickname());
+        //获取当前登录ip地址
+        zlUserloginlog.setLoginip(IPUtils.getIpAddr(request));
+        //客房名称
+        zlUserloginlog.setRoomnumber("房间名测试cr123");
+        //根据用户所属酒店Id
+        ZlHotel zlHotel = zlHotelMapper.getById(String.valueOf(zlWxuser.getHotelid()));
+        //酒店名称
+        zlUserloginlog.setHotelname(zlHotel.getHotelName());
+        //酒店id
+        zlUserloginlog.setHotelid(Integer.valueOf(zlHotel.getHotelID()));
+        //获取当前时间戳
+        zlUserloginlog.setCreatedate(Long.valueOf(DateUtils.javaToPhpNowDateTime()));
+        //客房Id
+        zlUserloginlog.setRoomid(roomId);
+        int count = zlUserloginlogService.insert(zlUserloginlog);
+        return count>0?true:false;
+    }
+
 }
