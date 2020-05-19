@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -13,13 +14,19 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
+
+    @Value("${swagger.enable}")
+    private Boolean swaggerIsEnable;
+
     /**
      * swagger2的配置文件，这里可以配置swagger2的一些基本的内容，比如扫描的包等等
      */
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .enable(swaggerIsEnable)
                 .apiInfo(apiInfo())
+                .groupName("知了酒店管家接口文档")
                 .select()
                 //为当前包路径
                 .apis(RequestHandlerSelectors.basePackage("com.zhiliao.hotel.controller"))
@@ -33,7 +40,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 //页面标题
-                .title("知了酒店小程序api")
+                .title("知了酒店管家api")
                 //版本号
                 .version("1.0")
                 .build();
