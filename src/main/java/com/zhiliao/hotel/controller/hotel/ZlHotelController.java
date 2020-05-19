@@ -1,7 +1,8 @@
 package com.zhiliao.hotel.controller.hotel;
 
+import com.zhiliao.hotel.common.NoLoginRequiredToken;
+import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
-import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.service.ZlHotelService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -16,7 +17,7 @@ import javax.annotation.Resource;
  * @author chenrong
  * @created date 2020/4/10
  */
-@Api(tags = "酒店服务调用")
+@Api(tags = "酒店信息(首页)_陈荣")
 @RestController
 @RequestMapping("/zl/hotel")
 public class ZlHotelController {
@@ -24,7 +25,7 @@ public class ZlHotelController {
     @Resource
     private ZlHotelService zlHotelService;
 
-    @UserLoginToken
+    @NoLoginRequiredToken
     @GetMapping("getHotelList")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
