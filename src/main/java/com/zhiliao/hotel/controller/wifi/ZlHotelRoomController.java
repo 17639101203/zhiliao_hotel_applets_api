@@ -1,7 +1,8 @@
-package com.zhiliao.hotel.controller.hotelroom;
+package com.zhiliao.hotel.controller.wifi;
 
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
+import com.zhiliao.hotel.controller.wifi.vo.WifiVo;
 import com.zhiliao.hotel.service.ZlHotelRoomService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -13,16 +14,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
- * 酒店客房控制层
- * @author 邓涵晨
- * @created date 2020/4/14
+ * @author 邓菡晨
+ * @date 2020/5/19 15:45
  */
-@Api(tags = "wifi接口")
+@Api(tags = "首页_wifi接口_陈荣")
 @RestController
-@RequestMapping("hotelroom")
+@RequestMapping("wifi")
 public class ZlHotelRoomController {
 
     private final ZlHotelRoomService zlHotelRoomService;
@@ -34,15 +35,18 @@ public class ZlHotelRoomController {
 
     @ApiOperation(value = "查询wifi")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "Token"),
             @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "String", required = true, value = "酒店ID")
     })
     @PassToken
-    @GetMapping("findWiFi/{hotelid}")
-    public ReturnString findWiFi(String token, @PathVariable Integer hotelid){
+    @GetMapping("{hotelID}")
+    public ReturnString findWiFi(String token, @PathVariable Integer hotelID){
         try {
-            Map<String,String> wifi = zlHotelRoomService.findWiFi(hotelid);
-            return new ReturnString(wifi);
+            List<WifiVo> wifi = zlHotelRoomService.findWiFi(hotelID);
+            if (wifi.size() == 0) {
+                return new ReturnString(0,"该酒店无wifi");
+            }
+            return new ReturnString(0,wifi);
         } catch (Exception e) {
             return new ReturnString("获取失败");
         }

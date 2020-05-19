@@ -6,8 +6,6 @@ import java.util.List;
 
 /**
  * @author 邓菡晨
- * @Package com.zhiliao.hotel.service
- * @Classname ZlBannerService
  * @date 2020/4/14 10:36
  */
 public interface ZlBannerService {

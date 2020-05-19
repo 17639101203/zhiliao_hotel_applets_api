@@ -9,15 +9,12 @@ import java.util.List;
 
 /**
  * @author 邓菡晨
- * @Package com.zhiliao.hotel.mapper
- * @Classname ZlBannerMapper
  * @date 2020/4/14 10:37
  */
 public interface ZlBannerMapper extends Mapper<ZlBanner> {
 
     //查询所属有效的轮播图
-    @Select("SELECT * FROM zl_banner WHERE  HotelID = #{hotelID} and MenuID = #{menuID} and  BannerStatus = 1 and " +
-            "IsDelete = 0 ")
+    @Select("SELECT * FROM zl_banner WHERE  HotelID = #{hotelID} and MenuID = #{menuID} and  BannerStatus = 1 and IsDelete = 0  LIMIT 5")
     List<ZlBanner> findBanner(@Param("hotelID") Integer hotelID, @Param("menuID") Integer menuID);
 
     /**

@@ -19,11 +19,9 @@ import java.util.List;
 
 /**
  * @author 邓菡晨
- * @Package com.zhiliao.hotel.controller.banner
- * @Classname ZlBannerConreoller
- * @date 2020/4/14 10:38
+ * @date 2020/5/19 15:42
  */
-@Api(tags = "轮播图接口")
+@Api(tags = "轮播图接口_陈荣")
 @RestController
 @RequestMapping("banner")
 public class ZlBannerConreoller {
@@ -39,7 +37,7 @@ public class ZlBannerConreoller {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "String", required = true, value = "酒店ID"),
-            @ApiImplicitParam(paramType = "path", name = "menuID", dataType = "String", required = true, value = "菜单ID"),
+            @ApiImplicitParam(paramType = "path", name = "menuID", dataType = "String", required = false, value = "菜单ID"),
     })
     @PassToken
     @GetMapping("findBanner/{hotelID}/{menuID}")

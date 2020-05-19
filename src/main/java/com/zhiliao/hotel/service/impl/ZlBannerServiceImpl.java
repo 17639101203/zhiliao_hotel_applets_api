@@ -11,8 +11,6 @@ import java.util.List;
 
 /**
  * @author 邓菡晨
- * @Package com.zhiliao.hotel.service.impl
- * @Classname ZlBannerServiceImpl
  * @date 2020/4/14 10:37
  */
 @Transactional(rollbackFor = Exception.class)
@@ -43,14 +41,14 @@ public class ZlBannerServiceImpl implements ZlBannerService {
             throw new RuntimeException("0");
         }
 
-        //数量>=3则直接返回
-        if (zlBanners.size() >= 3) {
+        //数量>=5则直接返回
+        if (zlBanners.size() == 5) {
             return zlBanners;
         }
 
-        //数量小于3则向后台获取图片补足3张
-        if (zlBanners.size() < 3) {
-            Integer page = 3 - zlBanners.size();
+        //数量小于5则向后台获取图片补足5张
+        if (zlBanners.size() < 5) {
+            Integer page = 5 - zlBanners.size();
             List<ZlBanner> plaBanner = zlBannerMapper.findByPlaBanner(page);
             for (ZlBanner zlBanner : plaBanner) {
                 zlBanners.add(zlBanner);
