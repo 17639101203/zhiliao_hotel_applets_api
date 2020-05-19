@@ -116,7 +116,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         return new ReturnString("数据加载失败");
     }
 
-    private boolean addZlUserLoginLog(Long userId,Integer roomId){
+    private void addZlUserLoginLog(Long userId,Integer roomId){
         ZlUserloginlog zlUserloginlog=new ZlUserloginlog();
         ZlWxuser zlWxuser = zlWxuserService.findWxuserByUserId(userId);
         //用户id
@@ -138,6 +138,8 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         //客房Id
         zlUserloginlog.setRoomid(roomId);
         int count = zlUserloginlogService.insert(zlUserloginlog);
-        return count>0?true:false;
+        if(count>0){
+            return;
+        }
     }
 }
