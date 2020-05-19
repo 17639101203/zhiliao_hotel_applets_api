@@ -20,7 +20,7 @@ import java.util.*;
  * Created by xiegege on 2020/4/15.
  */
 
-@Api(tags = "商品接口")
+@Api(tags = "首页_酒店超市商品接口_谢辉益")
 @RestController
 @RequestMapping("goods")
 public class ZlGoodsController {

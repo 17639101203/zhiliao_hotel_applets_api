@@ -22,7 +22,7 @@ import java.util.List;
  * Created by xiegege on 2020/4/12.
  */
 
-@Api(tags = "购物车接口")
+@Api(tags = "悬浮图标_购物车接口_谢辉益")
 @RestController
 @RequestMapping("cart")
 public class ZlCartController {

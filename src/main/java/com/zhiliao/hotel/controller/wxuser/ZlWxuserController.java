@@ -36,7 +36,7 @@ import java.util.Map;
  * Created by xiegege on 2019/10/14.
  */
 
-@Api(tags = "微信用户接口")
+@Api(tags = "微信用户接口_谢辉益")
 @RestController
 @RequestMapping("wxuser")
 public class ZlWxuserController {

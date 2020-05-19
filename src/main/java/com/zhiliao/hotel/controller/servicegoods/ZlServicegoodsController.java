@@ -23,7 +23,7 @@ import java.util.*;
  * Created by xiegege on 2020/4/23.
  */
 
-@Api(tags = "客房服务商品接口")
+@Api(tags = "首页_客房服务商品接口_谢辉益")
 @RestController
 @RequestMapping("servicegoods")
 public class ZlServicegoodsController {

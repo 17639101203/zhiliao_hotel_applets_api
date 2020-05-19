@@ -11,7 +11,6 @@
     <description>Demo project for Spring Boot</description>
     <packaging>war</packaging>
 
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -29,7 +28,6 @@
             <artifactId>lombok</artifactId>
             <version>1.18.8</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
@@ -74,19 +72,16 @@
             <version>2.6.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
-
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.5</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.1</version>
         </dependency>
-
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
@@ -176,12 +171,6 @@
             <groupId>com.github.wxpay</groupId>
             <artifactId>wxpay-sdk</artifactId>
             <version>0.0.3</version>
-        </dependency>
-        <!-- 配置gson String转map-->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.5</version>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
