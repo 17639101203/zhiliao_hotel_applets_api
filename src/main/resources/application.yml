@@ -26,6 +26,9 @@ spring:
       max-wait: 60000 #定义等待连接获取的最大超时时间
       timeBetweenEvictionRunsMillis: 60000
       filters: stat,wall #stat用于统计，wall用于防火墙
+  data:
+    elasticsearch:
+      cluster-nodes: 127.0.0.1:9300
 # 打印sql
 logging:
   level:

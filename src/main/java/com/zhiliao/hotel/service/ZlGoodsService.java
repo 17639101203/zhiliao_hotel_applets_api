@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.controller.goods.vo.EsGoods;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 
@@ -22,4 +23,6 @@ public interface ZlGoodsService {
     GoodsListVo findGoodsDetail(Integer goodsID);
 
     void updateGoodsCount(List<ZlOrderDetail> zlOrderDetailList);
+
+    List<EsGoods> searchGoods(Integer hotelId, String selectParam, Integer belongModule, Integer pageNo, Integer pageSize);
 }

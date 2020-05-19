@@ -3,14 +3,21 @@ package com.zhiliao.hotel.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.controller.goods.vo.EsGoods;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.mapper.ZlGoodsMapper;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.ZlGoodsService;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +31,9 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
 
 
     private final ZlGoodsMapper zlGoodsMapper;
+
+    @Autowired
+    private ElasticsearchTemplate elasticsearchTemplate;
 
     @Autowired
     public ZlGoodsServiceImpl(ZlGoodsMapper zlGoodsMapper) {
@@ -67,5 +77,34 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
             zlGoodsMapper.updateGoodsSku(goodsID, goodsCount);
             zlGoodsMapper.updateHotelGoods(goodsID, goodsCount);
         }
+    }
+
+    @Override
+    public List<EsGoods> searchGoods(Integer hotelId, String selectParam, Integer belongModule, Integer pageNo, Integer pageSize) {
+        NativeSearchQuery query = new NativeSearchQueryBuilder()
+                .withQuery(QueryBuilders.queryStringQuery(selectParam).defaultField("goodsname"))
+                .withPageable(PageRequest.of(pageNo - 1, pageSize))
+                .build();
+        //获取结果集list集合
+        List<EsGoods> esGoodsList = elasticsearchTemplate.queryForList(query, EsGoods.class);
+        //对集合进行遍历筛选
+        Iterator<EsGoods> iterator = esGoodsList.iterator();
+        if (belongModule == 0) {
+            while (iterator.hasNext()) {
+                EsGoods esGoods = iterator.next();
+                if (!esGoods.getHotelid().equals(hotelId)) {
+                    esGoodsList.remove(esGoods);
+                }
+            }
+        } else {
+            while (iterator.hasNext()) {
+                EsGoods esGoods = iterator.next();
+                if (!esGoods.getHotelid().equals(hotelId) || !esGoods.getBelongmodule().equals(belongModule)) {
+                    esGoodsList.remove(esGoods);
+                }
+            }
+        }
+
+        return esGoodsList;
     }
 }

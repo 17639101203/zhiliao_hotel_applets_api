@@ -1,8 +1,10 @@
 package com.zhiliao.hotel.controller.goods;
 
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.controller.goods.vo.EsGoods;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.service.ZlGoodsService;
 import io.swagger.annotations.Api;
@@ -131,4 +133,28 @@ public class ZlGoodsController {
             return new ReturnString("获取出错");
         }
     }
+
+    @ApiOperation(value = "姬慧慧_商品搜索_酒店超市")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
+            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "int", required = true, value = "酒店id"),
+            @ApiImplicitParam(paramType = "path", name = "selectParam", dataType = "String", required = true, value = "商品名称参数"),
+            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "int", required = true, value = "所属模块 0:首页搜索 1:便利店;2餐饮服务;3情趣用品;4土特产"),
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "String", required = true, value = "页码"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "String", required = true, value = "每页大小")
+    })
+//    @UserLoginToken
+    @PassToken
+    @GetMapping("searchGoods/{hotelId}/{selectParam}/{belongModule}/{pageNo}/{pageSize}")
+    public ReturnString searchGoods(String token,
+                                    @PathVariable Integer hotelId,
+                                    @PathVariable String selectParam,
+                                    @PathVariable Integer belongModule,
+                                    @PathVariable Integer pageNo,
+                                    @PathVariable Integer pageSize) {
+
+        List<EsGoods> esGoodsList = zlGoodsService.searchGoods(hotelId, selectParam, belongModule, pageNo, pageSize);
+        return new ReturnString(esGoodsList);
+    }
+
 }
