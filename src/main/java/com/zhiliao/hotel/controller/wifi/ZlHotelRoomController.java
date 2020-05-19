@@ -46,7 +46,7 @@ public class ZlHotelRoomController {
             if (wifi.size() == 0) {
                 return new ReturnString(0,"该酒店无wifi");
             }
-            return new ReturnString(0,wifi);
+            return new ReturnString(wifi);
         } catch (Exception e) {
             return new ReturnString("获取失败");
         }

@@ -44,11 +44,6 @@ public class ReturnString {
                 SerializerFeature.WriteNullStringAsEmpty));
     }
 
-    public ReturnString(int code, Object data) {
-        this.code = code;
-        this.data = data;
-    }
-
     public ReturnString(String message) {
         this.code = -1;
         this.message = message;
