@@ -1,7 +1,7 @@
 package com.zhiliao.hotel.service.impl;
 
 import com.zhiliao.hotel.common.ReturnString;
-import com.zhiliao.hotel.common.constant.RedisConstant;
+import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.hotel.in.ZlHotelIn;
 import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.model.*;
@@ -84,7 +84,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
             ZlHotelIn zlHotel = new ZlHotelIn(zlHotelMapper.getById(hotelId));
             if (zlHotel != null) {
                 //获取缓存value
-                String bannerValue = (String) redisTemplate.boundValueOps(RedisConstant.BANNER_KEY + ":" + hotelId).get();
+                String bannerValue = (String) redisTemplate.boundValueOps(RedisKeyConstant.BANNER_KEY + ":" + hotelId).get();
 
                 //判断缓存中是否有数据，没数据直接往数据库查
                 List<ZlBanner> zlBanners = Optional.ofNullable(bannerValue).map((val) -> GsonUtils.jsonToList(bannerValue, ZlBanner.class)).
@@ -92,7 +92,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
                 //判断缓存没数据情况则添加
                 if (!Optional.ofNullable(bannerValue).isPresent()) {
-                    redisTemplate.boundValueOps(RedisConstant.BANNER_KEY + ":" + hotelId).set(GsonUtils.objToJson(zlBanners));
+                    redisTemplate.boundValueOps(RedisKeyConstant.BANNER_KEY + ":" + hotelId).set(GsonUtils.objToJson(zlBanners));
                 }
                 //获取轮播图数据
                 zlHotel.setZlBannerList(zlBanners);
@@ -140,5 +140,4 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         int count = zlUserloginlogService.insert(zlUserloginlog);
         return count>0?true:false;
     }
-
 }

@@ -2,7 +2,7 @@ package com.zhiliao.hotel.controller.file;
 
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
-import com.zhiliao.hotel.utils.UploadFileContext;
+import com.zhiliao.hotel.controller.file.strategy.UploadFileContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

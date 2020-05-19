@@ -1,8 +1,9 @@
-package com.zhiliao.hotel.utils;
+package com.zhiliao.hotel.controller.file.strategy;
 
 /**
  * Created by xiegege on 2019/7/4.
  */
+import com.zhiliao.hotel.utils.FileUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 

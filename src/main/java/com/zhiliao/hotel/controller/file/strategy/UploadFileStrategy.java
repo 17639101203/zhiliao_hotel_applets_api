@@ -1,4 +1,4 @@
-package com.zhiliao.hotel.utils;
+package com.zhiliao.hotel.controller.file.strategy;
 
 import org.springframework.web.multipart.MultipartFile;
 

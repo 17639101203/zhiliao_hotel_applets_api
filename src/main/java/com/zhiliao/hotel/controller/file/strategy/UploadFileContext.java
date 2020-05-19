@@ -1,4 +1,4 @@
-package com.zhiliao.hotel.utils;
+package com.zhiliao.hotel.controller.file.strategy;
 
 /**
  * Created by xiegege on 2019/7/4.
