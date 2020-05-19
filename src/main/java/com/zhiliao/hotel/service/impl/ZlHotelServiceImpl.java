@@ -9,10 +9,7 @@ import com.zhiliao.hotel.service.ZlBannerService;
 import com.zhiliao.hotel.service.ZlHotelService;
 import com.zhiliao.hotel.service.ZlUserloginlogService;
 import com.zhiliao.hotel.service.ZlWxuserService;
-import com.zhiliao.hotel.utils.DateUtils;
-import com.zhiliao.hotel.utils.GsonUtils;
-import com.zhiliao.hotel.utils.IPUtils;
-import com.zhiliao.hotel.utils.TokenUtil;
+import com.zhiliao.hotel.utils.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -34,8 +31,6 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
     private final ZlHotelMapper zlHotelMapper;
 
-    private final RedisTemplate redisTemplate;
-
     private final ZlHotelRoomMapper zlHotelRoomMapper;
 
     private final ZlXcxMenuMapper zlXcxMenuMapper;
@@ -50,11 +45,12 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
     private final ZlBannerService zlBannerService;
 
+    private final RedisCommonUtil redisCommonUtil;
+
     @Autowired
-    public ZlHotelServiceImpl(ZlHotelMapper zlHotelMapper, RedisTemplate redisTemplate, ZlHotelRoomMapper zlHotelRoomMapper, ZlXcxMenuMapper zlXcxMenuMapper,
+    public ZlHotelServiceImpl(ZlHotelMapper zlHotelMapper, ZlHotelRoomMapper zlHotelRoomMapper, ZlXcxMenuMapper zlXcxMenuMapper,RedisCommonUtil redisCommonUtil,
                               ZlUserloginlogService zlUserloginlogService, HttpServletRequest request, ZlWxuserService zlWxuserService, ZlNewsMapper zlNewsMapper, ZlBannerService zlBannerService) {
         this.zlHotelMapper = zlHotelMapper;
-        this.redisTemplate = redisTemplate;
         this.zlHotelRoomMapper = zlHotelRoomMapper;
         this.zlXcxMenuMapper = zlXcxMenuMapper;
         this.zlUserloginlogService = zlUserloginlogService;
@@ -62,6 +58,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         this.zlWxuserService = zlWxuserService;
         this.zlNewsMapper = zlNewsMapper;
         this.zlBannerService = zlBannerService;
+        this.redisCommonUtil=redisCommonUtil;
     }
 
     @Override
@@ -84,7 +81,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
             ZlHotelIn zlHotel = new ZlHotelIn(zlHotelMapper.getById(hotelId));
             if (zlHotel != null) {
                 //获取缓存value
-                String bannerValue = (String) redisTemplate.boundValueOps(RedisKeyConstant.BANNER_KEY + ":" + hotelId).get();
+                String bannerValue = (String) redisCommonUtil.getCache(RedisKeyConstant.BANNER_KEY + ":" + hotelId);
 
                 //判断缓存中是否有数据，没数据直接往数据库查
                 List<ZlBanner> zlBanners = Optional.ofNullable(bannerValue).map((val) -> GsonUtils.jsonToList(bannerValue, ZlBanner.class)).
@@ -92,7 +89,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
                 //判断缓存没数据情况则添加
                 if (!Optional.ofNullable(bannerValue).isPresent()) {
-                    redisTemplate.boundValueOps(RedisKeyConstant.BANNER_KEY + ":" + hotelId).set(GsonUtils.objToJson(zlBanners));
+                    redisCommonUtil.setCache(RedisKeyConstant.BANNER_KEY + ":" + hotelId,GsonUtils.objToJson(zlBanners))  ;
                 }
                 //获取轮播图数据
                 zlHotel.setZlBannerList(zlBanners);
