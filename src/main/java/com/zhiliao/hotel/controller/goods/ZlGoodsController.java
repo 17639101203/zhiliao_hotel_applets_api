@@ -1,12 +1,9 @@
 package com.zhiliao.hotel.controller.goods;
 
 import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
-import com.zhiliao.hotel.model.ZlGoodsCategory;
-import com.zhiliao.hotel.service.ZlGoodsCateGoryService;
 import com.zhiliao.hotel.service.ZlGoodsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -35,12 +32,9 @@ public class ZlGoodsController {
 
     private final ZlGoodsService zlGoodsService;
 
-    private final ZlGoodsCateGoryService goodsCateGoryService;
-
     @Autowired
-    public ZlGoodsController(ZlGoodsService zlGoodsService,ZlGoodsCateGoryService goodsCateGoryService) {
+    public ZlGoodsController(ZlGoodsService zlGoodsService) {
         this.zlGoodsService = zlGoodsService;
-        this.goodsCateGoryService = goodsCateGoryService;
     }
 
     @ApiOperation(value = "获取商品分类")
@@ -106,16 +100,14 @@ public class ZlGoodsController {
     @ApiOperation(value = "获取商品规格")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id"),
-            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "Integer", required = true, value = "酒店id")
+            @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id")
     })
-    //@UserLoginToken
-    @PassToken
-    @GetMapping("findGoodsSkuList/{goodsId}/{hotelId}")
-    public ReturnString findGoodsSkuList(String token, @PathVariable Integer goodsId,@PathVariable Integer hotelId) {
+    @UserLoginToken
+    @GetMapping("findGoodsSkuList/{goodsId}")
+    public ReturnString findGoodsSkuList(String token, @PathVariable Integer goodsId) {
         try {
             logger.info("开始请求->参数->商品id：" + goodsId);
-            List<Map<String, Object>> goodsSkuList = zlGoodsService.findGoodsSkuList(goodsId,hotelId);
+            List<Map<String, Object>> goodsSkuList = zlGoodsService.findGoodsSkuList(goodsId);
             return new ReturnString(goodsSkuList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -126,58 +118,17 @@ public class ZlGoodsController {
     @ApiOperation(value = "获取商品详情数据")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType = "path", name = "goodsID", dataType = "Integer", required = true, value = "商品id"),
-            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "Integer", required = true, value = "酒店id")
+            @ApiImplicitParam(paramType = "path", name = "goodsID", dataType = "String", required = true, value = "商品id")
     })
     @UserLoginToken
-    @GetMapping("findGoodsDetail/{goodsID}/{hotelId}")
-    public ReturnString findGoodsDetail(String token, @PathVariable Integer goodsID,@PathVariable Integer hotelId) {
+    @GetMapping("findGoodsDetail/{goodsID}")
+    public ReturnString findGoodsDetail(String token, @PathVariable Integer goodsID) {
         try {
-            GoodsListVo goodsListVo = zlGoodsService.findGoodsDetail(goodsID,hotelId);
+            GoodsListVo goodsListVo = zlGoodsService.findGoodsDetail(goodsID);
             return new ReturnString(goodsListVo);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取出错");
         }
     }
-
-
-    @ApiOperation(value = "获取酒店商品分类")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "int", required = true, value = "酒店id"),
-            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "int", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产")
-    })
-//    @UserLoginToken
-    @PassToken
-    @GetMapping("getGoodsCateGory/{hotelId}/{belongModule}")
-    public ReturnString getGoodsCateGory(String token,@PathVariable Integer hotelId,@PathVariable Integer belongModule){
-        try {
-            List<Map<String,String>> categoryList = goodsCateGoryService.getGoodsCateGory(hotelId,belongModule);
-            //定义list集合存放商品分类信息
-            List<String> list = new ArrayList<>();
-            String str = "推荐";
-            for (Map<String,String> goodsCateGoryMap : categoryList) {
-                //判断是否有推荐
-                if (goodsCateGoryMap.get("IsRecommand").equals(str)){
-                    list.add(str);
-                }
-                list.add(goodsCateGoryMap.get("CategoryName"));
-            }
-            //将推荐放到首位
-            if (list.size() != 0 && list.contains(str)){
-                int now = list.indexOf(str);
-                Collections.swap(list,now,0);
-            }
-            //去重
-            // 有序去重
-            Set<String> set = new LinkedHashSet<>(list);
-            return new ReturnString(set);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnString("获取出错");
-        }
-
-    }
-
 }

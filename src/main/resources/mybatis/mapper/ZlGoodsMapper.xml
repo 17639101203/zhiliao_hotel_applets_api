@@ -42,14 +42,14 @@
 
     <select id="findGoodsList" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
         select
-        zg.GoodsID,
-        zg.GoodsName,
-        zg.CoverImgUrl,
-        zg.OriginalPrice,
-        zg.CurrentPrice,
-        zg.TotalStockCount,
-        zg.TotalSoldCount,
-        zg.TotalVirtualSoldCount
+            zg.GoodsID,
+            zg.GoodsName,
+            zg.CoverImgUrl,
+            zg.OriginalPrice,
+            zg.CurrentPrice,
+            zg.TotalStockCount,
+            zg.TotalSoldCount,
+            zg.TotalVirtualSoldCount
         from zl_goods zg
         left join zl_goodscategory zgc on zg.GoodsCategoryID=zgc.GoodsCategoryID
         where zg.GoodsStatus=1 and zg.IsDelete=0 and zgc.IsDelete=0
@@ -65,7 +65,7 @@
         order by zg.Sort asc
     </select>
 
-    <!--<select id="findGoodsSkuList" resultType="java.util.LinkedHashMap">
+    <select id="findGoodsSkuList" resultType="java.util.LinkedHashMap">
         select
             zgs.GoodsID,
             zgs.SkuID,
@@ -80,29 +80,6 @@
         left join zl_goodsproperty zgp on zgs.PropertyIDs=zgp.PropertyID
         where zgs.GoodsID=#{goodsId} and zgs.IsDelete=0 and zgp.IsDelete=0
         order by zgs.CreateDate desc
-    </select>
-    -->
-    <select id="findGoodsSkuList" resultType="java.util.LinkedHashMap">
-        SELECT
-            a.GoodsID,
-            b.SkuID,
-            b.OriginalPrice,
-            b.CurrentPrice,
-            b.SoldCount,
-            b.IsDefault,
-            c.GoodsName,
-            c.TotalStockCount,
-            c.TotalSoldCount,
-            d.PropertyName,
-            d.ImgUrl
-        FROM
-	        zl_hotelgoods a
-	    LEFT JOIN zl_goodssku b ON a.SkuID = b.SkuID
-        LEFT JOIN zl_goods c ON a.GoodsID = c.GoodsID
-        AND b.GoodsID = c.GoodsID
-        LEFT JOIN zl_goodsproperty d ON b.PropertyIDs = d.PropertyID
-        WHERE
-            a.GoodsID = #{goodsId} and a.HotelID = #{hotelId} and a.IsDelete = 0 and b.IsDelete = 0 and c.IsDelete = 0 and d.IsDelete = 0
     </select>
 
     <!--根据商品id商品详情数据-->
@@ -157,5 +134,6 @@
           SoldCount = TotalSoldCount + #{goodsCount}
         WHERE GoodsID = #{goodsID}
     </update>
+
 
 </mapper>

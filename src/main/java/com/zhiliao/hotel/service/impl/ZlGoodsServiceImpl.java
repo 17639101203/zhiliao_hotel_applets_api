@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.mapper.ZlGoodsMapper;
-import com.zhiliao.hotel.model.ZlGoods;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.ZlGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,13 +45,13 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
     }
 
     @Override
-    public List<Map<String, Object>> findGoodsSkuList(Integer hotelId, Integer goodsId) {
-        return zlGoodsMapper.findGoodsSkuList(hotelId, goodsId);
+    public List<Map<String, Object>> findGoodsSkuList(Integer goodsId) {
+        return zlGoodsMapper.findGoodsSkuList(goodsId);
     }
 
     @Override
-    public GoodsListVo findGoodsDetail(Integer hotelId, Integer goodsID) {
-        GoodsListVo goodsListVo = zlGoodsMapper.findGoodsDetail(hotelId,goodsID);
+    public GoodsListVo findGoodsDetail(Integer goodsID) {
+        GoodsListVo goodsListVo = zlGoodsMapper.findGoodsDetail(goodsID);
         if (goodsListVo != null) {
             zlGoodsMapper.updateTotalVisitCount(goodsID, goodsListVo.getTotalVisitCount());
         }
