@@ -23,6 +23,7 @@
         <result column="Balance" jdbcType="DECIMAL" property="balance" />
         <result column="RemainWithdrawCash" jdbcType="DECIMAL" property="remainwithdrawcash" />
         <result column="WithdrewCash" jdbcType="DECIMAL" property="withdrewcash" />
+        <result column="FrozenCash" jdbcType="DECIMAL" property="frozencash" />
         <result column="Score" jdbcType="BIGINT" property="score" />
         <result column="IsInfoCompleted" jdbcType="BIT" property="isinfocompleted" />
         <result column="HotelID" jdbcType="INTEGER" property="hotelid" />

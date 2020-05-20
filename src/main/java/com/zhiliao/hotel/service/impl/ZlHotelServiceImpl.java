@@ -47,12 +47,12 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
     private final RedisCommonUtil redisCommonUtil;
 
-    @Autowired
-    private ZlHotelUserHistoryMapper zlHotelUserHistoryMapper;
+    private final ZlHotelUserHistoryMapper zlHotelUserHistoryMapper;
 
     @Autowired
     public ZlHotelServiceImpl(ZlHotelMapper zlHotelMapper, ZlHotelRoomMapper zlHotelRoomMapper, ZlXcxMenuMapper zlXcxMenuMapper, RedisCommonUtil redisCommonUtil,
-                              ZlUserloginlogService zlUserloginlogService, HttpServletRequest request, ZlWxuserService zlWxuserService, ZlNewsMapper zlNewsMapper, ZlBannerService zlBannerService) {
+                              ZlUserloginlogService zlUserloginlogService, HttpServletRequest request, ZlWxuserService zlWxuserService, ZlNewsMapper zlNewsMapper, ZlBannerService zlBannerService,
+                              ZlHotelUserHistoryMapper zlHotelUserHistoryMapper) {
         this.zlHotelMapper = zlHotelMapper;
         this.zlHotelRoomMapper = zlHotelRoomMapper;
         this.zlXcxMenuMapper = zlXcxMenuMapper;
@@ -62,6 +62,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         this.zlNewsMapper = zlNewsMapper;
         this.zlBannerService = zlBannerService;
         this.redisCommonUtil = redisCommonUtil;
+        this.zlHotelUserHistoryMapper = zlHotelUserHistoryMapper;
     }
 
     @Override
@@ -146,7 +147,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
     }
 
     @Override
-    public ReturnString getHotelHistoryList(String token) {
+    public ReturnString<ZlHotelUserHistory> getHotelHistoryList(String token) {
         //获取 token得到微信用户Id
         Long userId = TokenUtil.getUserId(token);
         //获取用户酒店入住历史
