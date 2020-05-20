@@ -71,8 +71,8 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
     @Override
     public void updateGoodsCount(List<ZlOrderDetail> zlOrderDetailList) {
         for (ZlOrderDetail zlOrderDetail : zlOrderDetailList) {
-            Integer goodsID = zlOrderDetail.getGoodsID();
-            Integer goodsCount = zlOrderDetail.getGoodsCount();
+            Integer goodsID = zlOrderDetail.getHotelgoodsid();
+            Integer goodsCount = zlOrderDetail.getGoodscount();
             zlGoodsMapper.updateGoods(goodsID, goodsCount);
             zlGoodsMapper.updateGoodsSku(goodsID, goodsCount);
             zlGoodsMapper.updateHotelGoods(goodsID, goodsCount);

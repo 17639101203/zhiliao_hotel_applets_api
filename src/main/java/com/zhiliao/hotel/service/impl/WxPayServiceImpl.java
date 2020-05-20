@@ -164,7 +164,7 @@ public class WxPayServiceImpl implements WxPayService {
         //判断退款金额参数是否正常
         BigDecimal totalPrice = null;
         for (ZlOrderDetail zlOrderDetail : zlOrderDetailList) {
-            totalPrice = totalPrice.add(zlOrderDetail.getPrice().multiply(BigDecimal.valueOf(zlOrderDetail.getGoodsCount())));
+            totalPrice = totalPrice.add(zlOrderDetail.getPrice().multiply(BigDecimal.valueOf(zlOrderDetail.getGoodscount())));
         }
         if (totalPrice.intValue() == total_fee && refund_fee < totalPrice.intValue()) {
             Map<String, String> packageParams = new HashMap<String, String>();
