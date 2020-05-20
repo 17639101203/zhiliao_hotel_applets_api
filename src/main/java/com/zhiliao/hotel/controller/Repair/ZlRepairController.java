@@ -65,7 +65,7 @@ public class ZlRepairController {
             Integer i = service.addRepairMsg(repair);
             if (i==1){
                 //传入文件分析后，得到文件存放地址  key：filePathBase
-                ReturnString returnString = fileController.uploadFile(multipartFiles,token);
+                ReturnString returnString = fileController.uploadFile(multipartFiles);
                 List<String> list = (List) returnString.getData();
                 StringBuffer Imgurls  = new StringBuffer();
                 list.forEach(item -> {
