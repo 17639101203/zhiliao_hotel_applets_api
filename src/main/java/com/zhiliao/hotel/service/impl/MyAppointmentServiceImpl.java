@@ -51,27 +51,10 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     public PageInfoResult cleanFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
         List<ZlCleanOrder> cleanorders = zlCleanOrderMyMapper.findAllByStatus(userId,orderstatus);
-        if (cleanorders != null){
-            for (int i = 0; i < cleanorders.size(); i++) {
-                ZlCleanOrder zlCleanorder = cleanorders.get(i);
-                zlCleanorder.setFuwutype("清扫服务");
-            }
-        }
         PageInfo<ZlCleanOrder> pageInfo = new PageInfo<>(cleanorders);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
-    /**
-     * 清扫订单详情
-     * @param orderID
-     * @return
-     */
-    @Override
-    public ZlCleanOrder cleanOrderDetail(Long orderID) {
-        ZlCleanOrder cleanorder = zlCleanOrderMyMapper.OrderDetail(orderID);
-        cleanorder.setFuwutype("清扫");
-        return cleanorder;
-    }
 
     /**
      * 获取发票订单
@@ -85,22 +68,8 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     public PageInfoResult invoiceFindAll(Long userId, Integer invoicestatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
         List<ZlInvoice> invoices = zlInvoiceMyMapper.findAllByUserId(userId,invoicestatus);
-        for (int i = 0; i < invoices.size(); i++) {
-            ZlInvoice invoice = invoices.get(i);
-//            invoice.setFuwutype("发票服务");
-        }
         PageInfo<ZlInvoice> pageInfo = new PageInfo<>(invoices);
         return PageInfoResult.getPageInfoResult(pageInfo);
-    }
-
-    /**
-     * 发票订单详情
-     * @param invoiceid
-     * @return
-     */
-    @Override
-    public ZlInvoice invoiceOrderDetail(Integer invoiceid) {
-        return zlInvoiceMyMapper.orderDetail(invoiceid);
     }
 
     /**
@@ -115,24 +84,10 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     public PageInfoResult repairFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
         List<ZlRepairorder> repairOrders = zlRepairorderMyMapper.findAllByUserId(userId,orderstatus);
-        for (int i = 0; i < repairOrders.size(); i++) {
-            ZlRepairorder zlRepairOrder = repairOrders.get(i);
-            zlRepairOrder.setFuwutype("报修服务");
-        }
+
         PageInfo<ZlRepairorder> pageInfo = new PageInfo<>(repairOrders);
 
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
-    /**
-     * 报修订单详情
-     * @param orderID
-     * @return
-     */
-    @Override
-    public ZlRepairorder repairOrderDetail(Long orderID) {
-        ZlRepairorder repairOrder = zlRepairorderMyMapper.findDetail(orderID);
-        repairOrder.setFuwutype("报修");
-        return repairOrder;
-    }
 }

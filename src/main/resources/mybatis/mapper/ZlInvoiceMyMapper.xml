@@ -37,12 +37,4 @@
     </if>
   </select>
 
-  <select id="orderDetail" resultType="com.zhiliao.hotel.model.ZlInvoice">
-    select InvoiceID, UserID, InvoiceType,
-    MainBodyType, Title, Identifier,
-    Tel, Remark, InvoiceStatus,
-    IsDelete, CreateDate, UpdateDate
-    from zl_invoice
-    where InvoiceID = #{invoiceid}
-  </select>
 </mapper>

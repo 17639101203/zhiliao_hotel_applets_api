@@ -15,5 +15,4 @@ public interface ZlCleanOrderMyMapper extends Mapper<ZlCleanOrder> {
 
     List<ZlCleanOrder> findAllByStatus(@Param("userId") Long userId, @Param("orderstatus") Integer orderstatus);
 
-    ZlCleanOrder OrderDetail(@Param("orderID") Long orderID);
 }

@@ -1,6 +1,5 @@
 package com.zhiliao.hotel.service.impl;
 
-import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.mapper.ZlHotelFacilityMapper;
 import com.zhiliao.hotel.mapper.ZlHotelFacilityOrderMapper;
 import com.zhiliao.hotel.mapper.ZlHotelMapper;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,10 +53,11 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
     /**
      * 酒店设施预定
      * @param zlHotelFacilityOrder
+     * @param facilityID
      * @return
      */
     @Override
-    public Map<String, Object> addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder) {
+    public Map<String, Object> addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder, Integer facilityID) {
         ZlHotel zlHotel = hotelMapper.getById(String.valueOf(zlHotelFacilityOrder.getHotelid()));
         zlHotelFacilityOrder.setSerialnumber(OrderSerialNoUtil.CreateOrderSerialNo("HS"));
         zlHotelFacilityOrder.setComeformid(1);
@@ -71,7 +72,10 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         zlHotelFacilityOrder.setOrderstatus((byte) 0);
         zlHotelFacilityOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
-        facilityOrderMapper.insert(zlHotelFacilityOrder);
+        int insert = facilityOrderMapper.insert(zlHotelFacilityOrder);
+        if (insert > 0){
+            hotelFacilityMapper.updateCount(facilityID, (int) new Date().getTime());
+        }
         Map<String,Object> map = new HashMap<>();
         map.put("orderId",zlHotelFacilityOrder.getOrderid());
         return map;

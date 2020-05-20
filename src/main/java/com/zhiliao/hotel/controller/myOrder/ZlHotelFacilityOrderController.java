@@ -15,6 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Api(tags = "酒店设施订单接口")
 @RestController
@@ -29,7 +32,6 @@ public class ZlHotelFacilityOrderController {
 
     @ApiOperation(value = "我的订单", notes = "可传入不同的请求参数，查询各种类型的全部订单。例如：获取用户全部订单（不区分订单类型）列表的数据，传入token即可。")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "int", required = false, value = "订单状态：-1.已取消；0.待确认；1.已确认"),
             @ApiImplicitParam(paramType = "query", name = "payStatus", dataType = "int", required = false, value = "支付状态：0：无须支付；1：待支付；2：已支付。"),
             @ApiImplicitParam(paramType = "query", name = "payType", dataType = "int", required = false, value = "支付方式：0.无支付方式；1.微信；2.支付宝；3.银行卡；4.其它。"),
@@ -38,10 +40,10 @@ public class ZlHotelFacilityOrderController {
     })
     @UserLoginToken
     @PostMapping("all")
-    public ReturnString findAllOrder(String token, Integer orderStatus, Integer payStatus, Integer payType, Integer pageNo, Integer pageSize) {
+    public ReturnString findAllOrder(HttpServletRequest request, Integer orderStatus, Integer payStatus, Integer payType, Integer pageNo, Integer pageSize) {
 
         try {
-
+            String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("我的订单，用户ID：" + userId);
             PageInfoResult allOrder = hotelFacilityOrderService.findAllOrder(userId, orderStatus, payStatus, payType, pageNo, pageSize);
@@ -56,12 +58,11 @@ public class ZlHotelFacilityOrderController {
     @ApiOperation(value = "订单详情")
     @PostMapping("Detail")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "query", dataType = "long", name = "orderID", value = "订单ID", required = true)
     })
     @UserLoginToken
     @ResponseBody
-    public ReturnString findOrderDetail(String token, Long orderID) {
+    public ReturnString findOrderDetail(Long orderID) {
 
 
         try {
@@ -75,13 +76,12 @@ public class ZlHotelFacilityOrderController {
 
     @ApiOperation(value = "取消订单")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "订单id")
     })
     @PostMapping("orderById/{orderID}")
     @UserLoginToken
     @ResponseBody
-    public ReturnString orderById(String token, @PathVariable Long orderID) {
+    public ReturnString orderById(@PathVariable Long orderID) {
         try {
             hotelFacilityOrderService.byOrderId(orderID);
             return new ReturnString(0, "已取消");

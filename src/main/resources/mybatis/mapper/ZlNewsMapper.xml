@@ -42,8 +42,10 @@
   </sql>
 
   <select id="findAllJiuDianId" resultType="com.zhiliao.hotel.model.ZlNews">
-    select * from zl_news
-    where 1 = 1
+    select
+      NewsID,HotelID,Type,Author,Title,Content,ImgUrl,CreateDate
+    from zl_news
+    where 1 = 1 and IsDelete = 0
     <if test="hotelID != null and hotelID != '' ">
       and HotelID = #{hotelID}
     </if>
@@ -53,10 +55,23 @@
     <if test="status != null and status != '' ">
       and Status = #{status}
     </if>
-    order by Sort,CreateDate DESC
+    order by CreateDate DESC
 
   </select>
   <select id="findById" resultType="com.zhiliao.hotel.model.ZlNews">
-    select n.*,h.HotelName hotelName from zl_news n,zl_hotel h where n.NewsID = #{newsid} and n.HotelID = h.HotelID
+    select
+      n.NewsID,
+      n.HotelID,
+      n.Type,
+      n.Author,
+      n.Title,
+      n.Content,
+      n.ImgUrl,
+      n.CreateDate,
+      h.HotelName hotelName
+    from
+      zl_news n,zl_hotel h
+    where
+    n.NewsID = #{newsid} and n.HotelID = h.HotelID
   </select>
 </mapper>

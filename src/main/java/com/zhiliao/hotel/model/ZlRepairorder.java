@@ -78,11 +78,6 @@ public class ZlRepairorder implements Serializable {
      * 支付/取消时间
      */
     private Integer updatedate;
-    /**
-     * 服务类型
-     */
-    private String fuwutype;
-
 
     /**
      * 预约时间
@@ -115,7 +110,6 @@ public class ZlRepairorder implements Serializable {
                 ", orderstatus=" + orderstatus +
                 ", createdate=" + createdate +
                 ", updatedate=" + updatedate +
-                ", fuwutype='" + fuwutype + '\'' +
                 ", appointmentdate=" + appointmentdate +
                 '}';
     }
@@ -230,14 +224,6 @@ public class ZlRepairorder implements Serializable {
 
     public void setUpdatedate(Integer updatedate) {
         this.updatedate = updatedate;
-    }
-
-    public String getFuwutype() {
-        return fuwutype;
-    }
-
-    public void setFuwutype(String fuwutype) {
-        this.fuwutype = fuwutype;
     }
 
     public Integer getAppointmentdate() {

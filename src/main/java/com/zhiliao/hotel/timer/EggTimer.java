@@ -32,7 +32,8 @@ public class EggTimer {
                 timer.cancel();
             }
             private void playSound() {
-                ZlOrder order = zlOrderMapper.findById(orderid);
+                Integer payStatus = 1;
+                ZlOrder order = zlOrderMapper.findById(orderid,payStatus);
                 if (order != null){
                     order.setOrderstatus(-1);
                     order.setUpdatedate((int) new Date().getTime());

@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  * @date 2020-04-28
  */
 @Table(name = "zl_hotelfacilityorder")
-public class ZlHotelFacilityOrder implements Serializable {
+public class  ZlHotelFacilityOrder implements Serializable {
     /**
      * 订单ID
      */

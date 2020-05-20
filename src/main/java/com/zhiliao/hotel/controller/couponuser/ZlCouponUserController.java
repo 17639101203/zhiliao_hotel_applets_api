@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags = "用户优惠卷接口")
+import javax.servlet.http.HttpServletRequest;
+
+@Api(tags = "我的用户优惠卷接口_我的_徐向向")
 @RequestMapping("couponUser")
 @RestController
 public class ZlCouponUserController {
@@ -27,15 +29,15 @@ public class ZlCouponUserController {
 
     @ApiOperation(value="我的优惠卷订单展示")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType="query", name="token", dataType="String", required=true, value="token"),
             @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码"),
             @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数"),
     })
     @UserLoginToken
     @PostMapping("couponUserAll")
-    public ReturnString listCouponUsers(String token, Integer pageNo, Integer pageSize){
+    public ReturnString listCouponUsers(HttpServletRequest request, Integer pageNo, Integer pageSize){
 
         try{
+            String token = request.getHeader("token");
             Long userId= TokenUtil.getUserId(token);
             logger.info("我的优惠卷，用户ID："+userId);
             PageInfoResult result = couponUserService.listCouponUser(userId,pageNo,pageSize);
@@ -46,6 +48,26 @@ public class ZlCouponUserController {
             return new ReturnString("获取出错");
         }
 
+    }
+    @ApiOperation(value="获取有效优惠卷的数量")
+    @ApiImplicitParams({
+
+    })
+    @UserLoginToken
+    @PostMapping("count")
+    public ReturnString count(HttpServletRequest request){
+
+        try{
+            String token = request.getHeader("token");
+            Long userId= TokenUtil.getUserId(token);
+            logger.info("我的优惠卷，用户ID："+userId);
+            Integer count = couponUserService.count(userId);
+            return new ReturnString(count);
+
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ReturnString("获取出错");
+        }
     }
 
 }

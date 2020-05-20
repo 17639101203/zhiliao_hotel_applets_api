@@ -65,4 +65,7 @@
         and FacilityID = #{facilityId} and FacilityStatus = 1 and IsDelete = 0
   </select>
 
+    <update id="updateCount">
+        update zl_hotelfacility set FacilityCount = FacilityCount - 1,UpdateDate = #{time} where FacilityID = #{facilityID}
+    </update>
 </mapper>

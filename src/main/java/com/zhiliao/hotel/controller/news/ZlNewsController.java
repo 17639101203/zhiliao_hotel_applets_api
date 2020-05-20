@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "咨讯接口")
+@Api(tags = "咨讯接口_首页_徐向向")
 @RestController
 @RequestMapping("news")
 public class ZlNewsController {

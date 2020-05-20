@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ZlCouponUserMapper extends Mapper<ZlCouponUser> {
     List<ZlCouponUser> listCouponUser(@Param("userId") Long userId);
+
+    Integer count(@Param("userId") Long userId, @Param("newDate") Integer newDate);
 }

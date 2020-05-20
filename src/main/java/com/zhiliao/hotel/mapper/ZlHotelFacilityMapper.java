@@ -1,7 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.model.ZlHotelFacility;
-import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -12,4 +11,5 @@ public interface ZlHotelFacilityMapper extends Mapper<ZlHotelFacility> {
 
     ZlHotelFacility getHotelFacilityDetail(@Param("facilityId") Integer facilityId);
 
+    void updateCount(@Param("facilityID") Integer facilityID, @Param("time") Integer time);
 }

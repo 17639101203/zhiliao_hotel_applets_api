@@ -37,6 +37,11 @@ public class ZlNewsServiceImpl implements ZlNewsService {
 
     @Override
     public ZlNews findById(Integer newsid) {
-        return zlNewsMapper.findById(newsid);
+        ZlNews news = zlNewsMapper.findById(newsid);
+        if (news != null && news.getHotelid() == 0){
+            news.setHotelName("知了管家");
+        }
+        return news;
+
     }
 }

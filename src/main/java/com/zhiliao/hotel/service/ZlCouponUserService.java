@@ -8,4 +8,6 @@ import com.zhiliao.hotel.common.PageInfoResult;
 public interface ZlCouponUserService {
 
     PageInfoResult listCouponUser(Long userId, Integer pageNo, Integer pageSize);
+
+    Integer count(Long userId);
 }

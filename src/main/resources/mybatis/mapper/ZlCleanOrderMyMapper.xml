@@ -19,9 +19,6 @@
   </resultMap>
 
 
-  <select id="OrderDetail" resultType="com.zhiliao.hotel.model.ZlCleanOrder">
-    select OrderID,RoomNumber,BookDate,OrderStatus, UpdateDate from zl_cleanorder where OrderID = #{orderID}
-  </select>
 
   <select id="findAllByStatus" resultType="com.zhiliao.hotel.model.ZlCleanOrder">
     select

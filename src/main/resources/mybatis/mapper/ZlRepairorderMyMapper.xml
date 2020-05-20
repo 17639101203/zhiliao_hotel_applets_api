@@ -36,13 +36,5 @@
   </select>
 
 
-  <select id="findDetail" resultType="com.zhiliao.hotel.model.ZlRepairorder">
-    select OrderID, UserID, SerialNumber,
-    HotelID, HotelName, RoomID,
-    RoomNumber, ImgUrls, Remark,
-    ComeFormID, IsDelete, OrderStatus,
-    CreateDate, UpdateDate
-    from zl_repairorder
-    where OrderID = #{orderID}
-  </select>
+
 </mapper>

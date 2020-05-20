@@ -16,12 +16,6 @@ public interface MyAppointmentService {
      */
     PageInfoResult cleanFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize);
 
-    /**
-     * 清扫订单详情
-     * @param orderID
-     * @return
-     */
-    ZlCleanOrder cleanOrderDetail(Long orderID);
 
     /**
      * 获取发票订单
@@ -33,12 +27,6 @@ public interface MyAppointmentService {
      */
     PageInfoResult invoiceFindAll(Long userId, Integer invoicestatus, Integer pageNo, Integer pageSize);
 
-    /**
-     * 发票订单详情
-     * @param invoiceid
-     * @return
-     */
-    ZlInvoice invoiceOrderDetail(Integer invoiceid);
 
     /**
      * 获取报修订单
@@ -50,10 +38,4 @@ public interface MyAppointmentService {
      */
     PageInfoResult repairFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize);
 
-    /**
-     * 报修订单详情
-     * @param orderID
-     * @return
-     */
-    ZlRepairorder repairOrderDetail(Long orderID);
 }

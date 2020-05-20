@@ -16,10 +16,4 @@ public interface ZlInvoiceMyMapper {
      */
     List<ZlInvoice> findAllByUserId(@Param("userId") Long userId, @Param("invoicestatus") Integer invoicestatus);
 
-    /**
-     * 订单详情
-     * @param invoiceid
-     * @return
-     */
-    ZlInvoice orderDetail(@Param("invoiceid") Integer invoiceid);
 }

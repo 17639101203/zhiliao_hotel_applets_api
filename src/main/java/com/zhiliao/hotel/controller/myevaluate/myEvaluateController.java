@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "我的评价接口")
+@Api(tags = "我的评价接口_我的_徐向向")
 @RestController
 @RequestMapping("myEvaluate")
 public class myEvaluateController {

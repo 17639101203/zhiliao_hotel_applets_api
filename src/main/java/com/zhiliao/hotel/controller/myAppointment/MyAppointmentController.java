@@ -21,7 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags = "我的预约服务接口")
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
+
+@Api(tags = "我的预约服务接口_我的_徐向向")
 @RestController
 @RequestMapping("myAppointment")
 public class MyAppointmentController {
@@ -37,7 +41,6 @@ public class MyAppointmentController {
 
     @ApiOperation(value = "清扫服务订单展示")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "query", name = "orderstatus", dataType = "Integer", required = true, value = "不传：查询全部，-1：取消，0：等待确认，1：已确认，2已处理"),
             @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码值"),
             @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数")
@@ -45,42 +48,28 @@ public class MyAppointmentController {
     @PostMapping("cleanFindAll")
     @ResponseBody
     @UserLoginToken
-    public ReturnString cleanFindAll(String token , Integer orderstatus, Integer pageNo, Integer pageSize){
+    public ReturnString cleanFindAll(HttpServletRequest request , Integer orderstatus, Integer pageNo, Integer pageSize){
         try {
+            String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("用户id" + userId);
             if (userId == null){
                 return new ReturnString("用户不存在");
             }
-            PageInfoResult cleanorders = myAppointmentService.cleanFindAll(userId,orderstatus,pageNo,pageSize);;
-            return new ReturnString(cleanorders);
+            PageInfoResult cleanorders = myAppointmentService.cleanFindAll(userId,orderstatus,pageNo,pageSize);
+            Map<String,Object> map = new HashMap<>();
+            map.put("repairOrders",cleanorders);
+            map.put("orderServiceType","清扫服务");
+            return new ReturnString(map);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取失败");
         }
     }
 
-    @ApiOperation(value="清扫订单详情")
-    @PostMapping("cleanDetail")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType="query", dataType="long", name="orderID", value="清扫服务订单ID", required=true)
-    })
-    @PassToken
-    @ResponseBody
-    public ReturnString cleanOrderDetail(String token ,Long orderID){
-        try {
-            ZlCleanOrder cleanorder = myAppointmentService.cleanOrderDetail(orderID);
-            return new ReturnString(cleanorder);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnString("获取失败");
-        }
-    }
 
     @ApiOperation(value = "发票订单展示")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "query", name = "invoicestatus", dataType = "Integer", required = true, value = "不传：查询全部，-1：已取消，0：未开票，1：开票中，2：已开票"),
             @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码值"),
             @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数")
@@ -88,30 +77,16 @@ public class MyAppointmentController {
     @PostMapping("invoiceFindAll")
     @UserLoginToken
     @ResponseBody
-    public ReturnString invoiceFindAll(String token, Integer invoicestatus, Integer pageNo, Integer pageSize){
+    public ReturnString invoiceFindAll(HttpServletRequest request, Integer invoicestatus, Integer pageNo, Integer pageSize){
         try {
+            String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("用户id" + userId);
             PageInfoResult invoices = myAppointmentService.invoiceFindAll(userId,invoicestatus,pageNo,pageSize);
-            return new ReturnString(invoices);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnString("获取失败");
-        }
-    }
-
-    @ApiOperation(value="发票订单详情")
-    @PostMapping("invoiceDetail")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType="query", dataType="Integer", name="invoiceid", value="发票订单ID", required=true)
-    })
-    @PassToken
-    @ResponseBody
-    public ReturnString invoiceOrderDetail(String token, Integer invoiceid){
-        try {
-            ZlInvoice invoice = myAppointmentService.invoiceOrderDetail(invoiceid);
-            return new ReturnString(invoice);
+            Map<String,Object> map = new HashMap<>();
+            map.put("repairOrders",invoices);
+            map.put("orderServiceType","发票服务");
+            return new ReturnString(map);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取失败");
@@ -120,7 +95,6 @@ public class MyAppointmentController {
 
     @ApiOperation(value = "报修订单展示")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "query", name = "orderstatus", dataType = "Integer", required = true, value = "不传：查询全部，-1：取消，0：等待确认，1：已确认，2已处理"),
             @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码值"),
             @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数")
@@ -128,30 +102,16 @@ public class MyAppointmentController {
     @UserLoginToken
     @PostMapping("repairFindAll")
     @ResponseBody
-    public ReturnString repairFindAll(String token,Integer orderstatus,Integer pageNo,Integer pageSize){
+    public ReturnString repairFindAll(HttpServletRequest request,Integer orderstatus,Integer pageNo,Integer pageSize){
         try {
+            String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("用户id" + userId);
             PageInfoResult repairOrders = myAppointmentService.repairFindAll(userId,orderstatus,pageNo,pageSize);
-            return new ReturnString(repairOrders);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnString("获取失败");
-        }
-    }
-
-    @ApiOperation(value="订单详情")
-    @PostMapping("repairDetail")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType="query", dataType="long", name="orderID", value="清扫服务订单ID", required=true)
-    })
-    @PassToken
-    @ResponseBody
-    public ReturnString repairOrderDetail(String token, Long orderID){
-        try {
-            ZlRepairorder repairOrder = myAppointmentService.repairOrderDetail(orderID);
-            return new ReturnString(repairOrder);
+            Map<String,Object> map = new HashMap<>();
+            map.put("repairOrders",repairOrders);
+            map.put("orderServiceType","报修服务");
+            return new ReturnString(map);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取失败");

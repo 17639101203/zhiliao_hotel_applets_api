@@ -17,7 +17,7 @@ public interface ZlOrderMapper extends Mapper<ZlOrder> {
     //取消订单
     void byOrderId(ZlOrder order);
 
-    ZlOrder findById(@Param("orderid") Long orderid);
+    ZlOrder findById(@Param("orderid") Long orderid,@Param("PayStatus") Integer payStatus);
 
     void insertOrder(ZlOrder zlOrder);
 
