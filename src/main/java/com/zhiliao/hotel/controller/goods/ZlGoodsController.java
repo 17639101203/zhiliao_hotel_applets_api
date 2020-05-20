@@ -41,13 +41,12 @@ public class ZlGoodsController {
 
     @ApiOperation(value = "获取商品分类")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产")
     })
     @UserLoginToken
     @GetMapping("findGoodsCategory/{hotelId}/{belongModule}")
-    public ReturnString findGoodsCategory(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule) {
+    public ReturnString findGoodsCategory(@PathVariable Integer hotelId, @PathVariable Integer belongModule) {
         try {
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule);
             List<Map<String, String>> goodsCategoryDataList = zlGoodsService.findGoodsCategory(hotelId, belongModule);
@@ -76,7 +75,6 @@ public class ZlGoodsController {
 
     @ApiOperation(value = "获取商品分类列表数据")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产"),
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "String", required = true, value = "页码"),
@@ -86,7 +84,7 @@ public class ZlGoodsController {
     })
     @UserLoginToken
     @GetMapping("findGoodsList/{hotelId}/{belongModule}/{pageNo}/{pageSize}")
-    public ReturnString findGoodsList(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule,
+    public ReturnString findGoodsList(@PathVariable Integer hotelId, @PathVariable Integer belongModule,
                                       @PathVariable Integer pageNo, @PathVariable Integer pageSize, String categoryName) {
         try {
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|页码：" + pageNo + "|每页大小：" + pageSize + "|分类名称：" + categoryName);
@@ -101,12 +99,11 @@ public class ZlGoodsController {
 
     @ApiOperation(value = "获取商品规格")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id")
     })
     @UserLoginToken
     @GetMapping("findGoodsSkuList/{goodsId}")
-    public ReturnString findGoodsSkuList(String token, @PathVariable Integer goodsId) {
+    public ReturnString findGoodsSkuList(@PathVariable Integer goodsId) {
         try {
             logger.info("开始请求->参数->商品id：" + goodsId);
             List<Map<String, Object>> goodsSkuList = zlGoodsService.findGoodsSkuList(goodsId);
@@ -119,12 +116,11 @@ public class ZlGoodsController {
 
     @ApiOperation(value = "获取商品详情数据")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "goodsID", dataType = "String", required = true, value = "商品id")
     })
     @UserLoginToken
     @GetMapping("findGoodsDetail/{goodsID}")
-    public ReturnString findGoodsDetail(String token, @PathVariable Integer goodsID) {
+    public ReturnString findGoodsDetail(@PathVariable Integer goodsID) {
         try {
             GoodsListVo goodsListVo = zlGoodsService.findGoodsDetail(goodsID);
             return new ReturnString(goodsListVo);
@@ -136,7 +132,6 @@ public class ZlGoodsController {
 
     @ApiOperation(value = "姬慧慧_商品搜索_酒店超市")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "int", required = true, value = "酒店id"),
             @ApiImplicitParam(paramType = "path", name = "selectParam", dataType = "String", required = true, value = "商品名称参数"),
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "int", required = true, value = "所属模块 0:首页搜索 1:便利店;2餐饮服务;3情趣用品;4土特产"),
@@ -146,8 +141,7 @@ public class ZlGoodsController {
 //    @UserLoginToken
     @PassToken
     @GetMapping("searchGoods/{hotelId}/{selectParam}/{belongModule}/{pageNo}/{pageSize}")
-    public ReturnString searchGoods(String token,
-                                    @PathVariable Integer hotelId,
+    public ReturnString searchGoods(@PathVariable Integer hotelId,
                                     @PathVariable String selectParam,
                                     @PathVariable Integer belongModule,
                                     @PathVariable Integer pageNo,

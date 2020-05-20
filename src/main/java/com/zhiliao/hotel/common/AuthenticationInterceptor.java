@@ -60,7 +60,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
 
         // 从url中取出token
-        String token = httpServletRequest.getParameter("token");
+        String token = httpServletRequest.getHeader("token");
         if (token == null || "".equals(token)) {
             setHttpServletResponseMessage(httpServletResponse, -1, "未接收到token信息!");
             return false;

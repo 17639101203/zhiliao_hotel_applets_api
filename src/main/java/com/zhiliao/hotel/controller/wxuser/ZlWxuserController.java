@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,14 +66,13 @@ public class ZlWxuserController {
 
     @ApiOperation(value = "微信用户登录")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "query", name = "code", dataType = "String", required = true, value = "code"),
             @ApiImplicitParam(paramType = "query", name = "encryptedData", dataType = "String", required = true, value = "加密秘钥"),
             @ApiImplicitParam(paramType = "query", name = "iv", dataType = "String", required = true, value = "偏移量")
     })
     @NoLoginRequiredToken
     @PostMapping("wxuserLogin")
-    public ReturnString wxuserLogin(String token, String code, String encryptedData, String iv) {
+    public ReturnString wxuserLogin(String code, String encryptedData, String iv) {
         try {
             logger.info("开始请求->参数->code：" + code + "|加密秘钥：" + encryptedData + "|偏移量：" + iv);
             String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + APP_ID + "&secret=" + SECRET + "&js_code=" + code + "&grant_type=authorization_code";
@@ -123,9 +123,14 @@ public class ZlWxuserController {
         return new ReturnString(dataMap);
     }
 
+    @ApiOperation(value = "测试")
+    @ApiImplicitParams({
+
+    })
     @UserLoginToken
     @PostMapping("test")
-    public ReturnString test(String token) {
+    public ReturnString test(HttpServletRequest request) {
+        String token = request.getHeader("token");
         Long userId = TokenUtil.getUserId(token);
         System.out.println(userId);
         return new ReturnString(0, "你已通过验证");

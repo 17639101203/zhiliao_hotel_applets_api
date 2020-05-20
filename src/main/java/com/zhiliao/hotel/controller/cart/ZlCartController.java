@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -38,7 +39,6 @@ public class ZlCartController {
 
     @ApiOperation(value = "用户购物车添加")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
             @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id"),
             @ApiImplicitParam(paramType = "path", name = "skuId", dataType = "String", required = true, value = "商品skuId"),
@@ -46,9 +46,10 @@ public class ZlCartController {
     })
     @UserLoginToken
     @PostMapping("addCart/{hotelId}/{goodsId}/{skuId}/{goodsCount}")
-    public ReturnString addCart(String token, @PathVariable Integer hotelId, @PathVariable Integer goodsId,
-                                @PathVariable Integer skuId, @PathVariable Integer goodsCount) {
+    public ReturnString addCart(@PathVariable Integer hotelId, @PathVariable Integer goodsId,
+                                @PathVariable Integer skuId, @PathVariable Integer goodsCount, HttpServletRequest request) {
         try {
+            String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("开始请求->参数->酒店id：" + hotelId + "|商品id：" + goodsId + "|商品skuId：" + skuId + "|用户id：" + userId + "|数量：" + goodsCount);
             // 先查询购物车数据是否存在
@@ -87,14 +88,14 @@ public class ZlCartController {
 
     @ApiOperation(value = "用户购物车查询")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产")
     })
     @UserLoginToken
     @GetMapping("findUserCart/{hotelId}/{belongModule}")
-    public ReturnString findUserCart(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule) {
+    public ReturnString findUserCart(@PathVariable Integer hotelId, @PathVariable Integer belongModule, HttpServletRequest request) {
         try {
+            String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|用户id：" + userId);
             List<UserCartVo> userCartVoList = zlCartService.findUserCart(hotelId, userId, belongModule);
@@ -107,14 +108,14 @@ public class ZlCartController {
 
     @ApiOperation(value = "用户购物车清空")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产")
     })
     @UserLoginToken
     @PostMapping("emptyCart/{hotelId}/{belongModule}")
-    public ReturnString emptyCart(String token, @PathVariable Integer hotelId, @PathVariable Integer belongModule) {
+    public ReturnString emptyCart(@PathVariable Integer hotelId, @PathVariable Integer belongModule, HttpServletRequest request) {
         try {
+            String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|用户id：" + userId);
             zlCartService.emptyCart(hotelId, userId, belongModule);

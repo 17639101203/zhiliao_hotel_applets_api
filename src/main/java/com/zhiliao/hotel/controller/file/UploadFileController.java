@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.controller.file;
 
+import com.zhiliao.hotel.common.NoLoginRequiredToken;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.controller.file.strategy.UploadFileContext;
@@ -42,12 +43,9 @@ public class UploadFileController {
      * 传入文件，返回文件路径 mapkey值为：filePathBase
      */
     @ApiOperation(value = "文件上传")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token")
-    })
     @PostMapping(value = "uploadFile", consumes = { "multipart/*" }, headers = "content-type=multipart/form-data")
-    @PassToken
-    public ReturnString uploadFile(MultipartFile[] multipartFiles, String token) {  //param  token
+    @NoLoginRequiredToken
+    public ReturnString uploadFile(MultipartFile[] multipartFiles) {  //param  token
         try {
                  List<String> pathList = new ArrayList<>();
                 for(MultipartFile multipartFile : multipartFiles){
