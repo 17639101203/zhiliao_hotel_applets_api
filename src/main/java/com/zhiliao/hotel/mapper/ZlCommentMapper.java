@@ -17,6 +17,6 @@ public interface ZlCommentMapper extends Mapper<ZlComment> {
 
     int addComment(ZlComment zlComment);
 
-    List<ZlTag> getTags(@Param("zlTag") ZlTag zlTag);
+    List<ZlComment> getComments(Long userid);
 
 }

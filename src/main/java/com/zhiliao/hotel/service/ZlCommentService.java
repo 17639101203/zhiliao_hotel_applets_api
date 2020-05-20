@@ -20,5 +20,11 @@ public interface ZlCommentService {
     /**
         获取点赞吐槽标签
     */
-    List<ZlTag> getTags(ZlTag zlTag);
+    List<ZlTag> findTags(Integer hotelid);
+
+
+    /**
+     * 获取点赞吐槽列表
+     */
+    List<ZlComment> findComments(Long userid);
 }

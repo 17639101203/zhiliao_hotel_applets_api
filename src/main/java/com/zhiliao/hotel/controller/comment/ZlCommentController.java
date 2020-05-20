@@ -18,9 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -54,9 +52,7 @@ public class ZlCommentController {
         Integer nowtime = DateUtils.javaToPhpNowDateTime();
         zlComment.setCreatedate(nowtime);  //添加时间
         zlComment.setUpdatedate(nowtime);  //更新时间
-
         Integer res = zlCommentService.addComment(zlComment);
-
         if (res > 0) {
             return new ReturnString(0, "评价成功");
         } else {
@@ -70,13 +66,28 @@ public class ZlCommentController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "hotelID", dataType = "int", required = true, value = "酒店ID"),
     })
-    @PostMapping("getTags")
+    @GetMapping("findTags/{hotelid}")
     @PassToken
-    public ReturnString getTags(Integer hotelID) {
-        ZlTag zlTag = new ZlTag();
-        zlTag.setHotelid(hotelID);
-        List<ZlTag> zlTagList = zlCommentService.getTags(zlTag);
+    public ReturnString findTags(@PathVariable Integer hotelid) {
+        List<ZlTag> zlTagList = zlCommentService.findTags(hotelid);
         return new ReturnString(zlTagList);
+    }
+
+    @ApiOperation(value = "点赞吐槽详情列表获取(待修改)")
+    @GetMapping("findCommentList")
+    @UserLoginToken
+    public ReturnString findCommentList(HttpServletRequest request) {
+        Long userid = TokenUtil.getUserId(request.getHeader("token"));
+        List<ZlComment> list = zlCommentService.findComments(userid);
+        return new ReturnString(list);
+    }
+
+    @ApiOperation(value = "点赞吐槽详情列表页信息获取(待修改)")
+    @GetMapping("findComment")
+    @UserLoginToken
+    public ReturnString findComment(HttpServletRequest request) {
+
+        return new ReturnString(null);
     }
 
 }

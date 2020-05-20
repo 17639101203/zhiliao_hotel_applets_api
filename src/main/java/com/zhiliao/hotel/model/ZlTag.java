@@ -1,13 +1,16 @@
 package com.zhiliao.hotel.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.io.Serializable;
 
-/**
- * 
- *
- * @author null
- * @date 2020-04-15
- */
+@Data
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class ZlTag implements Serializable {
     /**
      * 标签ID
@@ -15,12 +18,17 @@ public class ZlTag implements Serializable {
     private Integer tagid;
 
     /**
-     * 酒店ID
+     * 酒店ID;0平台
      */
     private Integer hotelid;
 
     /**
-     * 标签名称
+     * 客房ID
+     */
+    private Integer roomid;
+
+    /**
+     * 标签ID
      */
     private String tagname;
 
@@ -30,7 +38,7 @@ public class ZlTag implements Serializable {
     private Short type;
 
     /**
-     * 
+     * 排序
      */
     private Integer sort;
 
@@ -49,95 +57,5 @@ public class ZlTag implements Serializable {
      */
     private Integer updatedate;
 
-    public Integer getTagid() {
-        return tagid;
-    }
 
-    public void setTagid(Integer tagid) {
-        this.tagid = tagid;
-    }
-
-    public Integer getHotelid() {
-        return hotelid;
-    }
-
-    public void setHotelid(Integer hotelid) {
-        this.hotelid = hotelid;
-    }
-
-    public String getTagname() {
-        return tagname;
-    }
-
-    public void setTagname(String tagname) {
-        this.tagname = tagname;
-    }
-
-    public Short getType() {
-        return type;
-    }
-
-    public void setType(Short type) {
-        this.type = type;
-    }
-
-    public Integer getSort() {
-        return sort;
-    }
-
-    public void setSort(Integer sort) {
-        this.sort = sort;
-    }
-
-    public Boolean getIsdelete() {
-        return isdelete;
-    }
-
-    public void setIsdelete(Boolean isdelete) {
-        this.isdelete = isdelete;
-    }
-
-    public Integer getCreatedate() {
-        return createdate;
-    }
-
-    public void setCreatedate(Integer createdate) {
-        this.createdate = createdate;
-    }
-
-    public Integer getUpdatedate() {
-        return updatedate;
-    }
-
-    public void setUpdatedate(Integer updatedate) {
-        this.updatedate = updatedate;
-    }
-
-    @Override
-    public String toString() {
-        return "ZlTag{" +
-                "tagid=" + tagid +
-                ", hotelid=" + hotelid +
-                ", tagname='" + tagname + '\'' +
-                ", type=" + type +
-                ", sort=" + sort +
-                ", isdelete=" + isdelete +
-                ", createdate=" + createdate +
-                ", updatedate=" + updatedate +
-                '}';
-    }
-
-    public ZlTag(Integer tagid, Integer hotelid, String tagname, Short type, Integer sort, Boolean isdelete, Integer createdate, Integer updatedate) {
-        this.tagid = tagid;
-        this.hotelid = hotelid;
-        this.tagname = tagname;
-        this.type = type;
-        this.sort = sort;
-        this.isdelete = isdelete;
-        this.createdate = createdate;
-        this.updatedate = updatedate;
-    }
-
-    public ZlTag() {
-    }
 }

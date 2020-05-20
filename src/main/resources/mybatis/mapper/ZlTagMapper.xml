@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiliao.hotel.mapper.ZlTagMapper">
+  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlTag">
+    <result column="TagID" jdbcType="INTEGER" property="tagid" />
+    <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
+    <result column="RoomID" jdbcType="INTEGER" property="roomid" />
+    <result column="TagName" jdbcType="CHAR" property="tagname" />
+    <result column="Type" jdbcType="SMALLINT" property="type" />
+    <result column="Sort" jdbcType="INTEGER" property="sort" />
+    <result column="IsDelete" jdbcType="BIT" property="isdelete" />
+    <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
+    <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
+  </resultMap>
+
+
+  <select id="getTags" resultType="com.zhiliao.hotel.model.ZlTag">
+    select * from zl_tag where HotelID = #{hotelid} and IsDelete = 0
+  </select>
+
+
+</mapper>

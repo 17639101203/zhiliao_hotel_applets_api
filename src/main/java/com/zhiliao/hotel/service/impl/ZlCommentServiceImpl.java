@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.service.impl;
 
 import com.zhiliao.hotel.mapper.ZlCommentMapper;
+import com.zhiliao.hotel.mapper.ZlTagMapper;
 import com.zhiliao.hotel.model.ZlComment;
 import com.zhiliao.hotel.model.ZlTag;
 import com.zhiliao.hotel.service.ZlCommentService;
@@ -11,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * @Author: Zhangyong
+ * @Author: zyj
  * @Date: 2020/4/14 10:35
  * @Description:
  */
@@ -20,12 +21,11 @@ import java.util.List;
 public class ZlCommentServiceImpl implements ZlCommentService {
 
 
-    private final ZlCommentMapper zlCommentMapper;
+    @Autowired
+    private ZlCommentMapper zlCommentMapper;
 
     @Autowired
-    public ZlCommentServiceImpl(ZlCommentMapper zlCommentMapper) {
-        this.zlCommentMapper = zlCommentMapper;
-    }
+    private ZlTagMapper zlTagMapper;
 
     @Override
     public Integer addComment(ZlComment zlComment) {
@@ -33,7 +33,12 @@ public class ZlCommentServiceImpl implements ZlCommentService {
     }
 
     @Override
-    public List<ZlTag> getTags(ZlTag zlTag) {
-        return zlCommentMapper.getTags(zlTag);
+    public List<ZlTag> findTags(Integer hotelid) {
+        return zlTagMapper.getTags(hotelid);
+    }
+
+    @Override
+    public List<ZlComment> findComments(Long userid) {
+        return zlCommentMapper.getComments(userid);
     }
 }
