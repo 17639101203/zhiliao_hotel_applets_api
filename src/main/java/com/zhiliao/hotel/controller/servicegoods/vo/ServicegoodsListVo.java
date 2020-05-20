@@ -17,6 +17,11 @@ public class ServicegoodsListVo {
     private String goodsName;
 
     /**
+     * 标签
+     */
+    private String tags;
+
+    /**
      * 客房服务商品封面图片
      */
     private String coverImgUrl;
@@ -56,5 +61,13 @@ public class ServicegoodsListVo {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }
