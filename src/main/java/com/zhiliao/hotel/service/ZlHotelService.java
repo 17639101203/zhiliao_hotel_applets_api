@@ -2,6 +2,7 @@ package com.zhiliao.hotel.service;
 
 
 import com.zhiliao.hotel.common.ReturnString;
+import com.zhiliao.hotel.model.ZlHotelUserHistory;
 
 /**
  * @author  chenrong
@@ -16,5 +17,5 @@ public interface ZlHotelService   {
      * @param token
      * @return
      */
-    ReturnString getHotelHistoryList(String token);
+    ReturnString<ZlHotelUserHistory> getHotelHistoryList(String token);
 }

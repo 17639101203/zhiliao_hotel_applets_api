@@ -3,6 +3,7 @@ package com.zhiliao.hotel.controller.hotel;
 import com.zhiliao.hotel.common.NoLoginRequiredToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.model.ZlHotelUserHistory;
 import com.zhiliao.hotel.service.ZlHotelService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -43,7 +44,7 @@ public class ZlHotelController {
     @ApiOperation(value = "高翔_获取入住酒店历史")
     @UserLoginToken
     @GetMapping("getHotelHistoryList")
-    public ReturnString getHotelHistoryList(HttpServletRequest request){
+    public ReturnString<ZlHotelUserHistory> getHotelHistoryList(HttpServletRequest request){
         String token = request.getHeader("token");
         return zlHotelService.getHotelHistoryList(token);
     }
