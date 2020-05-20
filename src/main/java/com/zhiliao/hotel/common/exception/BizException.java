@@ -1,7 +1,8 @@
 package com.zhiliao.hotel.common.exception;
 
 /**
- * Created by xiegege on 2020/5/14.
+ * @author xiegege
+ * @date 2020/5/20
  * 自定义一个异常类，用于处理我们发生的业务异常
  */
 public class BizException extends RuntimeException {
