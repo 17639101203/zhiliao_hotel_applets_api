@@ -4,7 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.ValueFilter;
 
-public class ReturnString {
+/**
+ * @author xiegege
+ * @date 2020/5/20
+ * @param <T>
+ */
+public class ReturnString<T> {
 
     /**
      * 0：成功 -1：失败
@@ -13,7 +18,7 @@ public class ReturnString {
 
     private String message = "数据获取成功";
 
-    private Object data;
+    private T data;
 
     public int getCode() {
         return code;
@@ -31,17 +36,16 @@ public class ReturnString {
         this.message = message;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 
-    public ReturnString(Object data) {
-        this.data = JSON.parse(JSON.toJSONString(data, filter, SerializerFeature.WriteMapNullValue,
-                SerializerFeature.WriteNullStringAsEmpty));
+    public ReturnString(T data) {
+        this.data = (T) JSON.parse(JSON.toJSONString(data, filter, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty));
     }
 
     public ReturnString(String message) {

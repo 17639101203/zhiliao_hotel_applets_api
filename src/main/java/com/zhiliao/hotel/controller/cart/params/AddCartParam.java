@@ -4,7 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Created by xiegege on 2020/4/12.
+ * @author xiegege
+ * @date 2020/4/12
  */
 
 @ApiModel("购物车添加")

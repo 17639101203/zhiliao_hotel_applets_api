@@ -22,7 +22,7 @@ import java.util.*;
  * Created by xiegege on 2020/4/15.
  */
 
-@Api(tags = "首页_酒店超市商品接口_谢辉益")
+@Api(tags = "首页_酒店超市商品接口_谢辉益_姬慧慧")
 @RestController
 @RequestMapping("goods")
 public class ZlGoodsController {
@@ -39,7 +39,7 @@ public class ZlGoodsController {
         this.zlGoodsService = zlGoodsService;
     }
 
-    @ApiOperation(value = "获取商品分类")
+    @ApiOperation(value = "获取商品分类_谢辉益")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产")
@@ -73,7 +73,7 @@ public class ZlGoodsController {
         }
     }
 
-    @ApiOperation(value = "获取商品分类列表数据")
+    @ApiOperation(value = "获取商品分类列表数据_谢辉益")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产"),
@@ -97,7 +97,7 @@ public class ZlGoodsController {
         }
     }
 
-    @ApiOperation(value = "获取商品规格")
+    @ApiOperation(value = "获取商品规格_谢辉益")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id")
     })
@@ -114,7 +114,7 @@ public class ZlGoodsController {
         }
     }
 
-    @ApiOperation(value = "获取商品详情数据")
+    @ApiOperation(value = "获取商品详情数据_谢辉益")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "goodsID", dataType = "String", required = true, value = "商品id")
     })
@@ -150,5 +150,4 @@ public class ZlGoodsController {
         List<EsGoods> esGoodsList = zlGoodsService.searchGoods(hotelId, selectParam, belongModule, pageNo, pageSize);
         return new ReturnString(esGoodsList);
     }
-
 }

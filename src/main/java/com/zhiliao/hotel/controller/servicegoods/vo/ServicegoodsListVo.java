@@ -1,34 +1,29 @@
 package com.zhiliao.hotel.controller.servicegoods.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
- * Created by xiegege on 2020/4/23.
+ * @author xiegege
+ * @date 2020/4/23
  */
 
+@ApiModel("客房服务商品vo")
 public class ServicegoodsListVo {
 
-    /**
-     * 客房服务商品id
-     */
+    @ApiModelProperty(value = "客房服务商品id")
     private Integer goodsId;
 
-    /**
-     * 客房服务商品名称
-     */
+    @ApiModelProperty(value = "客房服务商品名称")
     private String goodsName;
 
-    /**
-     * 标签
-     */
+    @ApiModelProperty(value = "标签")
     private String tags;
 
-    /**
-     * 客房服务商品封面图片
-     */
+    @ApiModelProperty(value = "客房服务商品封面图片")
     private String coverImgUrl;
 
-    /**
-     * 客房服务商品详情
-     */
+    @ApiModelProperty(value = "客房服务商品详情")
     private String content;
 
     public Integer getGoodsId() {

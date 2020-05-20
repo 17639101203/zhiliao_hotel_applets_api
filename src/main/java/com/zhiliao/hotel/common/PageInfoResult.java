@@ -1,24 +1,28 @@
 package com.zhiliao.hotel.common;
 
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
 /**
- * 分页结果集
- * Created by xiegege on 2020/4/17.
+ * @author xiegege
+ * @date 2020/4/17
  */
+
+@ApiModel("分页结果集")
 public class PageInfoResult<T> {
 
-    // 当前页
+    @ApiModelProperty(value = "当前页")
     private int pageNo;
-    // 当前页的数量
+    @ApiModelProperty(value = "当前页的数量")
     private int currentPageNumber;
-    // 总记录数
+    @ApiModelProperty(value = "总记录数")
     private long totalItem;
-    // 总页数
+    @ApiModelProperty(value = "总页数")
     private int totalPages;
-    // 结果集
+    @ApiModelProperty(value = "结果集")
     private List<T> list;
 
     public int getPageNo() {
