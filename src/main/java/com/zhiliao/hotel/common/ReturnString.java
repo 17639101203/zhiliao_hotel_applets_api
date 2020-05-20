@@ -58,6 +58,12 @@ public class ReturnString<T> {
         this.message = message;
     }
 
+    public ReturnString(int code, String message, T data) {
+        this.code = code;
+        this.message = message;
+        this.data = (T) JSON.parse(JSON.toJSONString(data, filter, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty));
+    }
+
     private static ValueFilter filter = new ValueFilter() {
         @Override
         public Object process(Object obj, String s, Object v) {
