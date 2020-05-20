@@ -41,10 +41,10 @@ public class ZlHotelController {
     }
 
     @ApiOperation(value = "高翔_获取入住酒店历史")
-    @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token")
     @UserLoginToken
     @GetMapping("getHotelHistoryList")
-    public ReturnString getHotelHistoryList(String token){
+    public ReturnString getHotelHistoryList(HttpServletRequest request){
+        String token = request.getHeader("token");
         return zlHotelService.getHotelHistoryList(token);
     }
 }

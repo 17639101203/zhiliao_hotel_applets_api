@@ -1,12 +1,13 @@
 package com.zhiliao.hotel.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.Table;
 import java.io.Serializable;
 
 @Table(name = "zl_hoteluserhistory")
+@ApiModel(value = "用户酒店历史")
 public class ZlHotelUserHistory implements Serializable {
 
     @ApiModelProperty(value = "自增id")
@@ -28,11 +29,9 @@ public class ZlHotelUserHistory implements Serializable {
     private String roomnumber;
 
     @ApiModelProperty(value = "入住日期")
-    @JsonFormat(timezone = "", pattern = "yyyy-MM-dd HH:mm:ss")
     private Integer checkindate;
 
     @ApiModelProperty(value = "添加日期")
-    @JsonFormat(timezone = "", pattern = "yyyy-MM-dd HH:mm:ss")
     private Integer createdate;
 
     public Long getRecid() {

@@ -148,9 +148,9 @@ public class ZlHotelServiceImpl implements ZlHotelService {
     @Override
     public ReturnString getHotelHistoryList(String token) {
         //获取 token得到微信用户Id
-        Long weiXinUserId = TokenUtil.getUserId(token);
+        Long userId = TokenUtil.getUserId(token);
         //获取用户酒店入住历史
-        List<ZlHotelUserHistory> hotelHistoryList = zlHotelUserHistoryMapper.getHotelHistoryList(weiXinUserId);
+        List<ZlHotelUserHistory> hotelHistoryList = zlHotelUserHistoryMapper.getHotelHistoryList(userId);
         return new ReturnString(hotelHistoryList);
     }
 }
