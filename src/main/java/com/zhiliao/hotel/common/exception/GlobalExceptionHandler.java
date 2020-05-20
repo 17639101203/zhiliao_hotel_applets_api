@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * @author xiegege
+ * @date 2020/5/20
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

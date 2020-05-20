@@ -1,7 +1,8 @@
 package com.zhiliao.hotel.common.exception;
 
 /**
- * Created by xiegege on 2020/5/14.
+ * @author xiegege
+ * @date 2020/5/20
  * 提示枚举类
  */
 public enum CommonExceptionEnum {
