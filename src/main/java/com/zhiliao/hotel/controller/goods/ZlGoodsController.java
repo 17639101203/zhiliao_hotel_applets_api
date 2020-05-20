@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 /**
- * Created by xiegege on 2020/4/15.
+ * @author xiegege
+ * @date 2020/4/15
  */
 
 @Api(tags = "首页_酒店超市商品接口_谢辉益_姬慧慧")
@@ -46,7 +47,7 @@ public class ZlGoodsController {
     })
     @UserLoginToken
     @GetMapping("findGoodsCategory/{hotelId}/{belongModule}")
-    public ReturnString findGoodsCategory(@PathVariable Integer hotelId, @PathVariable Integer belongModule) {
+    public ReturnString<Set<String>> findGoodsCategory(@PathVariable Integer hotelId, @PathVariable Integer belongModule) {
         try {
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule);
             List<Map<String, String>> goodsCategoryDataList = zlGoodsService.findGoodsCategory(hotelId, belongModule);
@@ -66,10 +67,10 @@ public class ZlGoodsController {
             }
             // 有序去重
             Set<String> goodsCategorySet = new LinkedHashSet<>(goodsCategoryList);
-            return new ReturnString(goodsCategorySet);
+            return new ReturnString<>(goodsCategorySet);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("获取出错");
+            return new ReturnString<>("获取出错");
         }
     }
 
@@ -84,16 +85,16 @@ public class ZlGoodsController {
     })
     @UserLoginToken
     @GetMapping("findGoodsList/{hotelId}/{belongModule}/{pageNo}/{pageSize}")
-    public ReturnString findGoodsList(@PathVariable Integer hotelId, @PathVariable Integer belongModule,
-                                      @PathVariable Integer pageNo, @PathVariable Integer pageSize, String categoryName) {
+    public ReturnString<PageInfoResult> findGoodsList(@PathVariable Integer hotelId, @PathVariable Integer belongModule,
+                                                      @PathVariable Integer pageNo, @PathVariable Integer pageSize, String categoryName) {
         try {
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|页码：" + pageNo + "|每页大小：" + pageSize + "|分类名称：" + categoryName);
             pageSize = pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize;
             PageInfoResult goodsList = zlGoodsService.findGoodsList(hotelId, belongModule, pageNo, pageSize, categoryName);
-            return new ReturnString(goodsList);
+            return new ReturnString<>(goodsList);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("获取出错");
+            return new ReturnString<>("获取出错");
         }
     }
 
@@ -103,14 +104,14 @@ public class ZlGoodsController {
     })
     @UserLoginToken
     @GetMapping("findGoodsSkuList/{goodsId}")
-    public ReturnString findGoodsSkuList(@PathVariable Integer goodsId) {
+    public ReturnString<List<Map<String, Object>>> findGoodsSkuList(@PathVariable Integer goodsId) {
         try {
             logger.info("开始请求->参数->商品id：" + goodsId);
             List<Map<String, Object>> goodsSkuList = zlGoodsService.findGoodsSkuList(goodsId);
-            return new ReturnString(goodsSkuList);
+            return new ReturnString<>(goodsSkuList);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("获取出错");
+            return new ReturnString<>("获取出错");
         }
     }
 
@@ -120,13 +121,13 @@ public class ZlGoodsController {
     })
     @UserLoginToken
     @GetMapping("findGoodsDetail/{goodsID}")
-    public ReturnString findGoodsDetail(@PathVariable Integer goodsID) {
+    public ReturnString<GoodsListVo> findGoodsDetail(@PathVariable Integer goodsID) {
         try {
             GoodsListVo goodsListVo = zlGoodsService.findGoodsDetail(goodsID);
-            return new ReturnString(goodsListVo);
+            return new ReturnString<>(goodsListVo);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("获取出错");
+            return new ReturnString<>("获取出错");
         }
     }
 
@@ -141,13 +142,13 @@ public class ZlGoodsController {
 //    @UserLoginToken
     @PassToken
     @GetMapping("searchGoods/{hotelId}/{selectParam}/{belongModule}/{pageNo}/{pageSize}")
-    public ReturnString searchGoods(@PathVariable Integer hotelId,
-                                    @PathVariable String selectParam,
-                                    @PathVariable Integer belongModule,
-                                    @PathVariable Integer pageNo,
-                                    @PathVariable Integer pageSize) {
+    public ReturnString<List<EsGoods>> searchGoods(@PathVariable Integer hotelId,
+                                                   @PathVariable String selectParam,
+                                                   @PathVariable Integer belongModule,
+                                                   @PathVariable Integer pageNo,
+                                                   @PathVariable Integer pageSize) {
 
         List<EsGoods> esGoodsList = zlGoodsService.searchGoods(hotelId, selectParam, belongModule, pageNo, pageSize);
-        return new ReturnString(esGoodsList);
+        return new ReturnString<>(esGoodsList);
     }
 }

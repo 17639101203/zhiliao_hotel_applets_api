@@ -40,7 +40,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by xiegege on 2019/10/14.
+ * @author xiegege
+ * @date 2019/10/14
  */
 
 @Api(tags = "微信用户接口_谢辉益")
@@ -78,7 +79,7 @@ public class ZlWxuserController {
             String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + APP_ID + "&secret=" + SECRET + "&js_code=" + code + "&grant_type=authorization_code";
             JSONObject res = getJsonObject(url);
             if (res != null && res.get("errcode") != null) {
-                return new ReturnString("解析失败");
+                return new ReturnString<>("解析失败");
             }
             String openid = res.getString("openid");
             // 通过openid查找用户信息
@@ -87,7 +88,7 @@ public class ZlWxuserController {
                 // 用户不存在，新增注册用户
                 JSONObject res1 = getUserInfo(encryptedData, String.valueOf(res.get("session_key")), iv);
                 if (res1 == null) {
-                    return new ReturnString("解析失败");
+                    return new ReturnString<>("解析失败");
                 }
                 wxuser = new ZlWxuser();
                 wxuser.setWxopenid(openid);
@@ -106,7 +107,7 @@ public class ZlWxuserController {
             return returnUserInfoData(wxuser);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("解析失败");
+            return new ReturnString<>("解析失败");
         }
     }
 
@@ -120,7 +121,7 @@ public class ZlWxuserController {
         dataMap.put("nickName", wxuser.getNickname());
         // 登录成功设置token过期时间 存3天
         redisCommonUtil.setCache(wxuser.getWxopenid(), token, 60 * 60 * 24 * 3);
-        return new ReturnString(dataMap);
+        return new ReturnString<>(dataMap);
     }
 
     @ApiOperation(value = "测试")
@@ -133,7 +134,7 @@ public class ZlWxuserController {
         String token = request.getHeader("token");
         Long userId = TokenUtil.getUserId(token);
         System.out.println(userId);
-        return new ReturnString(0, "你已通过验证");
+        return new ReturnString<>(0, "你已通过验证");
     }
 
     /**

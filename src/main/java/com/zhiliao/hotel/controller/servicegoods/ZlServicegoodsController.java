@@ -48,14 +48,14 @@ public class ZlServicegoodsController {
     })
     @UserLoginToken
     @GetMapping("findServicegoodsCategory/{hotelId}/{belongModule}")
-    public ReturnString findServicegoodsCategory(@PathVariable Integer hotelId, @PathVariable Integer belongModule) {
+    public ReturnString<List<String>> findServicegoodsCategory(@PathVariable Integer hotelId, @PathVariable Integer belongModule) {
         try {
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule);
             List<String> servicegoodsCategoryList = zlServicegoodsService.findServicegoodsCategory(hotelId, belongModule);
-            return new ReturnString(servicegoodsCategoryList);
+            return new ReturnString<>(servicegoodsCategoryList);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("获取出错");
+            return new ReturnString<>("获取出错");
         }
     }
 
