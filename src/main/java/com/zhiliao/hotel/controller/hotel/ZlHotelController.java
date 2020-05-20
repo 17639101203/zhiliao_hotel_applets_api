@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 酒店控制层
@@ -27,14 +28,15 @@ public class ZlHotelController {
     @Resource
     private ZlHotelService zlHotelService;
 
+    @ApiOperation(value = "陈荣_首页")
     @NoLoginRequiredToken
     @GetMapping("getHotelList")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "String", required = true, value = "酒店ID"),
             @ApiImplicitParam(paramType = "query", name = "roomId", dataType = "String", required = false, value = "客房ID"),
     })
-    public ReturnString getHotelList(String hotelId, String roomId, String token) {
+    public ReturnString getHotelList(String hotelId, String roomId, HttpServletRequest request) {
+        String token = request.getHeader("token");
         return zlHotelService.getById(hotelId, roomId, token);
     }
 

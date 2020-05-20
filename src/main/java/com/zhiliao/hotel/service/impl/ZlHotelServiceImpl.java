@@ -10,9 +10,8 @@ import com.zhiliao.hotel.service.ZlHotelService;
 import com.zhiliao.hotel.service.ZlUserloginlogService;
 import com.zhiliao.hotel.service.ZlWxuserService;
 import com.zhiliao.hotel.utils.*;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +21,7 @@ import java.util.Optional;
 
 /**
  * 酒店业务实现类
+ *
  * @author chenrong
  * @created date 2020/4/10
  */
@@ -51,7 +51,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
     private ZlHotelUserHistoryMapper zlHotelUserHistoryMapper;
 
     @Autowired
-    public ZlHotelServiceImpl(ZlHotelMapper zlHotelMapper, ZlHotelRoomMapper zlHotelRoomMapper, ZlXcxMenuMapper zlXcxMenuMapper,RedisCommonUtil redisCommonUtil,
+    public ZlHotelServiceImpl(ZlHotelMapper zlHotelMapper, ZlHotelRoomMapper zlHotelRoomMapper, ZlXcxMenuMapper zlXcxMenuMapper, RedisCommonUtil redisCommonUtil,
                               ZlUserloginlogService zlUserloginlogService, HttpServletRequest request, ZlWxuserService zlWxuserService, ZlNewsMapper zlNewsMapper, ZlBannerService zlBannerService) {
         this.zlHotelMapper = zlHotelMapper;
         this.zlHotelRoomMapper = zlHotelRoomMapper;
@@ -61,7 +61,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         this.zlWxuserService = zlWxuserService;
         this.zlNewsMapper = zlNewsMapper;
         this.zlBannerService = zlBannerService;
-        this.redisCommonUtil=redisCommonUtil;
+        this.redisCommonUtil = redisCommonUtil;
     }
 
     @Override
@@ -74,10 +74,12 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 //根据酒店id，客房id
                 zlHotelroom = zlHotelRoomMapper.getById(roomId, hotelId);
                 //获取 token得到微信用户Id
-                Long weiXinUserId = TokenUtil.getUserId(token);
-                if (weiXinUserId != null) {
-                    //客房扫描率录入
-                    addZlUserLoginLog(weiXinUserId,Integer.valueOf(roomId));
+                if (!StringUtils.isEmpty(token)) {
+                    Long weiXinUserId = TokenUtil.getUserId(token);
+                    if (weiXinUserId != null) {
+                        //客房扫描率录入
+                        addZlUserLoginLog(weiXinUserId, Integer.valueOf(roomId));
+                    }
                 }
             }
 
@@ -92,7 +94,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
                 //判断缓存没数据情况则添加
                 if (!Optional.ofNullable(bannerValue).isPresent()) {
-                    redisCommonUtil.setCache(RedisKeyConstant.BANNER_KEY + ":" + hotelId,GsonUtils.objToJson(zlBanners))  ;
+                    redisCommonUtil.setCache(RedisKeyConstant.BANNER_KEY + ":" + hotelId, GsonUtils.objToJson(zlBanners));
                 }
                 //获取轮播图数据
                 zlHotel.setZlBannerList(zlBanners);
@@ -116,8 +118,8 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         return new ReturnString("数据加载失败");
     }
 
-    private void addZlUserLoginLog(Long userId,Integer roomId){
-        ZlUserloginlog zlUserloginlog=new ZlUserloginlog();
+    private void addZlUserLoginLog(Long userId, Integer roomId) {
+        ZlUserloginlog zlUserloginlog = new ZlUserloginlog();
         ZlWxuser zlWxuser = zlWxuserService.findWxuserByUserId(userId);
         //用户id
         zlUserloginlog.setUserid(zlWxuser.getUserid());
@@ -138,13 +140,13 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         //客房Id
         zlUserloginlog.setRoomid(roomId);
         int count = zlUserloginlogService.insert(zlUserloginlog);
-        if(count>0){
+        if (count > 0) {
             return;
         }
     }
 
     @Override
-    public ReturnString getHotelHistoryList(String token){
+    public ReturnString getHotelHistoryList(String token) {
         //获取 token得到微信用户Id
         Long weiXinUserId = TokenUtil.getUserId(token);
         //获取用户酒店入住历史
