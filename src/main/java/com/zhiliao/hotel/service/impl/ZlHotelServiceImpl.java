@@ -48,6 +48,9 @@ public class ZlHotelServiceImpl implements ZlHotelService {
     private final RedisCommonUtil redisCommonUtil;
 
     @Autowired
+    private ZlHotelUserHistoryMapper zlHotelUserHistoryMapper;
+
+    @Autowired
     public ZlHotelServiceImpl(ZlHotelMapper zlHotelMapper, ZlHotelRoomMapper zlHotelRoomMapper, ZlXcxMenuMapper zlXcxMenuMapper,RedisCommonUtil redisCommonUtil,
                               ZlUserloginlogService zlUserloginlogService, HttpServletRequest request, ZlWxuserService zlWxuserService, ZlNewsMapper zlNewsMapper, ZlBannerService zlBannerService) {
         this.zlHotelMapper = zlHotelMapper;
@@ -138,5 +141,14 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         if(count>0){
             return;
         }
+    }
+
+    @Override
+    public ReturnString getHotelHistoryList(String token){
+        //获取 token得到微信用户Id
+        Long weiXinUserId = TokenUtil.getUserId(token);
+        //获取用户酒店入住历史
+        List<ZlHotelUserHistory> hotelHistoryList = zlHotelUserHistoryMapper.getHotelHistoryList(weiXinUserId);
+        return new ReturnString(hotelHistoryList);
     }
 }
