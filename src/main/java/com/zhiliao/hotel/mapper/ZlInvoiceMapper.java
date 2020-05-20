@@ -30,4 +30,13 @@ public interface ZlInvoiceMapper  {
      */
     Integer deleteInvoice(@Param("userid") Long userid,@Param("invoiceid")Integer invoiceid);
 
+
+    /**
+     * 查询发票详情
+     * @param userid    用户ID
+     * @param invoiceid    发票ID
+     * @return  返回1 为删除成功
+     */
+    ZlInvoice queryInvoicedetail(@Param("userid") Long userid,@Param("invoiceid")Integer invoiceid);
+
 }

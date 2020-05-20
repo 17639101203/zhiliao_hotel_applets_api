@@ -29,6 +29,15 @@ public interface ZlInvoiceService {
      */
     void deleteInvoice(Long userid, Integer invoiceid);
 
+
+    /**
+     * 查询发票详情
+     * @param userid
+     * @param invoiceid
+     * @return
+     */
+    ZlInvoice findinvoicedetails(Long userid, Integer invoiceid);
+
 }
 
 

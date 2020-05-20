@@ -21,7 +21,7 @@
     <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
   </resultMap>
 
-  <insert id="insertInvoice" parameterType="com.zhiliao.hotel.model.ZlInvoice">
+  <insert id="insertInvoice" parameterType="com.zhiliao.hotel.model.ZlInvoice" useGeneratedKeys="true" keyProperty="invoiceid">
     insert into zl_invoice
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="invoiceid != null">
@@ -134,7 +134,7 @@
 
 
 
-  <!--  根据用户ID查询发票-->
+  <!--  根据用户ID查询发票抬头-->
   <select id="queryInvoiceByUserID" resultMap="BaseResultMap">
         select
             InvoiceID,InvoiceType,MainBodyType,ElectronicPaperType,
@@ -144,16 +144,30 @@
         from
             zl_invoice
         where
-            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and InvoiceStatus in  (0,1);
+            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and InvoiceStatus in  (0,1,2);
     </select>
 
 
   <!--  根据用户ID,发票ID删除发票抬头-->
-  <delete id="deleteInvoice">
-        delete  from
+  <update id="deleteInvoice">
+        update
             zl_invoice
+        set
+            IsDelete='1'
         where
             UserID=#{userid,jdbcType=BIGINT} and InvoiceID=#{invoiceid,jdbcType=INTEGER}
-    </delete>
+  </update>
+
+
+  <!--  查询发票详情-->
+  <select id="queryInvoicedetail" resultMap="BaseResultMap">
+        select
+            InvoiceType,Title,ElectronicPaperType,CreateDate
+        from
+            zl_invoice
+        where
+            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and InvoiceID=#{invoiceid,jdbcType=INTEGER};
+    </select>
+
 
 </mapper>

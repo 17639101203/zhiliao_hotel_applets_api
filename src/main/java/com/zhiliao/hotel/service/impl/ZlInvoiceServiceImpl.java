@@ -47,4 +47,9 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
         }
     }
 
+    @Override
+    public ZlInvoice findinvoicedetails(Long userid, Integer invoiceid) {
+        return mapper.queryInvoicedetail(userid,invoiceid);
+    }
+
 }

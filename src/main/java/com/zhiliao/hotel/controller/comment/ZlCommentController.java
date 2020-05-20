@@ -36,7 +36,7 @@ import java.util.List;
 public class ZlCommentController {
 
     @Autowired
-    private  ZlCommentService zlCommentService;
+    private ZlCommentService zlCommentService;
 
 
     @ApiOperation(value = "添加点赞吐槽")

@@ -87,7 +87,7 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         List<ZlInvoice> invoices = zlInvoiceMyMapper.findAllByUserId(userId,invoicestatus);
         for (int i = 0; i < invoices.size(); i++) {
             ZlInvoice invoice = invoices.get(i);
-            invoice.setFuwutype("发票服务");
+//            invoice.setFuwutype("发票服务");
         }
         PageInfo<ZlInvoice> pageInfo = new PageInfo<>(invoices);
         return PageInfoResult.getPageInfoResult(pageInfo);
