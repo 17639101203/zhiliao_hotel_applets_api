@@ -35,7 +35,7 @@ public class EggTimer {
                 Integer payStatus = 1;
                 ZlOrder order = zlOrderMapper.findById(orderid,payStatus);
                 if (order != null){
-                    order.setOrderstatus(-1);
+                    order.setOrderstatus((byte) -1);
                     order.setUpdatedate((int) new Date().getTime());
                 }
                 //修改订单表状态及时间

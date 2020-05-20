@@ -1,50 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlOrderMapper">
-    
-    <select id="findAllOrder"
-            resultType="com.zhiliao.hotel.model.ZlOrder">
-        
+
+    <select id="findAllOrder" resultType="com.zhiliao.hotel.model.ZlOrder">
+
         SELECT * FROM zl_order WHERE UserID=#{userID}
-        
+
         <if test="orderType != null">
             AND OrderType = #{orderType}
         </if>
-        
+
         <if test="orderStatus != null">
             AND OrderStatus = #{orderStatus}
         </if>
-        
+
         <if test="payStatus != null">
             AND PayStatus = #{payStatus}
         </if>
-        
+
         <if test="payType != null">
             AND PayType = #{payType}
         </if>
-        
+
         ORDER BY CreateDate DESC
-    
+
     </select>
-    
-    <select id="findById"
-            resultType="com.zhiliao.hotel.model.ZlOrder">
-        select * from zl_order where OrderID = #{orderid}
-    </select>
-    
-    <update id="byOrderId"
-            parameterType="com.zhiliao.hotel.model.ZlOrder">
-        update zl_order set OrderStatus = #{orderstatus},UpdateDate = #{updatedate} where OrderID = #{orderid}
-    </update>
-    
-    <insert id="insertOrder"
-            parameterType="com.zhiliao.hotel.model.ZlOrder"
-            useGeneratedKeys="true"
+
+    <select id="findById" resultType="com.zhiliao.hotel.model.ZlOrder">
+    select * from zl_order where OrderID = #{orderid} and PayStatus = #{PayStatus}
+  </select>
+    <update id="byOrderId" parameterType="com.zhiliao.hotel.model.ZlOrder">
+    update zl_order set OrderStatus = #{orderstatus},UpdateDate = #{updatedate} where OrderID = #{orderid}
+  </update>
+
+    <insert id="insertOrder" parameterType="com.zhiliao.hotel.model.ZlOrder" useGeneratedKeys="true"
             keyProperty="orderID">
         insert into zl_order
-        <trim prefix="("
-              suffix=")"
-              suffixOverrides=",">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
             <!--<if test="orderID != null">
                 OrderID,
             </if>-->
@@ -118,9 +110,7 @@
                 UpdateDate,
             </if>
         </trim>
-        <trim prefix="values ("
-              suffix=")"
-              suffixOverrides=",">
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
             <!--<if test="orderID != null">
                 #{orderID,jdbcType=BIGINT},
             </if>-->
@@ -198,9 +188,8 @@
             </if>
         </trim>
     </insert>
-    
-    <select id="getOrderDetail"
-            resultType="com.zhiliao.hotel.model.ZlOrderDetail">
+
+    <select id="getOrderDetail" resultType="com.zhiliao.hotel.model.ZlOrderDetail">
         SELECT
           GoodsID,
           GoodsCount,
@@ -210,7 +199,7 @@
         WHERE OrderID = #{out_trade_no}
         ORDER BY GoodsID ASC
     </select>
-    
+
     <update id="updateOrder">
         UPDATE
           zl_order
