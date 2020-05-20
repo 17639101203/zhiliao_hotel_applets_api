@@ -1,7 +1,7 @@
 package com.zhiliao.hotel.controller.wxuser;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zhiliao.hotel.common.PassToken;
+import com.zhiliao.hotel.common.NoLoginRequiredToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.model.ZlWxuser;
@@ -70,7 +70,7 @@ public class ZlWxuserController {
             @ApiImplicitParam(paramType = "query", name = "encryptedData", dataType = "String", required = true, value = "加密秘钥"),
             @ApiImplicitParam(paramType = "query", name = "iv", dataType = "String", required = true, value = "偏移量")
     })
-    @PassToken
+    @NoLoginRequiredToken
     @PostMapping("wxuserLogin")
     public ReturnString wxuserLogin(String token, String code, String encryptedData, String iv) {
         try {
@@ -162,7 +162,8 @@ public class ZlWxuserController {
             SecretKeySpec spec = new SecretKeySpec(keyByte, "AES");
             AlgorithmParameters parameters = AlgorithmParameters.getInstance("AES");
             parameters.init(new IvParameterSpec(ivByte));
-            cipher.init(Cipher.DECRYPT_MODE, spec, parameters);// 初始化
+            // 初始化
+            cipher.init(Cipher.DECRYPT_MODE, spec, parameters);
             byte[] resultByte = cipher.doFinal(dataByte);
             if (null != resultByte && resultByte.length > 0) {
                 String result = new String(resultByte, "UTF-8");
