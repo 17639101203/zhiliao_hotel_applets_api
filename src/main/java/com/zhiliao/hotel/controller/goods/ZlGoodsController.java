@@ -131,7 +131,7 @@ public class ZlGoodsController {
         }
     }
 
-    @ApiOperation(value = "姬慧慧_商品搜索_酒店超市")
+    @ApiOperation(value = "酒店超市_商品搜索_姬慧慧")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "int", required = true, value = "酒店id"),
             @ApiImplicitParam(paramType = "path", name = "selectParam", dataType = "String", required = true, value = "商品名称参数"),

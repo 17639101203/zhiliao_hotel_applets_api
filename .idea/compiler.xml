@@ -14,7 +14,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="zhiliao-hotel-applets-api" options="-parameters" />
-      <module name="zhiliao_hotel_applets_api" options="-parameters" />
+      <module name="zhiliao_hotel_applets_api" options="" />
     </option>
   </component>
 </project>

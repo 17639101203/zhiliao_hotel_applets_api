@@ -37,6 +37,21 @@ public class GoodsInfoVO {
      */
     private Integer goodsCount;
 
+    /**
+     * 商品SkuID
+     */
+    private Integer skuID;
+
+    /**
+     * 优惠券ID
+     */
+    private Integer CouponID;
+
+    /**
+     * 配送地址
+     */
+    private String DeliveryAddress;
+
     public Integer getGoodsID() {
         return goodsID;
     }
@@ -53,12 +68,12 @@ public class GoodsInfoVO {
         this.goodsName = goodsName;
     }
 
-    public Integer getGoodsCount() {
-        return goodsCount;
+    public Integer getOrderType() {
+        return orderType;
     }
 
-    public void setGoodsCount(Integer goodsCount) {
-        this.goodsCount = goodsCount;
+    public void setOrderType(Integer orderType) {
+        this.orderType = orderType;
     }
 
     public String getCoverImgUrl() {
@@ -77,11 +92,35 @@ public class GoodsInfoVO {
         this.price = price;
     }
 
-    public Integer getOrderType() {
-        return orderType;
+    public Integer getGoodsCount() {
+        return goodsCount;
     }
 
-    public void setOrderType(Integer orderType) {
-        this.orderType = orderType;
+    public void setGoodsCount(Integer goodsCount) {
+        this.goodsCount = goodsCount;
+    }
+
+    public Integer getSkuID() {
+        return skuID;
+    }
+
+    public void setSkuID(Integer skuID) {
+        this.skuID = skuID;
+    }
+
+    public Integer getCouponID() {
+        return CouponID;
+    }
+
+    public void setCouponID(Integer couponID) {
+        CouponID = couponID;
+    }
+
+    public String getDeliveryAddress() {
+        return DeliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        DeliveryAddress = deliveryAddress;
     }
 }
