@@ -16,10 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -39,7 +36,7 @@ public class MyAppointmentController {
         this.myAppointmentService = myAppointmentService;
     }
 
-    @ApiOperation(value = "清扫服务订单展示")
+    @ApiOperation(value = "清扫服务订单展示_徐向向")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "orderstatus", dataType = "Integer", required = true, value = "不传：查询全部，-1：取消，0：等待确认，1：已确认，2已处理"),
             @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码值"),
@@ -65,6 +62,23 @@ public class MyAppointmentController {
             e.printStackTrace();
             return new ReturnString("获取失败");
         }
+    }
+
+    @ApiOperation(value = "取消清扫订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path",name = "orderid",dataType = "long",required = true,value = "清扫订单id")
+    })
+    @GetMapping("cancelCleanOrder/{orderid}")
+    @UserLoginToken
+    public ReturnString cancelCleanOrder(@PathVariable Long orderid){
+
+        try {
+            myAppointmentService.canceCleanOrder(orderid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("取消失败");
+        }
+        return new ReturnString(0,"已取消");
     }
 
 

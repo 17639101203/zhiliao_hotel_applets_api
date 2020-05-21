@@ -3,6 +3,7 @@ package com.zhiliao.hotel.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.mapper.ZlCleanOrderMapper;
 import com.zhiliao.hotel.mapper.ZlCleanOrderMyMapper;
 import com.zhiliao.hotel.mapper.ZlInvoiceMyMapper;
 import com.zhiliao.hotel.mapper.ZlRepairorderMyMapper;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,11 +34,14 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
 
     private final ZlRepairorderMyMapper zlRepairorderMyMapper;
 
+    private final ZlCleanOrderMapper cleanOrderMapper;
+
     @Autowired
-    public MyAppointmentServiceImpl(ZlCleanOrderMyMapper zlCleanOrderMyMapper, ZlInvoiceMyMapper zlInvoiceMyMapper, ZlRepairorderMyMapper zlRepairorderMyMapper) {
+    public MyAppointmentServiceImpl(ZlCleanOrderMyMapper zlCleanOrderMyMapper, ZlCleanOrderMapper cleanOrderMapper,ZlInvoiceMyMapper zlInvoiceMyMapper, ZlRepairorderMyMapper zlRepairorderMyMapper) {
         this.zlCleanOrderMyMapper = zlCleanOrderMyMapper;
         this.zlInvoiceMyMapper = zlInvoiceMyMapper;
         this.zlRepairorderMyMapper = zlRepairorderMyMapper;
+        this.cleanOrderMapper = cleanOrderMapper;
     }
 
     /**
@@ -55,6 +60,22 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
+    /**
+     * 取消清扫订单
+     * @param orderid
+     */
+    public void canceCleanOrder(Long orderid) {
+        ZlCleanOrder zlCleanOrder = new ZlCleanOrder();
+        zlCleanOrder.setOrderid(orderid);
+        ZlCleanOrder cleanOrder = cleanOrderMapper.selectOne(zlCleanOrder);
+        if (cleanOrder != null){
+            cleanOrder.setOrderstatus((byte) -1);
+            cleanOrder.setUpdatedate((int) new Date().getTime());
+            cleanOrderMapper.updateByPrimaryKey(cleanOrder);
+        }
+    }
+
+    //################################################################
 
     /**
      * 获取发票订单
@@ -89,5 +110,7 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
 
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
+
+
 
 }
