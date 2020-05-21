@@ -19,34 +19,34 @@
            <!-- <if test="orderDetailID != null">
                 orderDetailID,
             </if>-->
-            <if test="orderID != null">
+            <if test="orderid != null">
                 OrderID,
             </if>
-            <if test="userID != null">
+            <if test="userid != null">
                 UserID,
             </if>
-            <if test="goodsID != null">
-                GoodsID,
+            <if test="hotelgoodsid != null">
+                HotelGoodsID,
             </if>
-            <if test="goodsName != null">
+            <if test="goodsname != null">
                 GoodsName,
             </if>
-            <if test="goodsCoverUrl != null">
+            <if test="goodscoverurl != null">
                 GoodsCoverUrl,
             </if>
             <if test="price != null">
                 Price,
             </if>
-            <if test="goodsCount != null">
+            <if test="goodscount != null">
                 GoodsCount,
             </if>
-            <if test="isDelete != null">
+            <if test="isdelete != null">
                 IsDelete,
             </if>
-            <if test="createDate != null">
+            <if test="createdate != null">
                 CreateDate,
             </if>
-            <if test="updateDate != null">
+            <if test="updatedate != null">
                 UpdateDate,
             </if>
         </trim>
@@ -54,35 +54,35 @@
             <!--<if test="orderDetailID != null">
                 #{orderDetailID,jdbcType=BIGINT},
             </if>-->
-            <if test="orderID != null">
-                #{orderID,jdbcType=BIGINT},
+            <if test="orderid != null">
+                #{orderid,jdbcType=BIGINT},
             </if>
-            <if test="userID != null">
-                #{userID,jdbcType=BIGINT},
+            <if test="userid != null">
+                #{userid,jdbcType=BIGINT},
             </if>
-            <if test="goodsID != null">
-                #{goodsID,jdbcType=INTEGER},
+            <if test="hotelgoodsid != null">
+                #{hotelgoodsid,jdbcType=INTEGER},
             </if>
-            <if test="goodsName != null">
-                #{goodsName,jdbcType=VARCHAR},
+            <if test="goodsname != null">
+                #{goodsname,jdbcType=VARCHAR},
             </if>
-            <if test="goodsCoverUrl != null">
-                #{goodsCoverUrl,jdbcType=VARCHAR},
+            <if test="goodscoverurl != null">
+                #{goodscoverurl,jdbcType=VARCHAR},
             </if>
             <if test="price != null">
                 #{price,jdbcType=DECIMAL},
             </if>
-            <if test="goodsCount != null">
-                #{goodsCount,jdbcType=INTEGER},
+            <if test="goodscount != null">
+                #{goodscount,jdbcType=INTEGER},
             </if>
-            <if test="isDelete != null">
-                #{isDelete,jdbcType=BIT},
+            <if test="isdelete != null">
+                #{isdelete,jdbcType=BIT},
             </if>
-            <if test="createDate != null">
-                #{createDate,jdbcType=INTEGER},
+            <if test="createdate != null">
+                #{createdate,jdbcType=INTEGER},
             </if>
-            <if test="updateDate != null">
-                #{updateDate,jdbcType=INTEGER},
+            <if test="updatedate != null">
+                #{updatedate,jdbcType=INTEGER},
             </if>
         </trim>
 

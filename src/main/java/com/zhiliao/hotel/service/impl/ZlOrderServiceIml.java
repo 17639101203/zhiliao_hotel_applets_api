@@ -57,8 +57,8 @@ public class ZlOrderServiceIml implements ZlOrderService {
     public void byOrderId(Long orderID) {
         ZlOrder order = orderMapper.findById(orderID);
         if (order != null) {
-            order.setOrderStatus((byte) -1);
-            order.setUpdateDate((int) new Date().getTime());
+            order.setOrderstatus((byte) -1);
+            order.setUpdatedate((int) new Date().getTime());
         }
 
         //修改订单表
@@ -72,14 +72,13 @@ public class ZlOrderServiceIml implements ZlOrderService {
         //封装对象信息
         ZlOrder zlOrder = new ZlOrder();
         ZlOrderDetail zlOrderDetail = new ZlOrderDetail();
-//        List<ZlOrderDetail> zlOrderDetailList = new LinkedList<>();
         List<ZlOrder> zlOrderList = new LinkedList<>();
 
-        zlOrder.setUserID(userID);
-        zlOrder.setHotelID(hotelBasicVO.getHotelID());
-        zlOrder.setHotelName(hotelBasicVO.getHotelName());
-        zlOrder.setRoomID(hotelBasicVO.getRoomID());
-        zlOrder.setRoomNumber(hotelBasicVO.getRoomNumber());
+        zlOrder.setUserid(userID);
+        zlOrder.setHotelid(hotelBasicVO.getHotelID());
+        zlOrder.setHotelname(hotelBasicVO.getHotelName());
+        zlOrder.setRoomid(hotelBasicVO.getRoomID());
+        zlOrder.setRoomnumber(hotelBasicVO.getRoomNumber());
 
         Set<String> keySet = goodsInfoMap.keySet();
 
@@ -92,7 +91,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
             //获取该模块类型商品的第一张商品图片地址
             String coverImgUrl = goodsInfoVOList.get(0).getCoverImgUrl();
             //获取该模块类型商品的类型
-            Integer orderType = goodsInfoVOList.get(0).getOrderType();
+            Byte orderType = goodsInfoVOList.get(0).getOrderType();
             //获取该模块类型商品的优惠券id
             Integer couponID = goodsInfoVOList.get(0).getCouponID();
             //如果该模块是土特产,则需要判断是否需要配送
@@ -100,7 +99,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 String deliveryAddress = goodsInfoVOList.get(0).getDeliveryAddress();
                 //不为空说明需要配送
                 if (deliveryAddress != null) {
-                    zlOrder.setDeliveryAddress(deliveryAddress);
+                    zlOrder.setDeliveryaddress(deliveryAddress);
                 }
             }
 
@@ -109,7 +108,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 BigDecimal price = goodsInfoVOList.get(i).getPrice();
                 totalPrice = totalPrice.add(price);
             }
-            zlOrder.setTotalPrice(totalPrice);
+            zlOrder.setTotalprice(totalPrice);
             //如果优惠券id不为-1,说明用户在该模块使用了优惠券
             if (couponID != -1) {
                 //根据优惠券id查询优惠券信息
@@ -119,18 +118,19 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_COUPONID + couponID, couponID, 5, TimeUnit.MINUTES);
                 //算出用户在这个模块的实际支付金额
                 BigDecimal actuallyPay = totalPrice.subtract(zlCoupon.getDiscountmoney());
-                zlOrder.setActuallyPay(actuallyPay);
+                zlOrder.setActuallypay(actuallyPay);
             } else {
-                zlOrder.setActuallyPay(totalPrice);
+                //优惠券id为-1说明没有使用优惠券,实际支付金额=总价
+                zlOrder.setActuallypay(totalPrice);
             }
 
-            zlOrder.setGoodsCoverUrl(coverImgUrl);
-            zlOrder.setOrderType(orderType);
-            zlOrder.setPayStatus(1);
-            zlOrder.setIsDelete(0);
-            zlOrder.setCreateDate(Math.toIntExact(System.currentTimeMillis() / 1000));
+            zlOrder.setGoodscoverurl(coverImgUrl);
+            zlOrder.setOrdertype(orderType);
+            zlOrder.setPaystatus((byte) 1);
+            zlOrder.setIsdelete(false);
+            zlOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
-            zlOrder.setOrderSerialNo(orderSerialNo);
+            zlOrder.setOrderserialno(orderSerialNo);
 
             orderMapper.insertOrder(zlOrder);
             zlOrderList.add(zlOrder);
@@ -148,15 +148,15 @@ public class ZlOrderServiceIml implements ZlOrderService {
                     redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, goodsCount);
                 }
 
-                zlOrderDetail.setOrderID(zlOrder.getOrderID());
-                zlOrderDetail.setUserID(userID);
-                zlOrderDetail.setGoodsID(goodsInfoVOList.get(i).getGoodsID());
-                zlOrderDetail.setGoodsName(goodsInfoVOList.get(i).getGoodsName());
-                zlOrderDetail.setGoodsCoverUrl(goodsInfoVOList.get(i).getCoverImgUrl());
+                zlOrderDetail.setOrderid(zlOrder.getOrderid());
+                zlOrderDetail.setUserid(userID);
+                zlOrderDetail.setHotelgoodsid(goodsInfoVOList.get(i).getGoodsID());
+                zlOrderDetail.setGoodsname(goodsInfoVOList.get(i).getGoodsName());
+                zlOrderDetail.setGoodscoverurl(goodsInfoVOList.get(i).getCoverImgUrl());
                 zlOrderDetail.setPrice(goodsInfoVOList.get(i).getPrice());
-                zlOrderDetail.setGoodsCount(goodsInfoVOList.get(i).getGoodsCount());
-                zlOrderDetail.setIsDelete(0);
-                zlOrderDetail.setCreateDate(Math.toIntExact(System.currentTimeMillis() / 1000));
+                zlOrderDetail.setGoodscount(goodsInfoVOList.get(i).getGoodsCount());
+                zlOrderDetail.setIsdelete(false);
+                zlOrderDetail.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
                 orderDetailMapper.insertOrderDetail(zlOrderDetail);
             }
         }

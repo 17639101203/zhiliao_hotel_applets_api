@@ -325,7 +325,7 @@ public class ZlOrderController {
                 //比较实际付款价格和总价是否一致
                 BigDecimal totalPrice = null;
                 for (ZlOrderDetail zlOrderDetail : zlOrderDetailList) {
-                    totalPrice = totalPrice.add(zlOrderDetail.getPrice().multiply(BigDecimal.valueOf(zlOrderDetail.getGoodsCount())));
+                    totalPrice = totalPrice.add(zlOrderDetail.getPrice().multiply(BigDecimal.valueOf(zlOrderDetail.getGoodscount())));
                 }
                 Integer total_fee = (Integer) returnMap.get("total_fee");
                 if (totalPrice.intValue() == total_fee) {

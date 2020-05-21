@@ -4,7 +4,7 @@
 
     <select id="findAllOrder" resultType="com.zhiliao.hotel.model.ZlOrder">
 
-        SELECT * FROM zl_order WHERE UserID=#{userID}
+        SELECT * FROM zl_order WHERE UserID=#{userid}
 
         <if test="orderType != null">
             AND OrderType = #{orderType}
@@ -27,86 +27,86 @@
     </select>
 
     <select id="findById" resultType="com.zhiliao.hotel.model.ZlOrder">
-    select * from zl_order where OrderID = #{orderid} and PayStatus = #{PayStatus}
+    select * from zl_order where OrderID = #{orderid}
   </select>
     <update id="byOrderId" parameterType="com.zhiliao.hotel.model.ZlOrder">
     update zl_order set OrderStatus = #{orderstatus},UpdateDate = #{updatedate} where OrderID = #{orderid}
   </update>
 
     <insert id="insertOrder" parameterType="com.zhiliao.hotel.model.ZlOrder" useGeneratedKeys="true"
-            keyProperty="orderID">
+            keyProperty="orderid">
         insert into zl_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <!--<if test="orderID != null">
                 OrderID,
             </if>-->
-            <if test="userID != null">
+            <if test="userid != null">
                 UserID,
             </if>
-            <if test="orderSerialNo != null">
+            <if test="orderserialno != null">
                 OrderSerialNo,
             </if>
-            <if test="hotelID != null">
+            <if test="hotelid != null">
                 HotelID,
             </if>
-            <if test="hotelName != null">
+            <if test="hotelname != null">
                 HotelName,
             </if>
-            <if test="roomID != null">
+            <if test="roomid != null">
                 RoomID,
             </if>
-            <if test="roomNumber != null">
+            <if test="roomnumber != null">
                 RoomNumber,
             </if>
-            <if test="goodsCoverUrl != null">
+            <if test="goodscoverurl != null">
                 GoodsCoverUrl,
             </if>
-            <if test="orderType != null">
+            <if test="ordertype != null">
                 OrderType,
             </if>
             <if test="remark != null">
                 Remark,
             </if>
-            <if test="totalPrice != null">
+            <if test="totalprice != null">
                 TotalPrice,
             </if>
-            <if test="actuallyPay != null">
+            <if test="actuallypay != null">
                 ActuallyPay,
             </if>
-            <if test="payType != null">
+            <if test="paytype != null">
                 PayType,
             </if>
-            <if test="deliveryAddress != null">
+            <if test="deliveryaddress != null">
                 DeliveryAddress,
             </if>
-            <if test="comeFormID != null">
+            <if test="comeformid != null">
                 ComeFormID,
             </if>
-            <if test="expressID != null">
+            <if test="expressid != null">
                 ExpressID,
             </if>
-            <if test="trackNumber != null">
+            <if test="tracknumber != null">
                 TrackNumber,
             </if>
-            <if test="payStatus != null">
+            <if test="paystatus != null">
                 PayStatus,
             </if>
-            <if test="isDelete != null">
+            <if test="isdelete != null">
                 IsDelete,
             </if>
-            <if test="operatorName != null">
+            <if test="operatorname != null">
                 OperatorName,
             </if>
-            <if test="operatorIP != null">
+            <if test="operatorip != null">
                 OperatorIP,
             </if>
-            <if test="operatorRemark != null">
+            <if test="operatorremark != null">
                 OperatorRemark,
             </if>
-            <if test="createDate != null">
+            <if test="createdate != null">
                 CreateDate,
             </if>
-            <if test="updateDate != null">
+            <if test="updatedate != null">
                 UpdateDate,
             </if>
         </trim>
@@ -114,77 +114,77 @@
             <!--<if test="orderID != null">
                 #{orderID,jdbcType=BIGINT},
             </if>-->
-            <if test="userID != null">
-                #{userID,jdbcType=BIGINT},
+            <if test="userid != null">
+                #{userid,jdbcType=BIGINT},
             </if>
-            <if test="orderSerialNo != null">
-                #{orderSerialNo,jdbcType=CHAR},
+            <if test="orderserialno != null">
+                #{orderserialno,jdbcType=CHAR},
             </if>
-            <if test="hotelID != null">
-                #{hotelID,jdbcType=INTEGER},
+            <if test="hotelid != null">
+                #{hotelid,jdbcType=INTEGER},
             </if>
-            <if test="hotelName != null">
-                #{hotelName,jdbcType=CHAR},
+            <if test="hotelname != null">
+                #{hotelname,jdbcType=CHAR},
             </if>
-            <if test="roomID != null">
-                #{roomID,jdbcType=INTEGER},
+            <if test="roomid != null">
+                #{roomid,jdbcType=INTEGER},
             </if>
-            <if test="roomNumber != null">
-                #{roomNumber,jdbcType=CHAR},
+            <if test="roomnumber != null">
+                #{roomnumber,jdbcType=CHAR},
             </if>
-            <if test="goodsCoverUrl != null">
-                #{goodsCoverUrl,jdbcType=CHAR},
+            <if test="goodscoverurl != null">
+                #{goodscoverurl,jdbcType=CHAR},
             </if>
-            <if test="orderType != null">
-                #{orderType,jdbcType=TINYINT},
+            <if test="ordertype != null">
+                #{ordertype,jdbcType=TINYINT},
             </if>
             <if test="remark != null">
                 #{remark,jdbcType=CHAR},
             </if>
-            <if test="totalPrice != null">
-                #{totalPrice,jdbcType=DECIMAL},
+            <if test="totalprice != null">
+                #{totalprice,jdbcType=DECIMAL},
             </if>
-            <if test="actuallyPay != null">
-                #{actuallyPay,jdbcType=DECIMAL},
+            <if test="actuallypay != null">
+                #{actuallypay,jdbcType=DECIMAL},
             </if>
-            <if test="payType != null">
-                #{payType,jdbcType=TINYINT},
+            <if test="paytype != null">
+                #{paytype,jdbcType=TINYINT},
             </if>
-            <if test="deliveryAddress != null">
-                #{deliveryAddress,jdbcType=CHAR},
+            <if test="deliveryaddress != null">
+                #{deliveryaddress,jdbcType=CHAR},
             </if>
-            <if test="comeFormID != null">
-                #{comeFormID,jdbcType=INTEGER},
+            <if test="comeformid != null">
+                #{comeformid,jdbcType=INTEGER},
             </if>
-            <if test="expressID != null">
-                #{expressID,jdbcType=MEDIUMINT},
+            <if test="expressid != null">
+                #{expressid,jdbcType=MEDIUMINT},
             </if>
-            <if test="trackNumber != null">
-                #{trackNumber,jdbcType=CHAR},
+            <if test="tracknumber != null">
+                #{tracknumber,jdbcType=CHAR},
             </if>
-            <if test="payStatus != null">
-                #{payStatus,jdbcType=TINYINT},
+            <if test="paystatus != null">
+                #{paystatus,jdbcType=TINYINT},
             </if>
-            <if test="orderStatus != null">
-                #{orderStatus,jdbcType=TINYINT},
+            <if test="orderstatus != null">
+                #{orderstatus,jdbcType=TINYINT},
             </if>
-            <if test="isDelete != null">
-                #{isDelete,jdbcType=BIT},
+            <if test="isdelete != null">
+                #{isdelete,jdbcType=BIT},
             </if>
-            <if test="operatorName != null">
-                #{operatorName,jdbcType=CHAR},
+            <if test="operatorname != null">
+                #{operatorname,jdbcType=CHAR},
             </if>
-            <if test="operatorIP != null">
-                #{operatorIP,jdbcType=CHAR},
+            <if test="operatorip != null">
+                #{operatorip,jdbcType=CHAR},
             </if>
-            <if test="operatorRemark != null">
-                #{operatorRemark,jdbcType=VARCHAR},
+            <if test="operatorremark != null">
+                #{operatorremark,jdbcType=VARCHAR},
             </if>
-            <if test="createDate != null">
-                #{createDate,jdbcType=INTEGER},
+            <if test="createdate != null">
+                #{createdate,jdbcType=INTEGER},
             </if>
-            <if test="updateDate != null">
-                #{updateDate,jdbcType=INTEGER}
+            <if test="updatedate != null">
+                #{updatedate,jdbcType=INTEGER}
             </if>
         </trim>
     </insert>

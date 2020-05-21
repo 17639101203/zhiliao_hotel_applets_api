@@ -150,268 +150,232 @@ public class ZlOrder implements Serializable {
     private Integer couponid;
     
     private static final long serialVersionUID=1L;
-    
-    public Long getOrderid(){
+
+    public Long getOrderid() {
         return orderid;
     }
-    
-    public void setOrderid(Long orderid){
-        this.orderid=orderid;
+
+    public void setOrderid(Long orderid) {
+        this.orderid = orderid;
     }
-    
-    public Long getUserid(){
+
+    public Long getUserid() {
         return userid;
     }
-    
-    public void setUserid(Long userid){
-        this.userid=userid;
+
+    public void setUserid(Long userid) {
+        this.userid = userid;
     }
-    
-    public String getOrderserialno(){
+
+    public String getOrderserialno() {
         return orderserialno;
     }
-    
-    public void setOrderserialno(String orderserialno){
-        this.orderserialno=orderserialno==null ? null : orderserialno.trim();
+
+    public void setOrderserialno(String orderserialno) {
+        this.orderserialno = orderserialno;
     }
-    
-    public Integer getHotelid(){
+
+    public Integer getHotelid() {
         return hotelid;
     }
-    
-    public void setHotelid(Integer hotelid){
-        this.hotelid=hotelid;
+
+    public void setHotelid(Integer hotelid) {
+        this.hotelid = hotelid;
     }
-    
-    public String getHotelname(){
+
+    public String getHotelname() {
         return hotelname;
     }
-    
-    public void setHotelname(String hotelname){
-        this.hotelname=hotelname==null ? null : hotelname.trim();
+
+    public void setHotelname(String hotelname) {
+        this.hotelname = hotelname;
     }
-    
-    public Integer getRoomid(){
+
+    public Integer getRoomid() {
         return roomid;
     }
-    
-    public void setRoomid(Integer roomid){
-        this.roomid=roomid;
+
+    public void setRoomid(Integer roomid) {
+        this.roomid = roomid;
     }
-    
-    public String getRoomnumber(){
+
+    public String getRoomnumber() {
         return roomnumber;
     }
-    
-    public void setRoomnumber(String roomnumber){
-        this.roomnumber=roomnumber==null ? null : roomnumber.trim();
+
+    public void setRoomnumber(String roomnumber) {
+        this.roomnumber = roomnumber;
     }
-    
-    public String getGoodscoverurl(){
+
+    public String getGoodscoverurl() {
         return goodscoverurl;
     }
-    
-    public void setGoodscoverurl(String goodscoverurl){
-        this.goodscoverurl=goodscoverurl==null ? null : goodscoverurl.trim();
+
+    public void setGoodscoverurl(String goodscoverurl) {
+        this.goodscoverurl = goodscoverurl;
     }
-    
-    public Byte getOrdertype(){
+
+    public Byte getOrdertype() {
         return ordertype;
     }
-    
-    public void setOrdertype(Byte ordertype){
-        this.ordertype=ordertype;
+
+    public void setOrdertype(Byte ordertype) {
+        this.ordertype = ordertype;
     }
-    
-    public String getRemark(){
+
+    public String getRemark() {
         return remark;
     }
-    
-    public void setRemark(String remark){
-        this.remark=remark==null ? null : remark.trim();
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
-    
-    public BigDecimal getTotalprice(){
+
+    public BigDecimal getTotalprice() {
         return totalprice;
     }
-    
-    public void setTotalprice(BigDecimal totalprice){
-        this.totalprice=totalprice;
+
+    public void setTotalprice(BigDecimal totalprice) {
+        this.totalprice = totalprice;
     }
-    
-    public BigDecimal getActuallypay(){
+
+    public BigDecimal getActuallypay() {
         return actuallypay;
     }
-    
-    public void setActuallypay(BigDecimal actuallypay){
-        this.actuallypay=actuallypay;
+
+    public void setActuallypay(BigDecimal actuallypay) {
+        this.actuallypay = actuallypay;
     }
-    
-    public Byte getPaytype(){
+
+    public Byte getPaytype() {
         return paytype;
     }
-    
-    public void setPaytype(Byte paytype){
-        this.paytype=paytype;
+
+    public void setPaytype(Byte paytype) {
+        this.paytype = paytype;
     }
-    
-    public String getDeliveryaddress(){
+
+    public String getDeliveryaddress() {
         return deliveryaddress;
     }
-    
-    public void setDeliveryaddress(String deliveryaddress){
-        this.deliveryaddress=deliveryaddress==null ? null : deliveryaddress.trim();
+
+    public void setDeliveryaddress(String deliveryaddress) {
+        this.deliveryaddress = deliveryaddress;
     }
-    
-    public Integer getComeformid(){
+
+    public Integer getComeformid() {
         return comeformid;
     }
-    
-    public void setComeformid(Integer comeformid){
-        this.comeformid=comeformid;
+
+    public void setComeformid(Integer comeformid) {
+        this.comeformid = comeformid;
     }
-    
-    public Integer getExpressid(){
+
+    public Integer getExpressid() {
         return expressid;
     }
-    
-    public void setExpressid(Integer expressid){
-        this.expressid=expressid;
+
+    public void setExpressid(Integer expressid) {
+        this.expressid = expressid;
     }
-    
-    public String getTracknumber(){
+
+    public String getTracknumber() {
         return tracknumber;
     }
-    
-    public void setTracknumber(String tracknumber){
-        this.tracknumber=tracknumber==null ? null : tracknumber.trim();
+
+    public void setTracknumber(String tracknumber) {
+        this.tracknumber = tracknumber;
     }
-    
-    public Byte getPaystatus(){
+
+    public Byte getPaystatus() {
         return paystatus;
     }
-    
-    public void setPaystatus(Byte paystatus){
-        this.paystatus=paystatus;
+
+    public void setPaystatus(Byte paystatus) {
+        this.paystatus = paystatus;
     }
-    
-    public Byte getOrderstatus(){
+
+    public Byte getOrderstatus() {
         return orderstatus;
     }
-    
-    public void setOrderstatus(Byte orderstatus){
-        this.orderstatus=orderstatus;
+
+    public void setOrderstatus(Byte orderstatus) {
+        this.orderstatus = orderstatus;
     }
-    
-    public Byte getRefundstatus(){
+
+    public Byte getRefundstatus() {
         return refundstatus;
     }
-    
-    public void setRefundstatus(Byte refundstatus){
-        this.refundstatus=refundstatus;
+
+    public void setRefundstatus(Byte refundstatus) {
+        this.refundstatus = refundstatus;
     }
-    
-    public String getOperatorname(){
+
+    public String getOperatorname() {
         return operatorname;
     }
-    
-    public void setOperatorname(String operatorname){
-        this.operatorname=operatorname==null ? null : operatorname.trim();
+
+    public void setOperatorname(String operatorname) {
+        this.operatorname = operatorname;
     }
-    
-    public String getOperatorip(){
+
+    public String getOperatorip() {
         return operatorip;
     }
-    
-    public void setOperatorip(String operatorip){
-        this.operatorip=operatorip==null ? null : operatorip.trim();
+
+    public void setOperatorip(String operatorip) {
+        this.operatorip = operatorip;
     }
-    
-    public String getOperatorremark(){
+
+    public String getOperatorremark() {
         return operatorremark;
     }
-    
-    public void setOperatorremark(String operatorremark){
-        this.operatorremark=operatorremark==null ? null : operatorremark.trim();
+
+    public void setOperatorremark(String operatorremark) {
+        this.operatorremark = operatorremark;
     }
-    
-    public Boolean getIsdelete(){
+
+    public Boolean getIsdelete() {
         return isdelete;
     }
-    
-    public void setIsdelete(Boolean isdelete){
-        this.isdelete=isdelete;
+
+    public void setIsdelete(Boolean isdelete) {
+        this.isdelete = isdelete;
     }
-    
-    public Integer getCreatedate(){
+
+    public Integer getCreatedate() {
         return createdate;
     }
-    
-    public void setCreatedate(Integer createdate){
-        this.createdate=createdate;
+
+    public void setCreatedate(Integer createdate) {
+        this.createdate = createdate;
     }
-    
-    public Integer getUpdatedate(){
+
+    public Integer getUpdatedate() {
         return updatedate;
     }
-    
-    public void setUpdatedate(Integer updatedate){
-        this.updatedate=updatedate;
+
+    public void setUpdatedate(Integer updatedate) {
+        this.updatedate = updatedate;
     }
-    
-    public Byte getRefundcount(){
+
+    public Byte getRefundcount() {
         return refundcount;
     }
-    
-    public void setRefundcount(Byte refundcount){
-        this.refundcount=refundcount;
+
+    public void setRefundcount(Byte refundcount) {
+        this.refundcount = refundcount;
     }
-    
-    public Integer getCouponid(){
+
+    public Integer getCouponid() {
         return couponid;
     }
-    
-    public void setCouponid(Integer couponid){
-        this.couponid=couponid;
+
+    public void setCouponid(Integer couponid) {
+        this.couponid = couponid;
     }
-    
-    @Override
-    public String toString(){
-        StringBuilder sb=new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", orderid=").append(orderid);
-        sb.append(", userid=").append(userid);
-        sb.append(", orderserialno=").append(orderserialno);
-        sb.append(", hotelid=").append(hotelid);
-        sb.append(", hotelname=").append(hotelname);
-        sb.append(", roomid=").append(roomid);
-        sb.append(", roomnumber=").append(roomnumber);
-        sb.append(", goodscoverurl=").append(goodscoverurl);
-        sb.append(", ordertype=").append(ordertype);
-        sb.append(", remark=").append(remark);
-        sb.append(", totalprice=").append(totalprice);
-        sb.append(", actuallypay=").append(actuallypay);
-        sb.append(", paytype=").append(paytype);
-        sb.append(", deliveryaddress=").append(deliveryaddress);
-        sb.append(", comeformid=").append(comeformid);
-        sb.append(", expressid=").append(expressid);
-        sb.append(", tracknumber=").append(tracknumber);
-        sb.append(", paystatus=").append(paystatus);
-        sb.append(", orderstatus=").append(orderstatus);
-        sb.append(", refundstatus=").append(refundstatus);
-        sb.append(", operatorname=").append(operatorname);
-        sb.append(", operatorip=").append(operatorip);
-        sb.append(", operatorremark=").append(operatorremark);
-        sb.append(", isdelete=").append(isdelete);
-        sb.append(", createdate=").append(createdate);
-        sb.append(", updatedate=").append(updatedate);
-        sb.append(", refundcount=").append(refundcount);
-        sb.append(", couponid=").append(couponid);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
-    
 }
