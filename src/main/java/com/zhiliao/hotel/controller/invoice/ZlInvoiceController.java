@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "开票模块接口")
 @RestController
@@ -27,6 +28,10 @@ public class ZlInvoiceController {
 
     @Autowired
     private ZlInvoiceService service;
+
+
+    // 允许最大的pageSize
+    private final static int MAX_PAGE_SIZE = 20;
 
 
     @ApiOperation(value = "新增发票抬头方法")
@@ -50,11 +55,11 @@ public class ZlInvoiceController {
             invoice.setIsdelete(false);     // 是否删除
             invoice.setCreatedate(nowTime);     //添加时间
             invoice.setUpdatedate(nowTime);     //修改时间
-            if (ip.getMainbodytype() == 1) {      //个人开票
+            if (ip.getInvoicetype() == 1) {      //个人开票
                 service.addInvoice(invoice);
                 log.info("增值税普通发票抬头开具成功");
                 return new ReturnString<>(0, "增值税普通发票抬头开具成功", invoice.getInvoiceid());
-            } else if (ip.getMainbodytype() == 2) {  //企业开票
+            } else if (ip.getInvoicetype() == 2) {  //企业开票
                 invoice.setIdentifier(ip.getIdentifier());  //单位的纳税人识别号:15/18或20位
                 invoice.setBank(ip.getBank());   //开户银行
                 invoice.setBankaccountnumber(ip.getBankaccountnumber()); //银行账号
@@ -77,10 +82,10 @@ public class ZlInvoiceController {
     @ApiOperation(value = "查询发票抬头方法")
     @UserLoginToken
     @GetMapping("findinvoice")
-    public ReturnString<List<ZlInvoice>> findInvoice(HttpServletRequest request) {
+    public ReturnString<List<Map<String,Object>>> findInvoice(HttpServletRequest request) {
         // 解析token获取userid
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
-        List<ZlInvoice> list = service.queryByUserID(userid);
+        List<Map<String,Object>> list = service.queryByUserID(userid);
         if (list == null || list.size() == 0) {
             return new ReturnString<>(0, "未查询到发票信息！");
         }
@@ -109,13 +114,13 @@ public class ZlInvoiceController {
     @ApiOperation(value = "查询发票详情")
     @UserLoginToken
     @GetMapping("findinvoicedetails/{invoiceid}")
-    public ReturnString<ZlInvoice> findinvoicedetails(HttpServletRequest request, @PathVariable Integer invoiceid) {
+    public ReturnString<Map<String,Object>> findinvoicedetails(HttpServletRequest request, @PathVariable Integer invoiceid) {
 
         // 解析token获取userid
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
         if (invoiceid != null) {
-            ZlInvoice zlInvoice = service.findinvoicedetails(userid, invoiceid);
-            return new ReturnString<>(zlInvoice);
+            Map<String,Object> map = service.findinvoicedetails(userid, invoiceid);
+            return new ReturnString<>(map);
         }
         return new ReturnString<>(-1, "参数传递错误，请重新再试");
 

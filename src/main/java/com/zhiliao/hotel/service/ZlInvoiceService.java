@@ -3,6 +3,7 @@ package com.zhiliao.hotel.service;
 import com.zhiliao.hotel.model.ZlInvoice;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface ZlInvoiceService {
@@ -18,7 +19,7 @@ public interface ZlInvoiceService {
      * @param userid    用户ID
      * @return  发票对象集合
      */
-    List<ZlInvoice> queryByUserID(Long userid);
+    List<Map<String,Object>> queryByUserID(Long userid);
 
 
     /**
@@ -36,7 +37,7 @@ public interface ZlInvoiceService {
      * @param invoiceid
      * @return
      */
-    ZlInvoice findinvoicedetails(Long userid, Integer invoiceid);
+    Map<String,Object> findinvoicedetails(Long userid, Integer invoiceid);
 
 }
 

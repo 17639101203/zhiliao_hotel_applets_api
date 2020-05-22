@@ -4,6 +4,7 @@ import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.comment.commentparm.CommentParm;
+import com.zhiliao.hotel.controller.file.UploadFileController;
 import com.zhiliao.hotel.model.ZlComment;
 import com.zhiliao.hotel.model.ZlTag;
 import com.zhiliao.hotel.service.ZlCommentService;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -38,11 +40,14 @@ public class ZlCommentController {
     @Autowired
     private ZlCommentService zlCommentService;
 
+    @Autowired
+    private UploadFileController uploadFileController;
+
 
     @ApiOperation(value = "添加点赞吐槽")
-    @PostMapping("addComment")
+    @PostMapping(value="addComment", consumes = { "multipart/*" }, headers = "content-type=multipart/form-data")
     @UserLoginToken
-    public ReturnString addComment(HttpServletRequest request, CommentParm commentParm) {
+    public ReturnString addComment(HttpServletRequest request, CommentParm commentParm, MultipartFile[] multipartFiles) {
         ZlComment zlComment = new ZlComment();
         zlComment.setHotelid(commentParm.getHotelID());   //酒店ID
         zlComment.setUserid(TokenUtil.getUserId(request.getHeader("token")));   //用户ID  根据token获取userId
@@ -54,10 +59,11 @@ public class ZlCommentController {
         zlComment.setUpdatedate(nowtime);  //更新时间
         Integer res = zlCommentService.addComment(zlComment);
         if (res > 0) {
-            return new ReturnString(0, "评价成功");
+            uploadFileController.uploadFile(multipartFiles);
+            return new ReturnString<>(0, "评价成功");
         } else {
             log.error("评价失败");
-            return new ReturnString(-1, "评价失败");
+            return new ReturnString<>(-1, "评价失败");
         }
 
     }
@@ -68,18 +74,18 @@ public class ZlCommentController {
     })
     @GetMapping("findTags/{hotelid}")
     @PassToken
-    public ReturnString findTags(@PathVariable Integer hotelid) {
+    public ReturnString<List<ZlTag>> findTags(@PathVariable Integer hotelid) {
         List<ZlTag> zlTagList = zlCommentService.findTags(hotelid);
-        return new ReturnString(zlTagList);
+        return new ReturnString<>(zlTagList);
     }
 
     @ApiOperation(value = "点赞吐槽详情列表获取(待修改)")
     @GetMapping("findCommentList")
     @UserLoginToken
-    public ReturnString findCommentList(HttpServletRequest request) {
+    public ReturnString<List<ZlComment>> findCommentList(HttpServletRequest request) {
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
         List<ZlComment> list = zlCommentService.findComments(userid);
-        return new ReturnString(list);
+        return new ReturnString<>(list);
     }
 
     @ApiOperation(value = "点赞吐槽详情列表页信息获取(待修改)")
@@ -87,7 +93,7 @@ public class ZlCommentController {
     @UserLoginToken
     public ReturnString findComment(HttpServletRequest request) {
 
-        return new ReturnString(null);
+        return new ReturnString<>(null);
     }
 
 }
