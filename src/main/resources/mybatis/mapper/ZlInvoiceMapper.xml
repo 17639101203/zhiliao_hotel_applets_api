@@ -144,7 +144,7 @@
         from
             zl_invoice
         where
-            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and InvoiceStatus in  (0,1,2);
+            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and InvoiceStatus in  (0,1,2)
     </select>
 
 
@@ -166,7 +166,7 @@
         from
             zl_invoice
         where
-            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and InvoiceID=#{invoiceid,jdbcType=INTEGER};
+            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and InvoiceID=#{invoiceid,jdbcType=INTEGER}
     </select>
 
 
