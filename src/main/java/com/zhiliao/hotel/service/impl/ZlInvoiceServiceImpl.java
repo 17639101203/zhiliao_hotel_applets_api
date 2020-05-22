@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Transactional(rollbackFor = Exception.class)
 @Service
@@ -31,8 +32,8 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     }
 
     @Override
-    public List<ZlInvoice> queryByUserID(Long userid) {
-        List<ZlInvoice> list = mapper.queryInvoiceByUserID(userid);
+    public List<Map<String,Object>> queryByUserID(Long userid) {
+        List<Map<String,Object>> list = mapper.queryInvoiceByUserID(userid);
         if(list==null){
             throw new RuntimeException("开票抬头查询失败,请重新再试！");
         }
@@ -48,7 +49,7 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     }
 
     @Override
-    public ZlInvoice findinvoicedetails(Long userid, Integer invoiceid) {
+    public Map<String,Object> findinvoicedetails(Long userid, Integer invoiceid) {
         return mapper.queryInvoicedetail(userid,invoiceid);
     }
 

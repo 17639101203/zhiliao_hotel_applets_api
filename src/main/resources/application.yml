@@ -18,9 +18,9 @@ spring:
 #      url: jdbc:mysql://39.108.188.110:3306/company_zhiliao?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
 #      username: zhiliao_dev
 #      password: y82F3FybiffN6DrT
-      url: jdbc:mysql://127.0.0.1:3306/company_zhiliao?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
-      username: user
-      password: 123456
+      url: jdbc:mysql://39.108.188.110:3306/company_zhiliao?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
+      username: zhiliao_dev
+      password: y82F3FybiffN6DrT
       initial-size: 5 #定义初始连接数
       max-active: 20  #定义最大连接数
       min-idle: 10    #定义最小空闲

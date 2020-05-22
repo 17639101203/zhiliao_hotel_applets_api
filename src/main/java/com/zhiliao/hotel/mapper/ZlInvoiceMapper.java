@@ -4,6 +4,7 @@ import com.zhiliao.hotel.model.ZlInvoice;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ZlInvoiceMapper  {
 
@@ -19,7 +20,7 @@ public interface ZlInvoiceMapper  {
      * @param userid    用户ID
      * @return    发票对象
      */
-    List<ZlInvoice> queryInvoiceByUserID(Long userid);
+    List<Map<String,Object>> queryInvoiceByUserID(Long userid);
 
 
     /**
@@ -37,6 +38,6 @@ public interface ZlInvoiceMapper  {
      * @param invoiceid    发票ID
      * @return  返回1 为删除成功
      */
-    ZlInvoice queryInvoicedetail(@Param("userid") Long userid,@Param("invoiceid")Integer invoiceid);
+    Map<String,Object> queryInvoicedetail(@Param("userid") Long userid,@Param("invoiceid")Integer invoiceid);
 
 }
