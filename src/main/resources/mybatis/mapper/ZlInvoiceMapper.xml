@@ -135,7 +135,7 @@
 
 
   <!--  根据用户ID查询发票抬头-->
-  <select id="queryInvoiceByUserID" resultMap="java.util.HashMap">
+  <select id="queryInvoiceByUserID" resultType="java.util.HashMap">
         select
             InvoiceID,InvoiceType,MainBodyType,ElectronicPaperType,
             Title,Identifier,Tel,
@@ -160,7 +160,7 @@
 
 
   <!--  查询发票详情-->
-  <select id="queryInvoicedetail" resultMap="java.util.HashMap">
+  <select id="queryInvoicedetail" resultType="java.util.HashMap">
         select
             InvoiceType,Title,ElectronicPaperType,CreateDate
         from

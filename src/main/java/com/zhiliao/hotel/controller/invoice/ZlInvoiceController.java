@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.controller.invoice;
 
+import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceParam;
@@ -17,10 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Api(tags = "开票模块接口")
+@Api(tags = "首页_开票接口_章英杰")
 @RestController
 @RequestMapping("invoice")
 @Slf4j
@@ -40,7 +42,7 @@ public class ZlInvoiceController {
     public ReturnString addInvoice(@RequestBody InvoiceParam ip, HttpServletRequest request) {
         ZlInvoice invoice = new ZlInvoice();
         try {
-
+            Map<String,Object> map = new HashMap<>();
             // 解析token获取userid
             Long userid = TokenUtil.getUserId(request.getHeader("token"));
             Integer nowTime = DateUtils.javaToPhpNowDateTime();
@@ -57,8 +59,9 @@ public class ZlInvoiceController {
             invoice.setUpdatedate(nowTime);     //修改时间
             if (ip.getInvoicetype() == 1) {      //个人开票
                 service.addInvoice(invoice);
-                log.info("增值税普通发票抬头开具成功");
-                return new ReturnString<>(0, "增值税普通发票抬头开具成功", invoice.getInvoiceid());
+                log.info("增值税普通发票抬头开具成功,invoiceid："+invoice.getInvoiceid());
+                map.put("invoiceid",invoice.getInvoiceid());
+                return new ReturnString<>(0, "增值税普通发票抬头开具成功",map);
             } else if (ip.getInvoicetype() == 2) {  //企业开票
                 invoice.setIdentifier(ip.getIdentifier());  //单位的纳税人识别号:15/18或20位
                 invoice.setBank(ip.getBank());   //开户银行
@@ -66,8 +69,9 @@ public class ZlInvoiceController {
                 invoice.setCompanytel(ip.getCompanytel());    //单位电话
                 invoice.setCompanyaddress(ip.getCompanyaddress());  //  单位地址
                 service.addInvoice(invoice);
-                log.info("增值税专用发票抬头开具成功");
-                return new ReturnString<>(0, "增值税专用发票抬头开具成功", invoice.getInvoiceid());
+                log.info("增值税专用发票抬头开具成功,invoiceid："+invoice.getInvoiceid());
+                map.put("invoiceid",invoice.getInvoiceid());
+                return new ReturnString<>(0, "增值税专用发票抬头开具成功",map);
             }
             return new ReturnString<>(-1, "开票类型错误，请重新再试!");
         } catch (Exception e) {
@@ -79,14 +83,15 @@ public class ZlInvoiceController {
     }
 
 
-    @ApiOperation(value = "查询发票抬头方法")
+    @ApiOperation(value = "查询发票抬头方法(待添加二维码判断)")
     @UserLoginToken
-    @GetMapping("findinvoice")
-    public ReturnString<List<Map<String,Object>>> findInvoice(HttpServletRequest request) {
+    @GetMapping("findinvoice/{pageNo}/{pageSize}")
+    public ReturnString<PageInfoResult> findInvoice(HttpServletRequest request ,@PathVariable Integer pageNo, @PathVariable Integer pageSize) {
         // 解析token获取userid
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
-        List<Map<String,Object>> list = service.queryByUserID(userid);
-        if (list == null || list.size() == 0) {
+        pageSize = pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize;
+        PageInfoResult<List<Map<String,Object>>> list = service.queryByUserID(userid,pageNo,pageSize);
+        if (list == null) {
             return new ReturnString<>(0, "未查询到发票信息！");
         }
         return new ReturnString<>(list);
