@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.google.common.collect.Lists;
 import com.zhiliao.hotel.controller.wifi.vo.WifiVo;
 import com.zhiliao.hotel.mapper.ZlHotelRoomMapper;
 import com.zhiliao.hotel.service.ZlHotelRoomService;
@@ -29,6 +30,9 @@ public class ZlHotelRoomServiceImpl implements ZlHotelRoomService {
     @Override
     public List<WifiVo> findWiFi(Integer hotelID) {
         List<WifiVo> wifi =  zlHotelRoomMapper.findWiFi(hotelID);
-        return wifi;
+        if(wifi!=null && wifi.size()>0){
+            return wifi;
+        }
+        return Lists.newArrayList();
     }
 }
