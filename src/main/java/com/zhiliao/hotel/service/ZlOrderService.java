@@ -3,7 +3,7 @@ package com.zhiliao.hotel.service;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsInfoVO;
 import com.zhiliao.hotel.controller.myOrder.vo.HotelBasicVO;
-import com.zhiliao.hotel.model.ZlOrder;
+import com.zhiliao.hotel.controller.myOrder.vo.UserGoodsReturn;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public interface ZlOrderService {
 
     void byOrderId(Long orderID);
 
-    List<ZlOrder> submitOrder(Long userID, HotelBasicVO hotelBasicVO, Map<String, List<GoodsInfoVO>> goodsInfoMap);
+    UserGoodsReturn submitOrder(Long userID, HotelBasicVO hotelBasicVO, Map<String, List<GoodsInfoVO>> goodsInfoMap);
 
     void updateOrder(String out_trade_no);
 

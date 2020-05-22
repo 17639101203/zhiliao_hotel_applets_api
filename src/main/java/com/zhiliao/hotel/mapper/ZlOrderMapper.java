@@ -19,7 +19,7 @@ public interface ZlOrderMapper extends Mapper<ZlOrder> {
 
     ZlOrder findById(@Param("orderid") Long orderid);
 
-    void insertOrder(ZlOrder zlOrder);
+//    void insertOrder(ZlOrder zlOrder);
 
     void updateOrder(String out_trade_no);
 

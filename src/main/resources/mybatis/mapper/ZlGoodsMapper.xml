@@ -42,14 +42,14 @@
 
     <select id="findGoodsList" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
         select
-            zg.GoodsID,
-            zg.GoodsName,
-            zg.CoverImgUrl,
-            zg.OriginalPrice,
-            zg.CurrentPrice,
-            zg.TotalStockCount,
-            zg.TotalSoldCount,
-            zg.TotalVirtualSoldCount
+        zg.GoodsID,
+        zg.GoodsName,
+        zg.CoverImgUrl,
+        zg.OriginalPrice,
+        zg.CurrentPrice,
+        zg.TotalStockCount,
+        zg.TotalSoldCount,
+        zg.TotalVirtualSoldCount
         from zl_goods zg
         left join zl_goodscategory zgc on zg.GoodsCategoryID=zgc.GoodsCategoryID
         where zg.GoodsStatus=1 and zg.IsDelete=0 and zgc.IsDelete=0
@@ -134,7 +134,5 @@
           SoldCount = TotalSoldCount + #{goodsCount}
         WHERE GoodsID = #{goodsID}
     </update>
-
-    <select id="getProductsFeaturedList" resultType=""></select>
 
 </mapper>
