@@ -62,10 +62,19 @@ public class ZlHotelServiceImpl implements ZlHotelService {
             if (!StringUtils.isEmpty(roomId)) {
                 //根据酒店id，客房id
                 zlHotelroom = zlHotelRoomMapper.getById(roomId, hotelId);
-                //获取 token得到微信用户Id
+
+                //判断房间是否被绑定
+                if(zlHotelroom.getRoomstatus()==1){
+                     return new ReturnString("该房号已被绑定");
+                }
+
                 if (!StringUtils.isEmpty(token)) {
+                    //获取 token得到微信用户Id
                     Long weiXinUserId = TokenUtil.getUserId(token);
                     if (weiXinUserId != null) {
+                        //客房状态改变为已被绑定
+                        zlHotelRoomMapper.updateById(roomId);
+
                         //客房扫描率录入
                         addZlUserLoginLog(weiXinUserId, Integer.valueOf(roomId));
                     }

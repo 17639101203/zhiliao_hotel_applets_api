@@ -12,7 +12,7 @@
 
         select  <include refid="selectColumn"/>
         from zl_xcxmenu zl where zl.HotelID=#{hotelId} and MenuStatus=1
-        and IsDelete=0 order by CreateDate desc
+        and IsDelete=0 and ComeFromID=1 order by CreateDate desc
 
     </select>
 

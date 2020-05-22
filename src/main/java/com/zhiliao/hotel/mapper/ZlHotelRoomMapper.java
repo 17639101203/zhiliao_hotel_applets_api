@@ -21,4 +21,6 @@ public interface ZlHotelRoomMapper extends Mapper<ZlHotelroom> {
     ZlHotelroom getById(@Param("roomId") String roomId, @Param("hotelId") String hotelId);
 
     ZlHotelroom getByHotelIDAndRoomNumber(@Param("roomNumber") String roomNumber, @Param("hotelId") Integer hotelId);
+
+    boolean updateById(@Param("roomId")String roomId);
 }
