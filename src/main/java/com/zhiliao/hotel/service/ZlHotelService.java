@@ -1,8 +1,8 @@
 package com.zhiliao.hotel.service;
 
 
+import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.ReturnString;
-import com.zhiliao.hotel.model.ZlHotelUserHistory;
 
 /**
  * @author  chenrong
@@ -15,7 +15,9 @@ public interface ZlHotelService   {
     /**
      * 获取用户酒店入住历史
      * @param token
+     * @param pageNo
+     * @param pageSize
      * @return
      */
-    ReturnString<ZlHotelUserHistory> getHotelHistoryList(String token);
+    PageInfoResult getHotelHistoryList(String token, Integer pageNo, Integer pageSize);
 }
