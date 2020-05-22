@@ -13,7 +13,7 @@ import com.zhiliao.hotel.model.ZlCoupon;
 import com.zhiliao.hotel.model.ZlOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.ZlOrderService;
-import com.zhiliao.hotel.utils.OrderSerialNoUtil;
+import com.zhiliao.hotel.utils.OrderIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -94,7 +94,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
 
         BigDecimal totalPrice = new BigDecimal(0);
         //调用工具类生成订单编号
-        String orderSerialNo = OrderSerialNoUtil.CreateOrderSerialNo("");
+        String orderSerialNo = OrderIDUtil.createOrderID("");
         for (String key : keySet) {
             //封装订单信息
             ZlOrder zlOrder = new ZlOrder();
