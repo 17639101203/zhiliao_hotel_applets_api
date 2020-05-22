@@ -135,5 +135,6 @@
         WHERE GoodsID = #{goodsID}
     </update>
 
+    <select id="getProductsFeaturedList" resultType=""></select>
 
 </mapper>

@@ -25,4 +25,8 @@ public interface ZlGoodsService {
     void updateGoodsCount(List<ZlOrderDetail> zlOrderDetailList);
 
     List<EsGoods> searchGoods(Integer hotelId, String selectParam, Integer belongModule, Integer pageNo, Integer pageSize);
+
+    public PageInfoResult getProductsFeaturedList(String token ,Integer pageNo,Integer pageSize);
+
+
 }

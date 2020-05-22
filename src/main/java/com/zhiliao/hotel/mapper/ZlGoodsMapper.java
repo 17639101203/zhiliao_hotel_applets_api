@@ -29,4 +29,6 @@ public interface ZlGoodsMapper extends Mapper<ZlGoods> {
     void updateGoodsSku(Integer goodsID, Integer goodsCount);
 
     void updateHotelGoods(Integer goodsID, Integer goodsCount);
+
+    public List<GoodsListVo>getProductsFeaturedList();
 }

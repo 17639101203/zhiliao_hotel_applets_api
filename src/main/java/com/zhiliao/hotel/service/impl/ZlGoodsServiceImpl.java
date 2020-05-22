@@ -2,11 +2,16 @@ package com.zhiliao.hotel.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.goods.vo.EsGoods;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.mapper.ZlGoodsMapper;
+import com.zhiliao.hotel.mapper.ZlHotelMapper;
+import com.zhiliao.hotel.mapper.ZlWxuserMapper;
+import com.zhiliao.hotel.model.ZlHotel;
 import com.zhiliao.hotel.model.ZlOrderDetail;
+import com.zhiliao.hotel.model.ZlWxuser;
 import com.zhiliao.hotel.service.ZlGoodsService;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +37,19 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
 
     private final ZlGoodsMapper zlGoodsMapper;
 
+    private final ZlWxuserMapper zlWxuserMapper;
+
+    private final ZlHotelMapper zlHotelMapper;
+
+
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
 
     @Autowired
-    public ZlGoodsServiceImpl(ZlGoodsMapper zlGoodsMapper) {
+    public ZlGoodsServiceImpl(ZlGoodsMapper zlGoodsMapper,ZlWxuserMapper zlWxuserMapper, ZlHotelMapper zlHotelMapper) {
         this.zlGoodsMapper = zlGoodsMapper;
+        this.zlWxuserMapper=zlWxuserMapper;
+        this.zlHotelMapper=zlHotelMapper;
     }
 
     @Override
@@ -106,5 +118,17 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
         }
 
         return esGoodsList;
+    }
+
+    @Override
+    public PageInfoResult getProductsFeaturedList(String token ,Integer pageNo,Integer pageSize) {
+        PageHelper.startPage(pageNo,pageSize);
+        ZlWxuser zlWxuser = zlWxuserMapper.getUserById(token);
+        if(zlWxuser!=null){
+            ZlHotel zlHotel = zlHotelMapper.getById(String.valueOf(zlWxuser.getHotelid()));
+//            PageInfoResult.getPageInfoResult(new PageInfo(zlStowGoodsPageList));
+            Integer hotelId = zlHotel.getHotelID();
+        }
+        return null;
     }
 }

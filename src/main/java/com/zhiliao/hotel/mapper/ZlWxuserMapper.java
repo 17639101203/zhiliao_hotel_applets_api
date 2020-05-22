@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.model.ZlWxuser;
+import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 /**
@@ -8,5 +9,7 @@ import tk.mybatis.mapper.common.Mapper;
  */
 
 public interface ZlWxuserMapper extends Mapper<ZlWxuser> {
+
+    public ZlWxuser getUserById(@Param("userId") String userId);
 
 }
