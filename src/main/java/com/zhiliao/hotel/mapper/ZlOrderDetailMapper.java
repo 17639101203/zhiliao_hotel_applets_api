@@ -17,7 +17,7 @@ public interface ZlOrderDetailMapper extends Mapper<ZlOrderDetail>{
     void byOrderdetailId(ZlOrder order);
 
 //    void insertOrderDetail(List<ZlOrderDetail> zlOrderDetailList);
-    void insertOrderDetail(ZlOrderDetail zlOrderDetail);
+//    void insertOrderDetail(ZlOrderDetail zlOrderDetail);
     
     
 }

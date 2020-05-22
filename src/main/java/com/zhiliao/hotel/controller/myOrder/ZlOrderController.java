@@ -11,7 +11,7 @@ import com.zhiliao.hotel.controller.myOrder.param.WxPayRefundParam;
 import com.zhiliao.hotel.controller.myOrder.util.PayUtil;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsInfoVO;
 import com.zhiliao.hotel.controller.myOrder.vo.HotelBasicVO;
-import com.zhiliao.hotel.model.ZlOrder;
+import com.zhiliao.hotel.controller.myOrder.vo.UserGoodsReturn;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.WxPayService;
 import com.zhiliao.hotel.service.ZlGoodsService;
@@ -169,8 +169,8 @@ public class ZlOrderController {
         Long userID = System.currentTimeMillis();
 
         try {
-            List<ZlOrder> zlOrderList = orderService.submitOrder(userID, hotelBasicVO, GoodsInfoMap);
-            return new ReturnString(zlOrderList);
+            UserGoodsReturn userGoodsReturn = orderService.submitOrder(userID, hotelBasicVO, GoodsInfoMap);
+            return new ReturnString(userGoodsReturn);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("提交失败");

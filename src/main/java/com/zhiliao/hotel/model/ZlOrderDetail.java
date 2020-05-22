@@ -1,5 +1,8 @@
 package com.zhiliao.hotel.model;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -9,10 +12,13 @@ import java.math.BigDecimal;
  * @author null
  * @date 2020-04-15
  */
+@Table(name = "zl_orderdetail")
 public class ZlOrderDetail implements Serializable {
     /**
      * 自增ID
      */
+    @Id
+    @GeneratedValue(generator = "JDBC")
     private Long orderdetailid;
     
     /**

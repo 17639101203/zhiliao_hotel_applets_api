@@ -2,7 +2,6 @@ package com.zhiliao.hotel.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * 生成订单编号
