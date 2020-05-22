@@ -17,4 +17,13 @@
 
     </select>
 
+    <select id="getByHotelIDAndRoomNumber" resultType="com.zhiliao.hotel.model.ZlHotelroom">
+
+        SELECT <include refid="selectColumn"/>
+        FROM zl_hotelroom zm
+        WHERE zm.RoomNumber = #{roomNumber} AND zm.RoomStatus = 1 AND zm.IsDelete = 0
+        AND zm.IsRoom = 1 AND zm.HotelID = #{hotelId}
+
+    </select>
+
 </mapper>

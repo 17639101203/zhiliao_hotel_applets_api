@@ -14,7 +14,7 @@ public class OrderIDUtil {
      */
     public static String createOrderID(String type) {
         // 获取当前日期年月日时分yyyyMMddHHmm
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
         Date date = new Date();
         String currentDate = format.format(date);
         /*// 截取后五位时间戳

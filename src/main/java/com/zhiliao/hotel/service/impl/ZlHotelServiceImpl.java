@@ -1,5 +1,8 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.hotel.in.ZlHotelIn;
@@ -10,8 +13,8 @@ import com.zhiliao.hotel.service.ZlHotelService;
 import com.zhiliao.hotel.service.ZlUserloginlogService;
 import com.zhiliao.hotel.service.ZlWxuserService;
 import com.zhiliao.hotel.utils.*;
-import org.apache.commons.lang3.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +30,7 @@ import java.util.Optional;
  */
 @Transactional(rollbackFor = Exception.class)
 @Service
+@RequiredArgsConstructor
 public class ZlHotelServiceImpl implements ZlHotelService {
 
     private final ZlHotelMapper zlHotelMapper;
@@ -48,22 +52,6 @@ public class ZlHotelServiceImpl implements ZlHotelService {
     private final RedisCommonUtil redisCommonUtil;
 
     private final ZlHotelUserHistoryMapper zlHotelUserHistoryMapper;
-
-    @Autowired
-    public ZlHotelServiceImpl(ZlHotelMapper zlHotelMapper, ZlHotelRoomMapper zlHotelRoomMapper, ZlXcxMenuMapper zlXcxMenuMapper, RedisCommonUtil redisCommonUtil,
-                              ZlUserloginlogService zlUserloginlogService, HttpServletRequest request, ZlWxuserService zlWxuserService, ZlNewsMapper zlNewsMapper, ZlBannerService zlBannerService,
-                              ZlHotelUserHistoryMapper zlHotelUserHistoryMapper) {
-        this.zlHotelMapper = zlHotelMapper;
-        this.zlHotelRoomMapper = zlHotelRoomMapper;
-        this.zlXcxMenuMapper = zlXcxMenuMapper;
-        this.zlUserloginlogService = zlUserloginlogService;
-        this.request = request;
-        this.zlWxuserService = zlWxuserService;
-        this.zlNewsMapper = zlNewsMapper;
-        this.zlBannerService = zlBannerService;
-        this.redisCommonUtil = redisCommonUtil;
-        this.zlHotelUserHistoryMapper = zlHotelUserHistoryMapper;
-    }
 
     @Override
     public ReturnString getById(String hotelId, String roomId, String token) {
@@ -147,11 +135,14 @@ public class ZlHotelServiceImpl implements ZlHotelService {
     }
 
     @Override
-    public ReturnString<ZlHotelUserHistory> getHotelHistoryList(String token) {
+    public PageInfoResult getHotelHistoryList(String token, Integer pageNo, Integer pageSize) {
         //获取 token得到微信用户Id
         Long userId = TokenUtil.getUserId(token);
+        // 设定当前页码，以及当前页显示的条数
+        PageHelper.startPage(pageNo, pageSize);
         //获取用户酒店入住历史
         List<ZlHotelUserHistory> hotelHistoryList = zlHotelUserHistoryMapper.getHotelHistoryList(userId);
-        return new ReturnString(hotelHistoryList);
+        PageInfo<ZlHotelUserHistory> pageInfo = new PageInfo<>(hotelHistoryList);
+        return PageInfoResult.getPageInfoResult(pageInfo);
     }
 }

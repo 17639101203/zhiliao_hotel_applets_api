@@ -7,7 +7,7 @@ import com.zhiliao.hotel.model.ZlHotel;
 import com.zhiliao.hotel.model.ZlHotelFacility;
 import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import com.zhiliao.hotel.service.ZlHotelFacilityService;
-import com.zhiliao.hotel.utils.OrderSerialNoUtil;
+import com.zhiliao.hotel.utils.OrderIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +59,7 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
     @Override
     public Map<String, Object> addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder, Integer facilityID) {
         ZlHotel zlHotel = hotelMapper.getById(String.valueOf(zlHotelFacilityOrder.getHotelid()));
-        zlHotelFacilityOrder.setSerialnumber(OrderSerialNoUtil.CreateOrderSerialNo("HS"));
+        zlHotelFacilityOrder.setSerialnumber(OrderIDUtil.createOrderID("HS"));
         zlHotelFacilityOrder.setComeformid(1);
         if (zlHotel != null){
             zlHotelFacilityOrder.setHotelname(zlHotel.getHotelName());
