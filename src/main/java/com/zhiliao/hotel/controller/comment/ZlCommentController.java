@@ -31,7 +31,7 @@ import java.util.List;
  * @Date: 2020/4/14 10:32
  * @Description:
  */
-@Api(tags = "章英杰_点赞吐槽接口_首页")
+@Api(tags = "首页_点赞吐槽接口_章英杰")
 @RestController
 @RequestMapping("comment")
 @Slf4j

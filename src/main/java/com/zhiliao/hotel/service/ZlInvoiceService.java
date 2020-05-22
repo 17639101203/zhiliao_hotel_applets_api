@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.service;
 
+import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.model.ZlInvoice;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface ZlInvoiceService {
      * @param userid    用户ID
      * @return  发票对象集合
      */
-    List<Map<String,Object>> queryByUserID(Long userid);
+    PageInfoResult<List<Map<String,Object>>> queryByUserID(Long userid,Integer pageNo,Integer pageSize);
 
 
     /**

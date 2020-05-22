@@ -1,5 +1,9 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.mapper.ZlInvoiceMapper;
 import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.service.ZlInvoiceService;
@@ -32,12 +36,15 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     }
 
     @Override
-    public List<Map<String,Object>> queryByUserID(Long userid) {
+    public PageInfoResult<List<Map<String,Object>>> queryByUserID(Long userid,Integer pageNo,Integer pageSize) {
+        // 设定当前页码，以及当前页显示的条数
+        PageHelper.startPage(pageNo, pageSize);
         List<Map<String,Object>> list = mapper.queryInvoiceByUserID(userid);
+        PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(list);
         if(list==null){
             throw new RuntimeException("开票抬头查询失败,请重新再试！");
         }
-        return list;
+        return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
     @Override
