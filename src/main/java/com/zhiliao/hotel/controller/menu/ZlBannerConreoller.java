@@ -27,6 +27,7 @@ import java.util.List;
 public class ZlBannerConreoller {
 
     private final ZlBannerService zlBannerService;
+    private List<ZlBanner> zlBanners;
 
     @Autowired
     public ZlBannerConreoller(ZlBannerService zlBannerService) {

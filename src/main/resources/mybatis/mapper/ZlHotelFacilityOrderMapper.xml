@@ -8,6 +8,7 @@
       This element was generated on Tue Apr 28 09:49:18 CST 2020.
     -->
     <result column="OrderID" jdbcType="BIGINT" property="orderid" />
+    <result column="FacilityID" jdbcType="INTEGER" property="facilityid" />
     <result column="UserID" jdbcType="BIGINT" property="userid" />
     <result column="SerialNumber" jdbcType="CHAR" property="serialnumber" />
     <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
@@ -22,14 +23,16 @@
     <result column="PayType" jdbcType="TINYINT" property="paytype" />
     <result column="ComeFormID" jdbcType="INTEGER" property="comeformid" />
     <result column="BookDate" jdbcType="INTEGER" property="bookdate" />
+    <result column="BeginUseDate" jdbcType="INTEGER" property="beginusedate" />
     <result column="PayStatus" jdbcType="TINYINT" property="paystatus" />
     <result column="OrderStatus" jdbcType="TINYINT" property="orderstatus" />
-    <result column="IsDelete" jdbcType="BIT" property="isdelete" />
     <result column="OperatorName" jdbcType="CHAR" property="operatorname" />
     <result column="OperatorIP" jdbcType="CHAR" property="operatorip" />
     <result column="OperatorRemark" jdbcType="CHAR" property="operatorremark" />
+    <result column="IsDelete" jdbcType="BIT" property="isdelete" />
     <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
     <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
+    <result column="EndUseDate" jdbcType="INTEGER" property="endusedate" />
   </resultMap>
 
   <insert id="addFacilityOrder" parameterType="com.zhiliao.hotel.model.ZlHotelFacilityOrder" useGeneratedKeys="true"
@@ -158,7 +161,7 @@
   </insert>
 
 
-  <select id="findAllOrder" resultType="com.zhiliao.hotel.model.ZlHotelFacilityOrder">
+  <select id="findAllOrder" resultType="map">
     select *
     from zl_hotelfacilityorder
     where 1 = 1 and IsDelete = 0
@@ -167,12 +170,6 @@
     </if>
     <if test="orderStatus != null">
       and OrderStatus = #{orderStatus}
-    </if>
-    <if test="payStatus != null">
-      and PayStatus = #{payStatus}
-    </if>
-    <if test="payType != null">
-      and PayType = #{payType}
     </if>
     order by CreateDate DESC
   </select>
@@ -184,4 +181,13 @@
   <update id="byOrderId" parameterType="com.zhiliao.hotel.model.ZlHotelFacilityOrder">
     update zl_hotelfacilityorder set OrderStatus = #{orderstatus} and UpdateDate = #{updatedate} where OrderID = #{orderid}
   </update>
+
+  <select id="findByBiginAndEndDate" resultType="com.zhiliao.hotel.model.ZlHotelFacilityOrder">
+    select *
+    from zl_hotelfacilityorder
+    where (BeginUseDate &lt;= #{beginusedate}
+    or EndUseDate &gt;= #{endusedate})
+    and HotelID = #{hotelid}
+    and FacilityID = #{facilityid}
+  </select>
 </mapper>

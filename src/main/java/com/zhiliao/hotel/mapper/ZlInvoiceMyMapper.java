@@ -4,6 +4,7 @@ import com.zhiliao.hotel.model.ZlInvoice;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ZlInvoiceMyMapper {
 
@@ -14,6 +15,6 @@ public interface ZlInvoiceMyMapper {
      * @param invoicestatus
      * @return
      */
-    List<ZlInvoice> findAllByUserId(@Param("userId") Long userId, @Param("invoicestatus") Integer invoicestatus);
+    List<Map<String,Object>> findAllByUserId(@Param("userId") Long userId, @Param("invoicestatus") Integer invoicestatus);
 
 }

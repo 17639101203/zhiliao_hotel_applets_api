@@ -1,11 +1,8 @@
 package com.zhiliao.hotel.controller.hotelfacility;
 
-import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
-import com.zhiliao.hotel.controller.goods.ZlGoodsController;
-import com.zhiliao.hotel.controller.hotelfacility.vo.FacilityOrderVo;
 import com.zhiliao.hotel.model.ZlHotelFacility;
 import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import com.zhiliao.hotel.service.ZlHotelFacilityService;
@@ -74,6 +71,7 @@ public class ZlHotelFacilityController {
     @PostMapping("addFacilityOrder/{facilityID}")
     @PassToken
     public ReturnString addFacilityOrder(HttpServletRequest request, @RequestBody ZlHotelFacilityOrder zlHotelFacilityOrder, @PathVariable Integer facilityID) {
+
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
@@ -82,7 +80,7 @@ public class ZlHotelFacilityController {
             return new ReturnString(map);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("获取出错");
+            return new ReturnString("预定失败,请联系酒店前台咨询!");
         }
     }
 }

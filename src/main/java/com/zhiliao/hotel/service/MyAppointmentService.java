@@ -38,5 +38,6 @@ public interface MyAppointmentService {
      */
     PageInfoResult repairFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize);
 
-    void canceCleanOrder(Long orderid);
+
+    void cancelOrder(Long orderid, Integer orderServiceType);
 }

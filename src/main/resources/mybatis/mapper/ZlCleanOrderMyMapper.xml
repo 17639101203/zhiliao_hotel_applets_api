@@ -20,7 +20,7 @@
 
 
 
-  <select id="findAllByStatus" resultType="com.zhiliao.hotel.model.ZlCleanOrder">
+  <select id="findAllByStatus" resultType="map">
     select
     OrderID,HotelName,UserID,SerialNumber,BookDate,OrderStatus,CreateDate
     from zl_cleanorder

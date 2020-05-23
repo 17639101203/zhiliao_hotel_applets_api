@@ -3,6 +3,7 @@ package com.zhiliao.hotel.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.mapper.ZlHotelFacilityOrderMapper;
 import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
@@ -11,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Transactional(rollbackFor = Exception.class)
 @Service
@@ -25,17 +28,21 @@ public class ZlHotelFacilityOrderServiceImpl implements ZlHotelFacilityOrderServ
      * 酒店设施订单列表
      * @param userId
      * @param orderStatus
-     * @param payStatus
-     * @param payType
      * @param pageNo
      * @param pageSize
      * @return
      */
     @Override
-    public PageInfoResult findAllOrder(Long userId, Integer orderStatus, Integer payStatus, Integer payType, Integer pageNo, Integer pageSize) {
+    public PageInfoResult findAllOrder(Long userId, Integer orderStatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
-        List<ZlHotelFacilityOrder> hotelFacilityOrderList = hotelFacilityOrderMapper.findAllOrder(userId,orderStatus,payStatus,payType);
-        PageInfo<ZlHotelFacilityOrder> pageInfo = new PageInfo<>(hotelFacilityOrderList);
+        List<Map<String,Object>> hotelFacilityOrderList = hotelFacilityOrderMapper.findAllOrder(userId,orderStatus);
+        List<Map<String,Object>> orders = new ArrayList<>();
+        for (int i = 0; i < hotelFacilityOrderList.size(); i++) {
+            Map<String, Object> map = hotelFacilityOrderList.get(i);
+            map.put("orderServiceType",4);
+            orders.add(map);
+        }
+        PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(orders);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
@@ -54,16 +61,8 @@ public class ZlHotelFacilityOrderServiceImpl implements ZlHotelFacilityOrderServ
      * @param orderID
      */
     @Override
-    public void byOrderId(Long orderID) {
-        ZlHotelFacilityOrder order = new ZlHotelFacilityOrder();
-        order.setUserid(orderID);
-        order.setOrderstatus((byte) -1);
-        order.setUpdatedate((int) new Date().getTime());
+    public ReturnString byOrderId(Long orderID) {
 
-        ZlHotelFacilityOrder orderById = hotelFacilityOrderMapper.findOrderById(orderID);
-        if (orderById != null){
-            hotelFacilityOrderMapper.byOrderId(order);
-        }
-
+        return null;
     }
 }

@@ -2,11 +2,12 @@ package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.model.ZlInvoice;
 import org.apache.ibatis.annotations.Param;
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 import java.util.Map;
 
-public interface ZlInvoiceMapper  {
+public interface ZlInvoiceMapper extends Mapper<ZlInvoice> {
 
     /**
      * 新增发票

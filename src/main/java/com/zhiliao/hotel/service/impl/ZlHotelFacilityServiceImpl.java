@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.mapper.ZlHotelFacilityMapper;
 import com.zhiliao.hotel.mapper.ZlHotelFacilityOrderMapper;
 import com.zhiliao.hotel.mapper.ZlHotelMapper;
@@ -58,26 +59,56 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
      */
     @Override
     public Map<String, Object> addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder, Integer facilityID) {
-        ZlHotel zlHotel = hotelMapper.getById(String.valueOf(zlHotelFacilityOrder.getHotelid()));
+        //定义map集合,用于封装返回信息
+        Map<String,Object> map = new HashMap<>();
+
+        ZlHotelFacility hotelFacilityDetail = hotelFacilityMapper.getHotelFacilityDetail(facilityID);
+        if (hotelFacilityDetail == null) {
+            map.put("returnString","该酒店没有此设施,请询问酒店前台");
+            return map;
+        }
+
+        //开始时间
+        Integer beginusedate = zlHotelFacilityOrder.getBeginusedate();
+        //结束时间
+        Integer endusedate = zlHotelFacilityOrder.getEndusedate();
+        //付费项目
+        if (hotelFacilityDetail.getPrice().compareTo(new BigDecimal(0)) == 1) {
+            //判断酒店设施数量是否充足
+            if (hotelFacilityDetail.getFacilitycount() <= 0) {
+                map.put("returnString", "酒店设施数量不足!");
+                return map;
+            }
+            //判断该时间段是否已预约
+            ZlHotelFacilityOrder order = facilityOrderMapper.findByBiginAndEndDate(beginusedate, endusedate, zlHotelFacilityOrder.getHotelid(), zlHotelFacilityOrder.getFacilityid());
+            if (order != null) {
+                map.put("returnString", "改时间段已被占用");
+                map.put("beginUseDate", order.getBeginusedate());
+                map.put("endUseDate", order.getEndusedate());
+                return map;
+            }
+        }
+        //生成订单编号
         zlHotelFacilityOrder.setSerialnumber(OrderIDUtil.createOrderID("HS"));
         zlHotelFacilityOrder.setComeformid(1);
+        ZlHotel zlHotel = hotelMapper.getById(String.valueOf(zlHotelFacilityOrder.getHotelid()));
         if (zlHotel != null){
+            //获取酒店名称
             zlHotelFacilityOrder.setHotelname(zlHotel.getHotelName());
-        }
-        if (zlHotelFacilityOrder.getPaytype() == 0 && zlHotelFacilityOrder.getActuallypay().compareTo(BigDecimal.valueOf(0)) < 1){
-           zlHotelFacilityOrder.setPaystatus((byte) 0);
-        }else {
-            zlHotelFacilityOrder.setPaystatus((byte) 1);
         }
         zlHotelFacilityOrder.setOrderstatus((byte) 0);
         zlHotelFacilityOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
         int insert = facilityOrderMapper.insert(zlHotelFacilityOrder);
-        if (insert > 0){
-            hotelFacilityMapper.updateCount(facilityID, (int) new Date().getTime());
+        //是否下单成功
+        if (hotelFacilityDetail.getPrice().compareTo(new BigDecimal(0)) == 1) {
+            if (insert > 0) {
+                hotelFacilityMapper.updateCount(facilityID, (int) new Date().getTime());
+            }
         }
-        Map<String,Object> map = new HashMap<>();
+        map.put("returnString","预定成功");
         map.put("orderId",zlHotelFacilityOrder.getOrderid());
         return map;
+
     }
 }

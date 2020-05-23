@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xiegege on 2019/10/14.
@@ -13,6 +14,6 @@ import java.util.List;
 public interface ZlCleanOrderMyMapper extends Mapper<ZlCleanOrder> {
 
 
-    List<ZlCleanOrder> findAllByStatus(@Param("userId") Long userId, @Param("orderstatus") Integer orderstatus);
+    List<Map<String,Object>> findAllByStatus(@Param("userId") Long userId, @Param("orderstatus") Integer orderstatus);
 
 }

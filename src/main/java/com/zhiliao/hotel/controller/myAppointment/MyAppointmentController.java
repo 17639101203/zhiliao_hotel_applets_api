@@ -38,51 +38,35 @@ public class MyAppointmentController {
 
     @ApiOperation(value = "清扫服务订单展示_徐向向")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "orderstatus", dataType = "Integer", required = true, value = "不传：查询全部，-1：取消，0：等待确认，1：已确认，2已处理"),
+            @ApiImplicitParam(paramType = "query", name = "orderstatus", dataType = "int", required = true, value = "不传：查询全部，-1：取消，0：等待确认，1：已确认，2已处理"),
             @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码值"),
             @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数")
     })
     @PostMapping("cleanFindAll")
     @ResponseBody
-    @UserLoginToken
+    //@UserLoginToken
+    @PassToken
     public ReturnString cleanFindAll(HttpServletRequest request , Integer orderstatus, Integer pageNo, Integer pageSize){
         try {
             String token = request.getHeader("token");
-            Long userId = TokenUtil.getUserId(token);
+            //Long userId = TokenUtil.getUserId(token);
+            Long userId = (long)2;
             logger.info("用户id" + userId);
             if (userId == null){
                 return new ReturnString("用户不存在");
             }
             PageInfoResult cleanorders = myAppointmentService.cleanFindAll(userId,orderstatus,pageNo,pageSize);
-            Map<String,Object> map = new HashMap<>();
-            map.put("repairOrders",cleanorders);
-            map.put("orderServiceType","清扫服务");
-            return new ReturnString(map);
+            return new ReturnString(cleanorders);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取失败");
         }
     }
 
-    @ApiOperation(value = "取消清扫订单")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path",name = "orderid",dataType = "long",required = true,value = "清扫订单id")
-    })
-    @GetMapping("cancelCleanOrder/{orderid}")
-    @UserLoginToken
-    public ReturnString cancelCleanOrder(@PathVariable Long orderid){
-
-        try {
-            myAppointmentService.canceCleanOrder(orderid);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnString("取消失败");
-        }
-        return new ReturnString(0,"已取消");
-    }
 
 
-    @ApiOperation(value = "发票订单展示")
+
+    @ApiOperation(value = "发票订单展示_徐向向")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "invoicestatus", dataType = "Integer", required = true, value = "不传：查询全部，-1：已取消，0：未开票，1：开票中，2：已开票"),
             @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码值"),
@@ -97,15 +81,14 @@ public class MyAppointmentController {
             Long userId = TokenUtil.getUserId(token);
             logger.info("用户id" + userId);
             PageInfoResult invoices = myAppointmentService.invoiceFindAll(userId,invoicestatus,pageNo,pageSize);
-            Map<String,Object> map = new HashMap<>();
-            map.put("repairOrders",invoices);
-            map.put("orderServiceType","发票服务");
-            return new ReturnString(map);
+            return new ReturnString(invoices);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取失败");
         }
     }
+
+
 
     @ApiOperation(value = "报修订单展示")
     @ApiImplicitParams({
@@ -130,5 +113,23 @@ public class MyAppointmentController {
             e.printStackTrace();
             return new ReturnString("获取失败");
         }
+    }
+
+    @ApiOperation(value = "取消订单_徐向向")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path",name = "orderid",dataType = "long",required = true,value = "订单id"),
+            @ApiImplicitParam(paramType = "path",name = "orderServiceType",dataType = "int",required = true,value = "每个服务订单的类型标识 1: 清扫订单, 2: 发票订单, 3: 报修订单")
+    })
+    @GetMapping("cancelOrder/{orderid}/{orderServiceType}")
+    @UserLoginToken
+    public ReturnString cancelOrder(@PathVariable Long orderid ,@PathVariable Integer orderServiceType){
+
+        try {
+            myAppointmentService.cancelOrder(orderid,orderServiceType);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("取消失败");
+        }
+        return new ReturnString(0,"已取消");
     }
 }
