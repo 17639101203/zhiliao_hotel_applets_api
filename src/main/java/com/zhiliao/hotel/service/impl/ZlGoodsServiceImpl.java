@@ -6,11 +6,9 @@ import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.goods.vo.EsGoods;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
+import com.zhiliao.hotel.controller.myOrder.vo.GoodsCouponInfoVO;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsShortInfoVO;
-import com.zhiliao.hotel.mapper.ZlGoodsMapper;
-import com.zhiliao.hotel.mapper.ZlHotelMapper;
-import com.zhiliao.hotel.mapper.ZlWxuserMapper;
-import com.zhiliao.hotel.model.ZlOrderDetail;
+import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.service.ZlGoodsService;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +39,12 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private ZlCouponMapper zlCouponMapper;
+
+    @Autowired
+    private ZlCouponUserMapper zlCouponUserMapper;
 
     @Autowired
     public ZlGoodsServiceImpl(ZlGoodsMapper zlGoodsMapper,ZlWxuserMapper zlWxuserMapper, ZlHotelMapper zlHotelMapper) {
@@ -91,6 +95,20 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
             //更改redis数据库库存
             Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_SKU_ID + skuID);
             redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, count - goodsCount);
+        }
+
+        if (redisTemplate.hasKey(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO_ + out_trade_no)){
+            //从redis中拿出优惠券集合信息
+            List<GoodsCouponInfoVO> goodsCouponInfoVOList = (List<GoodsCouponInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO_ + out_trade_no);
+            for (GoodsCouponInfoVO goodsCouponInfoVO : goodsCouponInfoVOList) {
+                Integer recID = goodsCouponInfoVO.getRecID();
+                //删除该订单下锁定的优惠券
+                redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_RECID + recID);
+            }
+            //删除该订单下锁定的优惠券集合
+            redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO_ + out_trade_no);
+            //删除该订单下锁定的优惠券集合标记
+            redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO_FLAG_ + out_trade_no);
         }
         //下单业务完成,删除redis订单商品信息
         redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);

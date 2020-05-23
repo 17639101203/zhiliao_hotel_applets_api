@@ -44,6 +44,9 @@ public class ZlOrderServiceIml implements ZlOrderService {
     private ZlHotelGoodsMapper zlHotelGoodsMapper;
 
     @Autowired
+    private ZlHotelDetailMapper zlHotelDetailMapper;
+
+    @Autowired
     public ZlOrderServiceIml(ZlOrderMapper orderMapper, ZlOrderDetailMapper orderDetailMapper) {
         this.orderMapper = orderMapper;
         this.orderDetailMapper = orderDetailMapper;
@@ -76,8 +79,14 @@ public class ZlOrderServiceIml implements ZlOrderService {
         //封装商品短信息对象
         List<GoodsShortInfoVO> goodsShortInfoVOList = new LinkedList<>();
 
+        //封装商品优惠券对象
+        List<GoodsCouponInfoVO> goodsCouponInfoVOList = new LinkedList<>();
+
         //封装用户商品信息并返回
         UserGoodsReturn userGoodsReturn = new UserGoodsReturn();
+
+        //查询该酒店的配送费
+        BigDecimal sendCash = zlHotelDetailMapper.findSendCashByHotelID(hotelBasicVO.getHotelID());
 
         //调用判断用户选择的商品是否库存充足
         List<GoodsStockCountNo> goodsStockCountNoList = judgeStock(hotelBasicVO, goodsInfoMap);
@@ -93,10 +102,11 @@ public class ZlOrderServiceIml implements ZlOrderService {
 
         Set<String> keySet = goodsInfoMap.keySet();
 
-        BigDecimal totalPrice = new BigDecimal(0);
         //调用工具类生成订单编号
         String orderSerialNo = OrderIDUtil.createOrderID("");
         for (String key : keySet) {
+            //计算各个模块总金额
+            BigDecimal totalPrice = new BigDecimal(0);
             //封装订单信息
             ZlOrder zlOrder = new ZlOrder();
             zlOrder.setUserid(userID);
@@ -124,18 +134,24 @@ public class ZlOrderServiceIml implements ZlOrderService {
             //遍历每个模块类型的商品价格并相加
             for (int i = 0; i < goodsInfoVOList.size(); i++) {
                 BigDecimal price = goodsInfoVOList.get(i).getPrice();
-                totalPrice = totalPrice.add(price);
+                BigDecimal goodsCount = BigDecimal.valueOf(goodsInfoVOList.get(i).getGoodsCount());
+                totalPrice = totalPrice.add(price.multiply(goodsCount));
             }
+            totalPrice = totalPrice.add(sendCash);
             zlOrder.setTotalprice(totalPrice);
             //如果用户优惠券自增id不为-1,说明用户在该模块使用了优惠券
             if (recID != -1) {
                 //根据优惠券id查询优惠券信息
-                CouponUserVO couponUserVO = zlCouponMapper.findByCouponID(recID);
+                CouponUserVO couponUserVO = zlCouponMapper.findByRecID(recID);
+                //封装优惠券对象,放入list集合存入redis
+                GoodsCouponInfoVO goodsCouponInfoVO = new GoodsCouponInfoVO();
+                goodsCouponInfoVO.setRecID(recID);
+                goodsCouponInfoVO.setUserID(couponUserVO.getUserID());
+                goodsCouponInfoVO.setCouponID(couponUserVO.getCouponID());
+                goodsCouponInfoVOList.add(goodsCouponInfoVO);
 
                 //将该优惠券放入redis,进行锁定,
                 redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_RECID + recID, recID);
-                //定义redis优惠券标记,时间最长为5分钟
-                redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_RECID_FLAG + recID, recID, 5, TimeUnit.MINUTES);
 
                 //算出用户在这个模块的实际支付金额
                 BigDecimal actuallyPay = totalPrice.subtract(couponUserVO.getDiscountMoney());
@@ -204,6 +220,14 @@ public class ZlOrderServiceIml implements ZlOrderService {
         redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO + orderSerialNo, goodsShortInfoVOList);
         //将该订单商品标记放入redis,时间最长为5分钟
         redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + orderSerialNo, goodsShortInfoVOList, 5, TimeUnit.MINUTES);
+
+        if (goodsCouponInfoVOList.size()>0){
+            //将该订单优惠券集合放入redis
+            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO_ + orderSerialNo, goodsCouponInfoVOList);
+            //定义redis优惠券集合标记,时间最长为5分钟
+            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO_FLAG_ + orderSerialNo, orderSerialNo, 5, TimeUnit.MINUTES);
+        }
+
         userGoodsReturn.setUserGoodsInfoList(zlOrderList);
         userGoodsReturn.setContent("提交订单成功,请进行下单操作!");
         return userGoodsReturn;

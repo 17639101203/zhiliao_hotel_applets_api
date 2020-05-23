@@ -18,6 +18,12 @@ public class GoodsShortInfoVO {
      */
     private Integer goodsCount;
 
+
+    /**
+     * 商品SkuID
+     */
+    private Integer skuID;
+
     public Integer getSkuID() {
         return skuID;
     }
@@ -25,11 +31,6 @@ public class GoodsShortInfoVO {
     public void setSkuID(Integer skuID) {
         this.skuID = skuID;
     }
-
-    /**
-     * 商品SkuID
-     */
-    private Integer skuID;
 
     public Integer getGoodsCount() {
         return goodsCount;

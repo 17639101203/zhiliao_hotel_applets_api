@@ -12,5 +12,5 @@ import org.apache.ibatis.annotations.Param;
  * @create: 2020-05-20 15:34
  **/
 public interface ZlCouponMapper extends Mapper<ZlCoupon> {
-    CouponUserVO findByCouponID(@Param("recID") Integer recID);
+    CouponUserVO findByRecID(@Param("recID") Integer recID);
 }
