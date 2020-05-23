@@ -3,7 +3,6 @@ package com.zhiliao.hotel.service;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.goods.vo.EsGoods;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
-import com.zhiliao.hotel.model.ZlOrderDetail;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,7 @@ public interface ZlGoodsService {
 
     GoodsListVo findGoodsDetail(Integer goodsID);
 
-    void updateGoodsCount(List<ZlOrderDetail> zlOrderDetailList);
+    void updateGoodsCount(String out_trade_no);
 
     List<EsGoods> searchGoods(Integer hotelId, String selectParam, Integer belongModule, Integer pageNo, Integer pageSize);
 }

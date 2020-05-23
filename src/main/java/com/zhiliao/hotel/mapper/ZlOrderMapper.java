@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
+import com.zhiliao.hotel.controller.myOrder.vo.OrderDetailVO;
 import com.zhiliao.hotel.model.ZlOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import org.apache.ibatis.annotations.Param;
@@ -23,5 +24,5 @@ public interface ZlOrderMapper extends Mapper<ZlOrder> {
 
     void updateOrder(String out_trade_no);
 
-    List<ZlOrderDetail> getOrderDetail(String out_trade_no);
+    List<OrderDetailVO> getOrderDetail(String out_trade_no);
 }

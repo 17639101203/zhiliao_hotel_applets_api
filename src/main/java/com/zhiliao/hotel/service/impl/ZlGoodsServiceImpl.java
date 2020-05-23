@@ -3,8 +3,10 @@ package com.zhiliao.hotel.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.goods.vo.EsGoods;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
+import com.zhiliao.hotel.controller.myOrder.vo.GoodsShortInfoVO;
 import com.zhiliao.hotel.mapper.ZlGoodsMapper;
 import com.zhiliao.hotel.mapper.ZlHotelMapper;
 import com.zhiliao.hotel.mapper.ZlWxuserMapper;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +38,9 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
 
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Autowired
     public ZlGoodsServiceImpl(ZlGoodsMapper zlGoodsMapper,ZlWxuserMapper zlWxuserMapper, ZlHotelMapper zlHotelMapper) {
@@ -70,14 +76,24 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
     }
 
     @Override
-    public void updateGoodsCount(List<ZlOrderDetail> zlOrderDetailList) {
-        for (ZlOrderDetail zlOrderDetail : zlOrderDetailList) {
-            Integer goodsID = zlOrderDetail.getHotelgoodsid();
-            Integer goodsCount = zlOrderDetail.getGoodscount();
+    public void updateGoodsCount(String out_trade_no) {
+
+        //从redis中拿出订单商品信息
+        List<GoodsShortInfoVO> goodsShortInfoVOList = (List<GoodsShortInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
+        for (GoodsShortInfoVO goodsShortInfoVO : goodsShortInfoVOList) {
+            Integer goodsID = goodsShortInfoVO.getGoodsID();
+            Integer goodsCount = goodsShortInfoVO.getGoodsCount();
+            Integer skuID = goodsShortInfoVO.getSkuID();
+            //更新mysql数据库库存
             zlGoodsMapper.updateGoods(goodsID, goodsCount);
             zlGoodsMapper.updateGoodsSku(goodsID, goodsCount);
             zlGoodsMapper.updateHotelGoods(goodsID, goodsCount);
+            //更改redis数据库库存
+            Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_SKU_ID + skuID);
+            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, count - goodsCount);
         }
+        //下单业务完成,删除redis订单商品信息
+        redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
     }
 
     @Override

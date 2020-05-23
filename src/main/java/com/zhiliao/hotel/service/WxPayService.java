@@ -17,6 +17,8 @@ public interface WxPayService {
 
     Map<String, Object> wxPayRefund(WxPayRefundParam wxPayRefundParam);
 
+    String wxPayReturn(String out_trade_no);
+
 //    Map<String, Object> wxPayReturn(String sign, String out_trade_no);
 
 }

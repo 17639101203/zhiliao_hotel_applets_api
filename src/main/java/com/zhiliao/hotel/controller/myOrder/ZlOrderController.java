@@ -11,6 +11,7 @@ import com.zhiliao.hotel.controller.myOrder.param.WxPayRefundParam;
 import com.zhiliao.hotel.controller.myOrder.util.PayUtil;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsInfoVO;
 import com.zhiliao.hotel.controller.myOrder.vo.HotelBasicVO;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderDetailVO;
 import com.zhiliao.hotel.controller.myOrder.vo.UserGoodsReturn;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.WxPayService;
@@ -147,8 +148,8 @@ public class ZlOrderController {
             @ApiImplicitParam(paramType = "path", name = "roomNumber", dataType = "String", required = true, value = "房间编号")
     })
     @PostMapping("submitOrder/{hotelID}/{hotelName}/{roomID}/{roomNumber}")
-//    @UserLoginToken
-    @PassToken
+    @UserLoginToken
+//    @PassToken
     @ResponseBody
     public ReturnString submitOrder(
             HttpServletRequest httpServletRequest,
@@ -165,8 +166,8 @@ public class ZlOrderController {
         hotelBasicVO.setRoomNumber(roomNumber);
         //获取用户id
         String token = httpServletRequest.getHeader("token");
-//        Long userID = TokenUtil.getUserId(token);
-        Long userID = System.currentTimeMillis();
+        Long userID = TokenUtil.getUserId(token);
+//        Long userID = System.currentTimeMillis();
 
         try {
             UserGoodsReturn userGoodsReturn = orderService.submitOrder(userID, hotelBasicVO, GoodsInfoMap);
@@ -177,9 +178,8 @@ public class ZlOrderController {
         }
     }
 
-    @ApiOperation(value = "微信下单")
+    @ApiOperation(value = "酒店超市_微信下单_姬慧慧")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "openid", dataType = "String", required = true, value = "用户标识"),
             @ApiImplicitParam(paramType = "path", name = "body", dataType = "String", required = true, value = "商品描述"),
             @ApiImplicitParam(paramType = "path", name = "total_fee", dataType = "Integer", required = true, value = "标价金额"),
@@ -189,7 +189,6 @@ public class ZlOrderController {
     @UserLoginToken
     @ResponseBody
     public ReturnString wxPay(
-            String token,
             @PathVariable("openid") String openid,
             @PathVariable("body") String body,
             @PathVariable("total_fee") Integer total_fee,
@@ -205,86 +204,25 @@ public class ZlOrderController {
         }
     }
 
-    @ApiOperation(value = "微信支付账单查询：该接口不做复杂的业务处理，仅根据商户订单号查询订单情况返回支付结果")
+    @ApiOperation(value = "酒店超市_订单状态主动查询_姬慧慧")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号")
-
     })
     @PostMapping("wxPayReturn")
     @UserLoginToken
     @ResponseBody
-    public ReturnString wxPayReturn(String token, @PathVariable("out_trade_no") String out_trade_no) {
-
-        WXPayConfig wxPayConfig = new WXPayConfig() {
-            @Override
-            public String getAppID() {
-                return WxPayConfig.appid;
-            }
-
-            @Override
-            public String getMchID() {
-                return WxPayConfig.mch_id;
-            }
-
-            @Override
-            public String getKey() {
-                return WxPayConfig.key;
-            }
-
-            @Override
-            public InputStream getCertStream() {
-                return null;
-            }
-
-            @Override
-            public int getHttpConnectTimeoutMs() {
-                return 0;
-            }
-
-            @Override
-            public int getHttpReadTimeoutMs() {
-                return 0;
-            }
-        };
-
-        Map<String, String> result = null;
+    public ReturnString wxPayReturn(@PathVariable("out_trade_no") String out_trade_no) {
 
         try {
-            //创建sdk客户端
-            WXPay wxPay = new WXPay(wxPayConfig);
-            Map<String, String> map = new HashMap<>();
-            map.put("out_trade_no", out_trade_no);//商户内部的订单号
-            //调用微信的订单查询接口
-            result = wxPay.orderQuery(map);
+            String resultString = wxPayService.wxPayReturn(out_trade_no);
+            return new ReturnString(resultString);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("调用微信订单查询接口失败");
+            return new ReturnString("查询订单状态失败,请重新查询!");
         }
-        String return_code = result.get("return_code");
-        String result_code = result.get("result_code");
-        String trade_state = result.get("trade_state");//订单状态
-
-        if ("SUCCESS".equals(return_code) && "SUCCESS".equals(result_code)) {
-
-            if ("SUCCESS".equals(trade_state)) {  //支付成功
-                return new ReturnString("支付成功");
-            } else if ("CLOSED".equals(trade_state)) {//交易关闭
-                return new ReturnString("交易关闭");
-            } else if ("USERPAYING".equals(trade_state)) {//支付中
-                return new ReturnString("支付中");
-            } else if ("PAYERROR".equals(trade_state)) {//支付失败
-                return new ReturnString("支付失败");
-            }
-        }
-        return new ReturnString("不可识别的微信订单状态");
     }
 
-    @ApiOperation(value = "支付回调")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-
-    })
+    @ApiOperation(value = "酒店超市_订单状态自动回调_姬慧慧")
     @UserLoginToken
     @PostMapping("autoPayReturn")
     @ResponseBody
@@ -309,9 +247,9 @@ public class ZlOrderController {
         }
 
         String return_code = (String) returnMap.get("return_code");
-        String out_trade_no = (String) returnMap.get("out_trade_no");//订单号
 
         if ("SUCCESS".equals(return_code)) {
+            String out_trade_no = (String) returnMap.get("out_trade_no");//订单号
             //验证签名是否正确
             Map<String, String> validParams = PayUtil.paraFilter(returnMap);  //回调验签时需要去除sign和空值参数
             String validStr = PayUtil.createLinkString(validParams);//把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
@@ -321,26 +259,25 @@ public class ZlOrderController {
             //根据微信官网的介绍，此处不仅对回调的参数进行验签，还需要对返回的金额与系统订单的金额进行比对等
             if (sign.equals(returnMap.get("sign"))) {
                 //查询下单商品信息
-                List<ZlOrderDetail> zlOrderDetailList = zlOrderService.getOrderDetail(out_trade_no);
+                List<OrderDetailVO> orderDetailVOList = zlOrderService.getOrderDetail(out_trade_no);
                 //比较实际付款价格和总价是否一致
                 BigDecimal totalPrice = null;
-                for (ZlOrderDetail zlOrderDetail : zlOrderDetailList) {
-                    totalPrice = totalPrice.add(zlOrderDetail.getPrice().multiply(BigDecimal.valueOf(zlOrderDetail.getGoodscount())));
+                for (OrderDetailVO orderDetailVO : orderDetailVOList) {
+                    totalPrice = totalPrice.add(orderDetailVO.getPrice().multiply(BigDecimal.valueOf(orderDetailVO.getGoodsCount())));
                 }
                 Integer total_fee = (Integer) returnMap.get("total_fee");
-                if (totalPrice.intValue() == total_fee) {
-                    zlGoodsService.updateGoodsCount(zlOrderDetailList);
+                if (totalPrice.multiply(BigDecimal.valueOf(1000)).intValue() == total_fee) {
+                    //订单金额相同,更改数据库状态
+                    zlGoodsService.updateGoodsCount(out_trade_no);
                     zlOrderService.updateOrder(out_trade_no);
                     logger.info("微信手机支付回调成功订单号:{}", out_trade_no);
                     resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
                 } else {
                     logger.info("订单金额不符,订单号:", out_trade_no);
                     resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[订单金额不符]]></return_msg>" + "</xml> ";
-//                    throw new RuntimeException("订单金额不符");
                 }
             } else {
                 resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[微信支付回调失败!签名不一致]]></return_msg>" + "</xml> ";
-//                throw new RuntimeException("微信支付回调失败!签名不一致");
             }
         } else {
             resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"

@@ -24,6 +24,8 @@ public class WxPayConfig {
     public static final String TRADETYPE = "JSAPI";
     //微信统一下单接口地址
     public static final String pay_url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+    //微信查询订单接口地址
+    public static final String orderquery_url = "https://api.mch.weixin.qq.com/pay/orderquery";
     //微信退款接口地址
     public static final String refund_url = "https://api.mch.weixin.qq.com/secapi/pay/refund";
 

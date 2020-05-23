@@ -6,6 +6,7 @@ import com.zhiliao.hotel.controller.myOrder.util.IpUtils;
 import com.zhiliao.hotel.controller.myOrder.util.PayUtil;
 import com.zhiliao.hotel.controller.myOrder.util.StringUtils;
 import com.zhiliao.hotel.controller.myOrder.config.WxPayConfig;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderDetailVO;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.WxPayService;
 import com.zhiliao.hotel.service.ZlOrderService;
@@ -115,26 +116,86 @@ public class WxPayServiceImpl implements WxPayService {
             if ("SUCCESS".equals(result_code)) {
                 // 业务结果
                 String prepayId = (String) map.get("prepay_id");//返回的预付单信息
-                String nonceStr = (String) map.get("nonce_str");//微信返回的随机字符串
-                response.put("prepayId", prepayId);
+                response.put("package", "prepay_id=" + prepayId);
+                //生成的随机字符串
+                String nonceStr = StringUtils.getRandomStringByLength(32);
                 response.put("nonceStr", nonceStr);
-                response.put("appid", WxPayConfig.appid);
+                response.put("appId", WxPayConfig.appid);
                 response.put("signType", WxPayConfig.SIGNTYPE);
                 Long timeStamp = System.currentTimeMillis() / 1000;
                 response.put("timeStamp", timeStamp + "");//这边要将返回的时间戳转化成字符串，不然小程序端调用wx.requestPayment方法会报签名错误
 
-                String stringSignTemp = "appId=" + WxPayConfig.appid + "&nonceStr=" + nonceStr + "&prepayId=" + prepayId + "&signType=" + WxPayConfig.SIGNTYPE + "&timeStamp=" + timeStamp;
+                String stringSignTemp = "appId=" + WxPayConfig.appid + "&nonceStr=" + nonceStr + "&prepayId=prepay_id=" + prepayId + "&signType=" + WxPayConfig.SIGNTYPE + "&timeStamp=" + timeStamp;
                 //再次签名，这个签名用于小程序端调用wx.requesetPayment方法
                 String paySign = PayUtil.sign(stringSignTemp, WxPayConfig.key, "utf-8").toUpperCase();
                 logger.info("=======================第二次签名：" + paySign + "=====================");
 
                 response.put("paySign", paySign);
-                //向生产者提供参数,查询订单支付结果
-//                payProducer.payOrderNotice(paySign, out_trade_no);
             }
         }
 
         return response;
+    }
+
+
+    @Override
+    public String wxPayReturn(String out_trade_no) {
+        //生成的随机字符串
+        String nonce_str = StringUtils.getRandomStringByLength(32);
+
+        Map<String, String> queryParams = new HashMap<String, String>();
+        queryParams.put("appid", WxPayConfig.appid);
+        queryParams.put("mch_id", WxPayConfig.mch_id);
+        queryParams.put("out_trade_no", out_trade_no); //商户订单号
+        queryParams.put("nonce_str", nonce_str);
+
+        // 除去数组中的空值和签名参数
+        queryParams = PayUtil.paraFilter(queryParams);
+        String prestr = PayUtil.createLinkString(queryParams); // 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+
+        //MD5运算生成签名，这里是第一次签名，用于调用统一下单接口
+        String sign = PayUtil.sign(prestr, WxPayConfig.key, "utf-8").toUpperCase();
+
+        //拼接统一下单接口使用的xml数据，要将上一步生成的签名一起拼接进去
+        String xml = "<xml>" + "<appid>" + WxPayConfig.appid + "</appid>"
+                + "<mch_id>" + WxPayConfig.mch_id + "</mch_id>"
+                + "<nonce_str>" + nonce_str + "</nonce_str>"
+                + "<out_trade_no>" + out_trade_no + "</out_trade_no>"
+                + "<nonce_str>" + nonce_str + "</trade_type>"
+                + "<sign>" + sign + "</sign>"
+                + "</xml>";
+
+        System.out.println("调试模式_统一下单接口 请求XML数据：" + xml);
+
+        //调用统一下单接口，并接受返回的结果
+        String result = PayUtil.httpRequest(WxPayConfig.orderquery_url, "POST", xml);
+
+        // 将解析结果存储在HashMap中
+        Map map = null;
+        try {
+            map = PayUtil.xmlToMap(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //判断返回结果
+        String return_code = (String) map.get("return_code");
+
+        if ("SUCCESS".equals(return_code)) {
+            String result_code = (String) map.get("result_code");
+            if ("SUCCESS".equals(result_code)) {
+                String trade_state = (String) map.get("trade_state");//订单状态
+                if ("SUCCESS".equals(trade_state)) {  //支付成功
+                    return "支付成功";
+                } else if ("CLOSED".equals(trade_state)) {//交易关闭
+                    return "交易关闭";
+                } else if ("USERPAYING".equals(trade_state)) {//支付中
+                    return "支付中";
+                } else if ("PAYERROR".equals(trade_state)) {//支付失败
+                    return "支付失败";
+                }
+            }
+        }
+        return "订单状态不可识别,请重新查询!";
     }
 
     @Autowired
@@ -160,11 +221,11 @@ public class WxPayServiceImpl implements WxPayService {
         Integer total_fee = wxPayRefundParam.getTotal_fee();
 
         //查询下单商品信息
-        List<ZlOrderDetail> zlOrderDetailList = zlOrderService.getOrderDetail(out_trade_no);
+        List<OrderDetailVO> orderDetailVOList = zlOrderService.getOrderDetail(out_trade_no);
         //判断退款金额参数是否正常
         BigDecimal totalPrice = null;
-        for (ZlOrderDetail zlOrderDetail : zlOrderDetailList) {
-            totalPrice = totalPrice.add(zlOrderDetail.getPrice().multiply(BigDecimal.valueOf(zlOrderDetail.getGoodscount())));
+        for (OrderDetailVO orderDetailVO : orderDetailVOList) {
+            totalPrice = totalPrice.add(orderDetailVO.getPrice().multiply(BigDecimal.valueOf(orderDetailVO.getGoodsCount())));
         }
         if (totalPrice.intValue() == total_fee && refund_fee < totalPrice.intValue()) {
             Map<String, String> packageParams = new HashMap<String, String>();

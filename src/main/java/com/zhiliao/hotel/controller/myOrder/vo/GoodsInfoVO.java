@@ -20,7 +20,7 @@ public class GoodsInfoVO {
     /**
      * 1:便利店;2餐饮服务;3情趣用品;4土特产
      */
-    private Byte orderType;
+    private Short orderType;
 
     /**
      * 商品封面图片
@@ -68,11 +68,11 @@ public class GoodsInfoVO {
         this.goodsName = goodsName;
     }
 
-    public Byte getOrderType() {
+    public Short getOrderType() {
         return orderType;
     }
 
-    public void setOrderType(Byte orderType) {
+    public void setOrderType(Short orderType) {
         this.orderType = orderType;
     }
 
