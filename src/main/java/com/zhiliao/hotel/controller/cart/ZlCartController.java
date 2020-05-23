@@ -9,7 +9,6 @@ import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,9 +37,7 @@ public class ZlCartController {
     }
 
     @ApiOperation(value = "用户购物车添加")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
-    })
+    @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id")
     @UserLoginToken
     @PostMapping("addCart/{hotelId}")
     public ReturnString addCart(@PathVariable Integer hotelId, @RequestBody List<AddCartParam> addCartParams, HttpServletRequest request) {

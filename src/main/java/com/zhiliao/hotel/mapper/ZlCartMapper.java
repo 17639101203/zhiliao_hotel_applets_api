@@ -14,9 +14,9 @@ import java.util.List;
  */
 public interface ZlCartMapper extends Mapper<ZlCart> {
 
-    List<UserCartVo> findUserCart(@Param("hotelId") Integer hotelId, @Param("userId") Long userId);
-
     void deleteUserCart(@Param("hotelId") Integer hotelId, @Param("userId") Long userId);
 
     void addUserCartBatch(@Param("hotelId") Integer hotelId, @Param("userId") Long userId, @Param("addCartParams") List<AddCartParam> addCartParams, @Param("date") Integer date);
+
+    List<UserCartVo> findUserCart(@Param("hotelId") Integer hotelId, @Param("userId") Long userId);
 }

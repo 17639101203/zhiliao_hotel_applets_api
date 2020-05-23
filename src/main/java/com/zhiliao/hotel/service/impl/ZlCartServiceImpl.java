@@ -26,11 +26,6 @@ public class ZlCartServiceImpl implements ZlCartService {
     }
 
     @Override
-    public List<UserCartVo> findUserCart(Integer hotelId, Long userId) {
-        return zlCartMapper.findUserCart(hotelId, userId);
-    }
-
-    @Override
     public void deleteUserCart(Integer hotelId, Long userId) {
         zlCartMapper.deleteUserCart(hotelId, userId);
     }
@@ -38,5 +33,10 @@ public class ZlCartServiceImpl implements ZlCartService {
     @Override
     public void addUserCartBatch(Integer hotelId, Long userId, List<AddCartParam> addCartParams, Integer date) {
         zlCartMapper.addUserCartBatch(hotelId, userId, addCartParams, date);
+    }
+
+    @Override
+    public List<UserCartVo> findUserCart(Integer hotelId, Long userId) {
+        return zlCartMapper.findUserCart(hotelId, userId);
     }
 }

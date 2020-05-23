@@ -14,10 +14,6 @@
         <result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
     </resultMap>
 
-    <select id="findUserCart" resultType="com.zhiliao.hotel.controller.cart.vo.UserCartVo">
-
-    </select>
-
     <delete id="deleteUserCart">
         delete from zl_cart where HotelID=#{hotelId} and UserID=#{userId}
     </delete>
@@ -31,4 +27,7 @@
         </foreach>
     </insert>
 
+    <select id="findUserCart" resultType="com.zhiliao.hotel.controller.cart.vo.UserCartVo">
+
+    </select>
 </mapper>

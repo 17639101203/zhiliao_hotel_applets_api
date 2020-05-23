@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface ZlCartService {
 
-    List<UserCartVo> findUserCart(Integer hotelId, Long userId);
-
     void deleteUserCart(Integer hotelId, Long userId);
 
     void addUserCartBatch(Integer hotelId, Long userId, List<AddCartParam> addCartParams, Integer date);
+
+    List<UserCartVo> findUserCart(Integer hotelId, Long userId);
 }
