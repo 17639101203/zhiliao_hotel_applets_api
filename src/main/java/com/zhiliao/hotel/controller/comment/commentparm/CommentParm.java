@@ -22,4 +22,10 @@ public class CommentParm {
 
     @ApiModelProperty(value = "评价内容", required = true)
     private String content;
+
+    @ApiModelProperty(value = "房间号", required = true)
+    private String roomnumber;
+
+    @ApiModelProperty(value = "房间ID", required = true)
+    private Integer roomid;
 }

@@ -1,16 +1,20 @@
 package com.zhiliao.hotel.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.io.Serializable;
 
-/**
- * 
- *
- * @author null
- * @date 2020-04-14
- */
+@Data
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class ZlComment implements Serializable {
+
     /**
-     * 
+     * 自增ID
      */
     private Integer commentid;
 
@@ -20,9 +24,24 @@ public class ZlComment implements Serializable {
     private Integer hotelid;
 
     /**
+     *
+     */
+    private Integer roomid;
+
+    /**
      * 用户ID
      */
     private Long userid;
+
+    /**
+     * 用户名
+     */
+    private String username;
+
+    /**
+     * 用户联系电话
+     */
+    private String tel;
 
     /**
      * 1好评 2中评 3差评
@@ -35,9 +54,9 @@ public class ZlComment implements Serializable {
     private String tagids;
 
     /**
-     * 评论内容
+     * 评论图片地址（多张）
      */
-    private String content;
+    private String imageurls;
 
     /**
      * 评论类型 0:点赞吐槽
@@ -48,6 +67,26 @@ public class ZlComment implements Serializable {
      * 0:未通过;1已通过
      */
     private Byte commentstatus;
+
+    /**
+     * 房间号
+     */
+    private String roomnumber;
+
+    /**
+     * 操作人员
+     */
+    private String operatorname;
+
+    /**
+     * 回复时间
+     */
+    private Integer replydate;
+
+    /**
+     * 0:未读；1已读
+     */
+    private Byte replyreadstatus;
 
     /**
      * 删除状态:0正常;1删除;
@@ -65,139 +104,14 @@ public class ZlComment implements Serializable {
     private Integer updatedate;
 
     /**
-     * 酒店名称
+     * 评论内容
      */
-    private String hotelname;
+    private String content;
 
-    public String getHotelname() {
-        return hotelname;
-    }
+    /**
+     * 回复内容
+     */
+    private String replycontent;
 
-    public void setHotelname(String hotelname) {
-        this.hotelname = hotelname;
-    }
 
-    public Integer getCommentid() {
-        return commentid;
-    }
-
-    public void setCommentid(Integer commentid) {
-        this.commentid = commentid;
-    }
-
-    public Integer getHotelid() {
-        return hotelid;
-    }
-
-    public void setHotelid(Integer hotelid) {
-        this.hotelid = hotelid;
-    }
-
-    public Long getUserid() {
-        return userid;
-    }
-
-    public void setUserid(Long userid) {
-        this.userid = userid;
-    }
-
-    public Byte getEvaluation() {
-        return evaluation;
-    }
-
-    public void setEvaluation(Byte evaluation) {
-        this.evaluation = evaluation;
-    }
-
-    public String getTagids() {
-        return tagids;
-    }
-
-    public void setTagids(String tagids) {
-        this.tagids = tagids;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Byte getType() {
-        return type;
-    }
-
-    public void setType(Byte type) {
-        this.type = type;
-    }
-
-    public Byte getCommentstatus() {
-        return commentstatus;
-    }
-
-    public void setCommentstatus(Byte commentstatus) {
-        this.commentstatus = commentstatus;
-    }
-
-    public Boolean getIsdelete() {
-        return isdelete;
-    }
-
-    public void setIsdelete(Boolean isdelete) {
-        this.isdelete = isdelete;
-    }
-
-    public Integer getCreatedate() {
-        return createdate;
-    }
-
-    public void setCreatedate(Integer createdate) {
-        this.createdate = createdate;
-    }
-
-    public Integer getUpdatedate() {
-        return updatedate;
-    }
-
-    public void setUpdatedate(Integer updatedate) {
-        this.updatedate = updatedate;
-    }
-
-    @Override
-    public String toString() {
-        return "ZlComment{" +
-                "commentid=" + commentid +
-                ", hotelid=" + hotelid +
-                ", userid=" + userid +
-                ", evaluation=" + evaluation +
-                ", tagids='" + tagids + '\'' +
-                ", content='" + content + '\'' +
-                ", type=" + type +
-                ", commentstatus=" + commentstatus +
-                ", isdelete=" + isdelete +
-                ", createdate=" + createdate +
-                ", updatedate=" + updatedate +
-                ", hotelname=" + hotelname +
-                '}';
-    }
-
-    public ZlComment(Integer commentid, Integer hotelid, Long userid, Byte evaluation, String tagids, String content, Byte type, Byte commentstatus, Boolean isdelete, Integer createdate, Integer updatedate,String hotelname) {
-        this.commentid = commentid;
-        this.hotelid = hotelid;
-        this.userid = userid;
-        this.evaluation = evaluation;
-        this.tagids = tagids;
-        this.content = content;
-        this.type = type;
-        this.commentstatus = commentstatus;
-        this.isdelete = isdelete;
-        this.createdate = createdate;
-        this.updatedate = updatedate;
-        this.hotelname = hotelname;
-    }
-
-    public ZlComment() {
-    }
 }

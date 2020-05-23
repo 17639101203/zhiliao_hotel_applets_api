@@ -40,4 +40,11 @@ public interface ZlInvoiceMapper  {
      */
     Map<String,Object> queryInvoicedetail(@Param("userid") Long userid,@Param("invoiceid")Integer invoiceid);
 
+
+    /**
+     * 根据酒店ID查询开票二维码
+     * @param hotelid
+     * @return
+     */
+    Map<String,Object> queryInvoiceQrCodeUrl(Integer hotelid);
 }

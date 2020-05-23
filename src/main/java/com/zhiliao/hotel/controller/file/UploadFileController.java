@@ -46,12 +46,12 @@ public class UploadFileController {
     @ApiOperation(value = "文件上传")
     @PostMapping(value = "uploadFile", consumes = { "multipart/*" }, headers = "content-type=multipart/form-data")
     @NoLoginRequiredToken
-    public ReturnString uploadFile(MultipartFile[] multipartFiles) {  //param  token
+    public ReturnString<List<String>> uploadFile(MultipartFile[] multipartFiles) {  //param  token
         try {
                  List<String> pathList = new ArrayList<>();
                 for(MultipartFile multipartFile : multipartFiles){
                     if (multipartFile == null) {
-                        return new ReturnString(-1,"未接收到文件信息,请重新上传！");
+                        return new ReturnString<>(-1,"未接收到文件信息,请重新上传！");
                     }
                     UploadFileContext context = new UploadFileContext();
                     // 获取文件后缀（不带.）
@@ -62,14 +62,14 @@ public class UploadFileController {
                     log.info("文件map："+dataMap);
                     // 判断是否成功返回文件路径
                     if (dataMap == null) {
-                        return new ReturnString(-1,"获取文件路径信息出错！");
+                        return new ReturnString<>(-1,"获取文件路径信息出错！");
                     }
                      pathList.add((String)dataMap.get("filePathBase"));
                 }
-                return new ReturnString(pathList);
+                return new ReturnString<>(pathList);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString(-1,"获取出错");
+            return new ReturnString<>(-1,"获取出错");
 
         }
     }

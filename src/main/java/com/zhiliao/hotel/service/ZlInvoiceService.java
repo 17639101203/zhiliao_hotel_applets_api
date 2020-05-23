@@ -40,6 +40,13 @@ public interface ZlInvoiceService {
      */
     Map<String,Object> findinvoicedetails(Long userid, Integer invoiceid);
 
+
+    /**
+     * 根据酒店ID查询开票二维码
+     * @param hotelid
+     * @return
+     */
+    Map<String,Object> findInvoiceQrCodeUrl(Integer hotelid);
 }
 
 

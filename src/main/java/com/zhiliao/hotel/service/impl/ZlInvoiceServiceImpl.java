@@ -18,12 +18,10 @@ import java.util.Map;
 @Service
 public class ZlInvoiceServiceImpl implements ZlInvoiceService {
 
-    private final ZlInvoiceMapper mapper;
-
     @Autowired
-    public ZlInvoiceServiceImpl(ZlInvoiceMapper mapper) {
-        this.mapper = mapper;
-    }
+    private  ZlInvoiceMapper mapper;
+
+
 
     @Override
     @Transactional
@@ -58,6 +56,11 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     @Override
     public Map<String,Object> findinvoicedetails(Long userid, Integer invoiceid) {
         return mapper.queryInvoicedetail(userid,invoiceid);
+    }
+
+    @Override
+    public Map<String, Object> findInvoiceQrCodeUrl(Integer hotelid) {
+        return mapper.queryInvoiceQrCodeUrl(hotelid);
     }
 
 }

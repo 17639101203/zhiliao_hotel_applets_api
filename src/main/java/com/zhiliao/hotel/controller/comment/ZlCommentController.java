@@ -48,18 +48,34 @@ public class ZlCommentController {
     @PostMapping(value="addComment", consumes = { "multipart/*" }, headers = "content-type=multipart/form-data")
     @UserLoginToken
     public ReturnString addComment(HttpServletRequest request, CommentParm commentParm, MultipartFile[] multipartFiles) {
+
+        // 解析token获取userid
+        Long userid = TokenUtil.getUserId(request.getHeader("token"));
         ZlComment zlComment = new ZlComment();
+        Integer nowtime = DateUtils.javaToPhpNowDateTime();   // 获取当前时间
         zlComment.setHotelid(commentParm.getHotelID());   //酒店ID
-        zlComment.setUserid(TokenUtil.getUserId(request.getHeader("token")));   //用户ID  根据token获取userId
+        zlComment.setUserid(userid);   //用户ID  根据token获取userId
         zlComment.setEvaluation((byte) commentParm.getEvaluation().intValue());   //评论等级 1好评 2中评 3差评
         zlComment.setTagids(commentParm.getTagIDs());   //评论标签ID 多个用丨隔开
         zlComment.setContent(commentParm.getContent());   //评论内容
-        Integer nowtime = DateUtils.javaToPhpNowDateTime();
+        zlComment.setReplyreadstatus((byte) 1);        //  默认 1 已读  0 未读
+        zlComment.setRoomid(commentParm.getRoomid());      // 房间id
+        zlComment.setRoomnumber(commentParm.getRoomnumber());  // 房间号
         zlComment.setCreatedate(nowtime);  //添加时间
         zlComment.setUpdatedate(nowtime);  //更新时间
+
+        //传入文件分析后，得到文件存放地址  key：filePathBase
+        ReturnString<List<String>> returnString = uploadFileController.uploadFile(multipartFiles);
+        List<String> list =  returnString.getData();
+        StringBuffer Imgurls  = new StringBuffer();
+        list.forEach(item -> {
+            Imgurls.append(item+"|");   // 遍历集合，生成图片地址，并用 | 隔开
+        });
+        log.info("【报修图片地址：】"+Imgurls);
+        zlComment.setImageurls(Imgurls.toString());  //图片地址
         Integer res = zlCommentService.addComment(zlComment);
         if (res > 0) {
-            uploadFileController.uploadFile(multipartFiles);
+
             return new ReturnString<>(0, "评价成功");
         } else {
             log.error("评价失败");
@@ -87,6 +103,8 @@ public class ZlCommentController {
         List<ZlComment> list = zlCommentService.findComments(userid);
         return new ReturnString<>(list);
     }
+
+
 
     @ApiOperation(value = "点赞吐槽详情列表页信息获取(待修改)")
     @GetMapping("findComment")
