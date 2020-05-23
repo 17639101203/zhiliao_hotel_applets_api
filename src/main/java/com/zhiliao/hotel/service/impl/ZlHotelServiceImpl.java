@@ -2,6 +2,7 @@ package com.zhiliao.hotel.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
@@ -19,8 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
+import java.util.stream.Collectors;
 
 /**
  * 酒店业务实现类
@@ -64,8 +66,8 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 zlHotelroom = zlHotelRoomMapper.getById(roomId, hotelId);
 
                 //判断房间是否被绑定
-                if(zlHotelroom.getRoomstatus()==1){
-                     return new ReturnString("该房号已被绑定");
+                if (zlHotelroom.getRoomstatus() == 1) {
+                    return new ReturnString("该房号已被绑定");
                 }
 
                 if (!StringUtils.isEmpty(token)) {
@@ -99,19 +101,24 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
                 //根据酒店ID获取菜单
                 List<ZlXcxmenu> zlXcxMenuList = zlXcxMenuMapper.getMenuList(String.valueOf(zlHotel.getHotelID()));
-                zlHotel.setZlXcxMenus(zlXcxMenuList);
+
+                //根据menuName做数据去重 默认根据酒店id下的菜单
+                List<ZlXcxmenu> zlXcxMenuArrayList = zlXcxMenuList.stream().collect(
+                        Collectors.collectingAndThen(
+                                Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(ZlXcxmenu::getMenuname))), ArrayList::new)
+                );
+                zlHotel.setZlXcxMenus(zlXcxMenuArrayList);
 
                 //根据酒店Id获取公告
                 List<ZlNews> zlNews = zlNewsMapper.findAllJiuDianId(zlHotel.getHotelID(), 1, 1);
                 zlHotel.setZlNews(zlNews);
-
-                //获取客房数据
-                zlHotel.setHotelRoom(zlHotelroom);
-
-                ZlHotelIn hotelData = GsonUtils.gsonMaps(GsonUtils.objToJson(zlHotel), ZlHotelIn.class);
-
-                return new ReturnString(hotelData);
             }
+            //获取客房数据
+            zlHotel.setHotelRoom(zlHotelroom);
+
+            ZlHotelIn hotelData = GsonUtils.gsonMaps(GsonUtils.objToJson(zlHotel), ZlHotelIn.class);
+
+            return new ReturnString(hotelData);
         }
         return new ReturnString("数据加载失败");
     }

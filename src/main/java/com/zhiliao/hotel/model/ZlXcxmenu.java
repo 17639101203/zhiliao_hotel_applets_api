@@ -24,6 +24,9 @@ public class ZlXcxmenu implements Serializable {
      */
     private Integer menuid;
 
+
+    private Integer parentId;
+
     /**
      * 功能菜单名称
      */
@@ -133,6 +136,15 @@ public class ZlXcxmenu implements Serializable {
      */
     public void setHotelid(Integer hotelid) {
         this.hotelid = hotelid;
+    }
+
+
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
     /**
