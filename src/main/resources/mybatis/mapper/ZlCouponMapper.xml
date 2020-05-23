@@ -168,8 +168,17 @@
         <!--</trim>-->
     <!--</insert>-->
 
-    <select id="findByCouponID" resultType="com.zhiliao.hotel.model.ZlCoupon">
-        SELECT * FROM zl_coupon WHERE CouponID = #{couponID} LIMIT 1
+    <select id="findByCouponID" resultType="com.zhiliao.hotel.controller.myOrder.vo.CouponUserVO">
+        SELECT
+          zcu.CouponID,
+          zcu.UserID,
+          zc.DiscountMoney
+        FROM
+          zl_couponuser zcu
+          LEFT JOIN zl_coupon zc
+            ON zcu.CouponID = zc.CouponID
+        WHERE zcu.RecID = #{recID}
+        LIMIT 1
    </select>
 
 </mapper>

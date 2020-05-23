@@ -153,7 +153,7 @@ public class WxPayServiceImpl implements WxPayService {
         queryParams = PayUtil.paraFilter(queryParams);
         String prestr = PayUtil.createLinkString(queryParams); // 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
 
-        //MD5运算生成签名，这里是第一次签名，用于调用统一下单接口
+        //MD5运算生成签名,用于调用统一下单接口
         String sign = PayUtil.sign(prestr, WxPayConfig.key, "utf-8").toUpperCase();
 
         //拼接统一下单接口使用的xml数据，要将上一步生成的签名一起拼接进去

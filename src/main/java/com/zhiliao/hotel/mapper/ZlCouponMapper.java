@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
+import com.zhiliao.hotel.controller.myOrder.vo.CouponUserVO;
 import com.zhiliao.hotel.model.ZlCoupon;
 import tk.mybatis.mapper.common.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -11,5 +12,5 @@ import org.apache.ibatis.annotations.Param;
  * @create: 2020-05-20 15:34
  **/
 public interface ZlCouponMapper extends Mapper<ZlCoupon> {
-    ZlCoupon findByCouponID(@Param("couponID") Integer couponID);
+    CouponUserVO findByCouponID(@Param("recID") Integer recID);
 }

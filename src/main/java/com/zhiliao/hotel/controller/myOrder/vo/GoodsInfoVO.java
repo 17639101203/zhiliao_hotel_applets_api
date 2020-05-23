@@ -43,9 +43,9 @@ public class GoodsInfoVO {
     private Integer skuID;
 
     /**
-     * 优惠券ID
+     * 用户优惠券自增ID
      */
-    private Integer CouponID;
+    private Integer recID;
 
     /**
      * 配送地址
@@ -108,12 +108,12 @@ public class GoodsInfoVO {
         this.skuID = skuID;
     }
 
-    public Integer getCouponID() {
-        return CouponID;
+    public Integer getRecID() {
+        return recID;
     }
 
-    public void setCouponID(Integer couponID) {
-        CouponID = couponID;
+    public void setRecID(Integer recID) {
+        this.recID = recID;
     }
 
     public String getDeliveryAddress() {
