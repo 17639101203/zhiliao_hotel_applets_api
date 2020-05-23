@@ -1,7 +1,7 @@
 package com.zhiliao.hotel.service;
 
+import com.zhiliao.hotel.controller.cart.params.AddCartParam;
 import com.zhiliao.hotel.controller.cart.vo.UserCartVo;
-import com.zhiliao.hotel.model.ZlCart;
 
 import java.util.List;
 
@@ -11,15 +11,9 @@ import java.util.List;
 
 public interface ZlCartService {
 
-    ZlCart findCartDoesItExist(Long userId, Integer hotelId, Integer goodsId, Integer skuId);
+    List<UserCartVo> findUserCart(Integer hotelId, Long userId);
 
-    void addCart(ZlCart cart);
+    void deleteUserCart(Integer hotelId, Long userId);
 
-    void deleteCartByGoodsCountZero(ZlCart cart);
-
-    void updateCartGoodsCount(ZlCart cart);
-
-    List<UserCartVo> findUserCart(Integer hotelId, Long userId, Integer belongModule);
-
-    void emptyCart(Integer hotelId, Long userId, Integer belongModule);
+    void addUserCartBatch(Integer hotelId, Long userId, List<AddCartParam> addCartParams, Integer date);
 }

@@ -2,8 +2,8 @@ package com.zhiliao.hotel.controller.cart;
 
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.controller.cart.params.AddCartParam;
 import com.zhiliao.hotel.controller.cart.vo.UserCartVo;
-import com.zhiliao.hotel.model.ZlCart;
 import com.zhiliao.hotel.service.ZlCartService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
@@ -40,65 +40,39 @@ public class ZlCartController {
     @ApiOperation(value = "用户购物车添加")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
-            @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id"),
-            @ApiImplicitParam(paramType = "path", name = "skuId", dataType = "String", required = true, value = "商品skuId"),
-            @ApiImplicitParam(paramType = "path", name = "goodsCount", dataType = "String", required = true, value = "数量")
     })
     @UserLoginToken
-    @PostMapping("addCart/{hotelId}/{goodsId}/{skuId}/{goodsCount}")
-    public ReturnString addCart(@PathVariable Integer hotelId, @PathVariable Integer goodsId,
-                                @PathVariable Integer skuId, @PathVariable Integer goodsCount, HttpServletRequest request) {
+    @PostMapping("addCart/{hotelId}")
+    public ReturnString addCart(@PathVariable Integer hotelId, @RequestBody List<AddCartParam> addCartParams, HttpServletRequest request) {
         try {
-            String token = request.getHeader("token");
-            Long userId = TokenUtil.getUserId(token);
-            logger.info("开始请求->参数->酒店id：" + hotelId + "|商品id：" + goodsId + "|商品skuId：" + skuId + "|用户id：" + userId + "|数量：" + goodsCount);
-            // 先查询购物车数据是否存在
-            ZlCart cart = zlCartService.findCartDoesItExist(userId, hotelId, goodsId, skuId);
-            if (cart == null) {
-                if (goodsCount == 0) {
-                    return new ReturnString("商品数量为0，不执行添加操作");
-                }
-                // 不存在新增一条购物车数据
-                cart = new ZlCart();
-                cart.setUserid(userId);
-                cart.setHotelid(hotelId);
-                cart.setGoodsid(goodsId);
-                cart.setSkuid(skuId);
-                cart.setGoodscount(goodsCount);
-                cart.setCreatedate(DateUtils.javaToPhpNowDateTime());
-                cart.setUpdatedate(DateUtils.javaToPhpNowDateTime());
-                zlCartService.addCart(cart);
-            } else {
-                // 存在更改数量，如果数量为0，则删除数据
-                if (goodsCount == 0) {
-                    zlCartService.deleteCartByGoodsCountZero(cart);
-                } else {
-                    // 更新数量
-                    cart.setGoodscount(goodsCount);
-                    cart.setUpdatedate(DateUtils.javaToPhpNowDateTime());
-                    zlCartService.updateCartGoodsCount(cart);
-                }
+            if (addCartParams.size() > 0) {
+                String token = request.getHeader("token");
+                Long userId = TokenUtil.getUserId(token);
+                logger.info("开始请求->参数->酒店id：" + hotelId + "|用户id：" + userId + "|购物车长度：" + addCartParams.size());
+                // 先删除用户之前购物车数据
+                zlCartService.deleteUserCart(hotelId, userId);
+                // 添加新的购物车数据
+                Integer date = DateUtils.javaToPhpNowDateTime();
+                zlCartService.addUserCartBatch(hotelId, userId, addCartParams, date);
+                return new ReturnString<>(0, "购物车添加成功!");
             }
-            return new ReturnString(0, "添加成功");
+            return new ReturnString<>(0, "传入购物车长度为0，不执行操作!");
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("添加出错");
+            return new ReturnString<>("购物车添加出错!");
         }
     }
 
     @ApiOperation(value = "用户购物车查询")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
-            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产")
-    })
+    @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id")
     @UserLoginToken
-    @GetMapping("findUserCart/{hotelId}/{belongModule}")
-    public ReturnString findUserCart(@PathVariable Integer hotelId, @PathVariable Integer belongModule, HttpServletRequest request) {
+    @GetMapping("findUserCart/{hotelId}")
+    public ReturnString<UserCartVo> findUserCart(@PathVariable Integer hotelId, HttpServletRequest request) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
-            logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|用户id：" + userId);
-            List<UserCartVo> userCartVoList = zlCartService.findUserCart(hotelId, userId, belongModule);
+            logger.info("开始请求->参数->酒店id：" + hotelId + "|用户id：" + userId);
+            List<UserCartVo> userCartVoList = zlCartService.findUserCart(hotelId, userId);
             return new ReturnString(userCartVoList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,22 +81,19 @@ public class ZlCartController {
     }
 
     @ApiOperation(value = "用户购物车清空")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
-            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产")
-    })
+    @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id")
     @UserLoginToken
-    @PostMapping("emptyCart/{hotelId}/{belongModule}")
-    public ReturnString emptyCart(@PathVariable Integer hotelId, @PathVariable Integer belongModule, HttpServletRequest request) {
+    @PostMapping("emptyCart/{hotelId}")
+    public ReturnString emptyCart(@PathVariable Integer hotelId, HttpServletRequest request) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
-            logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|用户id：" + userId);
-            zlCartService.emptyCart(hotelId, userId, belongModule);
-            return new ReturnString(0, "清空成功");
+            logger.info("开始请求->参数->酒店id：" + hotelId + "|用户id：" + userId);
+            zlCartService.deleteUserCart(hotelId, userId);
+            return new ReturnString<>(0, "清空成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("清空出错");
+            return new ReturnString<>("清空出错");
         }
     }
 }

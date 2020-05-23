@@ -11,58 +11,47 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("购物车添加")
 public class AddCartParam {
 
-    @ApiModelProperty(value = "商品id", required = true)
-    private Integer goodsId;
+    @ApiModelProperty(value = "商品skuId", required = true)
+    private Integer skuId;
 
-    @ApiModelProperty(value = "商品名", required = true)
-    private String goodsName;
+    @ApiModelProperty(value = "酒店商品id", required = true)
+    private Integer hotelGoodsId;
 
-    @ApiModelProperty(value = "数量", required = true)
-    private Integer num;
+    @ApiModelProperty(value = "商品数量", required = true)
+    private Integer goodsCount;
 
-    @ApiModelProperty(value = "商品金额", required = true)
-    private Float price;
+    @ApiModelProperty(value = "所属模块: 1便利店;2餐饮服务;3情趣用品;4土特产", required = true)
+    private Integer belongModule;
 
-    @ApiModelProperty(value = "商品图片", required = true)
-    private String url;
-
-    public Integer getGoodsId() {
-        return goodsId;
+    public Integer getSkuId() {
+        return skuId;
     }
 
-    public void setGoodsId(Integer goodsId) {
-        this.goodsId = goodsId;
+    public void setSkuId(Integer skuId) {
+        this.skuId = skuId;
     }
 
-    public String getGoodsName() {
-        return goodsName;
+    public Integer getHotelGoodsId() {
+        return hotelGoodsId;
     }
 
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
+    public void setHotelGoodsId(Integer hotelGoodsId) {
+        this.hotelGoodsId = hotelGoodsId;
     }
 
-    public Integer getNum() {
-        return num;
+    public Integer getGoodsCount() {
+        return goodsCount;
     }
 
-    public void setNum(Integer num) {
-        this.num = num;
+    public void setGoodsCount(Integer goodsCount) {
+        this.goodsCount = goodsCount;
     }
 
-    public Float getPrice() {
-        return price;
+    public Integer getBelongModule() {
+        return belongModule;
     }
 
-    public void setPrice(Float price) {
-        this.price = price;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
+    public void setBelongModule(Integer belongModule) {
+        this.belongModule = belongModule;
     }
 }

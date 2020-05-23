@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
+import com.zhiliao.hotel.controller.cart.params.AddCartParam;
 import com.zhiliao.hotel.controller.cart.vo.UserCartVo;
 import com.zhiliao.hotel.model.ZlCart;
 import org.apache.ibatis.annotations.Param;
@@ -13,9 +14,9 @@ import java.util.List;
  */
 public interface ZlCartMapper extends Mapper<ZlCart> {
 
-    void updateCartGoodsCount(@Param("cartId") Long cartId, @Param("goodsCount") Integer goodsCount, @Param("updateDate") Integer updateDate);
+    List<UserCartVo> findUserCart(@Param("hotelId") Integer hotelId, @Param("userId") Long userId);
 
-    List<UserCartVo> findUserCart(@Param("hotelId") Integer hotelId, @Param("userId") Long userId, @Param("belongModule") Integer belongModule);
+    void deleteUserCart(@Param("hotelId") Integer hotelId, @Param("userId") Long userId);
 
-    void emptyCart(@Param("hotelId") Integer hotelId, @Param("userId") Long userId, @Param("belongModule") Integer belongModule);
+    void addUserCartBatch(@Param("hotelId") Integer hotelId, @Param("userId") Long userId, @Param("addCartParams") List<AddCartParam> addCartParams, @Param("date") Integer date);
 }

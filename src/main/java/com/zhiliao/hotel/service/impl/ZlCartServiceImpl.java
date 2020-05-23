@@ -1,8 +1,8 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.zhiliao.hotel.controller.cart.params.AddCartParam;
 import com.zhiliao.hotel.controller.cart.vo.UserCartVo;
 import com.zhiliao.hotel.mapper.ZlCartMapper;
-import com.zhiliao.hotel.model.ZlCart;
 import com.zhiliao.hotel.service.ZlCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,37 +26,17 @@ public class ZlCartServiceImpl implements ZlCartService {
     }
 
     @Override
-    public ZlCart findCartDoesItExist(Long userId, Integer hotelId, Integer goodsId, Integer skuId) {
-        ZlCart cart = new ZlCart();
-        cart.setUserid(userId);
-        cart.setHotelid(hotelId);
-        cart.setGoodsid(goodsId);
-        cart.setSkuid(skuId);
-        return zlCartMapper.selectOne(cart);
+    public List<UserCartVo> findUserCart(Integer hotelId, Long userId) {
+        return zlCartMapper.findUserCart(hotelId, userId);
     }
 
     @Override
-    public void addCart(ZlCart cart) {
-        zlCartMapper.insert(cart);
+    public void deleteUserCart(Integer hotelId, Long userId) {
+        zlCartMapper.deleteUserCart(hotelId, userId);
     }
 
     @Override
-    public void deleteCartByGoodsCountZero(ZlCart cart) {
-        zlCartMapper.deleteByPrimaryKey(cart);
-    }
-
-    @Override
-    public void updateCartGoodsCount(ZlCart cart) {
-        zlCartMapper.updateCartGoodsCount(cart.getCartid(), cart.getGoodscount(), cart.getUpdatedate());
-    }
-
-    @Override
-    public List<UserCartVo> findUserCart(Integer hotelId, Long userId, Integer belongModule) {
-        return zlCartMapper.findUserCart(hotelId, userId, belongModule);
-    }
-
-    @Override
-    public void emptyCart(Integer hotelId, Long userId, Integer belongModule) {
-        zlCartMapper.emptyCart(hotelId, userId, belongModule);
+    public void addUserCartBatch(Integer hotelId, Long userId, List<AddCartParam> addCartParams, Integer date) {
+        zlCartMapper.addUserCartBatch(hotelId, userId, addCartParams, date);
     }
 }
