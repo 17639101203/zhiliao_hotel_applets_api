@@ -22,10 +22,7 @@ public class ZlTag implements Serializable {
      */
     private Integer hotelid;
 
-    /**
-     * 客房ID
-     */
-    private Integer roomid;
+
 
     /**
      * 标签ID

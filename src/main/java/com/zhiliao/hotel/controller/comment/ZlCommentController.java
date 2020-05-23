@@ -1,9 +1,11 @@
 package com.zhiliao.hotel.controller.comment;
 
+import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.comment.commentparm.CommentParm;
+import com.zhiliao.hotel.controller.comment.commentparm.CommentVO;
 import com.zhiliao.hotel.controller.file.UploadFileController;
 import com.zhiliao.hotel.model.ZlComment;
 import com.zhiliao.hotel.model.ZlTag;
@@ -25,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Zhangyong
@@ -45,9 +48,9 @@ public class ZlCommentController {
 
 
     @ApiOperation(value = "添加点赞吐槽")
-    @PostMapping(value="addComment", consumes = { "multipart/*" }, headers = "content-type=multipart/form-data")
+    @PostMapping(value = "addComment", consumes = {"multipart/*"}, headers = "content-type=multipart/form-data")
     @UserLoginToken
-    public ReturnString addComment(HttpServletRequest request, CommentParm commentParm, MultipartFile[] multipartFiles) {
+    public ReturnString addComment(HttpServletRequest request,  CommentParm commentParm, MultipartFile[] multipartFiles) {
 
         // 解析token获取userid
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
@@ -66,44 +69,34 @@ public class ZlCommentController {
 
         //传入文件分析后，得到文件存放地址  key：filePathBase
         ReturnString<List<String>> returnString = uploadFileController.uploadFile(multipartFiles);
-        List<String> list =  returnString.getData();
-        StringBuffer Imgurls  = new StringBuffer();
+        List<String> list = returnString.getData();
+        StringBuffer Imgurls = new StringBuffer();
         list.forEach(item -> {
-            Imgurls.append(item+"|");   // 遍历集合，生成图片地址，并用 | 隔开
+            Imgurls.append(item + "|");   // 遍历集合，生成图片地址，并用 | 隔开
         });
-        log.info("【报修图片地址：】"+Imgurls);
+        log.info("【评论图片地址：】" + Imgurls);
         zlComment.setImageurls(Imgurls.toString());  //图片地址
-        Integer res = zlCommentService.addComment(zlComment);
-        if (res > 0) {
-
-            return new ReturnString<>(0, "评价成功");
-        } else {
-            log.error("评价失败");
-            return new ReturnString<>(-1, "评价失败");
-        }
-
+        zlCommentService.addComment(zlComment);
+        return new ReturnString<>(0, "评价成功");
     }
 
     @ApiOperation(value = "获取点赞吐槽标签")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "hotelID", dataType = "int", required = true, value = "酒店ID"),
-    })
     @GetMapping("findTags/{hotelid}")
     @PassToken
-    public ReturnString<List<ZlTag>> findTags(@PathVariable Integer hotelid) {
-        List<ZlTag> zlTagList = zlCommentService.findTags(hotelid);
+    public ReturnString<List<Map<String,Object>>> findTags(@PathVariable Integer hotelid) {
+        List<Map<String,Object>> zlTagList = zlCommentService.findTags(hotelid);
         return new ReturnString<>(zlTagList);
     }
 
-    @ApiOperation(value = "点赞吐槽详情列表获取(待修改)")
-    @GetMapping("findCommentList")
+    @ApiOperation(value = "点赞吐槽详情列表获取")
+    @GetMapping("findCommentList/{pageNo}/{pageSize}")
     @UserLoginToken
-    public ReturnString<List<ZlComment>> findCommentList(HttpServletRequest request) {
+    public PageInfoResult<List<CommentVO>> findCommentList(HttpServletRequest request,
+                                                         @PathVariable Integer pageNo,@PathVariable Integer pageSize) {
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
-        List<ZlComment> list = zlCommentService.findComments(userid);
-        return new ReturnString<>(list);
+        PageInfoResult<List<CommentVO>> list = zlCommentService.findComments(userid,pageNo,pageSize);
+        return list;
     }
-
 
 
     @ApiOperation(value = "点赞吐槽详情列表页信息获取(待修改)")

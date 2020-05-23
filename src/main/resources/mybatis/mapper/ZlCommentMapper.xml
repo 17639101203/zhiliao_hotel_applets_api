@@ -153,8 +153,23 @@
   </insert>
 
 
-  <select id="getComments" resultType="com.zhiliao.hotel.model.ZlComment">
-    select * from zl_comment where UserID = #{userid} and IsDelete = 0
+  <select id="getComments" resultType="com.zhiliao.hotel.controller.comment.commentparm.CommentVO">
+    select
+        a.CommentID,a.Evaluation,a.TagIDs,a.ImageUrls,a.Content,b.HotelName
+    from
+        zl_comment a left join zl_hotel b on a.hotelid = b.hotelid
+    where a.UserID = #{userid} and a.IsDelete = 0
+  </select>
+
+  <select id="getTagName" resultType="java.lang.String">
+    select
+        TagName
+    from
+        zl_tag
+    where TagID  in
+    <foreach collection="tagids" item="tagids"  index="index" open="(" close=")" separator=",">
+      #{tagids}
+    </foreach>
   </select>
 
 </mapper>

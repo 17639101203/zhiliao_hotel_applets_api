@@ -1,9 +1,12 @@
 package com.zhiliao.hotel.service;
 
+import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.controller.comment.commentparm.CommentVO;
 import com.zhiliao.hotel.model.ZlComment;
 import com.zhiliao.hotel.model.ZlTag;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Zhangyong
@@ -20,11 +23,11 @@ public interface ZlCommentService {
     /**
         获取点赞吐槽标签
     */
-    List<ZlTag> findTags(Integer hotelid);
+    List<Map<String,Object>> findTags(Integer hotelid);
 
 
     /**
      * 获取点赞吐槽列表
      */
-    List<ZlComment> findComments(Long userid);
+    PageInfoResult<List<CommentVO>> findComments(Long userid, Integer pageNo, Integer pageSize);
 }

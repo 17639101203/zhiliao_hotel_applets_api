@@ -1,5 +1,9 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.controller.comment.commentparm.CommentVO;
 import com.zhiliao.hotel.mapper.ZlCommentMapper;
 import com.zhiliao.hotel.mapper.ZlTagMapper;
 import com.zhiliao.hotel.model.ZlComment;
@@ -10,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: zyj
@@ -33,12 +38,30 @@ public class ZlCommentServiceImpl implements ZlCommentService {
     }
 
     @Override
-    public List<ZlTag> findTags(Integer hotelid) {
+    public List<Map<String,Object>> findTags(Integer hotelid) {
         return zlTagMapper.getTags(hotelid);
     }
 
+    
+    
     @Override
-    public List<ZlComment> findComments(Long userid) {
-        return zlCommentMapper.getComments(userid);
+    public PageInfoResult<List<CommentVO>> findComments(Long userid,Integer pageNo,Integer pageSize) {
+        // 设定当前页码，以及当前页显示的条数
+        PageHelper.startPage(pageNo, pageSize);
+        List<CommentVO> comments = zlCommentMapper.getComments(userid);
+        for (CommentVO comment : comments) {
+            String[] tagids;
+            if(comment.getTagids().contains("|")){
+                // 拆解标签ID
+                tagids = comment.getTagids().split("|");
+            }else{
+                tagids = new String[1];
+                tagids[0] = comment.getTagids();
+            }
+            // 查询标签名
+            comment.setTagname(zlCommentMapper.getTagName(tagids));
+        }
+        PageInfo<CommentVO> pageInfo = new PageInfo<>(comments);
+        return PageInfoResult.getPageInfoResult(pageInfo);
     }
 }

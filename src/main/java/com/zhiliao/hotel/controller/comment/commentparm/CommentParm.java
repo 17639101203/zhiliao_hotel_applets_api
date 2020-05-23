@@ -26,6 +26,6 @@ public class CommentParm {
     @ApiModelProperty(value = "房间号", required = true)
     private String roomnumber;
 
-    @ApiModelProperty(value = "房间ID", required = true)
+    @ApiModelProperty(value = "客房ID", required = true)
     private Integer roomid;
 }

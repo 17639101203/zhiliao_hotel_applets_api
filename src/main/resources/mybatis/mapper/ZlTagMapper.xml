@@ -4,7 +4,6 @@
     <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlTag">
         <result column="TagID" jdbcType="INTEGER" property="tagid"/>
         <result column="HotelID" jdbcType="INTEGER" property="hotelid"/>
-        <result column="RoomID" jdbcType="INTEGER" property="roomid"/>
         <result column="TagName" jdbcType="CHAR" property="tagname"/>
         <result column="Type" jdbcType="SMALLINT" property="type"/>
         <result column="Sort" jdbcType="INTEGER" property="sort"/>
@@ -14,8 +13,15 @@
     </resultMap>
 
 
-    <select id="getTags" resultType="com.zhiliao.hotel.model.ZlTag">
-    select * from zl_tag where HotelID = #{hotelid} and IsDelete = 0
+    <select id="getTags" resultType="java.util.HashMap">
+    select
+        TagID,TagName
+    from
+        zl_tag
+    where
+        HotelID = #{hotelid} and IsDelete = 0 and Type = 3
+    order by
+        Sort
   </select>
 
 
