@@ -36,10 +36,4 @@
         <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
     </resultMap>
 
-
-    <select id="getUserById" resultMap="wxuserResultMap">
-
-    select UserID,WxOpenID,WxQrcodeTicket,WxUnionID,NickName,IsNew,HotelID from zl_wxuser where UserID=#{userId}
-
-    </select>
 </mapper>

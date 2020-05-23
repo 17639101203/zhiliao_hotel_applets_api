@@ -10,6 +10,4 @@ import tk.mybatis.mapper.common.Mapper;
 
 public interface ZlWxuserMapper extends Mapper<ZlWxuser> {
 
-    public ZlWxuser getUserById(@Param("userId") String userId);
-
 }
