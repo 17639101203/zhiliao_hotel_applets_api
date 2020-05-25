@@ -15,7 +15,7 @@ public interface ZlServicegoodsMapper extends Mapper<ZlServicegoods> {
 
     List<String> findServicegoodsCategory(@Param("hotelId") Integer hotelId, @Param("belongModule") Integer belongModule);
 
-    List<ServicegoodsListVo> findServicegoodsList(@Param("hotelId") Integer hotelId, @Param("belongModule") Integer belongModule, @Param("categoryName") String categoryName);
+    List<ServicegoodsListVo> findServicegoodsList(@Param("hotelId") Integer hotelId, @Param("belongModule") Integer belongModule, @Param("categoryName") String categoryName, @Param("keyword") String keyword);
 
     ServicegoodsListVo findServicegoodsDetail(@Param("goodsId") Integer goodsId);
 

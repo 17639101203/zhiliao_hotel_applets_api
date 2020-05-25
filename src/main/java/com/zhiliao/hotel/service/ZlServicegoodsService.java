@@ -13,7 +13,7 @@ public interface ZlServicegoodsService {
 
     List<String> findServicegoodsCategory(Integer hotelId, Integer belongModule);
 
-    PageInfoResult findServicegoodsList(Integer hotelId, Integer belongModule, Integer pageNo, Integer pageSize, String categoryName);
+    PageInfoResult findServicegoodsList(Integer hotelId, Integer belongModule, Integer pageNo, Integer pageSize, String categoryName, String keyword);
 
     ServicegoodsListVo findServicegoodsDetail(Integer goodsId);
 }

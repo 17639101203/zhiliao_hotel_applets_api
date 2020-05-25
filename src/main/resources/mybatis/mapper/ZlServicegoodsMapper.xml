@@ -50,8 +50,11 @@
         left join zl_servicegoodscategory zsgc on zsg.GoodsCategoryID=zsgc.GoodsCategoryID
         where zsg.CheckStatus=2 and zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsgc.CategoryStatus=1 and zsgc.IsDelete=0
         and zsg.HotelID=#{hotelId} and zsgc.BelongModule=#{belongModule}
-        <if test='categoryName!="all"'>
+        <if test='categoryName!=null and categoryName!="all"'>
             and zsgc.CategoryName=#{categoryName}
+        </if>
+        <if test='keyword!=null'>
+            and zsg.GoodsName like concat('%',#{keyword},'%')
         </if>
         order by zsg.Sort asc,zsg.UpdateDate desc
     </select>

@@ -33,10 +33,10 @@ public class ZlServicegoodsServiceImpl implements ZlServicegoodsService {
     }
 
     @Override
-    public PageInfoResult findServicegoodsList(Integer hotelId, Integer belongModule, Integer pageNo, Integer pageSize, String categoryName) {
+    public PageInfoResult findServicegoodsList(Integer hotelId, Integer belongModule, Integer pageNo, Integer pageSize, String categoryName, String keyword) {
         // 设定当前页码，以及当前页显示的条数
         PageHelper.startPage(pageNo, pageSize);
-        List<ServicegoodsListVo> dataList = zlServicegoodsMapper.findServicegoodsList(hotelId, belongModule, categoryName);
+        List<ServicegoodsListVo> dataList = zlServicegoodsMapper.findServicegoodsList(hotelId, belongModule, categoryName, keyword);
         PageInfo<ServicegoodsListVo> pageInfo = new PageInfo<>(dataList);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }

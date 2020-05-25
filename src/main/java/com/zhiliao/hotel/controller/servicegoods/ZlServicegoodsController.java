@@ -12,10 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -71,11 +68,11 @@ public class ZlServicegoodsController {
     @UserLoginToken
     @GetMapping("findServicegoodsList/{hotelId}/{belongModule}/{pageNo}/{pageSize}")
     public ReturnString<PageInfoResult<ServicegoodsListVo>> findServicegoodsList(@PathVariable Integer hotelId, @PathVariable Integer belongModule,
-                                             @PathVariable Integer pageNo, @PathVariable Integer pageSize, String categoryName) {
+                                                                                 @PathVariable Integer pageNo, @PathVariable Integer pageSize, String categoryName) {
         try {
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|页码：" + pageNo + "|每页大小：" + pageSize + "|分类名称：" + categoryName);
             pageSize = pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize;
-            PageInfoResult servicegoodsList = zlServicegoodsService.findServicegoodsList(hotelId, belongModule, pageNo, pageSize, categoryName);
+            PageInfoResult servicegoodsList = zlServicegoodsService.findServicegoodsList(hotelId, belongModule, pageNo, pageSize, categoryName, null);
             return new ReturnString(servicegoodsList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,6 +94,29 @@ public class ZlServicegoodsController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取客房服务商品详情出错!");
+        }
+    }
+
+    @ApiOperation(value = "客房服务商品搜索")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
+            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务"),
+            @ApiImplicitParam(paramType = "query", name = "keyword", dataType = "String", required = true, value = "搜索关键词"),
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "String", required = true, value = "页码"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "String", required = true, value = "每页大小")
+    })
+    @UserLoginToken
+    @PostMapping("searchServicegoods/{hotelId}/{belongModule}/{pageNo}/{pageSize}")
+    public ReturnString<PageInfoResult<ServicegoodsListVo>> searchServicegoods(@PathVariable Integer hotelId, @PathVariable Integer belongModule,
+                                                                               String keyword, @PathVariable Integer pageNo, @PathVariable Integer pageSize) {
+        try {
+            logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|页码：" + pageNo + "|每页大小：" + pageSize + "|搜索关键词：" + keyword);
+            pageSize = pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize;
+            PageInfoResult searchServicegoodsList = zlServicegoodsService.findServicegoodsList(hotelId, belongModule, pageNo, pageSize, null, keyword);
+            return new ReturnString(searchServicegoodsList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString(-1, "获取客房服务商品搜索数据出错!");
         }
     }
 }
