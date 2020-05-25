@@ -3,15 +3,14 @@
 
 <mapper namespace="com.zhiliao.hotel.mapper.ZlCartMapper">
     <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlCart">
-        <result column="CartID" jdbcType="BIGINT" property="cartid"/>
-        <result column="UserID" jdbcType="BIGINT" property="userid"/>
-        <result column="HotelID" jdbcType="INTEGER" property="hotelid"/>
-        <result column="SkuID" jdbcType="INTEGER" property="skuid"/>
-        <result column="HotelGoodsID" jdbcType="INTEGER" property="hotelgoodsid"/>
-        <result column="GoodsCount" jdbcType="INTEGER" property="goodscount"/>
-        <result column="BelongModule" jdbcType="SMALLINT" property="belongmodule"/>
-        <result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
-        <result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
+        <result column="CartID" jdbcType="BIGINT" property="cartid" />
+        <result column="UserID" jdbcType="BIGINT" property="userid" />
+        <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
+        <result column="HotelGoodsSkuID" jdbcType="INTEGER" property="hotelgoodsskuid" />
+        <result column="GoodsCount" jdbcType="INTEGER" property="goodscount" />
+        <result column="BelongModule" jdbcType="SMALLINT" property="belongmodule" />
+        <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
+        <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
     </resultMap>
 
     <delete id="deleteUserCart">

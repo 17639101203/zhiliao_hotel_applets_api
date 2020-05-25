@@ -1,5 +1,10 @@
 package com.zhiliao.hotel.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +13,10 @@ import java.io.Serializable;
  * @author xiehuiyi
  * @date 2020-04-14
  */
+@Data
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class ZlCart implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,12 +39,7 @@ public class ZlCart implements Serializable {
     /**
      * skuID
      */
-    private Integer skuid;
-
-    /**
-     * 酒店商品ID
-     */
-    private Integer hotelgoodsid;
+    private Integer hotelgoodsskuid;
 
     /**
      * 商品数量
@@ -56,76 +60,4 @@ public class ZlCart implements Serializable {
      * 修改时间
      */
     private Integer updatedate;
-
-    public Long getCartid() {
-        return cartid;
-    }
-
-    public void setCartid(Long cartid) {
-        this.cartid = cartid;
-    }
-
-    public Long getUserid() {
-        return userid;
-    }
-
-    public void setUserid(Long userid) {
-        this.userid = userid;
-    }
-
-    public Integer getHotelid() {
-        return hotelid;
-    }
-
-    public void setHotelid(Integer hotelid) {
-        this.hotelid = hotelid;
-    }
-
-    public Integer getSkuid() {
-        return skuid;
-    }
-
-    public void setSkuid(Integer skuid) {
-        this.skuid = skuid;
-    }
-
-    public Integer getHotelgoodsid() {
-        return hotelgoodsid;
-    }
-
-    public void setHotelgoodsid(Integer hotelgoodsid) {
-        this.hotelgoodsid = hotelgoodsid;
-    }
-
-    public Integer getGoodscount() {
-        return goodscount;
-    }
-
-    public void setGoodscount(Integer goodscount) {
-        this.goodscount = goodscount;
-    }
-
-    public Short getBelongmodule() {
-        return belongmodule;
-    }
-
-    public void setBelongmodule(Short belongmodule) {
-        this.belongmodule = belongmodule;
-    }
-
-    public Integer getCreatedate() {
-        return createdate;
-    }
-
-    public void setCreatedate(Integer createdate) {
-        this.createdate = createdate;
-    }
-
-    public Integer getUpdatedate() {
-        return updatedate;
-    }
-
-    public void setUpdatedate(Integer updatedate) {
-        this.updatedate = updatedate;
-    }
 }
