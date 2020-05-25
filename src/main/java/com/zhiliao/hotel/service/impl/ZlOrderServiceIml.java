@@ -217,7 +217,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
         //将该订单商品放入redis,进行锁定
         redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO + orderSerialNo, goodsShortInfoVOList);
         //将该订单商品标记放入redis,时间最长为5分钟
-        redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + orderSerialNo, goodsShortInfoVOList, 5, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + orderSerialNo, goodsShortInfoVOList, 1, TimeUnit.MINUTES);
 
         if (goodsCouponInfoVOList.size() > 0) {
             //将该订单优惠券集合放入redis
@@ -298,9 +298,9 @@ public class ZlOrderServiceIml implements ZlOrderService {
             redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, count - goodsCount);
         }
         //删除redis中锁定的订单商品
-        redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
+        redisTemplate.delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
         //删除redis中锁定的订单商品标记
-        redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + out_trade_no);
+        redisTemplate.delete(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + out_trade_no);
 
         //拿出存入redis的订单商品所使用的优惠券的集合
         if (redisTemplate.hasKey(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no)) {
@@ -310,10 +310,10 @@ public class ZlOrderServiceIml implements ZlOrderService {
             for (GoodsCouponInfoVO goodsCouponInfoVO : goodsCouponInfoVOList) {
                 Integer recID = goodsCouponInfoVO.getRecID();
                 //删除redis中锁定的优惠券
-                redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_RECID + recID);
+                redisTemplate.delete(RedisKeyConstant.ORDER_RECID + recID);
             }
             //删除redis中锁定的优惠券集合
-            redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
+            redisTemplate.delete(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
         }
     }
 
@@ -329,7 +329,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
             redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, count - goodsCount);
         }
         //删除redis中锁定的订单商品
-        redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
+        redisTemplate.delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
 
         //拿出存入redis的订单商品所使用的优惠券的集合
         if (redisTemplate.hasKey(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no)) {
@@ -339,10 +339,10 @@ public class ZlOrderServiceIml implements ZlOrderService {
             for (GoodsCouponInfoVO goodsCouponInfoVO : goodsCouponInfoVOList) {
                 Integer recID = goodsCouponInfoVO.getRecID();
                 //删除redis中锁定的优惠券
-                redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_RECID + recID);
+                redisTemplate.delete(RedisKeyConstant.ORDER_RECID + recID);
             }
             //删除redis中锁定的优惠券集合
-            redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
+            redisTemplate.delete(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
         }
     }
 }
