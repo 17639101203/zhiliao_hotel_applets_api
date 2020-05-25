@@ -61,20 +61,6 @@ public class ZlOrderServiceIml implements ZlOrderService {
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
-    /*@Override
-    public void byOrderId(Long orderID) {
-        ZlOrder order = orderMapper.findById(orderID);
-        if (order != null) {
-            order.setOrderstatus((byte) -1);
-            order.setUpdatedate((int) new Date().getTime());
-        }
-
-        //修改订单表
-        orderMapper.byOrderId(order);
-        //修改订单详情表
-        orderDetailMapper.byOrderdetailId(order);
-    }*/
-
     @Override
     public UserGoodsReturn submitOrder(Long userID,
                                        HotelBasicVO hotelBasicVO,
