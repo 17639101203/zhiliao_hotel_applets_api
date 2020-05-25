@@ -20,12 +20,22 @@ public class GoodsInfoVO {
     /**
      * 1:便利店;2餐饮服务;3情趣用品;4土特产
      */
-    private Short orderType;
+    private Short belongModule;
 
     /**
      * 商品封面图片
      */
     private String coverImgUrl;
+
+    /**
+     * 用户优惠券自增ID
+     */
+    private Integer recID;
+
+    /**
+     * 备注信息
+     */
+    private String remark;
 
     /**
      * 单价
@@ -41,11 +51,6 @@ public class GoodsInfoVO {
      * 商品SkuID
      */
     private Integer skuID;
-
-    /**
-     * 用户优惠券自增ID
-     */
-    private Integer recID;
 
     /**
      * 配送地址
@@ -68,12 +73,12 @@ public class GoodsInfoVO {
         this.goodsName = goodsName;
     }
 
-    public Short getOrderType() {
-        return orderType;
+    public Short getBelongModule() {
+        return belongModule;
     }
 
-    public void setOrderType(Short orderType) {
-        this.orderType = orderType;
+    public void setBelongModule(Short belongModule) {
+        this.belongModule = belongModule;
     }
 
     public String getCoverImgUrl() {
@@ -108,6 +113,14 @@ public class GoodsInfoVO {
         this.skuID = skuID;
     }
 
+    public String getDeliveryAddress() {
+        return DeliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        DeliveryAddress = deliveryAddress;
+    }
+
     public Integer getRecID() {
         return recID;
     }
@@ -116,11 +129,11 @@ public class GoodsInfoVO {
         this.recID = recID;
     }
 
-    public String getDeliveryAddress() {
-        return DeliveryAddress;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDeliveryAddress(String deliveryAddress) {
-        DeliveryAddress = deliveryAddress;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

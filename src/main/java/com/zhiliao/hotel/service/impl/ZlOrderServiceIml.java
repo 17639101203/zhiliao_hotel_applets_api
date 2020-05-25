@@ -12,6 +12,7 @@ import com.zhiliao.hotel.model.ZlOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.ZlOrderService;
 import com.zhiliao.hotel.utils.OrderIDUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -55,8 +56,8 @@ public class ZlOrderServiceIml implements ZlOrderService {
 
     @Override
     public PageInfoResult findAllOrder(OrderInfoVO vo) {
-        List<OrderListQueryResult> ordersList=orderMapper.findAllOrder(vo);
-        PageInfo<OrderListQueryResult> pageInfo=new PageInfo<>(ordersList);
+        List<OrderListQueryResult> ordersList = orderMapper.findAllOrder(vo);
+        PageInfo<OrderListQueryResult> pageInfo = new PageInfo<>(ordersList);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
@@ -75,7 +76,9 @@ public class ZlOrderServiceIml implements ZlOrderService {
     }
 
     @Override
-    public UserGoodsReturn submitOrder(Long userID, HotelBasicVO hotelBasicVO, Map<String, List<GoodsInfoVO>> goodsInfoMap) {
+    public UserGoodsReturn submitOrder(Long userID,
+                                       HotelBasicVO hotelBasicVO,
+                                       Map<String, List<GoodsInfoVO>> goodsInfoMap) {
         //封装商品短信息对象
         List<GoodsShortInfoVO> goodsShortInfoVOList = new LinkedList<>();
 
@@ -119,9 +122,8 @@ public class ZlOrderServiceIml implements ZlOrderService {
             //获取该模块类型商品的第一张商品图片地址
             String coverImgUrl = goodsInfoVOList.get(0).getCoverImgUrl();
             //获取该模块类型商品的类型
-            Short orderType = goodsInfoVOList.get(0).getOrderType();
-            //获取该模块类型商品的优惠券id
-            Integer recID = goodsInfoVOList.get(0).getRecID();
+            Short belongModule = goodsInfoVOList.get(0).getBelongModule();
+
             //如果该模块是土特产,则需要判断是否需要配送
             if (key.equals("TTC")) {
                 String deliveryAddress = goodsInfoVOList.get(0).getDeliveryAddress();
@@ -139,6 +141,12 @@ public class ZlOrderServiceIml implements ZlOrderService {
             }
             totalPrice = totalPrice.add(sendCash);
             zlOrder.setTotalprice(totalPrice);
+
+            //获取优惠券自增id
+            Integer recID = goodsInfoVOList.get(0).getRecID();
+            //获取备注信息
+            String remark = goodsInfoVOList.get(0).getRemark();
+
             //如果用户优惠券自增id不为-1,说明用户在该模块使用了优惠券
             if (recID != -1) {
                 //根据优惠券id查询优惠券信息
@@ -161,9 +169,13 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 //优惠券id为-1说明没有使用优惠券,实际支付金额=总价
                 zlOrder.setActuallypay(totalPrice);
             }
+            if (StringUtils.isNoneBlank(remark)) {
+                //备注信息不为空且不是空串
+                zlOrder.setRemark(remark);
+            }
 
             zlOrder.setGoodscoverurl(coverImgUrl);
-            zlOrder.setBelongmodule(orderType);
+            zlOrder.setBelongmodule(belongModule);
             zlOrder.setPaystatus((byte) 1);
             zlOrder.setIsdelete(false);
             zlOrder.setOrderstatus((byte) 0);
@@ -201,7 +213,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 zlOrderDetail.setGoodscoverurl(goodsInfoVOList.get(i).getCoverImgUrl());
                 zlOrderDetail.setPrice(goodsInfoVOList.get(i).getPrice());
                 zlOrderDetail.setGoodscount(goodsInfoVOList.get(i).getGoodsCount());
-                zlOrderDetail.setBelongmodule(goodsInfoVOList.get(i).getOrderType());
+                zlOrderDetail.setBelongmodule(goodsInfoVOList.get(i).getBelongModule());
                 zlOrderDetail.setIsdelete(false);
                 zlOrderDetail.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
                 zlOrderDetail.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
@@ -221,7 +233,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
         //将该订单商品标记放入redis,时间最长为5分钟
         redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + orderSerialNo, goodsShortInfoVOList, 5, TimeUnit.MINUTES);
 
-        if (goodsCouponInfoVOList.size()>0){
+        if (goodsCouponInfoVOList.size() > 0) {
             //将该订单优惠券集合放入redis
             redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO_ + orderSerialNo, goodsCouponInfoVOList);
             //定义redis优惠券集合标记,时间最长为5分钟
