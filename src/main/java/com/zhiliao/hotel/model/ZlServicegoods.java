@@ -1,6 +1,12 @@
 package com.zhiliao.hotel.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * 客房服务商品表
@@ -8,6 +14,10 @@ import java.io.Serializable;
  * @author xiehuiyi
  * @date 2020-04-23
  */
+@Data
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class ZlServicegoods implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,24 +53,64 @@ public class ZlServicegoods implements Serializable {
     private String tags;
 
     /**
-     * 商品详情
+     * 最多领取次数
      */
-    private String content;
+    private Integer applymaxcount;
 
     /**
-     * 0:下架;1上架
-     */
-    private Byte goodsstatus;
-
-    /**
-     * 每天每房间可领取次数
+     * 每次可领取数量
      */
     private Integer applylimitcount;
+
+    /**
+     * 审核状态:-1驳回;0待审核;1审核中;2审核通过
+     */
+    private Byte checkstatus;
+
+    /**
+     * 售价
+     */
+    private BigDecimal saleprice;
+
+    /**
+     * 原价
+     */
+    private BigDecimal originalprice;
+
+    /**
+     * 市场价
+     */
+    private BigDecimal marketprice;
+
+    /**
+     * 浏览量
+     */
+    private Integer visitcount;
+
+    /**
+     * 初始销量
+     */
+    private Integer virtualsoldcount;
+
+    /**
+     * 规格
+     */
+    private String property;
+
+    /**
+     * 首页显示：0否；1是
+     */
+    private Boolean isindexshow;
 
     /**
      * 排序
      */
     private Integer sort;
+
+    /**
+     * 0:下架;1上架
+     */
+    private Byte goodsstatus;
 
     /**
      * 删除状态:0正常;1删除;
@@ -77,107 +127,8 @@ public class ZlServicegoods implements Serializable {
      */
     private Integer updatedate;
 
-    public Integer getGoodsid() {
-        return goodsid;
-    }
-
-    public void setGoodsid(Integer goodsid) {
-        this.goodsid = goodsid;
-    }
-
-    public Integer getHotelid() {
-        return hotelid;
-    }
-
-    public void setHotelid(Integer hotelid) {
-        this.hotelid = hotelid;
-    }
-
-    public Integer getGoodscategoryid() {
-        return goodscategoryid;
-    }
-
-    public void setGoodscategoryid(Integer goodscategoryid) {
-        this.goodscategoryid = goodscategoryid;
-    }
-
-    public String getCoverimgurl() {
-        return coverimgurl;
-    }
-
-    public void setCoverimgurl(String coverimgurl) {
-        this.coverimgurl = coverimgurl;
-    }
-
-    public String getGoodsname() {
-        return goodsname;
-    }
-
-    public void setGoodsname(String goodsname) {
-        this.goodsname = goodsname;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Byte getGoodsstatus() {
-        return goodsstatus;
-    }
-
-    public void setGoodsstatus(Byte goodsstatus) {
-        this.goodsstatus = goodsstatus;
-    }
-
-    public Integer getApplylimitcount() {
-        return applylimitcount;
-    }
-
-    public void setApplylimitcount(Integer applylimitcount) {
-        this.applylimitcount = applylimitcount;
-    }
-
-    public Integer getSort() {
-        return sort;
-    }
-
-    public void setSort(Integer sort) {
-        this.sort = sort;
-    }
-
-    public Boolean getIsdelete() {
-        return isdelete;
-    }
-
-    public void setIsdelete(Boolean isdelete) {
-        this.isdelete = isdelete;
-    }
-
-    public Integer getCreatedate() {
-        return createdate;
-    }
-
-    public void setCreatedate(Integer createdate) {
-        this.createdate = createdate;
-    }
-
-    public Integer getUpdatedate() {
-        return updatedate;
-    }
-
-    public void setUpdatedate(Integer updatedate) {
-        this.updatedate = updatedate;
-    }
+    /**
+     * 商品详情
+     */
+    private String content;
 }

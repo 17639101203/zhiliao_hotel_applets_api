@@ -2,19 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlServicegoodsMapper">
     <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlServicegoods">
-        <result column="GoodsID" jdbcType="INTEGER" property="goodsid" />
-        <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
-        <result column="GoodsCategoryID" jdbcType="INTEGER" property="goodscategoryid" />
-        <result column="CoverImgUrl" jdbcType="CHAR" property="coverimgurl" />
-        <result column="GoodsName" jdbcType="CHAR" property="goodsname" />
-        <result column="Tags" jdbcType="CHAR" property="tags" />
-        <result column="Content" jdbcType="LONGVARCHAR" property="content" />
-        <result column="GoodsStatus" jdbcType="TINYINT" property="goodsstatus" />
-        <result column="ApplyLimitCount" jdbcType="INTEGER" property="applylimitcount" />
-        <result column="Sort" jdbcType="INTEGER" property="sort" />
-        <result column="IsDelete" jdbcType="BIT" property="isdelete" />
-        <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
-        <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
+        <result column="GoodsID" jdbcType="INTEGER" property="goodsid"/>
+        <result column="HotelID" jdbcType="INTEGER" property="hotelid"/>
+        <result column="GoodsCategoryID" jdbcType="INTEGER" property="goodscategoryid"/>
+        <result column="CoverImgUrl" jdbcType="CHAR" property="coverimgurl"/>
+        <result column="GoodsName" jdbcType="CHAR" property="goodsname"/>
+        <result column="Tags" jdbcType="CHAR" property="tags"/>
+        <result column="Content" jdbcType="LONGVARCHAR" property="content"/>
+        <result column="ApplyMaxCount" jdbcType="INTEGER" property="applymaxcount"/>
+        <result column="ApplyLimitCount" jdbcType="INTEGER" property="applylimitcount"/>
+        <result column="CheckStatus" jdbcType="TINYINT" property="checkstatus"/>
+        <result column="SalePrice" jdbcType="DECIMAL" property="saleprice"/>
+        <result column="OriginalPrice" jdbcType="DECIMAL" property="originalprice"/>
+        <result column="MarketPrice" jdbcType="DECIMAL" property="marketprice"/>
+        <result column="VisitCount" jdbcType="INTEGER" property="visitcount"/>
+        <result column="VirtualSoldCount" jdbcType="INTEGER" property="virtualsoldcount"/>
+        <result column="Property" jdbcType="CHAR" property="property"/>
+        <result column="IsIndexShow" jdbcType="BIT" property="isindexshow"/>
+        <result column="Sort" jdbcType="INTEGER" property="sort"/>
+        <result column="GoodsStatus" jdbcType="TINYINT" property="goodsstatus"/>
+        <result column="IsDelete" jdbcType="BIT" property="isdelete"/>
+        <result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
+        <result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
     </resultMap>
 
     <select id="findServicegoodsCategory" resultType="java.lang.String">
