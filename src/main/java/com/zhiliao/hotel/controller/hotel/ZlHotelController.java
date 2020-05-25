@@ -29,7 +29,7 @@ public class ZlHotelController {
     private ZlHotelService zlHotelService;
 
     @ApiOperation(value = "陈荣_首页")
-    @NoLoginRequiredToken
+    @UserLoginToken
     @GetMapping("getHotelList")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "String", required = true, value = "酒店ID"),

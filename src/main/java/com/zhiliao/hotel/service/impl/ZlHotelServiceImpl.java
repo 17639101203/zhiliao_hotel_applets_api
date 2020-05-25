@@ -60,25 +60,25 @@ public class ZlHotelServiceImpl implements ZlHotelService {
             if (!StringUtils.isEmpty(roomId)) {
                 //根据酒店id，客房id
                 zlHotelroom = zlHotelRoomMapper.getById(roomId, hotelId);
+                if (zlHotelroom != null) {
+                    //判断房间是否被绑定
+                    if (zlHotelroom.getRoomstatus() == 1) {
+                        return new ReturnString("该房号已被绑定");
+                    }
 
-                //判断房间是否被绑定
-                if (zlHotelroom.getRoomstatus() == 1) {
-                    return new ReturnString("该房号已被绑定");
-                }
+                    if (!StringUtils.isEmpty(token)) {
+                        //获取 token得到微信用户Id
+                        Long weiXinUserId = TokenUtil.getUserId(token);
+                        if (weiXinUserId != null) {
+                            //客房状态改变为已被绑定
+                            zlHotelRoomMapper.updateById(roomId);
 
-                if (!StringUtils.isEmpty(token)) {
-                    //获取 token得到微信用户Id
-                    Long weiXinUserId = TokenUtil.getUserId(token);
-                    if (weiXinUserId != null) {
-                        //客房状态改变为已被绑定
-                        zlHotelRoomMapper.updateById(roomId);
-
-                        //客房扫描率录入
-                        addZlUserLoginLog(weiXinUserId, Integer.valueOf(roomId));
+                            //客房扫描率录入
+                            addZlUserLoginLog(weiXinUserId, Integer.valueOf(roomId), zlHotelroom.getRoomnumber());
+                        }
                     }
                 }
             }
-
             ZlHotelIn zlHotel = new ZlHotelIn(zlHotelMapper.getById(hotelId));
             if (zlHotel != null) {
                 //获取缓存value
@@ -115,30 +115,32 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         return new ReturnString("数据加载失败");
     }
 
-    private void addZlUserLoginLog(Long userId, Integer roomId) {
+    private void addZlUserLoginLog(Long userId, Integer roomId, String roomNumBer) {
         ZlUserloginlog zlUserloginlog = new ZlUserloginlog();
         ZlWxuser zlWxuser = zlWxuserService.findWxuserByUserId(userId);
-        //用户id
-        zlUserloginlog.setUserid(zlWxuser.getUserid());
-        //微信用户昵称
-        zlUserloginlog.setNickname(zlWxuser.getNickname());
-        //获取当前登录ip地址
-        zlUserloginlog.setLoginip(IPUtils.getIpAddr(request));
-        //客房名称
-        zlUserloginlog.setRoomnumber("房间名测试cr123");
-        //根据用户所属酒店Id
-        ZlHotel zlHotel = zlHotelMapper.getById(String.valueOf(zlWxuser.getHotelid()));
-        //酒店名称
-        zlUserloginlog.setHotelname(zlHotel.getHotelName());
-        //酒店id
-        zlUserloginlog.setHotelid(Integer.valueOf(zlHotel.getHotelID()));
-        //获取当前时间戳
-        zlUserloginlog.setCreatedate(Long.valueOf(DateUtils.javaToPhpNowDateTime()));
-        //客房Id
-        zlUserloginlog.setRoomid(roomId);
-        int count = zlUserloginlogService.insert(zlUserloginlog);
-        if (count > 0) {
-            return;
+        if (zlWxuser != null) {
+            //用户id
+            zlUserloginlog.setUserid(zlWxuser.getUserid());
+            //微信用户昵称
+            zlUserloginlog.setNickname(zlWxuser.getNickname());
+            //根据用户所属酒店Id
+            ZlHotel zlHotel = zlHotelMapper.getById(String.valueOf(zlWxuser.getHotelid()));
+            //酒店名称
+            zlUserloginlog.setHotelname(zlHotel.getHotelName());
+            //酒店id
+            zlUserloginlog.setHotelid(Integer.valueOf(zlHotel.getHotelID()));
+            //获取当前登录ip地址
+            zlUserloginlog.setLoginip(IPUtils.getIpAddr(request));
+            //客房名称
+            zlUserloginlog.setRoomnumber(roomNumBer);
+            //获取当前时间戳
+            zlUserloginlog.setCreatedate(Long.valueOf(DateUtils.javaToPhpNowDateTime()));
+            //客房Id
+            zlUserloginlog.setRoomid(roomId);
+            int count = zlUserloginlogService.insert(zlUserloginlog);
+            if (count > 0) {
+                return;
+            }
         }
     }
 

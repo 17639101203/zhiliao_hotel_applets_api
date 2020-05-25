@@ -1,7 +1,7 @@
 package com.zhiliao.hotel.controller.menu;
 
-import com.zhiliao.hotel.common.NoLoginRequiredToken;
 import com.zhiliao.hotel.common.ReturnString;
+import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.service.ZlXcxMenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -21,7 +21,7 @@ public class ZlXcxMenuController {
     private ZlXcxMenuService zlXcxMenuService;
 
     @GetMapping("getMenuList")
-    @NoLoginRequiredToken
+    @UserLoginToken
     @ApiOperation(value = "酒店超市菜单")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
