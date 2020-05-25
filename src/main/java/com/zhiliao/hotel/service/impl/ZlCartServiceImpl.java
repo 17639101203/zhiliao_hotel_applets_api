@@ -32,6 +32,9 @@ public class ZlCartServiceImpl implements ZlCartService {
 
     @Override
     public void addUserCartBatch(Integer hotelId, Long userId, List<AddCartParam> addCartParams, Integer date) {
+        // 先删除用户之前购物车数据
+        zlCartMapper.deleteUserCart(hotelId, userId);
+        // 添加新的购物车数据
         zlCartMapper.addUserCartBatch(hotelId, userId, addCartParams, date);
     }
 

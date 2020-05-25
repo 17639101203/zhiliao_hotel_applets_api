@@ -20,10 +20,10 @@
 
     <insert id="addUserCartBatch" parameterType="java.util.List" useGeneratedKeys="false">
         insert into zl_cart
-        (UserID,HotelID,SkuID,HotelGoodsID,GoodsCount,BelongModule,CreateDate,UpdateDate)
+        (UserID,HotelID,HotelGoodsSkuID,GoodsCount,BelongModule,CreateDate,UpdateDate)
         values
         <foreach collection="addCartParams" item="item" index="index" separator=",">
-            (#{userId},#{hotelId},#{item.skuId},#{item.hotelGoodsId},#{item.goodsCount},#{item.belongModule},#{date},#{date})
+            (#{userId},#{hotelId},#{item.hotelGoodsSkuId},#{item.goodsCount},#{item.belongModule},#{date},#{date})
         </foreach>
     </insert>
 

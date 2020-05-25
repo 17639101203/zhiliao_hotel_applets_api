@@ -46,17 +46,15 @@ public class ZlCartController {
                 String token = request.getHeader("token");
                 Long userId = TokenUtil.getUserId(token);
                 logger.info("开始请求->参数->酒店id：" + hotelId + "|用户id：" + userId + "|购物车长度：" + addCartParams.size());
-                // 先删除用户之前购物车数据
-                zlCartService.deleteUserCart(hotelId, userId);
                 // 添加新的购物车数据
                 Integer date = DateUtils.javaToPhpNowDateTime();
                 zlCartService.addUserCartBatch(hotelId, userId, addCartParams, date);
-                return new ReturnString<>(0, "购物车添加成功!");
+                return new ReturnString(0, "购物车添加成功!");
             }
-            return new ReturnString<>(0, "传入购物车长度为0，不执行操作!");
+            return new ReturnString("传入购物车长度为0，不执行操作!");
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString<>("购物车添加出错!");
+            return new ReturnString("购物车添加出错!");
         }
     }
 
@@ -66,6 +64,7 @@ public class ZlCartController {
     @GetMapping("findUserCart/{hotelId}")
     public ReturnString<UserCartVo> findUserCart(@PathVariable Integer hotelId, HttpServletRequest request) {
         try {
+            // TODO: SQL等商品表确认再编写
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("开始请求->参数->酒店id：" + hotelId + "|用户id：" + userId);
@@ -87,10 +86,10 @@ public class ZlCartController {
             Long userId = TokenUtil.getUserId(token);
             logger.info("开始请求->参数->酒店id：" + hotelId + "|用户id：" + userId);
             zlCartService.deleteUserCart(hotelId, userId);
-            return new ReturnString<>(0, "清空成功");
+            return new ReturnString(0, "购物车清空成功!");
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString<>("清空出错");
+            return new ReturnString("购物车清空出错!");
         }
     }
 }
