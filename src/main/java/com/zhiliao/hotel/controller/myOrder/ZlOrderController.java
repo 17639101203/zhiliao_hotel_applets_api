@@ -126,8 +126,8 @@ public class ZlOrderController {
             @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号")
     })
     @PostMapping("cancelOrder/{out_trade_no}")
-//    @UserLoginToken
-    @PassToken
+    @UserLoginToken
+//    @PassToken
     @ResponseBody
     public ReturnString cancelOrder(@PathVariable("out_trade_no") String out_trade_no) {
         try {
@@ -147,8 +147,8 @@ public class ZlOrderController {
             @ApiImplicitParam(paramType = "path", name = "roomNumber", dataType = "String", required = true, value = "房间编号")
     })
     @PostMapping("submitOrder/{hotelID}/{hotelName}/{roomID}/{roomNumber}")
-//    @UserLoginToken
-    @PassToken
+    @UserLoginToken
+//    @PassToken
     @ResponseBody
     public ReturnString submitOrder(
             HttpServletRequest httpServletRequest,
@@ -165,8 +165,8 @@ public class ZlOrderController {
         hotelBasicVO.setRoomNumber(roomNumber);
         //获取用户id
         String token = httpServletRequest.getHeader("token");
-//        Long userID = TokenUtil.getUserId(token);
-        Long userID = System.currentTimeMillis();
+        Long userID = TokenUtil.getUserId(token);
+//        Long userID = System.currentTimeMillis();
 
         try {
             UserGoodsReturn userGoodsReturn = orderService.submitOrder(userID, hotelBasicVO, GoodsInfoMap);

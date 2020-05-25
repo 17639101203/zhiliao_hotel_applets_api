@@ -217,7 +217,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
         //将该订单商品放入redis,进行锁定
         redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO + orderSerialNo, goodsShortInfoVOList);
         //将该订单商品标记放入redis,时间最长为5分钟
-        redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + orderSerialNo, goodsShortInfoVOList, 1, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + orderSerialNo, goodsShortInfoVOList, 15, TimeUnit.MINUTES);
 
         if (goodsCouponInfoVOList.size() > 0) {
             //将该订单优惠券集合放入redis
