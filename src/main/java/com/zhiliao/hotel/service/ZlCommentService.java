@@ -30,4 +30,10 @@ public interface ZlCommentService {
      * 获取点赞吐槽列表
      */
     PageInfoResult<List<CommentVO>> findComments(Long userid, Integer pageNo, Integer pageSize);
+
+
+    /**
+     * 获取点赞吐槽详情页
+     */
+    Map<String,Object> findComment(Long userid,Integer commentid);
 }

@@ -52,16 +52,36 @@ public class ZlCommentServiceImpl implements ZlCommentService {
         for (CommentVO comment : comments) {
             String[] tagids;
             if(comment.getTagids().contains("|")){
-                // 拆解标签ID
+                // 拆解标签I
                 tagids = comment.getTagids().split("|");
             }else{
                 tagids = new String[1];
                 tagids[0] = comment.getTagids();
             }
             // 查询标签名
-            comment.setTagname(zlCommentMapper.getTagName(tagids));
+            comment.setTagname(zlTagMapper.getTagName(tagids));
         }
         PageInfo<CommentVO> pageInfo = new PageInfo<>(comments);
         return PageInfoResult.getPageInfoResult(pageInfo);
+    }
+
+    @Override
+    public Map<String, Object> findComment(Long userid, Integer commentid) {
+        Map<String, Object> comment = zlCommentMapper.getComment(userid, commentid);
+        String[] tagids;
+        // 获取标签ID
+        String TagIDs = comment.get("TagIDs").toString();
+        if(TagIDs.contains("|")){
+            // 拆解标签I
+            tagids = TagIDs.split("|");
+        }else{
+            tagids = new String[1];
+            tagids[0] = TagIDs;
+        }
+        // 查询标签名
+        comment.put("tagname",zlTagMapper.getTagName(tagids));
+        // 修改为已读状态
+        zlCommentMapper.changeReplyReadStatus(userid, commentid);
+        return comment;
     }
 }

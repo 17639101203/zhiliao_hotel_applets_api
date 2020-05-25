@@ -25,4 +25,16 @@
   </select>
 
 
+
+    <select id="getTagName" resultType="java.lang.String">
+        select
+        TagName
+        from
+        zl_tag
+        where TagID  in
+        <foreach collection="tagids" item="tagids"  index="index" open="(" close=")" separator=",">
+            #{tagids}
+        </foreach>
+    </select>
+
 </mapper>

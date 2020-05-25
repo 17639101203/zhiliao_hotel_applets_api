@@ -1,175 +1,186 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlCommentMapper">
-  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlComment">
-    <result column="CommentID" jdbcType="INTEGER" property="commentid" />
-    <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
-    <result column="RoomID" jdbcType="INTEGER" property="roomid" />
-    <result column="UserID" jdbcType="BIGINT" property="userid" />
-    <result column="UserName" jdbcType="CHAR" property="username" />
-    <result column="Tel" jdbcType="CHAR" property="tel" />
-    <result column="Evaluation" jdbcType="TINYINT" property="evaluation" />
-    <result column="TagIDs" jdbcType="VARCHAR" property="tagids" />
-    <result column="ImageUrls" jdbcType="VARCHAR" property="imageurls" />
-    <result column="Type" jdbcType="TINYINT" property="type" />
-    <result column="CommentStatus" jdbcType="TINYINT" property="commentstatus" />
-    <result column="RoomNumber" jdbcType="CHAR" property="roomnumber" />
-    <result column="OperatorName" jdbcType="CHAR" property="operatorname" />
-    <result column="ReplyDate" jdbcType="INTEGER" property="replydate" />
-    <result column="ReplyReadStatus" jdbcType="TINYINT" property="replyreadstatus" />
-    <result column="IsDelete" jdbcType="BIT" property="isdelete" />
-    <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
-    <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
-    <result column="Content" jdbcType="LONGVARCHAR" property="content" />
-    <result column="ReplyContent" jdbcType="LONGVARCHAR" property="replycontent" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlComment">
+        <result column="CommentID" jdbcType="INTEGER" property="commentid"/>
+        <result column="HotelID" jdbcType="INTEGER" property="hotelid"/>
+        <result column="RoomID" jdbcType="INTEGER" property="roomid"/>
+        <result column="UserID" jdbcType="BIGINT" property="userid"/>
+        <result column="UserName" jdbcType="CHAR" property="username"/>
+        <result column="Tel" jdbcType="CHAR" property="tel"/>
+        <result column="Evaluation" jdbcType="TINYINT" property="evaluation"/>
+        <result column="TagIDs" jdbcType="VARCHAR" property="tagids"/>
+        <result column="ImageUrls" jdbcType="VARCHAR" property="imageurls"/>
+        <result column="Type" jdbcType="TINYINT" property="type"/>
+        <result column="CommentStatus" jdbcType="TINYINT" property="commentstatus"/>
+        <result column="RoomNumber" jdbcType="CHAR" property="roomnumber"/>
+        <result column="OperatorName" jdbcType="CHAR" property="operatorname"/>
+        <result column="ReplyDate" jdbcType="INTEGER" property="replydate"/>
+        <result column="ReplyReadStatus" jdbcType="TINYINT" property="replyreadstatus"/>
+        <result column="IsDelete" jdbcType="BIT" property="isdelete"/>
+        <result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
+        <result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
+        <result column="Content" jdbcType="LONGVARCHAR" property="content"/>
+        <result column="ReplyContent" jdbcType="LONGVARCHAR" property="replycontent"/>
+    </resultMap>
 
-  <insert id="addComment" parameterType="com.zhiliao.hotel.model.ZlComment">
-    insert into zl_comment
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="commentid != null">
-        CommentID,
-      </if>
-      <if test="hotelid != null">
-        HotelID,
-      </if>
-      <if test="roomid != null">
-        RoomID,
-      </if>
-      <if test="userid != null">
-        UserID,
-      </if>
-      <if test="username != null">
-        UserName,
-      </if>
-      <if test="tel != null">
-        Tel,
-      </if>
-      <if test="evaluation != null">
-        Evaluation,
-      </if>
-      <if test="tagids != null">
-        TagIDs,
-      </if>
-      <if test="imageurls != null">
-        ImageUrls,
-      </if>
-      <if test="type != null">
-        Type,
-      </if>
-      <if test="commentstatus != null">
-        CommentStatus,
-      </if>
-      <if test="roomnumber != null">
-        RoomNumber,
-      </if>
-      <if test="operatorname != null">
-        OperatorName,
-      </if>
-      <if test="replydate != null">
-        ReplyDate,
-      </if>
-      <if test="replyreadstatus != null">
-        ReplyReadStatus,
-      </if>
-      <if test="isdelete != null">
-        IsDelete,
-      </if>
-      <if test="createdate != null">
-        CreateDate,
-      </if>
-      <if test="updatedate != null">
-        UpdateDate,
-      </if>
-      <if test="content != null">
-        Content,
-      </if>
-      <if test="replycontent != null">
-        ReplyContent,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="commentid != null">
-        #{commentid,jdbcType=INTEGER},
-      </if>
-      <if test="hotelid != null">
-        #{hotelid,jdbcType=INTEGER},
-      </if>
-      <if test="roomid != null">
-        #{roomid,jdbcType=INTEGER},
-      </if>
-      <if test="userid != null">
-        #{userid,jdbcType=BIGINT},
-      </if>
-      <if test="username != null">
-        #{username,jdbcType=CHAR},
-      </if>
-      <if test="tel != null">
-        #{tel,jdbcType=CHAR},
-      </if>
-      <if test="evaluation != null">
-        #{evaluation,jdbcType=TINYINT},
-      </if>
-      <if test="tagids != null">
-        #{tagids,jdbcType=VARCHAR},
-      </if>
-      <if test="imageurls != null">
-        #{imageurls,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=TINYINT},
-      </if>
-      <if test="commentstatus != null">
-        #{commentstatus,jdbcType=TINYINT},
-      </if>
-      <if test="roomnumber != null">
-        #{roomnumber,jdbcType=CHAR},
-      </if>
-      <if test="operatorname != null">
-        #{operatorname,jdbcType=CHAR},
-      </if>
-      <if test="replydate != null">
-        #{replydate,jdbcType=INTEGER},
-      </if>
-      <if test="replyreadstatus != null">
-        #{replyreadstatus,jdbcType=TINYINT},
-      </if>
-      <if test="isdelete != null">
-        #{isdelete,jdbcType=BIT},
-      </if>
-      <if test="createdate != null">
-        #{createdate,jdbcType=INTEGER},
-      </if>
-      <if test="updatedate != null">
-        #{updatedate,jdbcType=INTEGER},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="replycontent != null">
-        #{replycontent,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
-  </insert>
+    <insert id="addComment" parameterType="com.zhiliao.hotel.model.ZlComment">
+        insert into zl_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="commentid != null">
+                CommentID,
+            </if>
+            <if test="hotelid != null">
+                HotelID,
+            </if>
+            <if test="roomid != null">
+                RoomID,
+            </if>
+            <if test="userid != null">
+                UserID,
+            </if>
+            <if test="username != null">
+                UserName,
+            </if>
+            <if test="tel != null">
+                Tel,
+            </if>
+            <if test="evaluation != null">
+                Evaluation,
+            </if>
+            <if test="tagids != null">
+                TagIDs,
+            </if>
+            <if test="imageurls != null">
+                ImageUrls,
+            </if>
+            <if test="type != null">
+                Type,
+            </if>
+            <if test="commentstatus != null">
+                CommentStatus,
+            </if>
+            <if test="roomnumber != null">
+                RoomNumber,
+            </if>
+            <if test="operatorname != null">
+                OperatorName,
+            </if>
+            <if test="replydate != null">
+                ReplyDate,
+            </if>
+            <if test="replyreadstatus != null">
+                ReplyReadStatus,
+            </if>
+            <if test="isdelete != null">
+                IsDelete,
+            </if>
+            <if test="createdate != null">
+                CreateDate,
+            </if>
+            <if test="updatedate != null">
+                UpdateDate,
+            </if>
+            <if test="content != null">
+                Content,
+            </if>
+            <if test="replycontent != null">
+                ReplyContent,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="commentid != null">
+                #{commentid,jdbcType=INTEGER},
+            </if>
+            <if test="hotelid != null">
+                #{hotelid,jdbcType=INTEGER},
+            </if>
+            <if test="roomid != null">
+                #{roomid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=BIGINT},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=CHAR},
+            </if>
+            <if test="tel != null">
+                #{tel,jdbcType=CHAR},
+            </if>
+            <if test="evaluation != null">
+                #{evaluation,jdbcType=TINYINT},
+            </if>
+            <if test="tagids != null">
+                #{tagids,jdbcType=VARCHAR},
+            </if>
+            <if test="imageurls != null">
+                #{imageurls,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="commentstatus != null">
+                #{commentstatus,jdbcType=TINYINT},
+            </if>
+            <if test="roomnumber != null">
+                #{roomnumber,jdbcType=CHAR},
+            </if>
+            <if test="operatorname != null">
+                #{operatorname,jdbcType=CHAR},
+            </if>
+            <if test="replydate != null">
+                #{replydate,jdbcType=INTEGER},
+            </if>
+            <if test="replyreadstatus != null">
+                #{replyreadstatus,jdbcType=TINYINT},
+            </if>
+            <if test="isdelete != null">
+                #{isdelete,jdbcType=BIT},
+            </if>
+            <if test="createdate != null">
+                #{createdate,jdbcType=INTEGER},
+            </if>
+            <if test="updatedate != null">
+                #{updatedate,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="replycontent != null">
+                #{replycontent,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
 
-
-  <select id="getComments" resultType="com.zhiliao.hotel.controller.comment.commentparm.CommentVO">
-    select
-        a.CommentID,a.Evaluation,a.TagIDs,a.ImageUrls,a.Content,b.HotelName
-    from
-        zl_comment a left join zl_hotel b on a.hotelid = b.hotelid
-    where a.UserID = #{userid} and a.IsDelete = 0
+    <!--  获取点赞列表-->
+    <select id="getComments" resultType="com.zhiliao.hotel.controller.comment.commentparm.CommentVO">
+      select
+          a.CommentID,a.Evaluation,a.TagIDs,a.ImageUrls,a.Content,b.HotelName,a.ReplyReadStatus
+      from
+          zl_comment a left join zl_hotel b on a.hotelid = b.hotelid
+      where
+          a.UserID = #{userid} and a.IsDelete = 0 and a.Type = 0 and a.CommentStatus = 1 Order by a.UpdateDate desc
   </select>
 
-  <select id="getTagName" resultType="java.lang.String">
-    select
-        TagName
-    from
-        zl_tag
-    where TagID  in
-    <foreach collection="tagids" item="tagids"  index="index" open="(" close=")" separator=",">
-      #{tagids}
-    </foreach>
+
+    <!-- 点赞详情页 -->
+    <select id="getComment" resultType="java.util.HashMap">
+      select
+          a.Evaluation,a.TagIDs,a.ImageUrls,a.Content,a.ReplyContent,a.CreateDate,b.HotelName
+      from
+          zl_comment a left join zl_hotel b on a.hotelid = b.hotelid
+      where
+          a.UserID = #{userid} and a.IsDelete = 0 and a.CommentID = #{commentid} and a.Type = 0 and a.CommentStatus = 1
   </select>
+
+    <!--  修改为已读状态-->
+    <update id="changeReplyReadStatus">
+      update
+          zl_comment a
+      set
+         ReplyReadStatus = 1
+      where
+          a.UserID = #{userid} and a.IsDelete = 0 and a.CommentID = #{commentid} and a.Type = 0 and a.CommentStatus = 1
+  </update>
 
 </mapper>
