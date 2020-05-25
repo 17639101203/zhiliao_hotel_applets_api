@@ -1,6 +1,8 @@
 package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.controller.myOrder.vo.OrderDetailVO;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderInfoVO;
+import com.zhiliao.hotel.model.OrderListQueryResult;
 import com.zhiliao.hotel.model.ZlOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import org.apache.ibatis.annotations.Param;
@@ -13,7 +15,7 @@ import java.util.List;
  */
 public interface ZlOrderMapper extends Mapper<ZlOrder> {
 
-    List<ZlOrder> findAllOrder(@Param("userID") Long userID, @Param("orderType") Integer orderType, @Param("orderStatus") Integer orderStatus, @Param("payStatus") Integer payStatus, @Param("payType") Integer payType);
+    List<OrderListQueryResult> findAllOrder(OrderInfoVO vo);
 
     //取消订单
     void byOrderId(ZlOrder order);

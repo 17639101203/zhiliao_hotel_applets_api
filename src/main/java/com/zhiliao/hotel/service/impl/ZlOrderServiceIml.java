@@ -6,6 +6,7 @@ import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.myOrder.vo.*;
 import com.zhiliao.hotel.mapper.*;
+import com.zhiliao.hotel.model.OrderListQueryResult;
 import com.zhiliao.hotel.model.ZlCoupon;
 import com.zhiliao.hotel.model.ZlOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
@@ -53,10 +54,9 @@ public class ZlOrderServiceIml implements ZlOrderService {
     }
 
     @Override
-    public PageInfoResult findAllOrder(Long userID, Integer orderType, Integer orderStatus, Integer payStatus, Integer payType, Integer pageNo, Integer pageSize) {
-        PageHelper.startPage(pageNo, pageSize);
-        List<ZlOrder> dataList = orderMapper.findAllOrder(userID, orderType, orderStatus, payStatus, payType);
-        PageInfo<ZlOrder> pageInfo = new PageInfo<>(dataList);
+    public PageInfoResult findAllOrder(OrderInfoVO vo) {
+        List<OrderListQueryResult> ordersList=orderMapper.findAllOrder(vo);
+        PageInfo<OrderListQueryResult> pageInfo=new PageInfo<>(ordersList);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
