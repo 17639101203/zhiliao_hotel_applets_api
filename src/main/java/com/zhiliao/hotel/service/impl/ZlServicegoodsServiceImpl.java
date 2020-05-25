@@ -43,8 +43,11 @@ public class ZlServicegoodsServiceImpl implements ZlServicegoodsService {
 
     @Override
     public ServicegoodsListVo findServicegoodsDetail(Integer goodsId) {
-        // 更新 浏览量+1
-        zlServicegoodsMapper.updateServicegoodsVisitCount(goodsId);
-        return zlServicegoodsMapper.findServicegoodsDetail(goodsId);
+        ServicegoodsListVo servicegoodsDetail = zlServicegoodsMapper.findServicegoodsDetail(goodsId);
+        if (servicegoodsDetail != null) {
+            // 更新 浏览量+1
+            zlServicegoodsMapper.updateServicegoodsVisitCount(goodsId);
+        }
+        return servicegoodsDetail;
     }
 }
