@@ -4,21 +4,29 @@
   <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlRepairorder">
     <result column="OrderID" jdbcType="BIGINT" property="orderid" />
     <result column="UserID" jdbcType="BIGINT" property="userid" />
+    <result column="UserName" jdbcType="CHAR" property="username" />
+    <result column="Tel" jdbcType="CHAR" property="tel" />
     <result column="SerialNumber" jdbcType="CHAR" property="serialnumber" />
     <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
     <result column="HotelName" jdbcType="CHAR" property="hotelname" />
+    <result column="FloorNumber" jdbcType="CHAR" property="floornumber" />
     <result column="RoomID" jdbcType="INTEGER" property="roomid" />
     <result column="RoomNumber" jdbcType="CHAR" property="roomnumber" />
-    <result column="ImgUrls" jdbcType="CHAR" property="imgurls" />
+    <result column="ImgUrls" jdbcType="VARCHAR" property="imgurls" />
     <result column="Remark" jdbcType="CHAR" property="remark" />
     <result column="ComeFormID" jdbcType="INTEGER" property="comeformid" />
-    <result column="IsDelete" jdbcType="BIT" property="isdelete" />
     <result column="OrderStatus" jdbcType="TINYINT" property="orderstatus" />
-    <result column="AppointmentDate" jdbcType="INTEGER" property="appointmentdate" />
+    <result column="OperatorName" jdbcType="CHAR" property="operatorname" />
+    <result column="OperatorIP" jdbcType="CHAR" property="operatorip" />
+    <result column="OperatorRemark" jdbcType="CHAR" property="operatorremark" />
+    <result column="RepairUseTime" jdbcType="INTEGER" property="repairusetime" />
+    <result column="IsDelete" jdbcType="BIT" property="isdelete" />
+    <result column="IsUserDelete" jdbcType="BIT" property="isuserdelete" />
     <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
     <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
   </resultMap>
-  <insert id="insertRepairorder" parameterType="com.zhiliao.hotel.model.ZlRepairorder">
+
+  <insert id="insertRepairorder" parameterType="com.zhiliao.hotel.model.ZlRepair">
     insert into zl_repairorder
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="orderid != null">
@@ -27,8 +35,11 @@
       <if test="userid != null">
         UserID,
       </if>
-      <if test="appointmentdate != null">
-        AppointmentDate,
+      <if test="username != null">
+        UserName,
+      </if>
+      <if test="tel != null">
+        Tel,
       </if>
       <if test="serialnumber != null">
         SerialNumber,
@@ -38,6 +49,9 @@
       </if>
       <if test="hotelname != null">
         HotelName,
+      </if>
+      <if test="floornumber != null">
+        FloorNumber,
       </if>
       <if test="roomid != null">
         RoomID,
@@ -54,11 +68,26 @@
       <if test="comeformid != null">
         ComeFormID,
       </if>
+      <if test="orderstatus != null">
+        OrderStatus,
+      </if>
+      <if test="operatorname != null">
+        OperatorName,
+      </if>
+      <if test="operatorip != null">
+        OperatorIP,
+      </if>
+      <if test="operatorremark != null">
+        OperatorRemark,
+      </if>
+      <if test="repairusetime != null">
+        RepairUseTime,
+      </if>
       <if test="isdelete != null">
         IsDelete,
       </if>
-      <if test="orderstatus != null">
-        OrderStatus,
+      <if test="isuserdelete != null">
+        IsUserDelete,
       </if>
       <if test="createdate != null">
         CreateDate,
@@ -74,8 +103,11 @@
       <if test="userid != null">
         #{userid,jdbcType=BIGINT},
       </if>
-      <if test="appointmentdate != null">
-        #{appointmentdate,jdbcType=INTEGER},
+      <if test="username != null">
+        #{username,jdbcType=CHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=CHAR},
       </if>
       <if test="serialnumber != null">
         #{serialnumber,jdbcType=CHAR},
@@ -86,6 +118,9 @@
       <if test="hotelname != null">
         #{hotelname,jdbcType=CHAR},
       </if>
+      <if test="floornumber != null">
+        #{floornumber,jdbcType=CHAR},
+      </if>
       <if test="roomid != null">
         #{roomid,jdbcType=INTEGER},
       </if>
@@ -93,7 +128,7 @@
         #{roomnumber,jdbcType=CHAR},
       </if>
       <if test="imgurls != null">
-        #{imgurls,jdbcType=CHAR},
+        #{imgurls,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=CHAR},
@@ -101,11 +136,26 @@
       <if test="comeformid != null">
         #{comeformid,jdbcType=INTEGER},
       </if>
+      <if test="orderstatus != null">
+        #{orderstatus,jdbcType=TINYINT},
+      </if>
+      <if test="operatorname != null">
+        #{operatorname,jdbcType=CHAR},
+      </if>
+      <if test="operatorip != null">
+        #{operatorip,jdbcType=CHAR},
+      </if>
+      <if test="operatorremark != null">
+        #{operatorremark,jdbcType=CHAR},
+      </if>
+      <if test="repairusetime != null">
+        #{repairusetime,jdbcType=INTEGER},
+      </if>
       <if test="isdelete != null">
         #{isdelete,jdbcType=BIT},
       </if>
-      <if test="orderstatus != null">
-        #{orderstatus,jdbcType=TINYINT},
+      <if test="isuserdelete != null">
+        #{isuserdelete,jdbcType=BIT},
       </if>
       <if test="createdate != null">
         #{createdate,jdbcType=INTEGER},
@@ -115,8 +165,6 @@
       </if>
     </trim>
   </insert>
-
-
 
 
   <!--  根据用户名查询订单生成时间最近的订单-->

@@ -42,7 +42,6 @@ public class ZlRepairServiceImpl implements ZlRepairService {
         repairorder.setRoomid(repair.getRoomid());  // 房间ID
         repairorder.setRoomnumber(repair.getRoomnumber());  //房间号
         repairorder.setImgurls(repair.getImgurls());    // 图片路径
-        repairorder.setAppointmentdate(repair.getAppointmentdate());  // 预约时间
         repairorder.setRemark(repair.getRemark());      // 备注信息
         repairorder.setComeformid(1);           //  来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
         repairorder.setIsdelete(false);     //  是否删除
