@@ -79,4 +79,10 @@
         update zl_servicegoods set VisitCount=VisitCount + 1 where GoodsID=#{goodsId}
     </update>
 
+    <select id="findAllByHotelIdAndGoodsIds" resultMap="BaseResultMap">
+        SELECT * FROM zl_servicegoods zsg
+        WHERE zsg.HotelID = #{hotelId} AND zsg.GoodsID IN (#{goodsIds})
+        AND zsg.IsDelete = 0 AND zsg.GoodsStatus = 1
+    </select>
+
 </mapper>

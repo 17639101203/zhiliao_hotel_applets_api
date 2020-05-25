@@ -27,9 +27,24 @@ public class ZlServiceorder implements Serializable {
     private Long userid;
 
     /**
+     * 用户名
+     */
+    private String username;
+
+    /**
+     * 用户电话
+     */
+    private String tel;
+
+    /**
      * 订单编号
      */
     private String serialnumber;
+
+    /**
+     * 服务项目
+     */
+    private String serviceitem;
 
     /**
      * 酒店ID
@@ -47,6 +62,16 @@ public class ZlServiceorder implements Serializable {
     private Integer roomid;
 
     /**
+     * 第一张商品图片地址
+     */
+    private String goodscoverurl;
+
+    /**
+     * 楼层号
+     */
+    private String floornumber;
+
+    /**
      * 房间号
      */
     private String roomnumber;
@@ -57,12 +82,22 @@ public class ZlServiceorder implements Serializable {
     private Integer comeformid;
 
     /**
+     * 预约时间
+     */
+    private Integer bookdate;
+
+    /**
+     * 超时时间
+     */
+    private Integer timeoutdate;
+
+    /**
      * 其它需求备注
      */
     private String remark;
 
     /**
-     * -1:已取消;0等待确认;1已确认;2已处理
+     * -1:已取消;0待配送;1已处理
      */
     private Byte orderstatus;
 
@@ -82,7 +117,7 @@ public class ZlServiceorder implements Serializable {
     private String operatorremark;
 
     /**
-     * 删除状态:0正常;1删除;
+     * 删除状态:0正常;1删除;2用户删除(用户端不显示)
      */
     private Boolean isdelete;
 
@@ -96,16 +131,22 @@ public class ZlServiceorder implements Serializable {
      */
     private Integer updatedate;
 
-    public ZlServiceorder(Long userid, String serialnumber, Integer hotelid,String hotelname,
-                          Integer roomid, String roomnumber, Integer comeformid, String remark,
-                          Integer createdate, Integer updatedate){
+    public ZlServiceorder(Long userid,String username, String tel, String serialnumber, Integer hotelid, String hotelname,
+                          Integer roomid, String goodscoverurl, String floornumber, String roomnumber, Integer comeformid,
+                          Integer bookdate, Integer timeoutdate, String remark, Integer createdate, Integer updatedate){
         this.userid = userid;
+        this.username = username;
+        this.tel = tel;
         this.serialnumber = serialnumber;
         this.hotelid = hotelid;
         this.hotelname = hotelname;
         this.roomid = roomid;
+        this.goodscoverurl = goodscoverurl;
+        this.floornumber = floornumber;
         this.roomnumber = roomnumber;
         this.comeformid = comeformid;
+        this.bookdate = bookdate;
+        this.timeoutdate = timeoutdate;
         this.remark = remark;
         this.createdate = createdate;
         this.updatedate = updatedate;

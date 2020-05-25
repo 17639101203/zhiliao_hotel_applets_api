@@ -3,8 +3,10 @@ package com.zhiliao.hotel.controller.serviceorder.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 客房服务订单详情vo
@@ -31,7 +33,27 @@ public class ServiceorderInfoVo implements Serializable {
     @ApiModelProperty(value = "下单时间")
     private String createdate;
 
+    @ApiModelProperty(value = "送达时间")
+    private String bookdate;
 
+    @ApiModelProperty(value = "订单商品列表")
+    private List<goods> orderGoodsList;
 
+    @Data
+    @NoArgsConstructor
+    public static class goods implements Serializable {
+
+        @ApiModelProperty(value = "商品id")
+        private Integer goodsId;
+
+        @ApiModelProperty(value = "商品名称")
+        private String goodsname;
+
+        @ApiModelProperty(value = "购买数量")
+        private Integer goodsCount;
+
+        @ApiModelProperty(value = "商品图片")
+        private String goodscoverurl;
+    }
 
 }

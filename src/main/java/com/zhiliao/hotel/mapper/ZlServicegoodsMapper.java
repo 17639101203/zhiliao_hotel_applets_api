@@ -20,4 +20,6 @@ public interface ZlServicegoodsMapper extends Mapper<ZlServicegoods> {
     ServicegoodsListVo findServicegoodsDetail(@Param("goodsId") Integer goodsId);
 
     void updateServicegoodsVisitCount(@Param("goodsId") Integer goodsId);
+
+    List<ZlServicegoods> findAllByHotelIdAndGoodsIds(@Param("hotelId") Integer hotelId, @Param("goodsIds") String goodsIds);
 }

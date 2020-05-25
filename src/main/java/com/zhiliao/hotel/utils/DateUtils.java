@@ -363,4 +363,29 @@ public class DateUtils {
         res = String.valueOf(ts);
         return res;
     }
+
+    /**
+     * 获取当日0时0分0秒的时间戳（php）
+     */
+    public static Integer todayFirstDate(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return Math.toIntExact(calendar.getTimeInMillis() / 1000);
+    }
+
+    /**
+     * 获取当日23时59分59秒的时间戳（php）
+     */
+    public static Integer todayLastDate(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        return Math.toIntExact(calendar.getTimeInMillis() / 1000);
+    }
+
 }

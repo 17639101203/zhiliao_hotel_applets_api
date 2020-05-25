@@ -2,8 +2,11 @@ package com.zhiliao.hotel.controller.serviceorder.params;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 客房服务订单提交dto
@@ -11,6 +14,7 @@ import java.io.Serializable;
  * @author gaoxiang
  * @date 2020-05-20
  */
+@Data
 @ApiModel("客房服务订单提交实体")
 public class ServiceorderCommitParams implements Serializable {
 
@@ -39,48 +43,31 @@ public class ServiceorderCommitParams implements Serializable {
     private String roomnumber;
 
     /**
+     * 预约时间
+     */
+    @ApiModelProperty(value = "预约时间(时间戳，精确到秒)", required = true)
+    private Integer bookdate;
+
+    /**
+     * 订单商品
+     */
+    @ApiModelProperty(value = "订单商品", required = true)
+    private List<orderGoods> orderGoods;
+
+    /**
      * 其它需求备注
      */
     @ApiModelProperty(value = "备注")
     private String remark;
 
-    public Integer getHotelid() {
-        return hotelid;
-    }
+    @Data
+    @NoArgsConstructor
+    public static class orderGoods implements Serializable {
 
-    public void setHotelid(Integer hotelid) {
-        this.hotelid = hotelid;
-    }
+        @ApiModelProperty(value = "商品id", required = true)
+        private Integer goodsId;
 
-    public String getHotelname() {
-        return hotelname;
-    }
-
-    public void setHotelname(String hotelname) {
-        this.hotelname = hotelname;
-    }
-
-    public Integer getRoomid() {
-        return roomid;
-    }
-
-    public void setRoomid(Integer roomid) {
-        this.roomid = roomid;
-    }
-
-    public String getRoomnumber() {
-        return roomnumber;
-    }
-
-    public void setRoomnumber(String roomnumber) {
-        this.roomnumber = roomnumber;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
+        @ApiModelProperty(value = "购买数量", required = true)
+        private Integer goodsCount;
     }
 }

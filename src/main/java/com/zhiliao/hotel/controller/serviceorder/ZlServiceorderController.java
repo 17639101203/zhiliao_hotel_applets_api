@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.controller.serviceorder;
 
+import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.serviceorder.params.ServiceorderCommitParams;
