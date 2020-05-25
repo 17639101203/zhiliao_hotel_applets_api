@@ -25,7 +25,7 @@
     <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
   </resultMap>
 
-  <insert id="addCleanOrder" parameterType="com.zhiliao.hotel.model.ZlCleanOrder" useGeneratedKeys="true" keyProperty="orderid">
+  <insert id="addCleanOrder" parameterType="com.zhiliao.hotel.model.ZlCleanOrder">
     insert into zl_cleanorder
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="orderid != null">
@@ -33,6 +33,12 @@
       </if>
       <if test="userid != null">
         UserID,
+      </if>
+      <if test="username != null">
+        UserName,
+      </if>
+      <if test="tel != null">
+        Tel,
       </if>
       <if test="serialnumber != null">
         SerialNumber,
@@ -42,6 +48,9 @@
       </if>
       <if test="hotelname != null">
         HotelName,
+      </if>
+      <if test="floornumber != null">
+        FloorNumber,
       </if>
       <if test="roomid != null">
         RoomID,
@@ -55,11 +64,23 @@
       <if test="bookdate != null">
         BookDate,
       </if>
+      <if test="timeoutdate != null">
+        TimeoutDate,
+      </if>
       <if test="remark != null">
         Remark,
       </if>
       <if test="orderstatus != null">
         OrderStatus,
+      </if>
+      <if test="operatorname != null">
+        OperatorName,
+      </if>
+      <if test="operatorip != null">
+        OperatorIP,
+      </if>
+      <if test="operatorremark != null">
+        OperatorRemark,
       </if>
       <if test="isdelete != null">
         IsDelete,
@@ -78,6 +99,12 @@
       <if test="userid != null">
         #{userid,jdbcType=BIGINT},
       </if>
+      <if test="username != null">
+        #{username,jdbcType=CHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=CHAR},
+      </if>
       <if test="serialnumber != null">
         #{serialnumber,jdbcType=CHAR},
       </if>
@@ -86,6 +113,9 @@
       </if>
       <if test="hotelname != null">
         #{hotelname,jdbcType=CHAR},
+      </if>
+      <if test="floornumber != null">
+        #{floornumber,jdbcType=CHAR},
       </if>
       <if test="roomid != null">
         #{roomid,jdbcType=INTEGER},
@@ -99,11 +129,23 @@
       <if test="bookdate != null">
         #{bookdate,jdbcType=INTEGER},
       </if>
+      <if test="timeoutdate != null">
+        #{timeoutdate,jdbcType=INTEGER},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=CHAR},
       </if>
       <if test="orderstatus != null">
         #{orderstatus,jdbcType=TINYINT},
+      </if>
+      <if test="operatorname != null">
+        #{operatorname,jdbcType=CHAR},
+      </if>
+      <if test="operatorip != null">
+        #{operatorip,jdbcType=CHAR},
+      </if>
+      <if test="operatorremark != null">
+        #{operatorremark,jdbcType=CHAR},
       </if>
       <if test="isdelete != null">
         #{isdelete,jdbcType=BIT},

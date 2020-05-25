@@ -11,6 +11,7 @@ import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,43 +22,36 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Api(tags = "报修模块接口")
 @RestController
 @RequestMapping("repair")
+@Slf4j
 public class ZlRepairController {
 
-    private final ZlRepairService service;
-
-    private final UploadFileController fileController;
+    @Autowired
+    private  ZlRepairService service;
 
     @Autowired
-    public ZlRepairController(ZlRepairService service, UploadFileController fileController) {
-        this.service = service;
-        this.fileController = fileController;
-    }
+    private  UploadFileController fileController;
 
-    private static final Logger logger = LoggerFactory.getLogger(ZlRepairController.class);
 
     @ApiOperation(value = "添加报修信息方法")
     @PostMapping(value = "addrepair", consumes = { "multipart/*" }, headers = "content-type=multipart/form-data")
     @UserLoginToken
-    @Transactional
     public ReturnString addrepair(RepairParam repairParam,
                                   @RequestParam("multipartFiles") MultipartFile[] multipartFiles,
-                                  @RequestParam String token) {
+                                  HttpServletRequest request) {
             ZlRepair repair = new ZlRepair();
+            Long userid = TokenUtil.getUserId(request.getHeader("token"));
         try {
-            // 解析token获取userid
-            Long userid = TokenUtil.getUserId(token);
             repair.setUserid(userid);             //  用户ID
             repair.setHotelid(repairParam.getHotelid());        //酒店ID
             repair.setRoomid(repairParam.getRoomid());      // 房间ID
             repair.setRoomnumber(repairParam.getRoomnumber());      //房间号
-            repair.setAppointmentdate(repairParam.getAppointmentdate());   // 预约时间
             repair.setRemark(repairParam.getRemark());      //  备注信息
-            repair.setRepairstatus((byte)0);        // 维修状态:0未维修;1维修中;2已维修
             repair.setIsdelete(false);         // 删除状态:false正常;true删除;
             repair.setCreatedate(DateUtils.javaToPhpNowDateTime());     //添加日期
             repair.setUpdatedate(DateUtils.javaToPhpNowDateTime());     //修改日期
@@ -70,7 +64,7 @@ public class ZlRepairController {
                 StringBuffer Imgurls  = new StringBuffer();
                 list.forEach(item -> {
                     Imgurls.append(item+"|");   // 遍历集合，生成图片地址，并用 | 隔开
-                    logger.info("【报修图片地址：】"+Imgurls);
+                    log.info("【报修图片地址：】"+Imgurls);
                 });
                 repair.setImgurls(Imgurls.toString());     // 获得图片地址，多个用|隔开
                 service.addRepairOrderMsg(repair,repairParam.getHotelname());
@@ -80,7 +74,7 @@ public class ZlRepairController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("报修信息添加失败");
+            log.error("报修信息添加失败");
             return new ReturnString(1, "报修信息添加失败，请重新再试");
         }
     }
@@ -97,7 +91,7 @@ public class ZlRepairController {
             return new ReturnString(zlRepairorder);
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("报修订单信息查询失败");
+            log.error("报修订单信息查询失败");
             return new ReturnString(1, "报修订单信息查询失败，请重新再试");
         }
 
