@@ -7,7 +7,14 @@
         SELECT * FROM zl_orderdetail WHERE UserID=#{userID} AND OrderID=#{orderID}
 
 	</select>
+    
+    <select id="findGoods"
+            resultType="com.zhiliao.hotel.model.ZlOrderDetail">
 
+        SELECT * FROM zl_orderdetail WHERE UserID=#{userID} AND BelongModule=#{belongModule}  ORDER BY CreateDate DESC LIMIT 2
+
+	</select>
+    
     <!--<update id="byOrderdetailId" parameterType="com.zhiliao.hotel.model.ZlOrder">-->
     	<!--update zl_order set UpdateDate = #{updatedate} where OrderID = #{orderid}-->
   	<!--</update>-->

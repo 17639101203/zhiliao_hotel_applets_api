@@ -14,10 +14,12 @@ public interface ZlOrderDetailMapper extends Mapper<ZlOrderDetail>{
     
     ZlOrderDetail findOrder(@Param("userID") Long userID, @Param("orderID") Long orderID);
     
+    List<ZlOrderDetail> findGoods(@Param("userID") Long userID, @Param("belongModule") Short BelongModule);
+    
 //    void byOrderdetailId(ZlOrder order);
 
 //    void insertOrderDetail(List<ZlOrderDetail> zlOrderDetailList);
 //    void insertOrderDetail(ZlOrderDetail zlOrderDetail);
-    
-    
+
+
 }

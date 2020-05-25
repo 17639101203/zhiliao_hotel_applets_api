@@ -1,205 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlOrderMapper">
-
-    <resultMap id="ZlOrderMap"
-               type="com.zhiliao.hotel.model.ZlOrder">
-        <result column="OrderID"
-                jdbcType="BIGINT"
-                property="orderid"/>
-        <result column="UserID"
-                jdbcType="BIGINT"
-                property="userid"/>
-        <result column="ParentOrderSerialNo"
-                jdbcType="CHAR"
-                property="parentorderserialno"/>
-        <result column="OrderSerialNo"
-                jdbcType="CHAR"
-                property="orderserialno"/>
-        <result column="HotelID"
-                jdbcType="INTEGER"
-                property="hotelid"/>
-        <result column="HotelName"
-                jdbcType="CHAR"
-                property="hotelname"/>
-        <result column="RoomID"
-                jdbcType="INTEGER"
-                property="roomid"/>
-        <result column="RoomNumber"
-                jdbcType="CHAR"
-                property="roomnumber"/>
-        <result column="GoodsCoverUrl"
-                jdbcType="CHAR"
-                property="goodscoverurl"/>
-        <result column="Remark"
-                jdbcType="CHAR"
-                property="remark"/>
-        <result column="TotalPrice"
-                jdbcType="DECIMAL"
-                property="totalprice"/>
-        <result column="ActuallyPay"
-                jdbcType="DECIMAL"
-                property="actuallypay"/>
-        <result column="PayType"
-                jdbcType="TINYINT"
-                property="paytype"/>
-        <result column="DeliveryAddress"
-                jdbcType="CHAR"
-                property="deliveryaddress"/>
-        <result column="ComeFormID"
-                jdbcType="INTEGER"
-                property="comeformid"/>
-        <result column="ExpressID"
-                jdbcType="INTEGER"
-                property="expressid"/>
-        <result column="TrackNumber"
-                jdbcType="CHAR"
-                property="tracknumber"/>
-        <result column="PayStatus"
-                jdbcType="TINYINT"
-                property="paystatus"/>
-        <result column="OrderStatus"
-                jdbcType="TINYINT"
-                property="orderstatus"/>
-        <result column="RefundStatus"
-                jdbcType="TINYINT"
-                property="refundstatus"/>
-        <result column="RefundCount"
-                jdbcType="TINYINT"
-                property="refundcount"/>
-        <result column="CouponID"
-                jdbcType="INTEGER"
-                property="couponid"/>
-        <result column="BelongModule"
-                jdbcType="SMALLINT"
-                property="belongmodule"/>
-        <result column="IsDelete"
-                jdbcType="BIT"
-                property="isdelete"/>
-        <result column="CreateDate"
-                jdbcType="INTEGER"
-                property="createdate"/>
-        <result column="UpdateDate"
-                jdbcType="INTEGER"
-                property="updatedate"/>
-        <result column="CouponCash"
-                jdbcType="DECIMAL"
-                property="couponcash"/>
-        <result column="SendCash"
-                jdbcType="DECIMAL"
-                property="sendcash"/>
-        <result column="OperatorName"
-                jdbcType="CHAR"
-                property="operatorname"/>
-        <result column="OperatorIP"
-                jdbcType="CHAR"
-                property="operatorip"/>
-        <result column="OperatorRemark"
-                jdbcType="VARCHAR"
-                property="operatorremark"/>
-
-    </resultMap>
-
-
-    <resultMap type="com.zhiliao.hotel.model.OrderListQueryResult"
-               id="orderListQueryMap"
-               extends="ZlOrderMap">
-        <collection property="zlOrderDetail"
-                    ofType="com.zhiliao.hotel.model.ZlOrderDetail">
-            <result column="OrderDetailID"
-                    jdbcType="BIGINT"
-                    property="orderdetailid"/>
-            <result column="OrderID"
-                    jdbcType="BIGINT"
-                    property="orderid"/>
-            <result column="UserID"
-                    jdbcType="BIGINT"
-                    property="userid"/>
-            <result column="HotelGoodsID"
-                    jdbcType="INTEGER"
-                    property="hotelgoodsid"/>
-            <result column="GoodsName"
-                    jdbcType="VARCHAR"
-                    property="goodsname"/>
-            <result column="GoodsCoverUrl"
-                    jdbcType="VARCHAR"
-                    property="goodscoverurl"/>
-            <result column="Price"
-                    jdbcType="DECIMAL"
-                    property="price"/>
-            <result column="GoodsCount"
-                    jdbcType="INTEGER"
-                    property="goodscount"/>
-            <result column="BelongModule"
-                    jdbcType="SMALLINT"
-                    property="belongmodule"/>
-            <result column="IsDelete"
-                    jdbcType="BIT"
-                    property="isdelete"/>
-            <result column="CreateDate"
-                    jdbcType="INTEGER"
-                    property="createdate"/>
-            <result column="UpdateDate"
-                    jdbcType="INTEGER"
-                    property="updatedate"/>
-        </collection>
-    </resultMap>
-
-    <sql id="whereOrderStatus">
-
-        WHERE zor.UserID=#{userId}
-
-        <if test="paytype != null">
-            AND zor.PayType = #{paytype}
-        </if>
-
-        <if test="paystatus != null">
-            AND zor.PayStatus = #{paystatus}
-        </if>
-
-        <if test="orderstatus != null">
-            AND zor.OrderStatus = #{orderstatus}
-        </if>
-
-        <if test="refundstatus != null">
-            AND zor.RefundStatus = #{refundstatus}
-        </if>
-
-        <if test="belongmodule != null">
-            AND zor.BelongModule = #{belongmodule}
-        </if>
-
-    </sql>
-
+    
     <select id="findAllOrder"
-            resultMap="orderListQueryMap"
+            resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderList"
             parameterType="com.zhiliao.hotel.controller.myOrder.vo.OrderInfoVO">
-
-        SELECT *
-        FROM (SELECT *
-        FROM zl_order
-        ORDER BY CreateDate DESC) AS zor
-        LEFT JOIN (SELECT *
-        FROM zl_orderdetail
-        ORDER BY CreateDate DESC) AS zol
-        ON zor.UserID=zol.UserID AND zor.BelongModule=zol.BelongModule
-
-        <include refid="whereOrderStatus"/>
-
-        UNION
-
-        SELECT *
-        FROM (SELECT *
-        FROM zl_order
-        ORDER BY CreateDate DESC) AS zor
-        RIGHT JOIN (SELECT *
-        FROM zl_orderdetail
-        ORDER BY CreateDate DESC) AS zol
-        ON zor.UserID=zol.UserID AND zor.BelongModule=zol.BelongModule
-
-        <include refid="whereOrderStatus"/>
-
-
+        
+        SELECT
+        UserID,
+        HotelName,
+        ActuallyPay,
+        BelongModule,
+        CouponID,
+        PayStatus,
+        OrderStatus,
+        RefundStatus,
+        IsDelete,
+        IsUserDelete,
+        CreateDate,
+        UpdateDate
+        FROM zl_order WHERE UserID=#{userId}
+        
+        <if test="paytype != null">
+            AND PayType = #{paytype}
+        </if>
+        
+        <if test="paystatus != null">
+            AND PayStatus = #{paystatus}
+        </if>
+        
+        <if test="orderstatus != null">
+            AND OrderStatus = #{orderstatus}
+        </if>
+        
+        <if test="refundstatus != null">
+            AND RefundStatus = #{refundstatus}
+        </if>
+        
+        <if test="belongmodule != null">
+            AND BelongModule = #{belongmodule}
+        </if>
+        
+        ORDER BY CreateDate DESC
+    
     </select>
 
     <select id="findById"

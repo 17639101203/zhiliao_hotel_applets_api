@@ -1,13 +1,10 @@
 package com.zhiliao.hotel.service.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.myOrder.vo.*;
 import com.zhiliao.hotel.mapper.*;
-import com.zhiliao.hotel.model.OrderListQueryResult;
-import com.zhiliao.hotel.model.ZlCoupon;
 import com.zhiliao.hotel.model.ZlOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.ZlOrderService;
@@ -28,10 +25,10 @@ import java.util.concurrent.TimeUnit;
 @Transactional(rollbackFor = Exception.class)
 @Service
 public class ZlOrderServiceIml implements ZlOrderService {
-
-    private final ZlOrderMapper orderMapper;
-
-    private final ZlOrderDetailMapper orderDetailMapper;
+    @Autowired
+    private  ZlOrderMapper orderMapper;
+    @Autowired
+    private  ZlOrderDetailMapper orderDetailMapper;
 
     @Autowired
     private ZlCouponMapper zlCouponMapper;
@@ -47,17 +44,18 @@ public class ZlOrderServiceIml implements ZlOrderService {
 
     @Autowired
     private ZlHotelDetailMapper zlHotelDetailMapper;
-
-    @Autowired
-    public ZlOrderServiceIml(ZlOrderMapper orderMapper, ZlOrderDetailMapper orderDetailMapper) {
-        this.orderMapper = orderMapper;
-        this.orderDetailMapper = orderDetailMapper;
-    }
-
+    
     @Override
-    public PageInfoResult findAllOrder(OrderInfoVO vo) {
-        List<OrderListQueryResult> ordersList = orderMapper.findAllOrder(vo);
-        PageInfo<OrderListQueryResult> pageInfo = new PageInfo<>(ordersList);
+    public PageInfoResult findAllOrder(OrderInfoVO vo){
+        
+        List<OrderList> allOrders=orderMapper.findAllOrder(vo);
+        if(allOrders!=null && !allOrders.isEmpty()){
+            for(OrderList order: allOrders){
+                List<ZlOrderDetail> goods=orderDetailMapper.findGoods(order.getUserid(),order.getBelongmodule());
+                order.setZlOrderDetailList(goods);
+            }
+        }
+        PageInfo<OrderList> pageInfo=new PageInfo<>(allOrders);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
