@@ -106,7 +106,7 @@ public class ZlServicegoodsController {
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "String", required = true, value = "每页大小")
     })
     @UserLoginToken
-    @PostMapping("searchServicegoods/{hotelId}/{belongModule}/{pageNo}/{pageSize}")
+    @GetMapping("searchServicegoods/{hotelId}/{belongModule}/{pageNo}/{pageSize}")
     public ReturnString<PageInfoResult<ServicegoodsListVo>> searchServicegoods(@PathVariable Integer hotelId, @PathVariable Integer belongModule,
                                                                                String keyword, @PathVariable Integer pageNo, @PathVariable Integer pageSize) {
         try {
