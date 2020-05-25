@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.annotation.Id;
 
+import javax.persistence.GeneratedValue;
 import java.io.Serializable;
 
 @Data
@@ -16,6 +18,8 @@ public class ZlComment implements Serializable {
     /**
      * 自增ID
      */
+    @Id
+    @GeneratedValue(generator = "JDBC")
     private Integer commentid;
 
     /**

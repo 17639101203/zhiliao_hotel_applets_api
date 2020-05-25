@@ -24,14 +24,11 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
 
 
     @Override
-    @Transactional
-    public void addInvoice(ZlInvoice Invoice) {
+    public void addInvoice(ZlInvoice Invoice) {  mapper.insertInvoice(Invoice); }
 
-        Integer i = mapper.insertInvoice(Invoice);
-        if(i!=1) {
-            throw new RuntimeException("开票抬头新增失败,请重新再试！");
-        }
-    }
+    @Override
+    public void deleteInvoice(Long userid, Integer invoiceid) { mapper.deleteInvoice(userid,invoiceid); }
+
 
     @Override
     public PageInfoResult<List<Map<String,Object>>> queryByUserID(Long userid,Integer pageNo,Integer pageSize) {
@@ -45,18 +42,12 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
-    @Override
-    public void deleteInvoice(Long userid, Integer invoiceid) {
-        Integer i = mapper.deleteInvoice(userid,invoiceid);
-        if(i!=1) {
-            throw new RuntimeException("开票抬头删除失败,请重新再试！");
-        }
-    }
 
     @Override
     public Map<String,Object> findinvoicedetails(Long userid, Integer invoiceid) {
         return mapper.queryInvoicedetail(userid,invoiceid);
     }
+
 
     @Override
     public Map<String, Object> findInvoiceQrCodeUrl(Integer hotelid) {

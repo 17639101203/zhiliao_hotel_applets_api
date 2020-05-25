@@ -137,10 +137,7 @@
   <!--  根据用户ID查询发票抬头-->
   <select id="queryInvoiceByUserID" resultType="java.util.HashMap">
         select
-            InvoiceID,InvoiceType,MainBodyType,ElectronicPaperType,
-            Title,Identifier,Tel,
-            Remark,Bank,BankAccountNumber,CompanyTel,
-            CompanyAddress
+            InvoiceID,InvoiceType,MainBodyType
         from
             zl_invoice
         where

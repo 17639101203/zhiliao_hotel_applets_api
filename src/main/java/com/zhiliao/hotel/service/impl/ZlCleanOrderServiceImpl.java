@@ -11,30 +11,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
-/**
- * @Author: Zhangyong
- * @Date: 2020/4/14 13:52
- * @Description:
- */
+
 @Transactional(rollbackFor = Exception.class)
 @Service
 public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
 
-    private final ZlCleanOrderMapper zlCleanOrderMapper;
-
     @Autowired
-    public ZlCleanOrderServiceImpl(ZlCleanOrderMapper zlCleanOrderMapper) {
-        this.zlCleanOrderMapper = zlCleanOrderMapper;
-    }
+    private  ZlCleanOrderMapper zlCleanOrderMapper;
 
     @Override
     public Integer addCleanOrder(ZlCleanOrder zlCleanOrder) {
         return zlCleanOrderMapper.addCleanOrder(zlCleanOrder);
     }
 
+
     @Override
-    public ZlCleanOrder selectCleanDetails(Long userID, String serialNumber) {
+    public Map<String,Object> selectCleanDetails(Long userID, String serialNumber) {
         return zlCleanOrderMapper.selectCleanDetails(userID, serialNumber);
     }
 

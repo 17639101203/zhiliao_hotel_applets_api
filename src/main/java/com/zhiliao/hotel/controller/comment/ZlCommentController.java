@@ -30,11 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @Author: Zhangyong
- * @Date: 2020/4/14 10:32
- * @Description:
- */
+
 @Api(tags = "首页_点赞吐槽接口_章英杰")
 @RestController
 @RequestMapping("comment")

@@ -24,7 +24,7 @@
         <result column="ReplyContent" jdbcType="LONGVARCHAR" property="replycontent"/>
     </resultMap>
 
-    <insert id="addComment" parameterType="com.zhiliao.hotel.model.ZlComment">
+    <insert id="addComment" parameterType="com.zhiliao.hotel.model.ZlComment" useGeneratedKeys="true" keyProperty="commentid">
         insert into zl_comment
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="commentid != null">

@@ -6,14 +6,13 @@ import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
-/**
- * Created by xiegege on 2019/10/14.
- */
+
 
 public interface ZlCleanOrderMapper extends Mapper<ZlCleanOrder> {
 
     Integer addCleanOrder(ZlCleanOrder zlCleanOrder);
 
-    ZlCleanOrder selectCleanDetails(@Param("userID") Long userID, @Param("serialNumber") String serialNumber);
+    Map<String,Object> selectCleanDetails(@Param("userid") Long userid, @Param("serialnumber") String serialnumber);
 }
