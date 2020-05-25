@@ -26,7 +26,7 @@
     <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
   </resultMap>
 
-  <insert id="insertRepairorder" parameterType="com.zhiliao.hotel.model.ZlRepair">
+  <insert id="insertRepairorder" parameterType="com.zhiliao.hotel.model.ZlRepairorder">
     insert into zl_repairorder
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="orderid != null">
