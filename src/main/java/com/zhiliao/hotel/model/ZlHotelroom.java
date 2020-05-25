@@ -40,11 +40,6 @@ public class ZlHotelroom implements Serializable {
     private String model;
 
     /**
-     * 客房电话
-     */
-    private String tel;
-
-    /**
      * wifi名称
      */
     private String wifiname;
@@ -148,14 +143,6 @@ public class ZlHotelroom implements Serializable {
     }
 
 
-    public String getTel() {
-        return tel;
-    }
-
-
-    public void setTel(String tel) {
-        this.tel = tel == null ? null : tel.trim();
-    }
 
 
     public String getWifiname() {
@@ -250,7 +237,6 @@ public class ZlHotelroom implements Serializable {
         sb.append(", roomfloor=").append(roomfloor);
         sb.append(", roomnumber=").append(roomnumber);
         sb.append(", model=").append(model);
-        sb.append(", tel=").append(tel);
         sb.append(", wifiname=").append(wifiname);
         sb.append(", wifipwd=").append(wifipwd);
         sb.append(", roomstatus=").append(roomstatus);

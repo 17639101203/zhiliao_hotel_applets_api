@@ -13,13 +13,13 @@ import java.util.List;
  */
 public interface ZlBannerMapper extends Mapper<ZlBanner> {
 
-    //查询所属有效的轮播图
-    @Select("SELECT * FROM zl_banner WHERE  HotelID = #{hotelID} and MenuID = #{menuID} and  BannerStatus = 1 and IsDelete = 0  LIMIT 5")
+    /**
+     * 查询所属有效的轮播图
+     */
     List<ZlBanner> findBanner(@Param("hotelID") Integer hotelID, @Param("menuID") Integer menuID);
 
     /**
      * 查询平台方的轮播图
      */
-    @Select("select * from zl_banner where hotelID = 0 order by Sort DESC limit 0, #{page}")
-    List<ZlBanner> findByPlaBanner(Integer page);
+    List<ZlBanner> findByPlaBanner(@Param("page") Integer page);
 }

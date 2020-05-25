@@ -9,10 +9,7 @@ import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.hotel.in.ZlHotelIn;
 import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.model.*;
-import com.zhiliao.hotel.service.ZlBannerService;
-import com.zhiliao.hotel.service.ZlHotelService;
-import com.zhiliao.hotel.service.ZlUserloginlogService;
-import com.zhiliao.hotel.service.ZlWxuserService;
+import com.zhiliao.hotel.service.*;
 import com.zhiliao.hotel.utils.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-import java.util.stream.Collectors;
 
 /**
  * 酒店业务实现类
@@ -39,7 +35,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
     private final ZlHotelRoomMapper zlHotelRoomMapper;
 
-    private final ZlXcxMenuMapper zlXcxMenuMapper;
+    private final ZlXcxMenuService zlXcxMenuService;
 
     private final ZlUserloginlogService zlUserloginlogService;
 
@@ -89,7 +85,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 String bannerValue = (String) redisCommonUtil.getCache(RedisKeyConstant.BANNER_KEY + ":" + hotelId);
 
                 //判断缓存中是否有数据，没数据直接往数据库查
-                List<ZlBanner> zlBanners = Optional.ofNullable(bannerValue).map((val) -> GsonUtils.jsonToList(bannerValue, ZlBanner.class)).
+                List<ZlBanner> zlBanners = Optional.ofNullable(bannerValue).map((val) -> GsonUtils.jsonToList(val, ZlBanner.class)).
                         orElse(zlBannerService.findBanner(Integer.valueOf(hotelId), 0));
 
                 //判断缓存没数据情况则添加
@@ -100,14 +96,10 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 zlHotel.setZlBannerList(zlBanners);
 
                 //根据酒店ID获取菜单
-                List<ZlXcxmenu> zlXcxMenuList = zlXcxMenuMapper.getMenuList(String.valueOf(zlHotel.getHotelID()));
+                List<ZlXcxmenu> zlXcxMenuList = zlXcxMenuService.getMenuList(String.valueOf(zlHotel.getHotelID()));
 
-                //根据menuName做数据去重 默认根据酒店id下的菜单
-                List<ZlXcxmenu> zlXcxMenuArrayList = zlXcxMenuList.stream().collect(
-                        Collectors.collectingAndThen(
-                                Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(ZlXcxmenu::getMenuname))), ArrayList::new)
-                );
-                zlHotel.setZlXcxMenus(zlXcxMenuArrayList);
+                //设值menus
+                zlHotel.setZlXcxMenus(zlXcxMenuList);
 
                 //根据酒店Id获取公告
                 List<ZlNews> zlNews = zlNewsMapper.findAllJiuDianId(zlHotel.getHotelID(), 1, 1);
@@ -161,4 +153,5 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         PageInfo<ZlHotelUserHistory> pageInfo = new PageInfo<>(hotelHistoryList);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
+
 }
