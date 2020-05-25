@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-
 <mapper namespace="com.zhiliao.hotel.mapper.ZlBannerMapper">
-  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlBanner">
-    <id column="BannerID" jdbcType="INTEGER" property="bannerid" />
-    <result column="BannerImg" jdbcType="CHAR" property="bannerimg" />
-    <result column="LinkUrl" jdbcType="CHAR" property="linkurl" />
-    <result column="BannerStatus" jdbcType="BIT" property="bannerstatus" />
-    <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
-    <result column="MenuID" jdbcType="SMALLINT" property="menuid" />
-    <result column="Position" jdbcType="TINYINT" property="position" />
-    <result column="Type" jdbcType="BIT" property="type" />
-    <result column="Sort" jdbcType="INTEGER" property="sort" />
-    <result column="IsDelete" jdbcType="BIT" property="isdelete" />
-    <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
-    <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
-  </resultMap>
 
+  <sql id="selectColumn">
+    BannerID,BannerImg,LinkUrl,BannerStatus,HotelID,MenuID,`Type`,`Position`,Sort,CheckStatus,VisitCount
+
+  </sql>
+
+  <select id="findBanner" resultType="com.zhiliao.hotel.model.ZlBanner">
+
+   SELECT <include refid="selectColumn"/> FROM zl_banner WHERE  HotelID = #{hotelID} and MenuID = #{menuID} and  BannerStatus = 1 and IsDelete = 0  LIMIT 5
+
+  </select>
+
+  <select id="findByPlaBanner" resultType="com.zhiliao.hotel.model.ZlBanner">
+
+   select  <include refid="selectColumn"/>  from zl_banner where hotelID = 0 and  BannerStatus = 1 and IsDelete = 0 order by Sort DESC limit 0, #{page}
+
+  </select>
 
 </mapper>

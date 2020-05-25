@@ -5,7 +5,7 @@
 <mapper namespace="com.zhiliao.hotel.mapper.ZlXcxMenuMapper">
 
     <sql id="selectColumn">
-      MenuID,HotelID,ParentID,MenuName,IconUrl,HaveBanner,ServiceOpenTime,MenuStatus,ComeFromID
+      MenuID,HotelID,ParentID,MenuName,IconUrl,HaveBanner,ServiceOpenTime,MenuStatus,ComeFromID,ServiceTime,LinkUrl,IsFrontendShow
     </sql>
 
     <select id="getMenuList" resultType="com.zhiliao.hotel.model.ZlXcxmenu">
