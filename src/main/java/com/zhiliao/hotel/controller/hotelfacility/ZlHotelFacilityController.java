@@ -74,7 +74,8 @@ public class ZlHotelFacilityController {
 
         try {
             String token = request.getHeader("token");
-            Long userId = TokenUtil.getUserId(token);
+            //Long userId = TokenUtil.getUserId(token);
+            long userId = System.currentTimeMillis();
             zlHotelFacilityOrder.setUserid(userId);
             Map<String, Object> map = hotelFacilityService.addFacilityOrder(zlHotelFacilityOrder,facilityID);
             return new ReturnString(map);

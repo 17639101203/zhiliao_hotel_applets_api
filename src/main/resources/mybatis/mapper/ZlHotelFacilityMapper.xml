@@ -48,7 +48,7 @@
     from
         zl_hotelfacility
     where
-        and FacilityID = #{facilityId} and FacilityStatus = 1 and IsDelete = 0
+        FacilityID = #{facilityId} and FacilityStatus = 1 and IsDelete = 0
   </select>
 
     <update id="updateCount">

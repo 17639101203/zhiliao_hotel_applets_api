@@ -186,7 +186,7 @@
     select *
     from zl_hotelfacilityorder
     where (BeginUseDate &lt;= #{beginusedate}
-    or EndUseDate &gt;= #{endusedate})
+    or EndUseDate &gt;  #{endusedate})
     and HotelID = #{hotelid}
     and FacilityID = #{facilityid}
   </select>
