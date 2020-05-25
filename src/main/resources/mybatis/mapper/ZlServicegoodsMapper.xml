@@ -20,7 +20,7 @@
     <select id="findServicegoodsCategory" resultType="java.lang.String">
         select zsgc.CategoryName from zl_servicegoods zsg
         left join zl_servicegoodscategory zsgc on zsg.GoodsCategoryID=zsgc.GoodsCategoryID
-        where zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsgc.CategoryStatus=1 and zsgc.IsDelete=0
+        where zsg.CheckStatus=2 and zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsgc.CategoryStatus=1 and zsgc.IsDelete=0
         and zsg.HotelID=#{hotelId} and zsgc.BelongModule=#{belongModule}
         group by zsgc.CategoryName
         order by zsgc.Sort asc,zsgc.UpdateDate desc
@@ -31,10 +31,15 @@
             zsg.GoodsID,
             zsg.GoodsName,
             zsg.Tags,
-            zsg.CoverImgUrl
+            zsg.CoverImgUrl,
+            zsg.ApplyMaxCount,
+            zsg.ApplyLimitCount,
+            zsg.SalePrice,
+            zsg.OriginalPrice,
+            zsg.MarketPrice
         from zl_servicegoods zsg
         left join zl_servicegoodscategory zsgc on zsg.GoodsCategoryID=zsgc.GoodsCategoryID
-        where zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsgc.CategoryStatus=1 and zsgc.IsDelete=0
+        where zsg.CheckStatus=2 and zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsgc.CategoryStatus=1 and zsgc.IsDelete=0
         and zsg.HotelID=#{hotelId} and zsgc.BelongModule=#{belongModule}
         <if test='categoryName!="all"'>
             and zsgc.CategoryName=#{categoryName}
@@ -48,9 +53,18 @@
             zsg.GoodsName,
             zsg.Tags,
             zsg.CoverImgUrl,
+            zsg.ApplyMaxCount,
+            zsg.ApplyLimitCount,
+            zsg.SalePrice,
+            zsg.OriginalPrice,
+            zsg.MarketPrice,
             zsg.Content
         from zl_servicegoods zsg
-        where zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsg.GoodsID=#{goodsId}
+        where zsg.CheckStatus=2 and zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsg.GoodsID=#{goodsId}
     </select>
+
+    <update id="updateServicegoodsVisitCount">
+        update zl_servicegoods set VisitCount=VisitCount + 1 where GoodsID=#{goodsId}
+    </update>
 
 </mapper>

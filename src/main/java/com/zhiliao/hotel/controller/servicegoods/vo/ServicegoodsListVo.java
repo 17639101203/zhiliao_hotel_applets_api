@@ -2,6 +2,9 @@ package com.zhiliao.hotel.controller.servicegoods.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
+import java.math.BigDecimal;
 
 /**
  * @author xiegege
@@ -9,6 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 
 @ApiModel("客房服务商品vo")
+@Data
 public class ServicegoodsListVo {
 
     @ApiModelProperty(value = "客房服务商品id")
@@ -23,46 +27,21 @@ public class ServicegoodsListVo {
     @ApiModelProperty(value = "客房服务商品封面图片")
     private String coverImgUrl;
 
+    @ApiModelProperty(value = "最多领取次数")
+    private Integer applyMaxCount;
+
+    @ApiModelProperty(value = "每次可领取数量")
+    private Integer applyLimitCount;
+
+    @ApiModelProperty(value = "售价")
+    private BigDecimal salePrice;
+
+    @ApiModelProperty(value = "原价")
+    private BigDecimal originalPrice;
+
+    @ApiModelProperty(value = "市场价")
+    private BigDecimal marketPrice;
+
     @ApiModelProperty(value = "客房服务商品详情")
     private String content;
-
-    public Integer getGoodsId() {
-        return goodsId;
-    }
-
-    public void setGoodsId(Integer goodsId) {
-        this.goodsId = goodsId;
-    }
-
-    public String getGoodsName() {
-        return goodsName;
-    }
-
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
-    }
-
-    public String getCoverImgUrl() {
-        return coverImgUrl;
-    }
-
-    public void setCoverImgUrl(String coverImgUrl) {
-        this.coverImgUrl = coverImgUrl;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
 }
