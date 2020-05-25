@@ -14,7 +14,7 @@ public interface ZlOrderDetailMapper extends Mapper<ZlOrderDetail>{
     
     ZlOrderDetail findOrder(@Param("userID") Long userID, @Param("orderID") Long orderID);
     
-    void byOrderdetailId(ZlOrder order);
+//    void byOrderdetailId(ZlOrder order);
 
 //    void insertOrderDetail(List<ZlOrderDetail> zlOrderDetailList);
 //    void insertOrderDetail(ZlOrderDetail zlOrderDetail);

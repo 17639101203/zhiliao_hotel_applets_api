@@ -8,9 +8,9 @@
 
 	</select>
 
-    <update id="byOrderdetailId" parameterType="com.zhiliao.hotel.model.ZlOrder">
-    	update zl_order set UpdateDate = #{updatedate} where OrderID = #{orderid}
-  	</update>
+    <!--<update id="byOrderdetailId" parameterType="com.zhiliao.hotel.model.ZlOrder">-->
+    	<!--update zl_order set UpdateDate = #{updatedate} where OrderID = #{orderid}-->
+  	<!--</update>-->
 
     <!--<insert id="insertOrderDetail" parameterType="com.zhiliao.hotel.model.ZlOrderDetail" useGeneratedKeys="true"-->
             <!--keyProperty="orderDetailID">-->

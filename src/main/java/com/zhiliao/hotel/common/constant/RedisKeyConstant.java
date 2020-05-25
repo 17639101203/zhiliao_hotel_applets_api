@@ -15,10 +15,7 @@ public class RedisKeyConstant {
     //存入redis的优惠券的键的名称,后加RecID
     public final static String ORDER_RECID = "order_RecID_";
     //存入redis的优惠券集合的名称,后加OrderSerialNo
-    public final static String ORDER_RECID_ORDERSERIALNO_ = "order_RecID_OrderSerialNo_";
-    //存入redis的优惠券集合标记的名称,后加OrderSerialNo
-    public final static String ORDER_RECID_ORDERSERIALNO_FLAG_ = "order_RecID_OrderSerialNo_Flag_";
-
+    public final static String ORDER_RECID_ORDERSERIALNO = "order_RecID_OrderSerialNo_";
 
     //存入redis的用户订单信息的键的名称,后加OrderSerialNo
     public final static String ORDER_ORDERSERIALNO = "order_OrderSerialNo_";

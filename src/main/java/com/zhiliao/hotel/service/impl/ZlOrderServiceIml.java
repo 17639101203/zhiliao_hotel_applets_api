@@ -61,7 +61,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
-    @Override
+    /*@Override
     public void byOrderId(Long orderID) {
         ZlOrder order = orderMapper.findById(orderID);
         if (order != null) {
@@ -73,7 +73,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
         orderMapper.byOrderId(order);
         //修改订单详情表
         orderDetailMapper.byOrderdetailId(order);
-    }
+    }*/
 
     @Override
     public UserGoodsReturn submitOrder(Long userID,
@@ -235,9 +235,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
 
         if (goodsCouponInfoVOList.size() > 0) {
             //将该订单优惠券集合放入redis
-            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO_ + orderSerialNo, goodsCouponInfoVOList);
-            //定义redis优惠券集合标记,时间最长为5分钟
-            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO_FLAG_ + orderSerialNo, orderSerialNo, 5, TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + orderSerialNo, goodsCouponInfoVOList);
         }
 
         userGoodsReturn.setUserGoodsInfoList(zlOrderList);
@@ -300,5 +298,65 @@ public class ZlOrderServiceIml implements ZlOrderService {
     public List<OrderDetailVO> getOrderDetail(String out_trade_no) {
         List<OrderDetailVO> zlOrderDetailList = orderMapper.getOrderDetail(out_trade_no);
         return zlOrderDetailList;
+    }
+
+    @Override
+    public void cancelOrder(String out_trade_no) {
+        //拿出存在redis的订单商品短信息集合
+        List<GoodsShortInfoVO> goodsShortInfoVOList = (List<GoodsShortInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
+        for (GoodsShortInfoVO goodsShortInfoVO : goodsShortInfoVOList) {
+            Integer skuID = goodsShortInfoVO.getSkuID();
+            Integer goodsCount = goodsShortInfoVO.getGoodsCount();
+            //更新redis该商品数量(删除redis中锁定的商品数量)
+            Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_SKU_ID + skuID);
+            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, count - goodsCount);
+        }
+        //删除redis中锁定的订单商品
+        redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
+        //删除redis中锁定的订单商品标记
+        redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + out_trade_no);
+
+        //拿出存入redis的订单商品所使用的优惠券的集合
+        if (redisTemplate.hasKey(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no)) {
+            //如果该订单使用了优惠券
+            //拿出存入redis的订单商品所使用的优惠券的集合
+            List<GoodsCouponInfoVO> goodsCouponInfoVOList = (List<GoodsCouponInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
+            for (GoodsCouponInfoVO goodsCouponInfoVO : goodsCouponInfoVOList) {
+                Integer recID = goodsCouponInfoVO.getRecID();
+                //删除redis中锁定的优惠券
+                redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_RECID + recID);
+            }
+            //删除redis中锁定的优惠券集合
+            redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
+        }
+    }
+
+    @Override
+    public void autoCancelOrder(String out_trade_no) {
+        //拿出存在redis的订单商品短信息集合
+        List<GoodsShortInfoVO> goodsShortInfoVOList = (List<GoodsShortInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
+        for (GoodsShortInfoVO goodsShortInfoVO : goodsShortInfoVOList) {
+            Integer skuID = goodsShortInfoVO.getSkuID();
+            Integer goodsCount = goodsShortInfoVO.getGoodsCount();
+            //更新redis该商品数量(删除redis中锁定的商品数量)
+            Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_SKU_ID + skuID);
+            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, count - goodsCount);
+        }
+        //删除redis中锁定的订单商品
+        redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
+
+        //拿出存入redis的订单商品所使用的优惠券的集合
+        if (redisTemplate.hasKey(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no)) {
+            //如果该订单使用了优惠券
+            //拿出存入redis的订单商品所使用的优惠券的集合
+            List<GoodsCouponInfoVO> goodsCouponInfoVOList = (List<GoodsCouponInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
+            for (GoodsCouponInfoVO goodsCouponInfoVO : goodsCouponInfoVOList) {
+                Integer recID = goodsCouponInfoVO.getRecID();
+                //删除redis中锁定的优惠券
+                redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_RECID + recID);
+            }
+            //删除redis中锁定的优惠券集合
+            redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
+        }
     }
 }

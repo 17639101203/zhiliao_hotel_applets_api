@@ -10,11 +10,13 @@ public interface ZlOrderService {
 
     PageInfoResult findAllOrder(OrderInfoVO vo);
 
-    void byOrderId(Long orderID);
-
     UserGoodsReturn submitOrder(Long userID, HotelBasicVO hotelBasicVO, Map<String, List<GoodsInfoVO>> goodsInfoMap);
 
     void updateOrder(String out_trade_no);
 
     List<OrderDetailVO> getOrderDetail(String out_trade_no);
+
+    void cancelOrder(String out_trade_no);
+
+    void autoCancelOrder(String out_trade_no);
 }

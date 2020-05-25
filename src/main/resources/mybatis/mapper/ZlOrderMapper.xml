@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlOrderMapper">
-    
+
     <resultMap id="ZlOrderMap"
                type="com.zhiliao.hotel.model.ZlOrder">
         <result column="OrderID"
@@ -97,10 +97,10 @@
         <result column="OperatorRemark"
                 jdbcType="VARCHAR"
                 property="operatorremark"/>
-    
+
     </resultMap>
-    
-    
+
+
     <resultMap type="com.zhiliao.hotel.model.OrderListQueryResult"
                id="orderListQueryMap"
                extends="ZlOrderMap">
@@ -144,37 +144,37 @@
                     property="updatedate"/>
         </collection>
     </resultMap>
-    
+
     <sql id="whereOrderStatus">
-        
+
         WHERE zor.UserID=#{userId}
-        
+
         <if test="paytype != null">
             AND zor.PayType = #{paytype}
         </if>
-        
+
         <if test="paystatus != null">
             AND zor.PayStatus = #{paystatus}
         </if>
-        
+
         <if test="orderstatus != null">
             AND zor.OrderStatus = #{orderstatus}
         </if>
-        
+
         <if test="refundstatus != null">
             AND zor.RefundStatus = #{refundstatus}
         </if>
-        
+
         <if test="belongmodule != null">
             AND zor.BelongModule = #{belongmodule}
         </if>
-    
+
     </sql>
-    
+
     <select id="findAllOrder"
             resultMap="orderListQueryMap"
             parameterType="com.zhiliao.hotel.controller.myOrder.vo.OrderInfoVO">
-        
+
         SELECT *
         FROM (SELECT *
         FROM zl_order
@@ -183,11 +183,11 @@
         FROM zl_orderdetail
         ORDER BY CreateDate DESC) AS zol
         ON zor.UserID=zol.UserID AND zor.BelongModule=zol.BelongModule
-        
+
         <include refid="whereOrderStatus"/>
-        
+
         UNION
-        
+
         SELECT *
         FROM (SELECT *
         FROM zl_order
@@ -196,21 +196,21 @@
         FROM zl_orderdetail
         ORDER BY CreateDate DESC) AS zol
         ON zor.UserID=zol.UserID AND zor.BelongModule=zol.BelongModule
-        
+
         <include refid="whereOrderStatus"/>
-    
-    
+
+
     </select>
-    
+
     <select id="findById"
             resultType="com.zhiliao.hotel.model.ZlOrder">
     select * from zl_order where OrderID = #{orderid}
   </select>
-    <update id="byOrderId"
-            parameterType="com.zhiliao.hotel.model.ZlOrder">
-    update zl_order set OrderStatus = #{orderstatus},UpdateDate = #{updatedate} where OrderID = #{orderid}
-  </update>
-    
+    <!--<update id="byOrderId"-->
+            <!--parameterType="com.zhiliao.hotel.model.ZlOrder">-->
+    <!--update zl_order set OrderStatus = #{orderstatus},UpdateDate = #{updatedate} where OrderID = #{orderid}-->
+  <!--</update>-->
+
     <select id="getOrderDetail"
             resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderDetailVO">
         SELECT
@@ -224,7 +224,7 @@
         WHERE zo.OrderSerialNo = #{out_trade_no}
         ORDER BY zod.HotelGoodsID ASC
     </select>
-    
+
     <update id="updateOrder">
         UPDATE
           zl_order

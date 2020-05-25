@@ -121,17 +121,17 @@ public class ZlOrderController {
         }
     }
 
-    @ApiOperation(value = "取消订单")
+    @ApiOperation(value = "酒店超市_手动取消订单_姬慧慧")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "订单id")
+            @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号")
     })
-    @PostMapping("quXiaoOrder/{orderID}")
-    @UserLoginToken
+    @PostMapping("cancelOrder/{out_trade_no}")
+//    @UserLoginToken
+    @PassToken
     @ResponseBody
-    public ReturnString findByjiudianId(String token, @PathVariable Long orderID) {
+    public ReturnString cancelOrder(@PathVariable("out_trade_no") String out_trade_no) {
         try {
-            orderService.byOrderId(orderID);
+            orderService.cancelOrder(out_trade_no);
             return new ReturnString(0, "已取消");
         } catch (Exception e) {
             e.printStackTrace();

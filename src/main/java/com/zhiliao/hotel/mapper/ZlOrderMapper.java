@@ -18,7 +18,7 @@ public interface ZlOrderMapper extends Mapper<ZlOrder> {
     List<OrderListQueryResult> findAllOrder(OrderInfoVO vo);
 
     //取消订单
-    void byOrderId(ZlOrder order);
+//    void byOrderId(ZlOrder order);
 
     ZlOrder findById(@Param("orderid") Long orderid);
 
