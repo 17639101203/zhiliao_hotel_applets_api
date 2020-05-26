@@ -11,7 +11,14 @@
     <select id="findGoods"
             resultType="com.zhiliao.hotel.model.ZlOrderDetail">
 
-        SELECT * FROM zl_orderdetail WHERE UserID=#{userID} AND BelongModule=#{belongModule}  ORDER BY CreateDate DESC LIMIT 2
+        SELECT * FROM zl_orderdetail WHERE UserID=#{userID} AND BelongModule=#{belongModule} ORDER BY CreateDate DESC LIMIT 2
+
+	</select>
+    
+    <select id="countGoods"
+            resultType="java.lang.Long">
+
+        SELECT count(*) FROM zl_orderdetail WHERE UserID=#{userID} AND BelongModule=#{belongModule}
 
 	</select>
     

@@ -70,6 +70,8 @@ public class OrderList{
      */
     private Integer updatedate;
     
+    private Long goodsTotal;
+    
     private List<ZlOrderDetail> zlOrderDetailList;
     
     public Long getUserid(){
@@ -166,6 +168,14 @@ public class OrderList{
     
     public void setUpdatedate(Integer updatedate){
         this.updatedate=updatedate;
+    }
+    
+    public Long getGoodsTotal(){
+        return goodsTotal;
+    }
+    
+    public void setGoodsTotal(Long goodsTotal){
+        this.goodsTotal=goodsTotal;
     }
     
     public List<ZlOrderDetail> getZlOrderDetailList(){
