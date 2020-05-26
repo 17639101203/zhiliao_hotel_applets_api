@@ -10,9 +10,8 @@ import com.zhiliao.hotel.controller.myOrder.vo.GoodsCouponInfoVO;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsShortInfoVO;
 import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.service.ZlGoodsService;
-import net.bytebuddy.asm.Advice;
+import lombok.RequiredArgsConstructor;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
@@ -30,30 +29,21 @@ import java.util.Map;
  */
 
 @Transactional(rollbackFor = Exception.class)
+@RequiredArgsConstructor
 @Service
 public class ZlGoodsServiceImpl implements ZlGoodsService {
 
     private final ZlGoodsMapper zlGoodsMapper;
 
-    @Autowired
-    private ElasticsearchTemplate elasticsearchTemplate;
+    private final ElasticsearchTemplate elasticsearchTemplate;
 
-    @Autowired
-    private RedisTemplate redisTemplate;
+    private final RedisTemplate redisTemplate;
 
-    @Autowired
-    private ZlCouponMapper zlCouponMapper;
+    private final ZlCouponMapper zlCouponMapper;
 
-    @Autowired
-    private ZlCouponUserMapper zlCouponUserMapper;
+    private final ZlCouponUserMapper zlCouponUserMapper;
 
-    @Autowired
-    private ZlOrderMapper zlOrderMapper;
-
-    @Autowired
-    public ZlGoodsServiceImpl(ZlGoodsMapper zlGoodsMapper, ZlWxuserMapper zlWxuserMapper, ZlHotelMapper zlHotelMapper) {
-        this.zlGoodsMapper = zlGoodsMapper;
-    }
+    private final ZlOrderMapper zlOrderMapper;
 
     @Override
     public List<Map<String, String>> findGoodsCategory(Integer hotelId, Integer belongModule) {

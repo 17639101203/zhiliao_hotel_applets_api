@@ -43,7 +43,7 @@ public class ZlGoodsController {
     @ApiOperation(value = "获取商品分类_谢辉益")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
-            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产")
+            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块: 1便利店;2餐饮服务;3情趣用品;4土特产")
     })
     @UserLoginToken
     @GetMapping("findGoodsCategory/{hotelId}/{belongModule}")
@@ -67,10 +67,10 @@ public class ZlGoodsController {
             }
             // 有序去重
             Set<String> goodsCategorySet = new LinkedHashSet<>(goodsCategoryList);
-            return new ReturnString<>(goodsCategorySet);
+            return new ReturnString(goodsCategorySet);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString<>("获取出错");
+            return new ReturnString("获取商品分类出错!");
         }
     }
 
