@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlOrderMapper">
-    
+
     <select id="findAllOrder"
             resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderList"
             parameterType="com.zhiliao.hotel.controller.myOrder.vo.OrderInfoVO">
-        
+
         SELECT
-            UserID,
-            HotelName,
-            ActuallyPay,
-            BelongModule,
-            CouponID,
-            PayStatus,
-            OrderStatus,
-            RefundStatus,
-            IsDelete,
-            IsUserDelete,
-            CreateDate,
-            UpdateDate
+        UserID,
+        HotelName,
+        ActuallyPay,
+        BelongModule,
+        CouponID,
+        PayStatus,
+        OrderStatus,
+        RefundStatus,
+        IsDelete,
+        IsUserDelete,
+        CreateDate,
+        UpdateDate
         FROM zl_order WHERE UserID=#{userId}
-        
+
         <if test="paytype != null">
             AND PayType = #{paytype}
         </if>
-        
+
         <if test="paystatus != null">
             AND PayStatus = #{paystatus}
         </if>
-        
+
         <if test="orderstatus != null">
             AND OrderStatus = #{orderstatus}
         </if>
-        
+
         <if test="refundstatus != null">
             AND RefundStatus = #{refundstatus}
         </if>
-        
+
         <if test="belongmodule != null">
             AND BelongModule = #{belongmodule}
         </if>
-        
+
         ORDER BY CreateDate DESC
-    
+
     </select>
 
     <select id="findById"
@@ -50,9 +50,9 @@
     select * from zl_order where OrderID = #{orderid}
   </select>
     <!--<update id="byOrderId"-->
-            <!--parameterType="com.zhiliao.hotel.model.ZlOrder">-->
+    <!--parameterType="com.zhiliao.hotel.model.ZlOrder">-->
     <!--update zl_order set OrderStatus = #{orderstatus},UpdateDate = #{updatedate} where OrderID = #{orderid}-->
-  <!--</update>-->
+    <!--</update>-->
 
     <select id="getOrderDetail"
             resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderDetailVO">
@@ -76,5 +76,15 @@
           OrderStatus = 1
         WHERE OrderSerialNo = #{out_trade_no}
     </update>
+
+    <select id="getByOrderSerialNo" resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderStatusVO">
+        SELECT DISTINCT
+          OrderSerialNo,
+          PayStatus,
+          OrderStatus
+        FROM
+          zl_order
+        WHERE OrderSerialNo = #{out_trade_no}
+    </select>
 
 </mapper>

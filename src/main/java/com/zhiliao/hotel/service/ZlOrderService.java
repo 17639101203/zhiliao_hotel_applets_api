@@ -19,4 +19,6 @@ public interface ZlOrderService {
     void cancelOrder(String out_trade_no);
 
     void autoCancelOrder(String out_trade_no);
+
+    OrderStatusVO getByOrderSerialNo(String out_trade_no);
 }

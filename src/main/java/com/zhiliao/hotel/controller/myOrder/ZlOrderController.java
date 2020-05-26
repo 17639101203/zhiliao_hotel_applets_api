@@ -8,6 +8,7 @@ import com.zhiliao.hotel.controller.myOrder.config.WxPayConfig;
 import com.zhiliao.hotel.controller.myOrder.param.WxPayRefundParam;
 import com.zhiliao.hotel.controller.myOrder.util.PayUtil;
 import com.zhiliao.hotel.controller.myOrder.vo.*;
+import com.zhiliao.hotel.model.ZlOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.WxPayService;
 import com.zhiliao.hotel.service.ZlGoodsService;
@@ -254,29 +255,37 @@ public class ZlOrderController {
             String validStr = PayUtil.createLinkString(validParams);//把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
             String sign = PayUtil.sign(validStr, WxPayConfig.key, "utf-8").toUpperCase();//拼装生成服务器端验证的签名
             // 因为微信回调会有八次之多,所以当第一次回调成功了,那么我们就不再执行逻辑了
-
-            //根据微信官网的介绍，此处不仅对回调的参数进行验签，还需要对返回的金额与系统订单的金额进行比对等
-            if (sign.equals(returnMap.get("sign"))) {
-                //查询下单商品信息
-                List<OrderDetailVO> orderDetailVOList = zlOrderService.getOrderDetail(out_trade_no);
-                //比较实际付款价格和总价是否一致
-                BigDecimal totalPrice = null;
-                for (OrderDetailVO orderDetailVO : orderDetailVOList) {
-                    totalPrice = totalPrice.add(orderDetailVO.getPrice().multiply(BigDecimal.valueOf(orderDetailVO.getGoodsCount())));
-                }
-                Integer total_fee = (Integer) returnMap.get("total_fee");
-                if (totalPrice.multiply(BigDecimal.valueOf(1000)).intValue() == total_fee) {
-                    //订单金额相同,更改数据库状态
-                    zlGoodsService.updateGoodsCount(out_trade_no);
-                    zlOrderService.updateOrder(out_trade_no);
-                    logger.info("微信手机支付回调成功订单号:{}", out_trade_no);
-                    resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
-                } else {
-                    logger.info("订单金额不符,订单号:", out_trade_no);
-                    resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[订单金额不符]]></return_msg>" + "</xml> ";
-                }
+            //查询数据库中订单状态
+            OrderStatusVO orderStatusVO = zlOrderService.getByOrderSerialNo(out_trade_no);
+            Byte payStatus = orderStatusVO.getPayStatus();
+            Byte orderStatus = orderStatusVO.getOrderStatus();
+            if (payStatus == 2 && orderStatus == 1) {
+                logger.info("微信手机支付回调成功订单号:{}", out_trade_no);
+                resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
             } else {
-                resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[微信支付回调失败!签名不一致]]></return_msg>" + "</xml> ";
+                //根据微信官网的介绍，此处不仅对回调的参数进行验签，还需要对返回的金额与系统订单的金额进行比对等
+                if (sign.equals(returnMap.get("sign"))) {
+                    //查询下单商品信息
+                    List<OrderDetailVO> orderDetailVOList = zlOrderService.getOrderDetail(out_trade_no);
+                    //比较实际付款价格和总价是否一致
+                    BigDecimal totalPrice = null;
+                    for (OrderDetailVO orderDetailVO : orderDetailVOList) {
+                        totalPrice = totalPrice.add(orderDetailVO.getPrice().multiply(BigDecimal.valueOf(orderDetailVO.getGoodsCount())));
+                    }
+                    Integer total_fee = (Integer) returnMap.get("total_fee");
+                    if (totalPrice.multiply(BigDecimal.valueOf(1000)).intValue() == total_fee) {
+                        //订单金额相同,更改数据库状态
+                        zlGoodsService.updateGoodsCount(out_trade_no);
+                        zlOrderService.updateOrder(out_trade_no);
+                        logger.info("微信手机支付回调成功订单号:{}", out_trade_no);
+                        resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+                    } else {
+                        logger.info("订单金额不符,订单号:", out_trade_no);
+                        resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[订单金额不符]]></return_msg>" + "</xml> ";
+                    }
+                } else {
+                    resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[微信支付回调失败!签名不一致]]></return_msg>" + "</xml> ";
+                }
             }
         } else {
             resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
