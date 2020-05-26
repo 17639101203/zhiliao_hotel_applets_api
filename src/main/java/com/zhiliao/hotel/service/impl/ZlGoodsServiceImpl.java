@@ -10,6 +10,7 @@ import com.zhiliao.hotel.controller.myOrder.vo.GoodsCouponInfoVO;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsShortInfoVO;
 import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.service.ZlGoodsService;
+import net.bytebuddy.asm.Advice;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +46,9 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
 
     @Autowired
     private ZlCouponUserMapper zlCouponUserMapper;
+
+    @Autowired
+    private ZlOrderMapper zlOrderMapper;
 
     @Autowired
     public ZlGoodsServiceImpl(ZlGoodsMapper zlGoodsMapper, ZlWxuserMapper zlWxuserMapper, ZlHotelMapper zlHotelMapper) {
@@ -112,6 +116,9 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
             //删除该订单下锁定的优惠券集合
             redisTemplate.delete(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
         }
+
+        //修改数据库中订单状态
+        zlOrderMapper.updateOrder(out_trade_no);
         //下单业务完成,删除redis订单商品信息
         redisTemplate.delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
         //删除redis中锁定的订单商品标记
