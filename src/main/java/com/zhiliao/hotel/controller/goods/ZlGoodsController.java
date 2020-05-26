@@ -147,8 +147,12 @@ public class ZlGoodsController {
                                                    @PathVariable Integer belongModule,
                                                    @PathVariable Integer pageNo,
                                                    @PathVariable Integer pageSize) {
-
-        List<EsGoods> esGoodsList = zlGoodsService.searchGoods(hotelId, selectParam, belongModule, pageNo, pageSize);
-        return new ReturnString<>(esGoodsList);
+        try {
+            List<EsGoods> esGoodsList = zlGoodsService.searchGoods(hotelId, selectParam, belongModule, pageNo, pageSize);
+            return new ReturnString<>(esGoodsList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString<>("获取出错");
+        }
     }
 }
