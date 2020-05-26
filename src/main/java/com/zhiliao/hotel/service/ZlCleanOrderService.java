@@ -22,4 +22,9 @@ public interface ZlCleanOrderService {
      * @return
      */
     Map<String,Object> selectCleanDetails(Long userID, String serialNumber);
+
+    /**
+     *取消清扫预约
+     */
+    void removeCleanOrder(Long userID, String serialNumber,Integer updatedate);
 }

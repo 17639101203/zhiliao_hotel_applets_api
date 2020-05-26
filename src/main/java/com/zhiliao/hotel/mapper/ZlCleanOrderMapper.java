@@ -15,4 +15,7 @@ public interface ZlCleanOrderMapper extends Mapper<ZlCleanOrder> {
     Integer addCleanOrder(ZlCleanOrder zlCleanOrder);
 
     Map<String,Object> selectCleanDetails(@Param("userid") Long userid, @Param("serialnumber") String serialnumber);
+
+    void removeCleanOrder(@Param("userid") Long userid, @Param("serialnumber") String serialnumber,
+                          @Param("updatedate") Integer updatedate);
 }

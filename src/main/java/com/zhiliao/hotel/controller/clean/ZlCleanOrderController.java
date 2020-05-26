@@ -63,11 +63,25 @@ public class ZlCleanOrderController {
     @ApiOperation(value = "查询清扫订单详情")
     @PostMapping("selectCleanDetails/{serialnumber}")
     @UserLoginToken
-    public ReturnString<Map<String, Object>> selectCleanDetails(HttpServletRequest request, @PathVariable String serialnumber) {
+    public ReturnString<Map<String, Object>> selectCleanDetails(HttpServletRequest request, @PathVariable("serialnumber") String serialnumber) {
 
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
         Map<String, Object> cleanmap = zlCleanOrderService.selectCleanDetails(userid, serialnumber);
         return new ReturnString<>(cleanmap);
     }
+
+
+
+    @ApiOperation(value = "取消清扫预约")
+    @PostMapping("cancelCleanOrder/{serialnumber}")
+    @UserLoginToken
+    public ReturnString cancelCleanOrder(HttpServletRequest request, @PathVariable("serialnumber") String serialnumber) {
+        Integer nowTime = DateUtils.javaToPhpNowDateTime();
+        Long userid = TokenUtil.getUserId(request.getHeader("token"));
+        zlCleanOrderService.removeCleanOrder(userid,serialnumber,nowTime);
+        return new ReturnString<>(0,"预约已取消");
+    }
+
+
 
 }

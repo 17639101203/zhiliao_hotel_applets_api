@@ -159,14 +159,25 @@
     </trim>
   </insert>
 
-
+<!--  查询清扫订单详情-->
   <select id="selectCleanDetails" resultType="java.util.HashMap">
     SELECT
-        HotelName,RoomNumber,BookDate,Remark,OrderStatus,CreateDate,SerialNumber
+        HotelName,RoomNumber,BookDate,Remark,OrderStatus,CreateDate,SerialNumber,UpdateDate
     FROM
         zl_cleanorder
     WHERE
         UserID = #{userid} AND SerialNumber = #{serialnumber} AND IsDelete = 0
   </select>
+
+
+  <!-- 取消清扫预约 -->
+  <update id="removeCleanOrder">
+    update
+        zl_cleanorder
+    set
+        OrderStatus="-1" , UpdateDate = #{updatedate,jdbcType=INTEGER}
+    where
+        UserID = #{userid} AND SerialNumber = #{serialnumber} AND IsDelete = 0
+  </update>
 
 </mapper>
