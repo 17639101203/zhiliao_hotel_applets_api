@@ -1,132 +1,43 @@
 package com.zhiliao.hotel.controller.goods.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
 import java.math.BigDecimal;
 
 /**
  * Created by xiegege on 2020/4/16.
  */
-public class GoodsListVo {
-    /**
-     * 商品id
-     */
-    private Integer goodsID;
-    /**
-     * 商品名称
-     */
-    private String goodsName;
-    /**
-     * 商品详情
-     */
-    private String content;
 
-    /**
-     * 商品封面图片
-     */
+@ApiModel("酒店商品")
+@Data
+public class GoodsListVo {
+
+    @ApiModelProperty(value = "酒店商品skuId", required = true)
+    private Integer hotelGoodsSkuId;
+
+    @ApiModelProperty(value = "商品名称", required = true)
+    private String goodsName;
+
+    @ApiModelProperty(value = "商品封面图片", required = true)
     private String coverImgUrl;
 
-    /**
-     * 原价
-     */
+    @ApiModelProperty(value = "原价", required = true)
     private BigDecimal originalPrice;
-    /**
-     * 现价
-     */
+
+    @ApiModelProperty(value = "现价", required = true)
     private BigDecimal currentPrice;
-    /**
-     * 总库存
-     */
-    private Integer totalStockCount;
-    /**
-     * 总销量
-     */
-    private Integer totalSoldCount;
-    /**
-     * 总虚拟销量
-     */
-    private Integer totalVirtualSoldCount;
 
-    /**
-     * 点击量
-     */
+    @ApiModelProperty(value = "销量", required = true)
+    private Integer soldCount;
+
+    @ApiModelProperty(value = "虚拟销量", required = true)
+    private Integer virtualSoldCount;
+
+    @ApiModelProperty(value = "商品详情", required = true)
+    private String content;
+
+    @ApiModelProperty(value = "总访问量", required = true)
     private Integer totalVisitCount;
-
-    public Integer getGoodsID() {
-        return goodsID;
-    }
-
-    public void setGoodsID(Integer goodsID) {
-        this.goodsID = goodsID;
-    }
-
-    public String getGoodsName() {
-        return goodsName;
-    }
-
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getCoverImgUrl() {
-        return coverImgUrl;
-    }
-
-    public void setCoverImgUrl(String coverImgUrl) {
-        this.coverImgUrl = coverImgUrl;
-    }
-
-    public BigDecimal getOriginalPrice() {
-        return originalPrice;
-    }
-
-    public void setOriginalPrice(BigDecimal originalPrice) {
-        this.originalPrice = originalPrice;
-    }
-
-    public BigDecimal getCurrentPrice() {
-        return currentPrice;
-    }
-
-    public void setCurrentPrice(BigDecimal currentPrice) {
-        this.currentPrice = currentPrice;
-    }
-
-    public Integer getTotalStockCount() {
-        return totalStockCount;
-    }
-
-    public void setTotalStockCount(Integer totalStockCount) {
-        this.totalStockCount = totalStockCount;
-    }
-
-    public Integer getTotalSoldCount() {
-        return totalSoldCount;
-    }
-
-    public void setTotalSoldCount(Integer totalSoldCount) {
-        this.totalSoldCount = totalSoldCount;
-    }
-
-    public Integer getTotalVirtualSoldCount() {
-        return totalVirtualSoldCount;
-    }
-
-    public void setTotalVirtualSoldCount(Integer totalVirtualSoldCount) {
-        this.totalVirtualSoldCount = totalVirtualSoldCount;
-    }
-
-    public Integer getTotalVisitCount() {
-        return totalVisitCount;
-    }
-
-    public void setTotalVisitCount(Integer totalVisitCount) {
-        this.totalVisitCount = totalVisitCount;
-    }
 }

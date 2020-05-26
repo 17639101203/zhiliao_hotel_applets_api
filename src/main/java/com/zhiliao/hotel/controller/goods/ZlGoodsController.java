@@ -74,27 +74,27 @@ public class ZlGoodsController {
         }
     }
 
-    @ApiOperation(value = "获取商品分类列表数据_谢辉益")
+    @ApiOperation(value = "获取商品列表数据（按分类名称查询）_谢辉益")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
-            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务;2便利店;3餐饮服务;4情趣用品;5土特产"),
+            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块: 1便利店;2餐饮服务;3情趣用品;4土特产"),
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "String", required = true, value = "页码"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "String", required = true, value = "每页大小"),
-            @ApiImplicitParam(paramType = "query", name = "categoryName", dataType = "String", required = true, value = "分类名称")
+            @ApiImplicitParam(paramType = "query", name = "categoryName", dataType = "String", required = true, value = "分类名称（all代表全部）")
 
     })
     @UserLoginToken
     @GetMapping("findGoodsList/{hotelId}/{belongModule}/{pageNo}/{pageSize}")
-    public ReturnString<PageInfoResult> findGoodsList(@PathVariable Integer hotelId, @PathVariable Integer belongModule,
+    public ReturnString<PageInfoResult<GoodsListVo>> findGoodsList(@PathVariable Integer hotelId, @PathVariable Integer belongModule,
                                                       @PathVariable Integer pageNo, @PathVariable Integer pageSize, String categoryName) {
         try {
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|页码：" + pageNo + "|每页大小：" + pageSize + "|分类名称：" + categoryName);
             pageSize = pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize;
             PageInfoResult goodsList = zlGoodsService.findGoodsList(hotelId, belongModule, pageNo, pageSize, categoryName);
-            return new ReturnString<>(goodsList);
+            return new ReturnString(goodsList);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString<>("获取出错");
+            return new ReturnString("获取商品列表数据出错!");
         }
     }
 
