@@ -47,7 +47,7 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
     private ZlCouponUserMapper zlCouponUserMapper;
 
     @Autowired
-    public ZlGoodsServiceImpl(ZlGoodsMapper zlGoodsMapper,ZlWxuserMapper zlWxuserMapper, ZlHotelMapper zlHotelMapper) {
+    public ZlGoodsServiceImpl(ZlGoodsMapper zlGoodsMapper, ZlWxuserMapper zlWxuserMapper, ZlHotelMapper zlHotelMapper) {
         this.zlGoodsMapper = zlGoodsMapper;
     }
 
@@ -88,28 +88,34 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
             Integer goodsID = goodsShortInfoVO.getGoodsID();
             Integer goodsCount = goodsShortInfoVO.getGoodsCount();
             Integer skuID = goodsShortInfoVO.getSkuID();
+            Integer hotelID = goodsShortInfoVO.getHotelID();
             //更新mysql数据库库存
             zlGoodsMapper.updateGoods(goodsID, goodsCount);
-            zlGoodsMapper.updateGoodsSku(goodsID, goodsCount);
-            zlGoodsMapper.updateHotelGoods(goodsID, goodsCount);
+            zlGoodsMapper.updateGoodsSku(skuID, goodsCount);
+            zlGoodsMapper.updateHotelGoodsSku(skuID, hotelID, goodsCount);
             //更改redis数据库库存
             Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_SKU_ID + skuID);
             redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, count - goodsCount);
         }
 
-        if (redisTemplate.hasKey(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no)){
+        if (redisTemplate.hasKey(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no)) {
             //从redis中拿出优惠券集合信息
             List<GoodsCouponInfoVO> goodsCouponInfoVOList = (List<GoodsCouponInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
             for (GoodsCouponInfoVO goodsCouponInfoVO : goodsCouponInfoVOList) {
                 Integer recID = goodsCouponInfoVO.getRecID();
+                //更改数据库中该优惠券的状态
+                Integer useDate = Math.toIntExact(System.currentTimeMillis() / 1000);
+                zlCouponUserMapper.updateCouponUser(recID, useDate, out_trade_no);
                 //删除该订单下锁定的优惠券
-                redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_RECID + recID);
+                redisTemplate.delete(RedisKeyConstant.ORDER_RECID + recID);
             }
             //删除该订单下锁定的优惠券集合
-            redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
+            redisTemplate.delete(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
         }
         //下单业务完成,删除redis订单商品信息
-        redisTemplate.opsForHash().delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
+        redisTemplate.delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
+        //删除redis中锁定的订单商品标记
+        redisTemplate.delete(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + out_trade_no);
     }
 
     @Override

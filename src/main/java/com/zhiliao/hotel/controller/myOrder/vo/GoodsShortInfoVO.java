@@ -24,6 +24,19 @@ public class GoodsShortInfoVO {
      */
     private Integer skuID;
 
+    /**
+     * 酒店HotelID
+     */
+    private Integer hotelID;
+
+    public Integer getHotelID() {
+        return hotelID;
+    }
+
+    public void setHotelID(Integer hotelID) {
+        this.hotelID = hotelID;
+    }
+
     public Integer getSkuID() {
         return skuID;
     }

@@ -20,4 +20,15 @@
   <select id="listCouponUser" resultType="com.zhiliao.hotel.model.ZlCouponUser">
     select cu.*,c.CouponName couponname from zl_couponuser cu,zl_coupon c where UserID = #{userId} and cu.CouponID = c.CouponID
   </select>
+
+  <update id="updateCouponUser">
+    UPDATE
+      zl_couponuser
+    SET
+      IsUsed = 1,
+      UseDate = #{useDate},
+      OrderID = #{out_trade_no}
+    WHERE RecID = #{recID}
+  </update>
+
 </mapper>

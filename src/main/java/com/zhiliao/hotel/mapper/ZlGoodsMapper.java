@@ -24,11 +24,11 @@ public interface ZlGoodsMapper extends Mapper<ZlGoods> {
 
     void updateTotalVisitCount(@Param("goodsID") Integer goodsID, @Param("totalvisitcount") Integer totalvisitcount);
 
-    void updateGoods(Integer goodsID, Integer goodsCount);
+    void updateGoods(@Param("goodsID") Integer goodsID, @Param("goodsCount") Integer goodsCount);
 
-    void updateGoodsSku(Integer goodsID, Integer goodsCount);
+    void updateGoodsSku(@Param("skuID") Integer skuID, @Param("goodsCount") Integer goodsCount);
 
-    void updateHotelGoods(Integer goodsID, Integer goodsCount);
+    void updateHotelGoodsSku(@Param("skuID") Integer skuID, @Param("hotelID") Integer hotelID, @Param("goodsCount") Integer goodsCount);
 
-    public List<GoodsListVo>getProductsFeaturedList();
+    public List<GoodsListVo> getProductsFeaturedList();
 }

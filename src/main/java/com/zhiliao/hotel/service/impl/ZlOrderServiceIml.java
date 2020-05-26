@@ -212,6 +212,7 @@ public class ZlOrderServiceIml implements ZlOrderService{
                 goodsShortInfoVO.setGoodsID(goodsInfoVOList.get(i).getGoodsID());
                 goodsShortInfoVO.setGoodsCount(goodsInfoVOList.get(i).getGoodsCount());
                 goodsShortInfoVO.setSkuID(skuID);
+                goodsShortInfoVO.setHotelID(hotelBasicVO.getHotelID());
                 goodsShortInfoVOList.add(goodsShortInfoVO);
                 //将订单详情数据存入数据库
                 orderDetailMapper.insert(zlOrderDetail);

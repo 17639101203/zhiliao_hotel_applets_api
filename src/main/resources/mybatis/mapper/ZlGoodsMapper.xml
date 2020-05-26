@@ -113,26 +113,28 @@
           zl_goods
         SET
           TotalStockCount = TotalStockCount - #{goodsCount},
-          TotalSoldCount = TotalSoldCount + #{goodsCount}
+          TotalSoldCount = TotalSoldCount + #{goodsCount},
+          RealtimeStockCount = RealtimeStockCount - #{goodsCount}
         WHERE GoodsID = #{goodsID}
     </update>
 
     <update id="updateGoodsSku">
         UPDATE
-          zl_goods
+          zl_goodssku
         SET
-          StockCount = TotalStockCount - #{goodsCount},
-          SoldCount = TotalSoldCount + #{goodsCount}
-        WHERE GoodsID = #{goodsID}
+          StockCount = StockCount - #{goodsCount},
+          SoldCount = SoldCount + #{goodsCount}
+        WHERE SkuID = #{skuID}
     </update>
 
-    <update id="updateHotelGoods">
+    <update id="updateHotelGoodsSku">
         UPDATE
-          zl_goods
+          zl_hotelgoodssku
         SET
-          StockCount = TotalStockCount - #{goodsCount},
-          SoldCount = TotalSoldCount + #{goodsCount}
-        WHERE GoodsID = #{goodsID}
+          StockCount = StockCount - #{goodsCount},
+          SoldCount = SoldCount + #{goodsCount}
+        WHERE SkuID = #{skuID}
+        AND HotelID = #{hotelID}
     </update>
 
 </mapper>
