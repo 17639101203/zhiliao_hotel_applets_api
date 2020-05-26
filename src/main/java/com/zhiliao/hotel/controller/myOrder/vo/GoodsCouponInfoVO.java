@@ -23,6 +23,19 @@ public class GoodsCouponInfoVO {
      */
     private Long userID;
 
+    /**
+     * 1:便利店;2餐饮服务;3情趣用品;4土特产
+     */
+    private Short belongModule;
+
+    public Short getBelongModule() {
+        return belongModule;
+    }
+
+    public void setBelongModule(Short belongModule) {
+        this.belongModule = belongModule;
+    }
+
     public Integer getRecID() {
         return recID;
     }

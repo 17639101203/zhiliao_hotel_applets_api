@@ -57,6 +57,19 @@ public class GoodsInfoVO {
      */
     private String DeliveryAddress;
 
+    /**
+     * 订单编号
+     */
+    private String orderSerialNo;
+
+    public String getOrderSerialNo() {
+        return orderSerialNo;
+    }
+
+    public void setOrderSerialNo(String orderSerialNo) {
+        this.orderSerialNo = orderSerialNo;
+    }
+
     public Integer getGoodsID() {
         return goodsID;
     }

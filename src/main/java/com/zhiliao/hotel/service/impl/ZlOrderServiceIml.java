@@ -71,6 +71,26 @@ public class ZlOrderServiceIml implements ZlOrderService {
     public UserGoodsReturn submitOrder(Long userID,
                                        HotelBasicVO hotelBasicVO,
                                        Map<String, List<GoodsInfoVO>> goodsInfoMap) {
+
+        if (goodsInfoMap.size() == 1) {
+            //集合数量为1,说明只有一个模块商品数据
+            Set<String> keySet = goodsInfoMap.keySet();
+            for (String key : keySet) {
+                List<GoodsInfoVO> goodsInfoVOList = goodsInfoMap.get(key);
+                for (GoodsInfoVO goodsInfoVO : goodsInfoVOList) {
+                    //获取订单号
+                    String orderSerialNo = goodsInfoVO.getOrderSerialNo();
+                    //如果订单号不为空,说明是被拆单的订单
+                    if (StringUtils.isNoneBlank(orderSerialNo)) {
+                        //先删除总订单中该小模块的数据信息
+                        Short belongModuleVO = goodsInfoVO.getBelongModule();
+                        int belongModule = belongModuleVO;
+                        this.cancelOrder(orderSerialNo, belongModule);
+                    }
+                }
+            }
+        }
+
         //封装商品短信息对象
         List<GoodsShortInfoVO> goodsShortInfoVOList = new LinkedList<>();
 
@@ -148,6 +168,8 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 goodsCouponInfoVO.setRecID(recID);
                 goodsCouponInfoVO.setUserID(couponUserVO.getUserID());
                 goodsCouponInfoVO.setCouponID(couponUserVO.getCouponID());
+                goodsCouponInfoVO.setBelongModule(belongModule);
+
                 goodsCouponInfoVOList.add(goodsCouponInfoVO);
 
                 //将该优惠券放入redis,进行锁定,
@@ -178,6 +200,12 @@ public class ZlOrderServiceIml implements ZlOrderService {
             zlOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
             zlOrder.setRefundcount((byte) 0);
 
+            //获取订单号
+            String orderSerialNoOld = goodsInfoMap.get(key).get(0).getOrderSerialNo();
+            //如果订单号不为空,说明是被拆单的订单
+            if (StringUtils.isNoneBlank(orderSerialNoOld)) {
+                zlOrder.setParentorderserialno(orderSerialNoOld);
+            }
             zlOrder.setOrderserialno(orderSerialNo);
 
             //将订单数据存入数据库
@@ -215,6 +243,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 goodsShortInfoVO.setGoodsID(goodsInfoVOList.get(i).getGoodsID());
                 goodsShortInfoVO.setGoodsCount(goodsInfoVOList.get(i).getGoodsCount());
                 goodsShortInfoVO.setSkuID(skuID);
+                goodsShortInfoVO.setBelongModule(goodsInfoVOList.get(i).getBelongModule());
                 goodsShortInfoVO.setHotelID(hotelBasicVO.getHotelID());
                 goodsShortInfoVOList.add(goodsShortInfoVO);
                 //将订单详情数据存入数据库
@@ -292,7 +321,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
         return zlOrderDetailList;
     }
 
-    @Override
+    /*@Override
     public void cancelOrder(String out_trade_no) {
         //拿出存在redis的订单商品短信息集合
         List<GoodsShortInfoVO> goodsShortInfoVOList = (List<GoodsShortInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
@@ -320,6 +349,54 @@ public class ZlOrderServiceIml implements ZlOrderService {
             }
             //删除redis中锁定的优惠券集合
             redisTemplate.delete(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
+        }
+    }*/
+
+    @Override
+    public void cancelOrder(String out_trade_no, Integer belongModule) {
+        //拿出存在redis的订单商品短信息集合
+        List<GoodsShortInfoVO> goodsShortInfoVOList = (List<GoodsShortInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
+        for (GoodsShortInfoVO goodsShortInfoVO : goodsShortInfoVOList) {
+            Short belongModuleVO = goodsShortInfoVO.getBelongModule();
+            if (belongModuleVO.equals(belongModuleVO)) {
+                Integer skuID = goodsShortInfoVO.getSkuID();
+                Integer goodsCount = goodsShortInfoVO.getGoodsCount();
+                //更新redis该商品数量(删除redis中锁定的商品数量)
+                Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_SKU_ID + skuID);
+                redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, count - goodsCount);
+            }
+        }
+
+        //利用迭代器遍历删除该模块下的商品
+        Iterator<GoodsShortInfoVO> iteratorGoodsShortInfo = goodsShortInfoVOList.iterator();
+        while (iteratorGoodsShortInfo.hasNext()) {
+            GoodsShortInfoVO goodsShortInfoVO = iteratorGoodsShortInfo.next();
+            Short belongModuleVO = goodsShortInfoVO.getBelongModule();
+            if (belongModuleVO.equals(belongModule)) {
+                goodsShortInfoVOList.remove(goodsShortInfoVO);
+            }
+        }
+        redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no, goodsShortInfoVOList);
+
+        //拿出存入redis的订单商品所使用的优惠券的集合
+        if (redisTemplate.hasKey(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no)) {
+            //如果该订单使用了优惠券
+            //拿出存入redis的订单商品所使用的优惠券的集合
+            List<GoodsCouponInfoVO> goodsCouponInfoVOList = (List<GoodsCouponInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
+
+            //利用迭代器遍历删除该订单在此模块下使用的的商品优惠券
+            Iterator<GoodsCouponInfoVO> iteratorGoodsCouponInfo = goodsCouponInfoVOList.iterator();
+            while (iteratorGoodsCouponInfo.hasNext()) {
+                GoodsCouponInfoVO goodsCouponInfoVO = iteratorGoodsCouponInfo.next();
+                Short belongModuleVO = goodsCouponInfoVO.getBelongModule();
+                if (belongModuleVO.equals(belongModule)) {
+                    Integer recID = goodsCouponInfoVO.getRecID();
+                    //删除redis中锁定的优惠券
+                    redisTemplate.delete(RedisKeyConstant.ORDER_RECID + recID);
+                    goodsCouponInfoVOList.remove(goodsCouponInfoVO);
+                }
+            }
+            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no, goodsCouponInfoVOList);
         }
     }
 
@@ -356,6 +433,50 @@ public class ZlOrderServiceIml implements ZlOrderService {
     public OrderStatusVO getByOrderSerialNo(String out_trade_no) {
         OrderStatusVO orderStatusVO = zlOrderMapper.getByOrderSerialNo(out_trade_no);
         return null;
+    }
+
+    //判断用户选择的商品是否库存充足,并返回库存不足商品的集合
+    private List<GoodsStockCountNo> judgeSmallStock(HotelBasicVO hotelBasicVO, List<GoodsInfoVO> goodsInfoVOList) {
+        //封装库存不足商品信息
+        GoodsStockCountNo goodsStockCountNo = new GoodsStockCountNo();
+        List<GoodsStockCountNo> goodsStockCountNoList = new LinkedList<>();
+        Integer hotelID = hotelBasicVO.getHotelID();
+        String orderSerialNo = goodsInfoVOList.get(0).getOrderSerialNo();
+        if (StringUtils.isNoneBlank(orderSerialNo)) {
+
+        }
+
+        for (int i = 0; i < goodsInfoVOList.size(); i++) {
+
+            //获取用户选择的商品skuid和数量
+            Integer skuID = goodsInfoVOList.get(i).getSkuID();
+            Integer goodsCount = goodsInfoVOList.get(i).getGoodsCount();
+            //判断酒店该商品库存是否足够
+            Integer stockCount = zlHotelGoodsMapper.getStockCount(hotelID, skuID);
+            if (stockCount > goodsCount) {
+                Boolean bool = redisTemplate.hasKey(RedisKeyConstant.ORDER_SKU_ID + skuID);
+                Integer count = 0;
+                if (bool) {
+                    //存在该键,就查询出该商品被锁定的库存数量
+                    count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_SKU_ID + skuID);
+                }
+                if (stockCount - count > goodsCount) {
+                    continue;
+                } else {
+                    goodsStockCountNo.setGoodsID(goodsInfoVOList.get(i).getGoodsID());
+                    goodsStockCountNo.setGoodsName(goodsInfoVOList.get(i).getGoodsName());
+                    goodsStockCountNo.setSkuID(goodsInfoVOList.get(i).getSkuID());
+                    goodsStockCountNoList.add(goodsStockCountNo);
+                }
+            } else {
+                goodsStockCountNo.setGoodsID(goodsInfoVOList.get(i).getGoodsID());
+                goodsStockCountNo.setGoodsName(goodsInfoVOList.get(i).getGoodsName());
+                goodsStockCountNo.setSkuID(goodsInfoVOList.get(i).getSkuID());
+                goodsStockCountNoList.add(goodsStockCountNo);
+            }
+        }
+
+        return goodsStockCountNoList;
     }
 
 }
