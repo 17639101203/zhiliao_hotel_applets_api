@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <name>zhiliao</name>
     <description>Demo project for Spring Boot</description>
-
+    <packaging>war</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
