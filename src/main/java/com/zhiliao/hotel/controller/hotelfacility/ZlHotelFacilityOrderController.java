@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Api(tags = "酒店设施订单接口")
+@Api(tags = "酒店设施订单接口_我的_徐向向")
 @RestController
 @RequestMapping("facilityOrder")
 public class ZlHotelFacilityOrderController {
@@ -70,5 +70,19 @@ public class ZlHotelFacilityOrderController {
         }
     }
 
+    /*@ApiOperation(value = "取消设施预定")
+    @PostMapping("Detail")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "long", name = "orderID", value = "订单ID", required = true)
+    })
+    @UserLoginToken
+    @ResponseBody
+    public ReturnString cancelFacilityOrder(Long orderID) {
+
+
+        ReturnString returnString = hotelFacilityOrderService.cancelFacilityOrder(orderID);
+        return new ReturnString(returnString);
+
+    }*/
 
 }

@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface ZlRepairorderMyMapper extends Mapper<ZlRepairorder> {
 
-    List<Map<String,Object>> findAllByUserId(@Param("userId") Long userId, @Param("orderstatus") Integer orderstatus);
+    List<ZlRepairorder> findAllByUserId(@Param("userId") Long userId, @Param("orderstatus") Integer orderstatus);
 
 
 }

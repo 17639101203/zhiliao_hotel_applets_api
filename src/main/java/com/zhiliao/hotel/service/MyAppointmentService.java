@@ -40,4 +40,6 @@ public interface MyAppointmentService {
 
 
     void cancelOrder(Long orderid, Integer orderServiceType);
+
+    PageInfoResult serviceFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize);
 }

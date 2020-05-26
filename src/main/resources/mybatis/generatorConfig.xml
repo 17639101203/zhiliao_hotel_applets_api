@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <generatorConfiguration>
 
+<!--    <classPathEntry location="D:\Maven\maven_repository\maven_repository\mysql\mysql-connector-java\8.0.13\mysql-connector-java-8.0.13.jar"/>-->
     <context id="yiyuan" targetRuntime="MyBatis3" defaultModelType="flat">
         <!-- 指定生成的java文件的编码,没有直接生成到项目时中文可能会乱码 -->
         <property name="javaFileEncoding" value="UTF-8"/>
@@ -23,8 +24,8 @@
         </commentGenerator>
         <!-- 数据库的相关配置 -->
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://127.0.0.1:3306/company_zhiliao?serverTimezone=UTC"
-                        userId="user" password="123456"/>
+                        connectionURL="jdbc:mysql://39.108.188.110:3306/company_zhiliao?serverTimezone=UTC"
+                        userId="zhiliao_dev" password="y82F3FybiffN6DrT"/>
 <!--        <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@远程ip地址或localhost:1521:orcl" userId="用户名" password="密码">-->
 <!--            &lt;!&ndash; 针对oracle数据库 &ndash;&gt;-->
 <!--            <property name="remarksReporting" value="true"></property>-->
@@ -48,8 +49,10 @@
 <!--        </javaClientGenerator>-->
 
         <!--将example类型设为false，否则实体类里面会多一个example的类exampleStudent -->
-        <table tableName="zl_coupon" domainObjectName="ZlCoupon" enableCountByExample="false"
+        <table tableName="zl_hotelfacilityorder" domainObjectName="xxxxxzl_hotelfacilityorder" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
+               enableUpdateByExample="false"
+
+        />
     </context>
 </generatorConfiguration>

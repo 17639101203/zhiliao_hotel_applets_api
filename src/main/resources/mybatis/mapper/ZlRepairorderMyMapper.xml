@@ -18,7 +18,7 @@
     <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
   </resultMap>
 
-  <select id="findAllByUserId" resultType="map">
+  <select id="findAllByUserId" resultType="com.zhiliao.hotel.model.ZlRepairorder">
     select OrderID, UserID, SerialNumber,
     HotelID, HotelName, RoomID,
     RoomNumber, ImgUrls, Remark,

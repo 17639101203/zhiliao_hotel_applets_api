@@ -14,6 +14,6 @@ import java.util.Map;
 public interface ZlCleanOrderMyMapper extends Mapper<ZlCleanOrder> {
 
 
-    List<Map<String,Object>> findAllByStatus(@Param("userId") Long userId, @Param("orderstatus") Integer orderstatus);
+    List<ZlCleanOrder> findAllByStatus(@Param("userId") Long userId, @Param("orderstatus") Integer orderstatus);
 
 }

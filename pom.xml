@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <name>zhiliao</name>
     <description>Demo project for Spring Boot</description>
-    <packaging>war</packaging>
+
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -182,7 +182,6 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
         </dependency>
-        <!--引入与rabbitmq集成依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>

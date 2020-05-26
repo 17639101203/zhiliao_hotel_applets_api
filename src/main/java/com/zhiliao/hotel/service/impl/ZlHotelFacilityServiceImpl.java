@@ -54,39 +54,30 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
     /**
      * 酒店设施预定
      * @param zlHotelFacilityOrder
-     * @param facilityID
      * @return
      */
     @Override
-    public Map<String, Object> addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder, Integer facilityID) {
+    public ReturnString addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder) {
+        Integer facilityID = zlHotelFacilityOrder.getFacilityid();
         //定义map集合,用于封装返回信息
         Map<String,Object> map = new HashMap<>();
 
         ZlHotelFacility hotelFacilityDetail = hotelFacilityMapper.getHotelFacilityDetail(facilityID);
         if (hotelFacilityDetail == null) {
-            map.put("returnString","该酒店没有此设施,请询问酒店前台");
-            return map;
+            return new ReturnString("该酒店没有此设施,请询问酒店前台");
         }
 
         //开始时间
-        Integer beginusedate = zlHotelFacilityOrder.getBeginusedate();
+        Integer beginusedate = zlHotelFacilityOrder.getUsebegindate();
         //结束时间
-        Integer endusedate = zlHotelFacilityOrder.getEndusedate();
+        Integer endusedate = zlHotelFacilityOrder.getUseenddate();
         //付费项目
         if (hotelFacilityDetail.getPrice().compareTo(new BigDecimal(0)) == 1) {
             //判断酒店设施数量是否充足
             if (hotelFacilityDetail.getFacilitycount() <= 0) {
-                map.put("returnString", "酒店设施数量不足!");
-                return map;
+                return new ReturnString("酒店设施数量不足!");
             }
-            //判断该时间段是否已预约
-            ZlHotelFacilityOrder order = facilityOrderMapper.findByBiginAndEndDate(beginusedate, endusedate, zlHotelFacilityOrder.getHotelid(), zlHotelFacilityOrder.getFacilityid());
-            if (order != null) {
-                map.put("returnString", "改时间段已被占用");
-                map.put("beginUseDate", order.getBeginusedate());
-                map.put("endUseDate", order.getEndusedate());
-                return map;
-            }
+            //判断该时间段是否在营业时间
         }
         //生成订单编号
         zlHotelFacilityOrder.setSerialnumber(OrderIDUtil.createOrderID("HS"));
@@ -103,12 +94,11 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         //是否下单成功
         if (hotelFacilityDetail.getPrice().compareTo(new BigDecimal(0)) == 1) {
             if (insert > 0) {
-                hotelFacilityMapper.updateCount(facilityID, (int) new Date().getTime());
+                hotelFacilityMapper.updateCount(facilityID, Math.toIntExact(System.currentTimeMillis() / 1000));
             }
         }
-        map.put("returnString","预定成功");
         map.put("orderId",zlHotelFacilityOrder.getOrderid());
-        return map;
+        return new ReturnString(0,"预定成功,请联系前台进行设施启用",map);
 
     }
 }

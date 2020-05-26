@@ -38,7 +38,7 @@ public class MyAppointmentController {
 
     @ApiOperation(value = "清扫服务订单展示_徐向向")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "orderstatus", dataType = "int", required = true, value = "不传：查询全部，-1：取消，0：等待确认，1：已确认，2已处理"),
+            @ApiImplicitParam(paramType = "query", name = "orderstatus", dataType = "int", required = true, value = "不传：查询全部，-1：取消，0：待清扫，1：已完成"),
             @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码值"),
             @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数")
     })
@@ -92,7 +92,7 @@ public class MyAppointmentController {
 
     @ApiOperation(value = "报修订单展示")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "orderstatus", dataType = "Integer", required = true, value = "不传：查询全部，-1：取消，0：等待确认，1：已确认，2已处理"),
+            @ApiImplicitParam(paramType = "query", name = "orderstatus", dataType = "Integer", required = true, value = "不传：查询全部，-1：已取消，0：待维修, 1: 已完成"),
             @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码值"),
             @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数")
     })
@@ -105,10 +105,28 @@ public class MyAppointmentController {
             Long userId = TokenUtil.getUserId(token);
             logger.info("用户id" + userId);
             PageInfoResult repairOrders = myAppointmentService.repairFindAll(userId,orderstatus,pageNo,pageSize);
-            Map<String,Object> map = new HashMap<>();
-            map.put("repairOrders",repairOrders);
-            map.put("orderServiceType","报修服务");
-            return new ReturnString(map);
+            return new ReturnString(repairOrders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("获取失败");
+        }
+    }
+    @ApiOperation(value = "客房服务订单展示")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "orderstatus", dataType = "Integer", required = true, value = "不传：查询全部，-1：取消，0：待配送, 1: 已完成"),
+            @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码值"),
+            @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数")
+    })
+    @UserLoginToken
+    @PostMapping("serviceFindAll")
+    @ResponseBody
+    public ReturnString serviceFindAll(HttpServletRequest request,Integer orderstatus,Integer pageNo,Integer pageSize){
+        try {
+            String token = request.getHeader("token");
+            Long userId = TokenUtil.getUserId(token);
+            logger.info("用户id" + userId);
+            PageInfoResult serviceOrders = myAppointmentService.serviceFindAll(userId,orderstatus,pageNo,pageSize);
+            return new ReturnString(serviceOrders);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取失败");
@@ -118,7 +136,7 @@ public class MyAppointmentController {
     @ApiOperation(value = "取消订单_徐向向")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path",name = "orderid",dataType = "long",required = true,value = "订单id"),
-            @ApiImplicitParam(paramType = "path",name = "orderServiceType",dataType = "int",required = true,value = "每个服务订单的类型标识 1: 清扫订单, 2: 发票订单, 3: 报修订单")
+            @ApiImplicitParam(paramType = "path",name = "orderServiceType",dataType = "int",required = true,value = "每个服务订单的类型标识 1: 清扫订单, 2: 发票订单, 3: 报修订单,4: 设施订单")
     })
     @GetMapping("cancelOrder/{orderid}/{orderServiceType}")
     @UserLoginToken

@@ -15,6 +15,6 @@ public interface ZlInvoiceMyMapper {
      * @param invoicestatus
      * @return
      */
-    List<Map<String,Object>> findAllByUserId(@Param("userId") Long userId, @Param("invoicestatus") Integer invoicestatus);
+    List<ZlInvoice> findAllByUserId(@Param("userId") Long userId, @Param("invoicestatus") Integer invoicestatus);
 
 }

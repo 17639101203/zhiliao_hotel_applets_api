@@ -3,11 +3,14 @@ package com.zhiliao.hotel.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.controller.myAppointment.result.ZlServiceorderResult;
 import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.model.ZlCleanOrder;
 import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.model.ZlRepairorder;
+import com.zhiliao.hotel.model.ZlServiceorder;
 import com.zhiliao.hotel.service.MyAppointmentService;
+import com.zhiliao.hotel.service.ZlHotelFacilityOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +40,12 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
 
     private final ZlInvoiceMapper invoiceMapper;
 
+    @Autowired
+    private ZlHotelFacilityOrderService facilityOrderService;
+
+    @Autowired
+    private ZlServiceorderMyMapper serviceorderMyMapper;
+
 
     @Autowired
     public MyAppointmentServiceImpl(ZlCleanOrderMyMapper zlCleanOrderMyMapper,ZlInvoiceMapper invoiceMapper, ZlCleanOrderMapper cleanOrderMapper,ZlInvoiceMyMapper zlInvoiceMyMapper, ZlRepairorderMyMapper zlRepairorderMyMapper) {
@@ -58,14 +67,8 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     @Override
     public PageInfoResult cleanFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
-        List<Map<String,Object>> cleanorders = zlCleanOrderMyMapper.findAllByStatus(userId,orderstatus);
-        List<Map<String,Object>> orders = new ArrayList<>();
-        for (int i = 0; i < cleanorders.size(); i++) {
-            Map<String, Object> map = cleanorders.get(i);
-            map.put("orderServiceType",1);
-            orders.add(map);
-        }
-        PageInfo<Map<String,Object>> pageInfo = new PageInfo<Map<String,Object>>(orders);
+        List<ZlCleanOrder> cleanorders = zlCleanOrderMyMapper.findAllByStatus(userId,orderstatus);
+        PageInfo<ZlCleanOrder> pageInfo = new PageInfo<>(cleanorders);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
@@ -82,14 +85,8 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     @Override
     public PageInfoResult invoiceFindAll(Long userId, Integer invoicestatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
-        List<Map<String,Object>> invoices = zlInvoiceMyMapper.findAllByUserId(userId,invoicestatus);
-        List<Map<String,Object>> orders = new ArrayList<>();
-        for (int i = 0; i < invoices.size(); i++) {
-            Map<String, Object> map = invoices.get(i);
-            map.put("orderServiceType",2);
-            orders.add(map);
-        }
-        PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(invoices);
+        List<ZlInvoice> invoices = zlInvoiceMyMapper.findAllByUserId(userId,invoicestatus);
+        PageInfo<ZlInvoice> pageInfo = new PageInfo<>(invoices);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
@@ -108,17 +105,34 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     @Override
     public PageInfoResult repairFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
-        List<Map<String,Object>> repairOrders = zlRepairorderMyMapper.findAllByUserId(userId,orderstatus);
-        List<Map<String,Object>> orders = new ArrayList<>();
-        for (int i = 0; i < repairOrders.size(); i++) {
-            Map<String, Object> map = repairOrders.get(i);
-            map.put("orderServiceType",3);
-            orders.add(map);
-        }
-        PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(orders);
+        List<ZlRepairorder> repairOrders = zlRepairorderMyMapper.findAllByUserId(userId,orderstatus);
+        PageInfo<ZlRepairorder> pageInfo = new PageInfo<>(repairOrders);
 
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
+
+    /**
+     * 客房服务订单类型
+     * @param userId
+     * @param orderstatus
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageInfoResult serviceFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize) {
+        PageHelper.startPage(pageNo,pageSize);
+        List<ZlServiceorderResult> results = serviceorderMyMapper.serviceFindAll(userId,orderstatus);
+        PageInfo<ZlServiceorderResult> pageInfo = new PageInfo<>(results);
+        return PageInfoResult.getPageInfoResult(pageInfo);
+    }
+
+
+
+
+
+
+
 
     /**
      * 取消订单接口
@@ -133,10 +147,15 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
             canceInvoiceOrder(Math.toIntExact(orderid));
         }else if (orderServiceType == 3){
             cancelRepairOrder(orderid);
-        }else {
+        }else if (orderServiceType == 4){
+            facilityOrderService.cancelFacilityOrder(orderid);
+        }
+        else {
             new RuntimeException("订单标识不符");
         }
     }
+
+
 
     /**
      * 报修订单取消
@@ -148,8 +167,8 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         ZlRepairorder repairorder = zlRepairorderMyMapper.selectOne(zlRepairorder);
         if (repairorder != null){
             repairorder.setOrderstatus((byte) -1);
-            repairorder.setUpdatedate((int) new Date().getTime());
-            zlRepairorderMyMapper.updateByPrimaryKey(repairorder);
+            repairorder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+            zlRepairorderMyMapper.updateByPrimaryKeySelective(repairorder);
         }
     }
 
@@ -163,8 +182,8 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         ZlCleanOrder cleanOrder = cleanOrderMapper.selectOne(zlCleanOrder);
         if (cleanOrder != null){
             cleanOrder.setOrderstatus((byte) -1);
-            cleanOrder.setUpdatedate((int) new Date().getTime());
-            cleanOrderMapper.updateByPrimaryKey(cleanOrder);
+            cleanOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+            cleanOrderMapper.updateByPrimaryKeySelective(cleanOrder);
         }
     }
     /**
@@ -177,9 +196,26 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         ZlInvoice invoice = invoiceMapper.selectOne(zlInvoice);
         if (invoice != null){
             invoice.setInvoicestatus((byte) -1);
-            invoice.setUpdatedate((int) new Date().getTime());
-            invoiceMapper.updateByPrimaryKey(invoice);
+            invoice.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+            invoiceMapper.updateByPrimaryKeySelective(invoice);
         }
+    }
+
+
+    /**
+     * 客房服务订单取消
+     * @param orderid
+     */
+    public void canceServiceOrder(Long orderid){
+        ZlServiceorder serviceorder = new ZlServiceorder();
+        serviceorder.setOrderid(orderid);
+        ZlServiceorder order = serviceorderMyMapper.selectOne(serviceorder);
+        if (serviceorder != null){
+            order.setOrderstatus((byte) -1);
+            order.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+            serviceorderMyMapper.updateByPrimaryKeySelective(order);
+        }
+
     }
 
 }

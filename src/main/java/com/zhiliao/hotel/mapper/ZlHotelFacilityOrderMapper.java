@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ZlHotelFacilityOrderMapper extends Mapper<ZlHotelFacilityOrder> {
-    List<Map<String,Object>> findAllOrder(@Param("userId") Long userId,
+    List<ZlHotelFacilityOrder> findAllOrder(@Param("userId") Long userId,
                                           @Param("orderStatus") Integer orderStatus
                                             );
 

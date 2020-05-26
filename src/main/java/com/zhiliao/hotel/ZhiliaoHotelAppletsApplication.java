@@ -9,6 +9,8 @@ import tk.mybatis.spring.annotation.MapperScan;
 public class ZhiliaoHotelAppletsApplication {
 
     public static void main(String[] args) {
+
+        System.setProperty("es.set.netty.runtime.available.processors", "false");
         SpringApplication.run(ZhiliaoHotelAppletsApplication.class, args);
     }
 

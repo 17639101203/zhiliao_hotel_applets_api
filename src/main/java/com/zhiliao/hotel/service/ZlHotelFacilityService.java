@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.service;
 
+import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.model.ZlHotelFacility;
 import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 
@@ -12,5 +13,5 @@ public interface ZlHotelFacilityService {
 
     ZlHotelFacility getHotelFacilityDetail(Integer facilityId);
 
-    Map<String, Object> addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder, Integer facilityID);
+    ReturnString addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder);
 }

@@ -7,7 +7,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class AESUtil {
 
     public static void main(String args[]) throws Exception {
-        String content = "2020-05-23 16:18:00";
+        String content = "2020-05-26 14:50:00";
         //加密
         String encrypted = encrypt(content);
         //解密

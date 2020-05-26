@@ -22,7 +22,7 @@
   </resultMap>
 
 
-  <select id="findAllByUserId" resultType="map">
+  <select id="findAllByUserId" resultType="com.zhiliao.hotel.model.ZlInvoice">
     select InvoiceID, UserID, InvoiceType,
     MainBodyType, Title, Identifier,
     Tel, Remark, InvoiceStatus,

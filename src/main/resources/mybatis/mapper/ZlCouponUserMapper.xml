@@ -12,13 +12,77 @@
     <result column="CouponID" jdbcType="INTEGER" property="couponid" />
     <result column="IsUsed" jdbcType="BIT" property="isused" />
     <result column="ExpiredDate" jdbcType="INTEGER" property="expireddate" />
+    <result column="UseDate" jdbcType="INTEGER" property="usedate" />
     <result column="OrderID" jdbcType="INTEGER" property="orderid" />
+    <result column="IsDelete" jdbcType="BIT" property="isdelete" />
     <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
   </resultMap>
 
+  <!--已使用优惠卷-->
+  <select id="usedCouponUser" resultType="com.zhiliao.hotel.model.ZlCouponUser">
+    select
+      cu.*,c.CouponName couponname
+    from zl_couponuser cu,zl_coupon c
+    where
+      cu.UserID = #{userId}
+    and
+      cu.CouponID = c.CouponID
+    and
+      cu.IsDelete = 0
+    and
+      cu.IsUsed = 1
+    order by cu.CreateDate DESC
+  </select>
 
-  <select id="listCouponUser" resultType="com.zhiliao.hotel.model.ZlCouponUser">
-    select cu.*,c.CouponName couponname from zl_couponuser cu,zl_coupon c where UserID = #{userId} and cu.CouponID = c.CouponID
+  <!--可使用优惠卷-->
+  <select id="count" resultType="int">
+    select count (id) from zl_couponuser where UserID = #{userId} and ExpiredDate > #{newDate} and IsUsed = 0 and IsDelete = 0
+  </select>
+  <!--有效优惠卷-->
+  <select id="effectiveCouponUser" resultType="com.zhiliao.hotel.model.ZlCouponUser">
+    select
+      cu.*,c.CouponName couponname
+    from zl_couponuser cu,zl_coupon c
+    where
+      cu.UserID = #{userId}
+    and
+      cu.CouponID = c.CouponID
+    and
+      cu.IsDelete = 0
+    and
+      cu.ExpiredDate &gt; #{date}
+    and
+      cu.IsUsed = 0
+    order by cu.CreateDate DESC
+  </select>
+  <!--过期优惠卷-->
+  <select id="beOverdue" resultType="com.zhiliao.hotel.model.ZlCouponUser">
+    select
+      cu.*,c.CouponName couponname
+    from zl_couponuser cu,zl_coupon c
+    where
+      cu.UserID = #{userId}
+    and
+      cu.CouponID = c.CouponID
+    and
+      cu.IsDelete = 0
+    and
+      cu.ExpiredDate &lt; #{date}
+    and
+      cu.IsUsed = 0
+    order by cu.CreateDate DESC
+  </select>
+
+  <select id="list" resultType="com.zhiliao.hotel.model.ZlCouponUser">
+    select
+      cu.*,c.CouponName couponname
+    from zl_couponuser cu,zl_coupon c
+    where
+      cu.UserID = #{userId}
+    and
+      cu.CouponID = c.CouponID
+    and
+      cu.IsDelete = 0
   </select>
 
   <update id="updateCouponUser">
