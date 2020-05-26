@@ -167,17 +167,23 @@
   </insert>
 
 
-  <!--  根据用户名查询订单生成时间最近的订单-->
-  <select id="queryByUserIdDescByOrderId" resultMap="BaseResultMap">
+  <!--  查询订单详情-->
+  <select id="queryRepairMsg" resultType="java.util.Map">
         select
-            OrderID,RoomNumber,AppointmentDate,Remark,SerialNumber,CreateDate
+            SerialNumber,HotelName,RoomNumber,ImgUrls,Remark,OrderStatus,CreateDate,UpdateDate
         from
             zl_repairorder
         where
-            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and OrderStatus='0'
-        ORDER by
-            CreateDate desc
-        limit
-            0,1;
+            UserID=#{userid,jdbcType=BIGINT} and SerialNumber=#{serialnumber,jdbcType=CHAR} and IsDelete='0' and IsUserDelete='0'
     </select>
+
+
+  <update id="removeRepairOrder">
+    update
+        zl_repairorder
+    set
+        OrderStatus = '-1', UpdateDate = #{updatedate,jdbcType=INTEGER}
+    where
+        UserID=#{userid,jdbcType=BIGINT} and SerialNumber=#{serialnumber,jdbcType=CHAR}
+  </update>
 </mapper>

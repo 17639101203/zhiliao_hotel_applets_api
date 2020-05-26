@@ -7,90 +7,86 @@ import com.zhiliao.hotel.controller.file.UploadFileController;
 import com.zhiliao.hotel.model.ZlRepairorder;
 import com.zhiliao.hotel.service.ZlRepairService;
 import com.zhiliao.hotel.utils.DateUtils;
+import com.zhiliao.hotel.utils.OrderIDUtil;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@Api(tags = "报修模块接口")
+@Api(tags = "首页_报修模块接口_章英杰")
 @RestController
 @RequestMapping("repair")
 @Slf4j
 public class ZlRepairController {
 
     @Autowired
-    private  ZlRepairService service;
+    private ZlRepairService service;
 
     @Autowired
-    private  UploadFileController fileController;
+    private UploadFileController fileController;
 
 
-//    @ApiOperation(value = "添加报修信息方法")
-//    @PostMapping(value = "addrepair", consumes = { "multipart/*" }, headers = "content-type=multipart/form-data")
-//    @UserLoginToken
-//    public ReturnString addrepair(RepairParam repairParam,
-//                                  @RequestParam("multipartFiles") MultipartFile[] multipartFiles,
-//                                  HttpServletRequest request) {
-//            ZlRepair repair = new ZlRepair();
-//            Long userid = TokenUtil.getUserId(request.getHeader("token"));
-//        try {
-//            repair.setUserid(userid);             //  用户ID
-//            repair.setHotelid(repairParam.getHotelid());        //酒店ID
-//            repair.setRoomid(repairParam.getRoomid());      // 房间ID
-//            repair.setRoomnumber(repairParam.getRoomnumber());      //房间号
-//            repair.setRemark(repairParam.getRemark());      //  备注信息
-//            repair.setIsdelete(false);         // 删除状态:false正常;true删除;
-//            repair.setCreatedate(DateUtils.javaToPhpNowDateTime());     //添加日期
-//            repair.setUpdatedate(DateUtils.javaToPhpNowDateTime());     //修改日期
-//            // 插入报修数据，除报修图片路径
-//            Integer i = service.addRepairMsg(repair);
-//            if (i==1){
-//                //传入文件分析后，得到文件存放地址  key：filePathBase
-//                ReturnString returnString = fileController.uploadFile(multipartFiles);
-//                List<String> list = (List) returnString.getData();
-//                StringBuffer Imgurls  = new StringBuffer();
-//                list.forEach(item -> {
-//                    Imgurls.append(item+"|");   // 遍历集合，生成图片地址，并用 | 隔开
-//                    log.info("【报修图片地址：】"+Imgurls);
-//                });
-//                repair.setImgurls(Imgurls.toString());     // 获得图片地址，多个用|隔开
-//                service.addRepairOrderMsg(repair,repairParam.getHotelname());
-//                return new ReturnString(0, "报修信息添加成功");
-//            }else {
-//                return new ReturnString(1, "报修信息添加失败，请重新再试");
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            log.error("报修信息添加失败");
-//            return new ReturnString(1, "报修信息添加失败，请重新再试");
-//        }
-//    }
-
-
-    @ApiOperation(value = "查询报修订单详情方法")
-    @PostMapping("queryRepairOrder")
+    @ApiOperation(value = "添加报修信息")
+    @PostMapping(value = "addrepair", consumes = {"multipart/*"}, headers = "content-type=multipart/form-data")
     @UserLoginToken
-    public ReturnString addrepair(@RequestParam String token){
-        try {
-            // 解析token获取userid
-            Long userid = TokenUtil.getUserId(token);
-            ZlRepairorder zlRepairorder = service.queryRepairOrder(userid);
-            return new ReturnString(zlRepairorder);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("报修订单信息查询失败");
-            return new ReturnString(1, "报修订单信息查询失败，请重新再试");
-        }
+    public ReturnString<Map<String, Object>> addrepair( RepairParam repairParam,
+                                  @RequestParam("multipartFiles") MultipartFile[] multipartFiles,
+                                  HttpServletRequest request) {
 
+        Integer now = DateUtils.javaToPhpNowDateTime();
+        String orderid = OrderIDUtil.createOrderID("");
+        Map<String, Object> map = new HashMap<>();
+        map.put("serialnumber",orderid);
+        ZlRepairorder zlRepairorder = new ZlRepairorder();
+        Long userid = TokenUtil.getUserId(request.getHeader("token"));
+        zlRepairorder.setUserid(userid);
+        zlRepairorder.setHotelname(repairParam.getHotelname());  // 酒店名
+        zlRepairorder.setHotelid(repairParam.getHotelid());     // 酒店ID
+        zlRepairorder.setRoomid(repairParam.getRoomid());       // 客房ID
+        zlRepairorder.setRoomnumber(repairParam.getRoomnumber());   //客房号
+        zlRepairorder.setRemark(repairParam.getRemark());       // 备注信息
+        zlRepairorder.setSerialnumber(orderid);  //订单号
+        zlRepairorder.setCreatedate(now);
+        zlRepairorder.setUpdatedate(now);
+        ReturnString<List<String>> returnString = fileController.uploadFile(multipartFiles);
+        List<String> list = returnString.getData();
+        StringBuffer Imgurls = new StringBuffer();
+        list.forEach(item -> {
+            Imgurls.append(item + "|");   // 遍历集合，生成图片地址，并用 | 隔开
+            log.info("【报修图片地址：】" + Imgurls);
+        });
+        zlRepairorder.setImgurls(Imgurls.toString());     // 获得图片地址，多个用|隔开
+        service.addRepairMsg(zlRepairorder);
+        return new ReturnString<>(0,"报修已提交",map);
+    }
+
+
+    @ApiOperation(value = "查询报修订单详情")
+    @PostMapping("findRepairOrder/{serialnumber}")
+    @UserLoginToken
+    public ReturnString<Map<String,Object>> findRepairOrder(HttpServletRequest request,@PathVariable("serialnumber") String serialnumber) {
+            Long userid = TokenUtil.getUserId(request.getHeader("token"));
+            Map<String,Object> map = service.findRepairOrder(userid,serialnumber);
+            return new ReturnString<>(map);
+    }
+
+
+    @ApiOperation(value = "取消报修预约")
+    @PostMapping("cancelRepairOrder/{serialnumber}")
+    @UserLoginToken
+    public ReturnString cancelRepairOrder(HttpServletRequest request,@PathVariable("serialnumber") String serialnumber) {
+        Integer nowTime = DateUtils.javaToPhpNowDateTime();
+        Long userid = TokenUtil.getUserId(request.getHeader("token"));
+        service.cancelRepairOrder(userid,serialnumber,nowTime);
+        return new ReturnString<>(0,"预约已取消");
     }
 
 

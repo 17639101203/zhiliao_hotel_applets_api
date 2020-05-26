@@ -2,8 +2,12 @@ package com.zhiliao.hotel.controller.Repair.params;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.ToString;
 
-@ApiModel("报修对象Repair")
+@ApiModel("报修下单接口传参")
+@Data
+@ToString
 public class RepairParam {
 
     /**
@@ -40,70 +44,8 @@ public class RepairParam {
     private String remark;
 
 
-    /**
-     * 预约时间
-     */
-    @ApiModelProperty(value = "预约时间", required = true)
-    private Integer appointmentdate;
 
 
-    public Integer getHotelid() {
-        return hotelid;
-    }
 
-    public void setHotelid(Integer hotelid) {
-        this.hotelid = hotelid;
-    }
 
-    public Integer getRoomid() {
-        return roomid;
-    }
-
-    public void setRoomid(Integer roomid) {
-        this.roomid = roomid;
-    }
-
-    public String getRoomnumber() {
-        return roomnumber;
-    }
-
-    public void setRoomnumber(String roomnumber) {
-        this.roomnumber = roomnumber;
-    }
-
-    public String getHotelname() {
-        return hotelname;
-    }
-
-    public void setHotelname(String hotelname) {
-        this.hotelname = hotelname;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public Integer getAppointmentdate() {
-        return appointmentdate;
-    }
-
-    public void setAppointmentdate(Integer appointmentdate) {
-        this.appointmentdate = appointmentdate;
-    }
-
-    @Override
-    public String toString() {
-        return "RepairParam{" +
-                "hotelid=" + hotelid +
-                ", roomid=" + roomid +
-                ", roomnumber='" + roomnumber + '\'' +
-                ", hotelname='" + hotelname + '\'' +
-                ", remark='" + remark + '\'' +
-                ", appointmentdate=" + appointmentdate +
-                '}';
-    }
 }

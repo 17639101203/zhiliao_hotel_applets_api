@@ -3,30 +3,29 @@ package com.zhiliao.hotel.service;
 import com.zhiliao.hotel.model.ZlRepairorder;
 
 import java.io.IOException;
+import java.util.Map;
 
 public interface ZlRepairService {
 
-//    /**
-//     * 新增报修信息
-//     * @param repair   报修信息
-//     * @return
-//     * @throws IOException
-//     */
-//    Integer addRepairMsg(ZlRepair repair) throws IOException;
+    /**
+     * 新增报修信息
+     * @param zlRepairorder   报修信息
+     * @return
+     * @throws IOException
+     */
+    void addRepairMsg(ZlRepairorder zlRepairorder);
 
 
     /**
-     * 查询报修订单信息
-     * @param Userid
+     * 查询报修订单详情
+     * @param
      * @return
      */
-    ZlRepairorder queryRepairOrder(Long Userid);
+    Map<String,Object> findRepairOrder(Long Userid,String serialnumber);
 
-//
-//    /**
-//     * 新增报修订单信息，报修图片地址添加
-//     * @param repair    报修信息
-//     * @param hotelname 酒店名
-//     */
-//    void addRepairOrderMsg(ZlRepair repair,String hotelname);
+
+    /**
+     * 取消报修预约
+     */
+    void cancelRepairOrder(Long Userid,String serialnumber,Integer updatedate);
 }
