@@ -122,6 +122,11 @@ public class ZlServiceorder implements Serializable {
     private Boolean isdelete;
 
     /**
+     * 用户删除:0否;1是
+     */
+    private Boolean isuserdelete;
+
+    /**
      * 下单时间
      */
     private Integer createdate;

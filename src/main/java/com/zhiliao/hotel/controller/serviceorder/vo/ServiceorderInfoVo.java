@@ -44,13 +44,13 @@ public class ServiceorderInfoVo implements Serializable {
     public static class goods implements Serializable {
 
         @ApiModelProperty(value = "商品id")
-        private Integer goodsId;
+        private Integer goodsid;
 
         @ApiModelProperty(value = "商品名称")
         private String goodsname;
 
         @ApiModelProperty(value = "购买数量")
-        private Integer goodsCount;
+        private Integer goodscount;
 
         @ApiModelProperty(value = "商品图片")
         private String goodscoverurl;

@@ -27,7 +27,7 @@ public interface ZlServiceorderdetailMapper {
                                                     , @Param("roomID") Integer roomID, @Param("start") Integer start, @Param("end") Integer end);
 
     //插入多条订单详情表
-    int insertOrderDetailList(List<ZlServiceorderdetail> zlServiceorderdetails);
+    int insertOrderDetailList(@Param("zlServiceorderdetails") List<ZlServiceorderdetail> zlServiceorderdetails);
 
-    List<ZlServiceorderdetail> findByOrderId(@Param("orderid") Long orderid);
+    List<ZlServiceorderdetail> findByOrderId(@Param("orderId") Long orderId);
 }

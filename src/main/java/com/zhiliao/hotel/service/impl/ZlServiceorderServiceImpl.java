@@ -20,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,17 +87,17 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
             //判断订单商品是否超过该商品单次购买数量
             Integer buyNum = orderBuyNum.get(zlServicegoods.getGoodsid());
             if(buyNum.compareTo(0) <= 0){
-                throw new BizException(String.format("商品%未选择购买数量，请重新选择！", zlServicegoods.getGoodsname()));
+                throw new BizException(String.format("商品%s未选择购买数量，请重新选择！", zlServicegoods.getGoodsname()));
             }
             if(buyNum.compareTo(zlServicegoods.getApplylimitcount()) > 0){
-                throw new BizException(String.format("商品%超过单次可购买数量%，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getApplylimitcount()));
+                throw new BizException(String.format("商品%s超过单次可购买数量%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getApplylimitcount()));
             }
             if(zlServicegoods.getApplymaxcount().compareTo(0) == 0){
-                throw new BizException(String.format("商品%超过每日可购买次数%，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getApplymaxcount()));
+                throw new BizException(String.format("商品%s超过每日可购买次数%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getApplymaxcount()));
             }
             if(orderHasBuyNum.containsKey(zlServicegoods.getGoodsid())){
                 if(orderHasBuyNum.get(zlServicegoods.getGoodsid()).compareTo(zlServicegoods.getApplymaxcount()) >= 0){
-                    throw new BizException(String.format("商品%超过每日可购买次数%，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getApplymaxcount()));
+                    throw new BizException(String.format("商品%s超过每日可购买次数%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getApplymaxcount()));
                 }
             }
             if(isFirst){
@@ -108,6 +109,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
             orderDetail.setGoodsid(zlServicegoods.getGoodsid());
             orderDetail.setGoodsname(zlServicegoods.getGoodsname());
             orderDetail.setGoodscoverurl(zlServicegoods.getCoverimgurl());
+            orderDetail.setPrice(zlServicegoods.getSaleprice());
             orderDetail.setGoodscount(buyNum);
             orderDetail.setCreatedate(DateUtils.javaToPhpNowDateTime());
             orderDetails.add(orderDetail);
@@ -116,7 +118,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         //todo 超时时间  暂时按15分钟  送达时间、超时时间要放到redis，key暂定
         Integer timeoutDate = scp.getBookdate() + (15 * 60);
         //获取用户信息
-        ZlWxuserdetail zlWxuserdetail = zlWxuserdetailMapper.findByUserId(userId);
+        ZlWxuserdetail zlWxuserdetail = Optional.ofNullable(zlWxuserdetailMapper.findByUserId(userId)).orElse(new ZlWxuserdetail());
         //生成客房服务订单
         ZlServiceorder order = new ZlServiceorder(
                 userId,

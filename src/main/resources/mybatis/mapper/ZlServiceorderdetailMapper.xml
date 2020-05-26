@@ -116,28 +116,28 @@
   <select id="getBuyNumByOrderIds" resultType="com.zhiliao.hotel.model.ZlServiceorderdetail">
     SELECT zsd.GoodsID AS goodsid, COUNT(1) AS buyNum
     FROM zl_serviceorderdetail zsd
-    WHERE zsd.GoodsID IN (#{goodsId}) AND zsd.IsDelete = 0
+    WHERE zsd.GoodsID IN (${goodsId}) AND zsd.IsDelete = 0 AND zsd.IsUserDelete = 0
     AND zsd.OrderID IN
     (SELECT zs.OrderID FROM zl_serviceorder zs
     WHERE zs.HotelID = #{hotleId} AND zs.RoomID = #{roomID}
-    AND zs.IsDelete = 0 AND zs.OrderStatus IN ('0','1')
+    AND zs.IsDelete = 0 AND zs.OrderStatus IN ('0','1') AND zs.IsUserDelete = 0
     AND zs.CreateDate BETWEEN #{start} AND #{end})
     GROUP BY zsd.GoodsID
   </select>
 
   <insert id="insertOrderDetailList" parameterType="java.util.ArrayList">
     INSERT INTO zl_serviceorderdetail (OrderID, UserID,
-    GoodsID, GoodsName, GoodsCoverUrl, GoodsCount, CreateDate) VALUES
-    <foreach collection="list" index="index" separator="," item="item">
+    GoodsID, GoodsName, GoodsCoverUrl, Price, GoodsCount, CreateDate) VALUES
+    <foreach collection="zlServiceorderdetails" index="index" separator="," item="item">
         (#{item.orderid,jdbcType=BIGINT}, #{item.userid,jdbcType=BIGINT},
         #{item.goodsid,jdbcType=INTEGER}, #{item.goodsname,jdbcType=VARCHAR}, #{item.goodscoverurl,jdbcType=VARCHAR},
-        #{item.goodscount,jdbcType=INTEGER}, #{item.createdate,jdbcType=INTEGER})
+        #{item.price,jdbcType=DECIMAL}, #{item.goodscount,jdbcType=INTEGER}, #{item.createdate,jdbcType=INTEGER})
     </foreach>
   </insert>
 
-  <select id="findByOrderId" resultType="java.util.ArrayList">
+  <select id="findByOrderId" resultMap="BaseResultMap">
     SELECT zsd.OrderID, zsd.GoodsID, zsd.GoodsName, zsd.GoodsCoverUrl, zsd.GoodsCount
     FROM zl_serviceorderdetail zsd
-    WHERE zsd.OrderID = #{orderId} AND zsd.IsDelete = 0
+    WHERE zsd.OrderID = #{orderId} AND zsd.IsDelete = 0 AND zsd.IsUserDelete = 0
   </select>
 </mapper>
