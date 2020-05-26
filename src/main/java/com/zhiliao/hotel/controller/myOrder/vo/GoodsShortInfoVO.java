@@ -18,6 +18,10 @@ public class GoodsShortInfoVO {
      */
     private Integer goodsCount;
 
+    /**
+     * 1:便利店;2餐饮服务;3情趣用品;4土特产
+     */
+    private Short belongModule;
 
     /**
      * 商品SkuID
@@ -28,6 +32,14 @@ public class GoodsShortInfoVO {
      * 酒店HotelID
      */
     private Integer hotelID;
+
+    public Short getBelongModule() {
+        return belongModule;
+    }
+
+    public void setBelongModule(Short belongModule) {
+        this.belongModule = belongModule;
+    }
 
     public Integer getHotelID() {
         return hotelID;

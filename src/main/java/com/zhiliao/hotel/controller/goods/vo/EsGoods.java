@@ -11,7 +11,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
  * @author: 姬慧慧
  * @create: 2020-05-19 12:50
  **/
-@Document(indexName = "zlgjxcx", type = "goods")
+@Document(indexName = "zlgj", type = "shop")
 public class EsGoods {
 
     @Id

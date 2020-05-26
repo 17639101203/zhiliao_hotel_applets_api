@@ -16,7 +16,7 @@ public interface ZlOrderService {
 
     List<OrderDetailVO> getOrderDetail(String out_trade_no);
 
-    void cancelOrder(String out_trade_no);
+    void cancelOrder(String out_trade_no, Integer belongModule);
 
     void autoCancelOrder(String out_trade_no);
 
