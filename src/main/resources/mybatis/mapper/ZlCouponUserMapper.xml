@@ -35,9 +35,9 @@
   </select>
 
   <!--可使用优惠卷-->
-  <select id="count" resultType="int">
+  <!--<select id="count" resultType="int">
     select count (id) from zl_couponuser where UserID = #{userId} and ExpiredDate > #{newDate} and IsUsed = 0 and IsDelete = 0
-  </select>
+  </select>-->
   <!--有效优惠卷-->
   <select id="effectiveCouponUser" resultType="com.zhiliao.hotel.model.ZlCouponUser">
     select
