@@ -87,4 +87,13 @@
         WHERE OrderSerialNo = #{out_trade_no}
     </select>
 
+    <update id="updateOrderUpdateDate">
+        UPDATE
+          zl_order
+        SET
+          UpdateDate = #{updateDate}
+        WHERE OrderSerialNo = #{out_trade_no}
+          AND BelongModule = #{belongModule}
+    </update>
+
 </mapper>

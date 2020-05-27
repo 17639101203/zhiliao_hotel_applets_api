@@ -195,7 +195,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
             zlOrder.setComeformid(1);
             zlOrder.setRefundstatus((byte) 1);
             zlOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
-            zlOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+//            zlOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
             zlOrder.setRefundcount((byte) 0);
 
             //获取订单号
@@ -234,7 +234,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 zlOrderDetail.setBelongmodule(goodsInfoVOList.get(i).getBelongModule());
                 zlOrderDetail.setIsdelete(false);
                 zlOrderDetail.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
-                zlOrderDetail.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+//                zlOrderDetail.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
                 //封装订单商品短信息,并存入列表,准备放入redis
                 GoodsShortInfoVO goodsShortInfoVO = new GoodsShortInfoVO();
@@ -347,6 +347,9 @@ public class ZlOrderServiceIml implements ZlOrderService {
         } else {
             redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no, goodsShortInfoVOList);
         }
+        Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
+        //修改数据库支付/取消时间
+        zlOrderMapper.updateOrderUpdateDate(out_trade_no, belongModule, updateDate);
 
         //拿出存入redis的订单商品所使用的优惠券的集合
         if (redisTemplate.hasKey(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no)) {
