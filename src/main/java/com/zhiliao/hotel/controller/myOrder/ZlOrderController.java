@@ -149,8 +149,8 @@ public class ZlOrderController {
             @ApiImplicitParam(paramType = "path", name = "roomNumber", dataType = "String", required = true, value = "房间编号")
     })
     @PostMapping("submitOrder/{hotelID}/{hotelName}/{roomID}/{roomNumber}")
-    @UserLoginToken
-//    @PassToken
+//    @UserLoginToken
+    @PassToken
     @ResponseBody
     public ReturnString submitOrder(
             HttpServletRequest httpServletRequest,
@@ -167,8 +167,8 @@ public class ZlOrderController {
         hotelBasicVO.setRoomNumber(roomNumber);
         //获取用户id
         String token = httpServletRequest.getHeader("token");
-        Long userID = TokenUtil.getUserId(token);
-//        Long userID = System.currentTimeMillis();
+//        Long userID = TokenUtil.getUserId(token);
+        Long userID = System.currentTimeMillis();
 
         try {
             UserGoodsReturn userGoodsReturn = orderService.submitOrder(userID, hotelBasicVO, GoodsInfoMap);

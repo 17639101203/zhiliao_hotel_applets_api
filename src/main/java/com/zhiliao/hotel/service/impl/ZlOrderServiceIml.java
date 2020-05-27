@@ -77,16 +77,14 @@ public class ZlOrderServiceIml implements ZlOrderService {
             Set<String> keySet = goodsInfoMap.keySet();
             for (String key : keySet) {
                 List<GoodsInfoVO> goodsInfoVOList = goodsInfoMap.get(key);
-                for (GoodsInfoVO goodsInfoVO : goodsInfoVOList) {
-                    //获取订单号
-                    String orderSerialNo = goodsInfoVO.getOrderSerialNo();
-                    //如果订单号不为空,说明是被拆单的订单
-                    if (StringUtils.isNoneBlank(orderSerialNo)) {
-                        //先删除总订单中该小模块的数据信息
-                        Short belongModuleVO = goodsInfoVO.getBelongModule();
-                        int belongModule = belongModuleVO;
-                        this.cancelOrder(orderSerialNo, belongModule);
-                    }
+                //获取订单号
+                String orderSerialNo = goodsInfoVOList.get(0).getOrderSerialNo();
+                //如果订单号不为空,说明是被拆单的订单
+                if (StringUtils.isNoneBlank(orderSerialNo)) {
+                    //先删除总订单中该小模块的数据信息
+                    Short belongModuleVO = goodsInfoVOList.get(0).getBelongModule();
+                    int belongModule = belongModuleVO;
+                    this.cancelOrder(orderSerialNo, belongModule);
                 }
             }
         }
@@ -321,43 +319,12 @@ public class ZlOrderServiceIml implements ZlOrderService {
         return zlOrderDetailList;
     }
 
-    /*@Override
-    public void cancelOrder(String out_trade_no) {
-        //拿出存在redis的订单商品短信息集合
-        List<GoodsShortInfoVO> goodsShortInfoVOList = (List<GoodsShortInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
-        for (GoodsShortInfoVO goodsShortInfoVO : goodsShortInfoVOList) {
-            Integer skuID = goodsShortInfoVO.getSkuID();
-            Integer goodsCount = goodsShortInfoVO.getGoodsCount();
-            //更新redis该商品数量(删除redis中锁定的商品数量)
-            Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_SKU_ID + skuID);
-            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, count - goodsCount);
-        }
-        //删除redis中锁定的订单商品
-        redisTemplate.delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
-        //删除redis中锁定的订单商品标记
-        redisTemplate.delete(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + out_trade_no);
-
-        //拿出存入redis的订单商品所使用的优惠券的集合
-        if (redisTemplate.hasKey(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no)) {
-            //如果该订单使用了优惠券
-            //拿出存入redis的订单商品所使用的优惠券的集合
-            List<GoodsCouponInfoVO> goodsCouponInfoVOList = (List<GoodsCouponInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
-            for (GoodsCouponInfoVO goodsCouponInfoVO : goodsCouponInfoVOList) {
-                Integer recID = goodsCouponInfoVO.getRecID();
-                //删除redis中锁定的优惠券
-                redisTemplate.delete(RedisKeyConstant.ORDER_RECID + recID);
-            }
-            //删除redis中锁定的优惠券集合
-            redisTemplate.delete(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
-        }
-    }*/
-
     @Override
     public void cancelOrder(String out_trade_no, Integer belongModule) {
         //拿出存在redis的订单商品短信息集合
         List<GoodsShortInfoVO> goodsShortInfoVOList = (List<GoodsShortInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
         for (GoodsShortInfoVO goodsShortInfoVO : goodsShortInfoVOList) {
-            Short belongModuleVO = goodsShortInfoVO.getBelongModule();
+            Integer belongModuleVO = Integer.valueOf(goodsShortInfoVO.getBelongModule());
             if (belongModuleVO.equals(belongModuleVO)) {
                 Integer skuID = goodsShortInfoVO.getSkuID();
                 Integer goodsCount = goodsShortInfoVO.getGoodsCount();
@@ -371,12 +338,18 @@ public class ZlOrderServiceIml implements ZlOrderService {
         Iterator<GoodsShortInfoVO> iteratorGoodsShortInfo = goodsShortInfoVOList.iterator();
         while (iteratorGoodsShortInfo.hasNext()) {
             GoodsShortInfoVO goodsShortInfoVO = iteratorGoodsShortInfo.next();
-            Short belongModuleVO = goodsShortInfoVO.getBelongModule();
+            Integer belongModuleVO = Integer.valueOf(goodsShortInfoVO.getBelongModule());
             if (belongModuleVO.equals(belongModule)) {
-                goodsShortInfoVOList.remove(goodsShortInfoVO);
+                iteratorGoodsShortInfo.remove();
             }
         }
-        redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no, goodsShortInfoVOList);
+
+        if (goodsShortInfoVOList.size() == 0) {
+            redisTemplate.delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
+            redisTemplate.delete(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + out_trade_no);
+        } else {
+            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no, goodsShortInfoVOList);
+        }
 
         //拿出存入redis的订单商品所使用的优惠券的集合
         if (redisTemplate.hasKey(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no)) {
@@ -388,15 +361,21 @@ public class ZlOrderServiceIml implements ZlOrderService {
             Iterator<GoodsCouponInfoVO> iteratorGoodsCouponInfo = goodsCouponInfoVOList.iterator();
             while (iteratorGoodsCouponInfo.hasNext()) {
                 GoodsCouponInfoVO goodsCouponInfoVO = iteratorGoodsCouponInfo.next();
-                Short belongModuleVO = goodsCouponInfoVO.getBelongModule();
+                Integer belongModuleVO = Integer.valueOf(goodsCouponInfoVO.getBelongModule());
                 if (belongModuleVO.equals(belongModule)) {
                     Integer recID = goodsCouponInfoVO.getRecID();
                     //删除redis中锁定的优惠券
                     redisTemplate.delete(RedisKeyConstant.ORDER_RECID + recID);
-                    goodsCouponInfoVOList.remove(goodsCouponInfoVO);
+                    iteratorGoodsCouponInfo.remove();
+                    break;
                 }
             }
-            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no, goodsCouponInfoVOList);
+
+            if (goodsCouponInfoVOList.size() == 0) {
+                redisTemplate.delete(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no);
+            } else {
+                redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no, goodsCouponInfoVOList);
+            }
         }
     }
 

@@ -127,14 +127,14 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
             while (iterator.hasNext()) {
                 EsGoods esGoods = iterator.next();
                 if (!esGoods.getHotelid().equals(hotelId)) {
-                    esGoodsList.remove(esGoods);
+                    iterator.remove();
                 }
             }
         } else {
             while (iterator.hasNext()) {
                 EsGoods esGoods = iterator.next();
                 if (!esGoods.getHotelid().equals(hotelId) || !esGoods.getBelongmodule().equals(belongModule)) {
-                    esGoodsList.remove(esGoods);
+                    iterator.remove();
                 }
             }
         }
