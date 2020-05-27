@@ -5,6 +5,7 @@ import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.model.ZlHotelFacility;
 import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
+import com.zhiliao.hotel.service.ZlHotelFacilityOrderService;
 import com.zhiliao.hotel.service.ZlHotelFacilityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -28,6 +29,9 @@ public class ZlHotelFacilityController {
 
     @Autowired
     private ZlHotelFacilityService hotelFacilityService;
+
+    @Autowired
+    private ZlHotelFacilityOrderService hotelFacilityOrderService;
 
     @UserLoginToken
     @ApiOperation(value = "酒店设施列表展示")
@@ -64,8 +68,6 @@ public class ZlHotelFacilityController {
     //@UserLoginToken
     @ApiOperation(value = "酒店设施预定")
     @ApiImplicitParams({
-
-
     })
     @PostMapping("addFacilityOrder")
     @PassToken
@@ -79,5 +81,24 @@ public class ZlHotelFacilityController {
             ReturnString returnString = hotelFacilityService.addFacilityOrder(zlHotelFacilityOrder);
             return new ReturnString(returnString);
 
+    }
+
+    @ApiOperation(value = "酒店设施订单详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", dataType = "long", name = "orderID", value = "订单ID", required = true)
+    })
+    @GetMapping("facilityOrderDetail/{orderID}")
+    @UserLoginToken
+    @ResponseBody
+    public ReturnString findOrderDetail(@PathVariable Long orderID) {
+
+
+        try {
+            ZlHotelFacilityOrder zlHotelFacilityOrder = hotelFacilityOrderService.findOrder( orderID);
+            return new ReturnString(zlHotelFacilityOrder);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("查询失败");
+        }
     }
 }

@@ -32,6 +32,8 @@ public class MyAppointmentController {
     private final MyAppointmentService myAppointmentService;
 
     @Autowired
+    private ZlHotelFacilityOrderService hotelFacilityOrderService;
+    @Autowired
     public MyAppointmentController(MyAppointmentService myAppointmentService) {
         this.myAppointmentService = myAppointmentService;
     }
@@ -130,6 +132,29 @@ public class MyAppointmentController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取失败");
+        }
+    }
+
+
+    @ApiOperation(value = "设施预定订单展示", notes = "可传入不同的请求参数，查询各种类型的全部订单。例如：获取用户全部订单（不区分订单类型）列表的数据，传入token即可。")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "int", required = false, value = "订单状态：0: 查询全部 ,-1.已取消；0.待确认；1.已确认"),
+            @ApiImplicitParam(paramType = "query", name = "pageNo", dataType = "int", required = true, value = "页码"),
+            @ApiImplicitParam(paramType = "query", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
+    })
+    @UserLoginToken
+    @PostMapping("facilityOrderFindall")
+    public ReturnString findAllOrder(HttpServletRequest request, Integer orderStatus, Integer payStatus, Integer payType, Integer pageNo, Integer pageSize) {
+
+        try {
+            String token = request.getHeader("token");
+            Long userId = TokenUtil.getUserId(token);
+            logger.info("我的订单，用户ID：" + userId);
+            PageInfoResult allOrder = hotelFacilityOrderService.findAllOrder(userId, orderStatus, pageNo, pageSize);
+            return new ReturnString(allOrder);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("获取出错");
         }
     }
 
