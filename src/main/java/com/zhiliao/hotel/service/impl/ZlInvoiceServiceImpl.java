@@ -5,8 +5,11 @@ import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.mapper.ZlInvoiceMapper;
+import com.zhiliao.hotel.mapper.ZlInvoiceOrderMapper;
 import com.zhiliao.hotel.model.ZlInvoice;
+import com.zhiliao.hotel.model.ZlInvoiceOrder;
 import com.zhiliao.hotel.service.ZlInvoiceService;
+import io.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,9 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
 
     @Autowired
     private  ZlInvoiceMapper mapper;
+
+    @Autowired
+    private ZlInvoiceOrderMapper orderMapper;
 
 
 
@@ -52,6 +58,16 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     @Override
     public Map<String, Object> findInvoiceQrCodeUrl(Integer hotelid) {
         return mapper.queryInvoiceQrCodeUrl(hotelid);
+    }
+
+    @Override
+    public void addinvoiceOrder(ZlInvoiceOrder zlInvoiceOrder) {
+        orderMapper.insertInvoiceOrder(zlInvoiceOrder);
+    }
+
+    @Override
+    public void changeInvoice(ZlInvoice zlInvoice) {
+        mapper.updateInvoiceMsg(zlInvoice);
     }
 
 }

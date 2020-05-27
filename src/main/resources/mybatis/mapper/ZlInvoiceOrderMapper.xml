@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhiliao.hotel.mapper.ZlInvoiceMapper">
-  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlInvoice">
+<mapper namespace="com.zhiliao.hotel.mapper.ZlInvoiceOrderMapper">
+  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlInvoiceOrder">
+    <result column="InvoiceOrderID" jdbcType="BIGINT" property="invoiceorderid" />
     <result column="InvoiceID" jdbcType="INTEGER" property="invoiceid" />
     <result column="UserID" jdbcType="BIGINT" property="userid" />
+    <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
     <result column="InvoiceType" jdbcType="TINYINT" property="invoicetype" />
     <result column="MainBodyType" jdbcType="TINYINT" property="mainbodytype" />
     <result column="ElectronicPaperType" jdbcType="TINYINT" property="electronicpapertype" />
@@ -16,19 +18,27 @@
     <result column="BankAccountNumber" jdbcType="CHAR" property="bankaccountnumber" />
     <result column="CompanyTel" jdbcType="CHAR" property="companytel" />
     <result column="CompanyAddress" jdbcType="CHAR" property="companyaddress" />
+    <result column="RoomNumber" jdbcType="CHAR" property="roomnumber" />
+    <result column="InvoiceOrderNumber" jdbcType="CHAR" property="invoiceordernumber" />
     <result column="IsDelete" jdbcType="BIT" property="isdelete" />
     <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
     <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
   </resultMap>
 
-  <insert id="insertInvoice" parameterType="com.zhiliao.hotel.model.ZlInvoice" useGeneratedKeys="true" keyProperty="invoiceid">
-    insert into zl_invoice
+  <insert id="insertInvoiceOrder" parameterType="com.zhiliao.hotel.model.ZlInvoiceOrder">
+    insert into zl_invoiceorder
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="invoiceorderid != null">
+        InvoiceOrderID,
+      </if>
       <if test="invoiceid != null">
         InvoiceID,
       </if>
       <if test="userid != null">
         UserID,
+      </if>
+      <if test="hotelid != null">
+        HotelID,
       </if>
       <if test="invoicetype != null">
         InvoiceType,
@@ -66,6 +76,12 @@
       <if test="companyaddress != null">
         CompanyAddress,
       </if>
+      <if test="roomnumber != null">
+        RoomNumber,
+      </if>
+      <if test="invoiceordernumber != null">
+        InvoiceOrderNumber,
+      </if>
       <if test="isdelete != null">
         IsDelete,
       </if>
@@ -77,11 +93,17 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="invoiceorderid != null">
+        #{invoiceorderid,jdbcType=BIGINT},
+      </if>
       <if test="invoiceid != null">
         #{invoiceid,jdbcType=INTEGER},
       </if>
       <if test="userid != null">
         #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="hotelid != null">
+        #{hotelid,jdbcType=INTEGER},
       </if>
       <if test="invoicetype != null">
         #{invoicetype,jdbcType=TINYINT},
@@ -90,7 +112,7 @@
         #{mainbodytype,jdbcType=TINYINT},
       </if>
       <if test="electronicpapertype != null">
-        #{electronicpapertype,jdbcType=TINYINT},
+        #{electronicpapertype,jdbcType=BIT},
       </if>
       <if test="title != null">
         #{title,jdbcType=CHAR},
@@ -119,6 +141,12 @@
       <if test="companyaddress != null">
         #{companyaddress,jdbcType=CHAR},
       </if>
+      <if test="roomnumber != null">
+        #{roomnumber,jdbcType=CHAR},
+      </if>
+      <if test="invoiceordernumber != null">
+        #{invoiceordernumber,jdbcType=CHAR},
+      </if>
       <if test="isdelete != null">
         #{isdelete,jdbcType=BIT},
       </if>
@@ -130,101 +158,4 @@
       </if>
     </trim>
   </insert>
-
-
-
-
-  <!--  根据用户ID查询发票抬头-->
-  <select id="queryInvoiceByUserID" resultType="java.util.HashMap">
-        select
-            InvoiceID,InvoiceType,MainBodyType,Title
-        from
-            zl_invoice
-        where
-            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0'
-    </select>
-
-
-  <!--  根据用户ID,发票ID删除发票抬头-->
-  <update id="deleteInvoice">
-        update
-            zl_invoice
-        set
-            IsDelete='1', UpdateDate = #{updatedate,jdbcType=INTEGER}
-        where
-            UserID=#{userid,jdbcType=BIGINT} and InvoiceID=#{invoiceid,jdbcType=INTEGER}
-  </update>
-
-
-  <!--  查询发票详情-->
-  <select id="queryInvoicedetail" resultType="java.util.Map">
-        select
-            InvoiceID,InvoiceType,MainBodyType,ElectronicPaperType,Title,
-            Identifier,Tel,Remark,Bank,BankAccountNumber,CompanyTel,
-            CompanyAddress
-        from
-            zl_invoice
-        where
-            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and InvoiceID=#{invoiceid,jdbcType=INTEGER}
-    </select>
-
-
-  <!--  根据酒店ID查询开票二维码-->
-  <select id="queryInvoiceQrCodeUrl" resultType="java.util.HashMap">
-        select
-            InvoiceQrCodeUrl
-        from
-            zl_hoteldetail
-        where
-            HotelID=#{hotelid,jdbcType=INTEGER} and IsDelete='0'
-    </select>
-
-  <!--  开票信息修改 -->
-  <update id="updateInvoiceMsg">
-    update
-    zl_invoice
-    <trim prefix="set"  suffixOverrides=",">
-      <if test="invoicetype != null">
-        InvoiceType = #{invoicetype,jdbcType=TINYINT},
-      </if>
-      <if test="mainbodytype != null">
-        MainBodyType = #{mainbodytype,jdbcType=TINYINT},
-      </if>
-      <if test="electronicpapertype != null">
-        ElectronicPaperType = #{electronicpapertype,jdbcType=TINYINT},
-      </if>
-      <if test="title != null">
-        Title = #{title,jdbcType=CHAR},
-      </if>
-      <if test="identifier != null">
-        Identifier = #{identifier,jdbcType=CHAR},
-      </if>
-      <if test="tel != null">
-        Tel = #{tel,jdbcType=CHAR},
-      </if>
-      <if test="remark != null">
-        Remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="bank != null">
-        Bank = #{bank,jdbcType=CHAR},
-      </if>
-      <if test="bankaccountnumber != null">
-        BankAccountNumber = #{bankaccountnumber,jdbcType=CHAR},
-      </if>
-      <if test="companytel != null">
-        CompanyTel = #{companytel,jdbcType=CHAR},
-      </if>
-      <if test="companyaddress != null">
-        CompanyAddress = #{companyaddress,jdbcType=CHAR},
-      </if>
-      <if test="updatedate != null">
-        UpdateDate = #{updatedate,jdbcType=INTEGER},
-      </if>
-    </trim>
-    where
-    UserID=#{userid,jdbcType=BIGINT} and InvoiceID=#{invoiceid,jdbcType=INTEGER}
-  </update>
-
-
-
 </mapper>

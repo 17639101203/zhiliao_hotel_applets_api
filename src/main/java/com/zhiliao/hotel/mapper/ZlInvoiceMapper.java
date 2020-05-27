@@ -39,7 +39,7 @@ public interface ZlInvoiceMapper extends Mapper<ZlInvoice> {
      * @param invoiceid    发票ID
      * @return  返回1 为删除成功
      */
-    Map<String,Object> queryInvoicedetail(@Param("userid") Long userid,@Param("invoiceid")Integer invoiceid);
+    Map<String,Object>  queryInvoicedetail(@Param("userid") Long userid,@Param("invoiceid")Integer invoiceid);
 
 
     /**
@@ -48,4 +48,10 @@ public interface ZlInvoiceMapper extends Mapper<ZlInvoice> {
      * @return
      */
     Map<String,Object> queryInvoiceQrCodeUrl(Integer hotelid);
+
+    /**
+     * 修改开票信息
+     * @param zlInvoice
+     */
+    void updateInvoiceMsg(ZlInvoice zlInvoice);
 }

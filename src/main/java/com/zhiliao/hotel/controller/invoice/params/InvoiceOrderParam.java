@@ -1,6 +1,5 @@
 package com.zhiliao.hotel.controller.invoice.params;
 
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -8,12 +7,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@ApiModel("发票抬头保存参数")
+
+@ApiModel("发票订单下单参数")
 @Data
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class InvoiceParam {
+public class InvoiceOrderParam {
 
     /**
      * 发票类型:1:增值税普通发票;2增值税专用发票
@@ -36,16 +36,14 @@ public class InvoiceParam {
 
 
     /**
-     *
-     单位的纳税人识别号:15/18或20位
+     * 单位的纳税人识别号:15/18或20位
      */
     @ApiModelProperty(value = "单位的纳税人识别号:15/18或20位", required = true)
     private String identifier;
 
 
     /**
-     *
-     个人或单位电话号码
+     * 个人或单位电话号码
      */
     @ApiModelProperty(value = "个人或单位电话号码", required = true)
     private String tel;
@@ -92,13 +90,18 @@ public class InvoiceParam {
     private String remark;
 
 
-
-    @ApiModelProperty(value = "保存类型 1新增，2修改", required = true)
-    private String saveType;
-
-
     @ApiModelProperty(value = "发票ID")
     private Integer invoiceid;
 
+    /**
+     * 酒店ID
+     */
+    @ApiModelProperty(value = "酒店ID")
+    private Integer hotelid;
 
+    /**
+     * 房间号
+     */
+    @ApiModelProperty(value = "房间号")
+    private String roomnumber;
 }

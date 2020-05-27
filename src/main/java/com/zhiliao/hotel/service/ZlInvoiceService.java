@@ -2,6 +2,7 @@ package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.model.ZlInvoice;
+import com.zhiliao.hotel.model.ZlInvoiceOrder;
 
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,20 @@ public interface ZlInvoiceService {
      * @return
      */
     Map<String,Object> findInvoiceQrCodeUrl(Integer hotelid);
+
+
+    /**
+     * 增加发票订单
+     * @param zlInvoiceOrder
+     */
+    void addinvoiceOrder(ZlInvoiceOrder zlInvoiceOrder);
+
+
+    /**
+     * 修改开票信息
+     * @param zlInvoice
+     */
+    void changeInvoice(ZlInvoice zlInvoice);
 }
 
 
