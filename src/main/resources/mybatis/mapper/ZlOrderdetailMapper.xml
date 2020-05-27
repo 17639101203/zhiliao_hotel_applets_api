@@ -22,115 +22,18 @@
 
 	</select>
     
-    <!--<update id="byOrderdetailId" parameterType="com.zhiliao.hotel.model.ZlOrder">-->
-    	<!--update zl_order set UpdateDate = #{updatedate} where OrderID = #{orderid}-->
-  	<!--</update>-->
-
-    <!--<insert id="insertOrderDetail" parameterType="com.zhiliao.hotel.model.ZlOrderDetail" useGeneratedKeys="true"-->
-            <!--keyProperty="orderDetailID">-->
-        <!--insert into zl_orderdetail-->
-        <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
-           <!--&lt;!&ndash; <if test="orderDetailID != null">-->
-                <!--orderDetailID,-->
-            <!--</if>&ndash;&gt;-->
-            <!--<if test="orderid != null">-->
-                <!--OrderID,-->
-            <!--</if>-->
-            <!--<if test="userid != null">-->
-                <!--UserID,-->
-            <!--</if>-->
-            <!--<if test="hotelgoodsid != null">-->
-                <!--HotelGoodsID,-->
-            <!--</if>-->
-            <!--<if test="goodsname != null">-->
-                <!--GoodsName,-->
-            <!--</if>-->
-            <!--<if test="goodscoverurl != null">-->
-                <!--GoodsCoverUrl,-->
-            <!--</if>-->
-            <!--<if test="price != null">-->
-                <!--Price,-->
-            <!--</if>-->
-            <!--<if test="goodscount != null">-->
-                <!--GoodsCount,-->
-            <!--</if>-->
-            <!--<if test="isdelete != null">-->
-                <!--IsDelete,-->
-            <!--</if>-->
-            <!--<if test="createdate != null">-->
-                <!--CreateDate,-->
-            <!--</if>-->
-            <!--<if test="updatedate != null">-->
-                <!--UpdateDate,-->
-            <!--</if>-->
-        <!--</trim>-->
-        <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
-            <!--&lt;!&ndash;<if test="orderDetailID != null">-->
-                <!--#{orderDetailID,jdbcType=BIGINT},-->
-            <!--</if>&ndash;&gt;-->
-            <!--<if test="orderid != null">-->
-                <!--#{orderid,jdbcType=BIGINT},-->
-            <!--</if>-->
-            <!--<if test="userid != null">-->
-                <!--#{userid,jdbcType=BIGINT},-->
-            <!--</if>-->
-            <!--<if test="hotelgoodsid != null">-->
-                <!--#{hotelgoodsid,jdbcType=INTEGER},-->
-            <!--</if>-->
-            <!--<if test="goodsname != null">-->
-                <!--#{goodsname,jdbcType=VARCHAR},-->
-            <!--</if>-->
-            <!--<if test="goodscoverurl != null">-->
-                <!--#{goodscoverurl,jdbcType=VARCHAR},-->
-            <!--</if>-->
-            <!--<if test="price != null">-->
-                <!--#{price,jdbcType=DECIMAL},-->
-            <!--</if>-->
-            <!--<if test="goodscount != null">-->
-                <!--#{goodscount,jdbcType=INTEGER},-->
-            <!--</if>-->
-            <!--<if test="isdelete != null">-->
-                <!--#{isdelete,jdbcType=BIT},-->
-            <!--</if>-->
-            <!--<if test="createdate != null">-->
-                <!--#{createdate,jdbcType=INTEGER},-->
-            <!--</if>-->
-            <!--<if test="updatedate != null">-->
-                <!--#{updatedate,jdbcType=INTEGER},-->
-            <!--</if>-->
-        <!--</trim>-->
-
-    <!--</insert>-->
-
-    <!--<insert id="insertOrderDetail" parameterType="java.util.List" useGeneratedKeys="true">
-        insert into zl_orderdetail(
-        OrderDetailID,
-        OrderID,
-        UserID,
-        GoodsID,
-        GoodsName,
-        GoodsCoverUrl,
-        Price,
-        GoodsCount,
-        IsDelete,
-        CreateDate,
-        UpdateDate
-        )values
-        <foreach collection="list" item="item" index="index" separator=",">
-            (
-            #{item.orderDetailID},
-            #{item.orderID},
-            #{item.userID},
-            #{item.goodsID},
-            #{item.goodsName},
-            #{item.goodsCoverUrl},
-            #{item.price},
-            #{item.goodsCount},
-            #{item.isDelete},
-            #{item.createDate},
-            #{item.updateDate},
-            )
-        </foreach>
-    </insert>-->
+    <update id="updateOrderDetailUpdateDate">
+        UPDATE
+          zl_orderdetail
+        SET
+          UpdateDate = #{updateDate}
+        WHERE OrderID =
+          (SELECT
+            OrderID
+          FROM
+            zl_order
+          WHERE OrderSerialNo = #{out_trade_no}
+            AND BelongModule = #{belongModule})
+    </update>
 
 </mapper>

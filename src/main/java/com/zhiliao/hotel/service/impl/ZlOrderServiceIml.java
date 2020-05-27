@@ -29,7 +29,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
     @Autowired
     private ZlOrderMapper orderMapper;
     @Autowired
-    private ZlOrderDetailMapper orderDetailMapper;
+    private ZlOrderDetailMapper zlOrderDetailMapper;
 
     @Autowired
     private ZlCouponMapper zlCouponMapper;
@@ -57,8 +57,8 @@ public class ZlOrderServiceIml implements ZlOrderService {
             List<ZlOrderDetail> goods = null;
             Long goodsTotal = null;
             for (OrderList order : allOrders) {
-                goods = orderDetailMapper.findGoods(order.getUserid(), order.getBelongmodule());
-                goodsTotal = orderDetailMapper.countGoods(order.getUserid(), order.getBelongmodule());
+                goods = zlOrderDetailMapper.findGoods(order.getUserid(), order.getBelongmodule());
+                goodsTotal = zlOrderDetailMapper.countGoods(order.getUserid(), order.getBelongmodule());
                 order.setZlOrderDetailList(goods);
                 order.setGoodsTotal(goodsTotal);
             }
@@ -244,7 +244,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 goodsShortInfoVO.setHotelID(hotelBasicVO.getHotelID());
                 goodsShortInfoVOList.add(goodsShortInfoVO);
                 //将订单详情数据存入数据库
-                orderDetailMapper.insert(zlOrderDetail);
+                zlOrderDetailMapper.insert(zlOrderDetail);
             }
         }
         //将该订单商品放入redis,进行锁定
@@ -350,6 +350,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
         Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
         //修改数据库支付/取消时间
         zlOrderMapper.updateOrderUpdateDate(out_trade_no, belongModule, updateDate);
+        zlOrderDetailMapper.updateOrderDetailUpdateDate(out_trade_no, belongModule, updateDate);
 
         //拿出存入redis的订单商品所使用的优惠券的集合
         if (redisTemplate.hasKey(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no)) {

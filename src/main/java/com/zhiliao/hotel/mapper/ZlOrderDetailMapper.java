@@ -17,11 +17,7 @@ public interface ZlOrderDetailMapper extends Mapper<ZlOrderDetail>{
     List<ZlOrderDetail> findGoods(@Param("userID") Long userID, @Param("belongModule") Short BelongModule);
     
     Long countGoods(@Param("userID") Long userID, @Param("belongModule") Short BelongModule);
-    
-//    void byOrderdetailId(ZlOrder order);
 
-//    void insertOrderDetail(List<ZlOrderDetail> zlOrderDetailList);
-//    void insertOrderDetail(ZlOrderDetail zlOrderDetail);
-
+    void updateOrderDetailUpdateDate(@Param("out_trade_no") String out_trade_no, @Param("belongModule") Integer belongModule, @Param("updateDate") Integer updateDate);
 
 }
