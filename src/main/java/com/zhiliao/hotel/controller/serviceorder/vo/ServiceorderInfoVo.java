@@ -36,6 +36,9 @@ public class ServiceorderInfoVo implements Serializable {
     @ApiModelProperty(value = "送达时间")
     private String bookdate;
 
+    @ApiModelProperty(value = "是否尽快送达，0：其他时间，1：尽快送达")
+    private Integer isUrgent;
+
     @ApiModelProperty(value = "订单商品列表")
     private List<goods> orderGoodsList;
 

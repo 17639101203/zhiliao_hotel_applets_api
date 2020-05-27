@@ -138,7 +138,7 @@ public class ZlServiceorder implements Serializable {
 
     public ZlServiceorder(Long userid,String username, String tel, String serialnumber, Integer hotelid, String hotelname,
                           Integer roomid, String goodscoverurl, String floornumber, String roomnumber, Integer comeformid,
-                          Integer bookdate, Integer timeoutdate, String remark, Integer createdate, Integer updatedate){
+                          Integer bookdate, Integer timeoutdate, String remark, Integer createdate){
         this.userid = userid;
         this.username = username;
         this.tel = tel;
@@ -154,7 +154,6 @@ public class ZlServiceorder implements Serializable {
         this.timeoutdate = timeoutdate;
         this.remark = remark;
         this.createdate = createdate;
-        this.updatedate = updatedate;
     }
 
 }

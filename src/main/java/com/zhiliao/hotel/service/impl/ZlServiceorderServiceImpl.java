@@ -82,6 +82,13 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         List<ZlServiceorderdetail> orderDetails = new ArrayList<>();
         //根据 token得到微信用户Id
         Long userId = TokenUtil.getUserId(token);
+        Integer createdate;
+        if(scp.getIsUrgent() == 1){
+            //尽快送达
+            createdate = scp.getBookdate();
+        }else{
+            createdate = DateUtils.javaToPhpNowDateTime();
+        }
         //校验订单物品数量是否大于当日可提交数量
         for (ZlServicegoods zlServicegoods : zlServicegoodsList) {
             //判断订单商品是否超过该商品单次购买数量
@@ -111,7 +118,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
             orderDetail.setGoodscoverurl(zlServicegoods.getCoverimgurl());
             orderDetail.setPrice(zlServicegoods.getSaleprice());
             orderDetail.setGoodscount(buyNum);
-            orderDetail.setCreatedate(DateUtils.javaToPhpNowDateTime());
+            orderDetail.setCreatedate(createdate);
             orderDetails.add(orderDetail);
         }
         //todo 校验送达时间是否在服务时间内
@@ -135,8 +142,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
                 scp.getBookdate(),
                 timeoutDate,
                 scp.getRemark(),
-                DateUtils.javaToPhpNowDateTime(),
-                DateUtils.javaToPhpNowDateTime()
+                createdate
         );
         zlServiceorderMapper.insert(order);
         //插入客服服务订单商品表数据
@@ -172,6 +178,11 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         //根据字段复制实体
         BeanUtils.copyProperties(order, serviceorderInfoVo);
         //处理时间
+        serviceorderInfoVo.setIsUrgent(0);
+        if(order.getCreatedate().compareTo(order.getBookdate()) == 0){
+            //即可送达
+            serviceorderInfoVo.setIsUrgent(1);
+        }
         String createdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getCreatedate()).toString());
         serviceorderInfoVo.setCreatedate(createdate);
         String bookdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getBookdate()).toString());

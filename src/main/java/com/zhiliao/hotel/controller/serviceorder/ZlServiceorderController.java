@@ -27,8 +27,8 @@ public class ZlServiceorderController {
      * 客房服务订单提交
      */
     @ApiOperation(value = "高翔_客房服务订单提交")
-//    @UserLoginToken
-    @PassToken
+    @UserLoginToken
+//    @PassToken
     @PostMapping("serviceorderSubmit")
     public ReturnString<ServiceorderCommitVo> serviceorderSubmit(HttpServletRequest request, @RequestBody ServiceorderCommitParams scp){
         String token = request.getHeader("token");
@@ -46,8 +46,8 @@ public class ZlServiceorderController {
      */
     @ApiOperation(value = "高翔_获取客房服务订单详情")
     @ApiImplicitParam(paramType = "path", name = "orderId", dataType = "int", required = true, value = "客房服务订单id")
-//    @UserLoginToken
-    @PassToken
+    @UserLoginToken
+//    @PassToken
     @GetMapping("getServiceorderInfo/{orderId}")
     public ReturnString<ServiceorderInfoVo> getServiceorderInfo(@PathVariable Long orderId){
         try {
