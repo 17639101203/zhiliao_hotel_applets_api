@@ -179,45 +179,6 @@ public class ZlOrderController {
         }
     }
 
-    /*@ApiOperation(value = "酒店超市_提交小订单_姬慧慧")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "Long", required = true, value = "酒店ID"),
-            @ApiImplicitParam(paramType = "path", name = "hotelName", dataType = "String", required = true, value = "酒店名"),
-            @ApiImplicitParam(paramType = "path", name = "roomID", dataType = "Long", required = true, value = "房间ID"),
-            @ApiImplicitParam(paramType = "path", name = "roomNumber", dataType = "String", required = true, value = "房间编号")
-    })
-    @PostMapping("submitOrder/{hotelID}/{hotelName}/{roomID}/{roomNumber}")
-    @UserLoginToken
-//    @PassToken
-    @ResponseBody
-    public ReturnString submitSmallOrder(
-            HttpServletRequest httpServletRequest,
-            @PathVariable("hotelID") Integer hotelID,
-            @PathVariable("hotelName") String hotelName,
-            @PathVariable("roomID") Integer roomID,
-            @PathVariable("roomNumber") String roomNumber,
-            @RequestBody List<GoodsInfoVO> goodsInfoVOList
-    ) {
-        //封装对象
-        HotelBasicVO hotelBasicVO = new HotelBasicVO();
-        hotelBasicVO.setHotelID(hotelID);
-        hotelBasicVO.setHotelName(hotelName);
-        hotelBasicVO.setRoomID(roomID);
-        hotelBasicVO.setRoomNumber(roomNumber);
-        //获取用户id
-        String token = httpServletRequest.getHeader("token");
-        Long userID = TokenUtil.getUserId(token);
-//        Long userID = System.currentTimeMillis();
-
-        try {
-            UserGoodsReturn userGoodsReturn = orderService.submitSmallOrder(userID, hotelBasicVO, goodsInfoVOList);
-            return new ReturnString(userGoodsReturn);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnString("提交失败");
-        }
-    }*/
-
     @ApiOperation(value = "酒店超市_微信下单_姬慧慧")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "openid", dataType = "String", required = true, value = "用户标识"),

@@ -19,16 +19,16 @@ public class GoodsStockCountNo {
     private String goodsName;
 
     /**
-     * 商品SkuID
+     * 酒店商品表自增id
      */
-    private Integer skuID;
+    private Integer hotelGoodsSkuID;
 
-    public Integer getSkuID() {
-        return skuID;
+    public Integer getHotelGoodsSkuID() {
+        return hotelGoodsSkuID;
     }
 
-    public void setSkuID(Integer skuID) {
-        this.skuID = skuID;
+    public void setHotelGoodsSkuID(Integer hotelGoodsSkuID) {
+        this.hotelGoodsSkuID = hotelGoodsSkuID;
     }
 
     public Integer getGoodsID() {

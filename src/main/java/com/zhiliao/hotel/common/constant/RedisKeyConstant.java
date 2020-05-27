@@ -10,7 +10,7 @@ public class RedisKeyConstant {
     public final static String BANNER_KEY = "banner";
 
     //存入redis的库存的键名称,后加SkuID
-    public final static String ORDER_SKU_ID = "order_SkuID_";
+    public final static String ORDER_HOTELGOODSSKUID_ID = "order_HotelGoodsSkuID_";
 
     //存入redis的优惠券的键的名称,后加RecID
     public final static String ORDER_RECID = "order_RecID_";

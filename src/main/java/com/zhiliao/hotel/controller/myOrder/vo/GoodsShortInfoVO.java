@@ -9,11 +9,6 @@ package com.zhiliao.hotel.controller.myOrder.vo;
 public class GoodsShortInfoVO {
 
     /**
-     * 商品ID
-     */
-    private Integer goodsID;
-
-    /**
      * 数量
      */
     private Integer goodsCount;
@@ -24,9 +19,9 @@ public class GoodsShortInfoVO {
     private Short belongModule;
 
     /**
-     * 商品SkuID
+     * 酒店商品表自增id
      */
-    private Integer skuID;
+    private Integer hotelGoodsSkuID;
 
     /**
      * 酒店HotelID
@@ -49,12 +44,12 @@ public class GoodsShortInfoVO {
         this.hotelID = hotelID;
     }
 
-    public Integer getSkuID() {
-        return skuID;
+    public Integer getHotelGoodsSkuID() {
+        return hotelGoodsSkuID;
     }
 
-    public void setSkuID(Integer skuID) {
-        this.skuID = skuID;
+    public void setHotelGoodsSkuID(Integer hotelGoodsSkuID) {
+        this.hotelGoodsSkuID = hotelGoodsSkuID;
     }
 
     public Integer getGoodsCount() {
@@ -63,13 +58,5 @@ public class GoodsShortInfoVO {
 
     public void setGoodsCount(Integer goodsCount) {
         this.goodsCount = goodsCount;
-    }
-
-    public Integer getGoodsID() {
-        return goodsID;
-    }
-
-    public void setGoodsID(Integer goodsID) {
-        this.goodsID = goodsID;
     }
 }

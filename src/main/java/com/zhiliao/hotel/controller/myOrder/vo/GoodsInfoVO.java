@@ -8,11 +8,6 @@ import java.math.BigDecimal;
 public class GoodsInfoVO {
 
     /**
-     * 商品ID
-     */
-    private Integer goodsID;
-
-    /**
      * 商品名称
      */
     private String goodsName;
@@ -48,9 +43,9 @@ public class GoodsInfoVO {
     private Integer goodsCount;
 
     /**
-     * 商品SkuID
+     * 酒店商品表自增id
      */
-    private Integer skuID;
+    private Integer hotelGoodsSkuID;
 
     /**
      * 配送地址
@@ -62,20 +57,20 @@ public class GoodsInfoVO {
      */
     private String orderSerialNo;
 
+    public Integer getHotelGoodsSkuID() {
+        return hotelGoodsSkuID;
+    }
+
+    public void setHotelGoodsSkuID(Integer hotelGoodsSkuID) {
+        this.hotelGoodsSkuID = hotelGoodsSkuID;
+    }
+
     public String getOrderSerialNo() {
         return orderSerialNo;
     }
 
     public void setOrderSerialNo(String orderSerialNo) {
         this.orderSerialNo = orderSerialNo;
-    }
-
-    public Integer getGoodsID() {
-        return goodsID;
-    }
-
-    public void setGoodsID(Integer goodsID) {
-        this.goodsID = goodsID;
     }
 
     public String getGoodsName() {
@@ -116,14 +111,6 @@ public class GoodsInfoVO {
 
     public void setGoodsCount(Integer goodsCount) {
         this.goodsCount = goodsCount;
-    }
-
-    public Integer getSkuID() {
-        return skuID;
-    }
-
-    public void setSkuID(Integer skuID) {
-        this.skuID = skuID;
     }
 
     public String getDeliveryAddress() {

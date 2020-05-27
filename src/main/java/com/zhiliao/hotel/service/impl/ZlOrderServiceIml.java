@@ -213,20 +213,20 @@ public class ZlOrderServiceIml implements ZlOrderService {
             for (int i = 0; i < goodsInfoVOList.size(); i++) {
                 //封装订单详情信息
                 ZlOrderDetail zlOrderDetail = new ZlOrderDetail();
-                //获取用户选择的商品skuid和数量
-                Integer skuID = goodsInfoVOList.get(i).getSkuID();
+                //获取用户选择的商品hotelGoodsSkuID和数量
+                Integer hotelGoodsSkuID = goodsInfoVOList.get(i).getHotelGoodsSkuID();
                 Integer goodsCount = goodsInfoVOList.get(i).getGoodsCount();
-                if (redisTemplate.hasKey(RedisKeyConstant.ORDER_SKU_ID + skuID)) {
+                if (redisTemplate.hasKey(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID)) {
                     //如果存在该键,就更新商品数量
-                    Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_SKU_ID + skuID);
-                    redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, goodsCount + count);
+                    Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
+                    redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID, goodsCount + count);
                 } else {
                     //不存在该键,就新建
-                    redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, goodsCount);
+                    redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID, goodsCount);
                 }
                 zlOrderDetail.setOrderid(zlOrder.getOrderid());
                 zlOrderDetail.setUserid(userID);
-                zlOrderDetail.setHotelgoodsid(goodsInfoVOList.get(i).getGoodsID());
+                zlOrderDetail.setHotelgoodsid(hotelGoodsSkuID);
                 zlOrderDetail.setGoodsname(goodsInfoVOList.get(i).getGoodsName());
                 zlOrderDetail.setGoodscoverurl(goodsInfoVOList.get(i).getCoverImgUrl());
                 zlOrderDetail.setPrice(goodsInfoVOList.get(i).getPrice());
@@ -238,9 +238,8 @@ public class ZlOrderServiceIml implements ZlOrderService {
 
                 //封装订单商品短信息,并存入列表,准备放入redis
                 GoodsShortInfoVO goodsShortInfoVO = new GoodsShortInfoVO();
-                goodsShortInfoVO.setGoodsID(goodsInfoVOList.get(i).getGoodsID());
                 goodsShortInfoVO.setGoodsCount(goodsInfoVOList.get(i).getGoodsCount());
-                goodsShortInfoVO.setSkuID(skuID);
+                goodsShortInfoVO.setHotelGoodsSkuID(hotelGoodsSkuID);
                 goodsShortInfoVO.setBelongModule(goodsInfoVOList.get(i).getBelongModule());
                 goodsShortInfoVO.setHotelID(hotelBasicVO.getHotelID());
                 goodsShortInfoVOList.add(goodsShortInfoVO);
@@ -276,30 +275,28 @@ public class ZlOrderServiceIml implements ZlOrderService {
             List<GoodsInfoVO> goodsInfoVOList = goodsInfoMap.get(key);
 
             for (int i = 0; i < goodsInfoVOList.size(); i++) {
-                //获取用户选择的商品skuid和数量
-                Integer skuID = goodsInfoVOList.get(i).getSkuID();
+                //获取用户选择的商品hotelGoodsSkuID和数量
+                Integer hotelGoodsSkuID = goodsInfoVOList.get(i).getHotelGoodsSkuID();
                 Integer goodsCount = goodsInfoVOList.get(i).getGoodsCount();
                 //判断酒店该商品库存是否足够
-                Integer stockCount = zlHotelGoodsMapper.getStockCount(hotelID, skuID);
+                Integer stockCount = zlHotelGoodsMapper.getStockCount(hotelID, hotelGoodsSkuID);
                 if (stockCount > goodsCount) {
-                    Boolean bool = redisTemplate.hasKey(RedisKeyConstant.ORDER_SKU_ID + skuID);
+                    Boolean bool = redisTemplate.hasKey(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
                     Integer count = 0;
                     if (bool) {
                         //存在该键,就查询出该商品被锁定的库存数量
-                        count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_SKU_ID + skuID);
+                        count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
                     }
                     if (stockCount - count > goodsCount) {
                         continue;
                     } else {
-                        goodsStockCountNo.setGoodsID(goodsInfoVOList.get(i).getGoodsID());
                         goodsStockCountNo.setGoodsName(goodsInfoVOList.get(i).getGoodsName());
-                        goodsStockCountNo.setSkuID(goodsInfoVOList.get(i).getSkuID());
+                        goodsStockCountNo.setHotelGoodsSkuID(goodsInfoVOList.get(i).getHotelGoodsSkuID());
                         goodsStockCountNoList.add(goodsStockCountNo);
                     }
                 } else {
-                    goodsStockCountNo.setGoodsID(goodsInfoVOList.get(i).getGoodsID());
                     goodsStockCountNo.setGoodsName(goodsInfoVOList.get(i).getGoodsName());
-                    goodsStockCountNo.setSkuID(goodsInfoVOList.get(i).getSkuID());
+                    goodsStockCountNo.setHotelGoodsSkuID(goodsInfoVOList.get(i).getHotelGoodsSkuID());
                     goodsStockCountNoList.add(goodsStockCountNo);
                 }
             }
@@ -325,12 +322,12 @@ public class ZlOrderServiceIml implements ZlOrderService {
         List<GoodsShortInfoVO> goodsShortInfoVOList = (List<GoodsShortInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
         for (GoodsShortInfoVO goodsShortInfoVO : goodsShortInfoVOList) {
             Integer belongModuleVO = Integer.valueOf(goodsShortInfoVO.getBelongModule());
-            if (belongModuleVO.equals(belongModuleVO)) {
-                Integer skuID = goodsShortInfoVO.getSkuID();
+            if (belongModuleVO.equals(belongModule)) {
+                Integer hotelGoodsSkuID = goodsShortInfoVO.getHotelGoodsSkuID();
                 Integer goodsCount = goodsShortInfoVO.getGoodsCount();
                 //更新redis该商品数量(删除redis中锁定的商品数量)
-                Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_SKU_ID + skuID);
-                redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, count - goodsCount);
+                Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
+                redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID, count - goodsCount);
             }
         }
 
@@ -384,11 +381,11 @@ public class ZlOrderServiceIml implements ZlOrderService {
         //拿出存在redis的订单商品短信息集合
         List<GoodsShortInfoVO> goodsShortInfoVOList = (List<GoodsShortInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
         for (GoodsShortInfoVO goodsShortInfoVO : goodsShortInfoVOList) {
-            Integer skuID = goodsShortInfoVO.getSkuID();
+            Integer hotelGoodsSkuID = goodsShortInfoVO.getHotelGoodsSkuID();
             Integer goodsCount = goodsShortInfoVO.getGoodsCount();
             //更新redis该商品数量(删除redis中锁定的商品数量)
-            Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_SKU_ID + skuID);
-            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, count - goodsCount);
+            Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
+            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID, count - goodsCount);
         }
         //删除redis中锁定的订单商品
         redisTemplate.delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
@@ -427,30 +424,28 @@ public class ZlOrderServiceIml implements ZlOrderService {
 
         for (int i = 0; i < goodsInfoVOList.size(); i++) {
 
-            //获取用户选择的商品skuid和数量
-            Integer skuID = goodsInfoVOList.get(i).getSkuID();
+            //获取用户选择的商品hotelGoodsSkuID和数量
+            Integer hotelGoodsSkuID = goodsInfoVOList.get(i).getHotelGoodsSkuID();
             Integer goodsCount = goodsInfoVOList.get(i).getGoodsCount();
             //判断酒店该商品库存是否足够
-            Integer stockCount = zlHotelGoodsMapper.getStockCount(hotelID, skuID);
+            Integer stockCount = zlHotelGoodsMapper.getStockCount(hotelID, hotelGoodsSkuID);
             if (stockCount > goodsCount) {
-                Boolean bool = redisTemplate.hasKey(RedisKeyConstant.ORDER_SKU_ID + skuID);
+                Boolean bool = redisTemplate.hasKey(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
                 Integer count = 0;
                 if (bool) {
                     //存在该键,就查询出该商品被锁定的库存数量
-                    count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_SKU_ID + skuID);
+                    count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
                 }
                 if (stockCount - count > goodsCount) {
                     continue;
                 } else {
-                    goodsStockCountNo.setGoodsID(goodsInfoVOList.get(i).getGoodsID());
                     goodsStockCountNo.setGoodsName(goodsInfoVOList.get(i).getGoodsName());
-                    goodsStockCountNo.setSkuID(goodsInfoVOList.get(i).getSkuID());
+                    goodsStockCountNo.setHotelGoodsSkuID(goodsInfoVOList.get(i).getHotelGoodsSkuID());
                     goodsStockCountNoList.add(goodsStockCountNo);
                 }
             } else {
-                goodsStockCountNo.setGoodsID(goodsInfoVOList.get(i).getGoodsID());
                 goodsStockCountNo.setGoodsName(goodsInfoVOList.get(i).getGoodsName());
-                goodsStockCountNo.setSkuID(goodsInfoVOList.get(i).getSkuID());
+                goodsStockCountNo.setHotelGoodsSkuID(goodsInfoVOList.get(i).getHotelGoodsSkuID());
                 goodsStockCountNoList.add(goodsStockCountNo);
             }
         }

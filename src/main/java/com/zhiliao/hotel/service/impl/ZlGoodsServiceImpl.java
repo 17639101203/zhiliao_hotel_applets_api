@@ -80,17 +80,15 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
         //从redis中拿出订单商品信息
         List<GoodsShortInfoVO> goodsShortInfoVOList = (List<GoodsShortInfoVO>) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
         for (GoodsShortInfoVO goodsShortInfoVO : goodsShortInfoVOList) {
-            Integer goodsID = goodsShortInfoVO.getGoodsID();
             Integer goodsCount = goodsShortInfoVO.getGoodsCount();
-            Integer skuID = goodsShortInfoVO.getSkuID();
-            Integer hotelID = goodsShortInfoVO.getHotelID();
+            Integer hotelGoodsSkuID = goodsShortInfoVO.getHotelGoodsSkuID();
             //更新mysql数据库库存
-            zlGoodsMapper.updateGoods(goodsID, goodsCount);
-            zlGoodsMapper.updateGoodsSku(skuID, goodsCount);
-            zlGoodsMapper.updateHotelGoodsSku(skuID, hotelID, goodsCount);
+            zlGoodsMapper.updateGoods(hotelGoodsSkuID, goodsCount);
+            zlGoodsMapper.updateGoodsSku(hotelGoodsSkuID, goodsCount);
+            zlGoodsMapper.updateHotelGoodsSku(hotelGoodsSkuID, goodsCount);
             //更改redis数据库库存
-            Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_SKU_ID + skuID);
-            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_SKU_ID + skuID, count - goodsCount);
+            Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
+            redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID, count - goodsCount);
         }
 
         if (redisTemplate.hasKey(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no)) {
