@@ -38,13 +38,13 @@ public class ZlBannerServiceImpl implements ZlBannerService {
 
         List<ZlBanner> zlBanners = zlBannerMapper.findBanner(hotelID, menuID);
 
-        int numberFive = ZlBannerConstant.NUMBER_FIVE;
+        int numberFive =ZlBannerConstant.NUMBER_FIVE ,numberZero=ZlBannerConstant.NUMBER_ZERO;
 
-        int size = CollectionUtils.isEmpty(zlBanners) ? ZlBannerConstant.NUMBER_ZERO : zlBanners.size();
+        int size = CollectionUtils.isEmpty(zlBanners) ? numberZero : zlBanners.size();
 
         //判断是否有数据
         //数量等于0返回0
-        if (size == ZlBannerConstant.NUMBER_ZERO) {
+        if (size == numberZero) {
             return Lists.newArrayList();
         }
 

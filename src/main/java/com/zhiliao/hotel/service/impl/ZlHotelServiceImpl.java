@@ -57,7 +57,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         ZlHotelroom zlHotelroom = null;
         //固定 小程序渠道 1为C端
         String state = "1";
-        if (state.equals("1")) {
+        if (StringUtils.equals(state,"1")) {
             if (!StringUtils.isEmpty(roomId)) {
                 //根据酒店id，客房id
                 zlHotelroom = zlHotelRoomMapper.getById(roomId, hotelId);
@@ -72,7 +72,6 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                         }
                     }
                 }
-
             }
             ZlHotel byId = zlHotelMapper.getById(hotelId);
             ZlHotelIn zlHotel = new ZlHotelIn(byId);
@@ -106,9 +105,9 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 );
 
 
-                List<ZlNews> collect = zlNewsList.stream().filter(a -> a.getType() == 1 && a.getIsDelete() == 0).collect(Collectors.toList());
+                List<ZlNews> zlNewsCollect = zlNewsList.stream().filter(a -> a.getType() == 1 && a.getIsDelete() == 0).collect(Collectors.toList());
 
-                zlHotel.setZlNews(collect);
+                zlHotel.setZlNews(zlNewsCollect);
             }
             //获取客房数据
             zlHotel.setHotelRoom(zlHotelroom);
