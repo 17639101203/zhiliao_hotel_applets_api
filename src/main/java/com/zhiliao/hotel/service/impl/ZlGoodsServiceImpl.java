@@ -6,6 +6,7 @@ import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.goods.vo.EsGoods;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
+import com.zhiliao.hotel.controller.goods.vo.GoodsSkuListVo;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsCouponInfoVO;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsShortInfoVO;
 import com.zhiliao.hotel.mapper.*;
@@ -60,8 +61,8 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
     }
 
     @Override
-    public List<Map<String, Object>> findGoodsSkuList(Integer goodsId) {
-        return zlGoodsMapper.findGoodsSkuList(goodsId);
+    public List<GoodsSkuListVo> findGoodsSkuList(Integer hotelGoodsSkuId) {
+        return zlGoodsMapper.findGoodsSkuList(hotelGoodsSkuId);
     }
 
     @Override

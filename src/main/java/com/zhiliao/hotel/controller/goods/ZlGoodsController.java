@@ -6,6 +6,7 @@ import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.goods.vo.EsGoods;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
+import com.zhiliao.hotel.controller.goods.vo.GoodsSkuListVo;
 import com.zhiliao.hotel.service.ZlGoodsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -81,7 +82,6 @@ public class ZlGoodsController {
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "String", required = true, value = "页码"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "String", required = true, value = "每页大小"),
             @ApiImplicitParam(paramType = "query", name = "categoryName", dataType = "String", required = true, value = "分类名称（all代表全部）")
-
     })
     @UserLoginToken
     @GetMapping("findGoodsList/{hotelId}/{belongModule}/{pageNo}/{pageSize}")
@@ -100,18 +100,25 @@ public class ZlGoodsController {
 
     @ApiOperation(value = "获取商品规格_谢辉益")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id")
+            @ApiImplicitParam(paramType = "path", name = "hotelGoodsSkuId", dataType = "String", required = true, value = "酒店商品skuId")
     })
     @UserLoginToken
-    @GetMapping("findGoodsSkuList/{goodsId}")
-    public ReturnString<List<Map<String, Object>>> findGoodsSkuList(@PathVariable Integer goodsId) {
+    @GetMapping("findGoodsSkuList/{hotelGoodsSkuId}")
+    public ReturnString<List<Map<String, Object>>> findGoodsSkuList(@PathVariable Integer hotelGoodsSkuId) {
         try {
-            logger.info("开始请求->参数->商品id：" + goodsId);
-            List<Map<String, Object>> goodsSkuList = zlGoodsService.findGoodsSkuList(goodsId);
-            return new ReturnString<>(goodsSkuList);
+            logger.info("开始请求->参数->酒店商品skuId：" + hotelGoodsSkuId);
+            List<GoodsSkuListVo> goodsSkuList = zlGoodsService.findGoodsSkuList(hotelGoodsSkuId);
+            List<String> propertyNameList = new ArrayList<>();
+            for (GoodsSkuListVo goodsSkuListVo : goodsSkuList) {
+                propertyNameList.add(goodsSkuListVo.getPropertyName());
+            }
+            Map<String, Object> dataMap = new HashMap<>(2);
+            dataMap.put("propertyNameList", propertyNameList);
+            dataMap.put("goodsSkuList", goodsSkuList);
+            return new ReturnString(dataMap);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString<>("获取出错");
+            return new ReturnString("获取商品规格出错!");
         }
     }
 

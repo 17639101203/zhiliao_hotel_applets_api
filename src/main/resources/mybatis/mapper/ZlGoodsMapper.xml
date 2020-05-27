@@ -41,21 +41,19 @@
         order by zg.Sort asc
     </select>
 
-    <select id="findGoodsSkuList" resultType="java.util.LinkedHashMap">
+    <select id="findGoodsSkuList" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsSkuListVo">
         select
-            zgs.GoodsID,
-            zgs.SkuID,
+            zhgs.HotelGoodsSkuID,
+            zgp.PropertyName,
             zgs.OriginalPrice,
             zgs.CurrentPrice,
-            zgs.StockCount,
-            zgs.SoldCount,
-            zgs.VirtualSoldCount,
-            zgp.PropertyName,
-            zgs.IsDefault
-        from zl_goodssku zgs
-        left join zl_goodsproperty zgp on zgs.PropertyIDs=zgp.PropertyID
-        where zgs.GoodsID=#{goodsId} and zgs.IsDelete=0 and zgp.IsDelete=0
-        order by zgs.CreateDate desc
+            zhgs.StockCount
+        from zl_hotelgoodssku zhgs
+        left join zl_goodssku zgs on zhgs.SkuID=zgs.SkuID
+        left join zl_goodsproperty zgp on zgs.PropertyID=zgp.PropertyID
+        where zhgs.IsDelete=0 and zgp.IsDelete=0
+        and zhgs.GoodsID=(select a.GoodsID from zl_hotelgoodssku a where a.HotelGoodsSkuID=#{hotelGoodsSkuId})
+        order by zgp.PropertyName desc
     </select>
 
     <!--根据商品id商品详情数据-->
