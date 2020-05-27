@@ -61,7 +61,7 @@ public class ZlCleanOrderController {
 
 
     @ApiOperation(value = "查询清扫订单详情")
-    @PostMapping("selectCleanDetails/{serialnumber}")
+    @GetMapping("selectCleanDetails/{serialnumber}")
     @UserLoginToken
     public ReturnString<Map<String, Object>> selectCleanDetails(HttpServletRequest request, @PathVariable("serialnumber") String serialnumber) {
 

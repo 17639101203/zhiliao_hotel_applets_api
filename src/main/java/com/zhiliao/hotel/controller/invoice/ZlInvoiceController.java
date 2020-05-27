@@ -4,6 +4,7 @@ import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderParam;
+import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceParam;
 import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.model.ZlInvoiceOrder;
@@ -39,9 +40,9 @@ public class ZlInvoiceController {
     private final static int MAX_PAGE_SIZE = 20;
 
 
-    @ApiOperation(value = "保存发票抬头（待修改）")
+    @ApiOperation(value = "保存/修改发票抬头")
     @UserLoginToken
-    @PostMapping("addinvoice")
+    @PostMapping("addInvoice")
     public ReturnString addInvoice(@RequestBody InvoiceParam ip, HttpServletRequest request) {
         ZlInvoice invoice = new ZlInvoice();
         // 解析token获取userid
@@ -71,6 +72,7 @@ public class ZlInvoiceController {
             }
             return new ReturnString<>(-1, "开票类型错误，请重新再试!");
         }else if(ip.getSaveType().equals("2")){ //保存类型为修改
+            invoice.setInvoiceid(ip.getInvoiceid());    // 发票ID
             service.changeInvoice(invoice);
             return new ReturnString<>(0, "发票抬头修改成功");
         }
@@ -78,10 +80,10 @@ public class ZlInvoiceController {
     }
 
 
-    @ApiOperation(value = "开具发票")
+    @ApiOperation(value = "开具发票订单")
     @UserLoginToken
-    @PostMapping("addinvoiceOrder")
-    public ReturnString<Map<String,Object>> addinvoiceOrder(@RequestBody InvoiceOrderParam ip, HttpServletRequest request) {
+    @PostMapping("addInvoiceOrder")
+    public ReturnString<Map<String,Object>> addInvoiceOrder(@RequestBody InvoiceOrderParam ip, HttpServletRequest request) {
         ZlInvoiceOrder invoice = new ZlInvoiceOrder();
         Map<String,Object> map = new HashMap<>();
         // 解析token获取userid
@@ -121,8 +123,8 @@ public class ZlInvoiceController {
 
     @ApiOperation(value = "查询发票抬头")
     @UserLoginToken
-    @GetMapping("findinvoice/{hotelid}/{pageNo}/{pageSize}")
-    public ReturnString findInvoice(HttpServletRequest request, @PathVariable Integer hotelid,
+    @GetMapping("findInvoiceHeads/{hotelid}/{pageNo}/{pageSize}")
+    public ReturnString findInvoiceHeads(HttpServletRequest request, @PathVariable Integer hotelid,
                                     @PathVariable Integer pageNo, @PathVariable Integer pageSize) {
         // 判断是否有商家自带的开票二维码
         Map<String, Object> invoiceQrCodeUrlmap = service.findInvoiceQrCodeUrl(hotelid);
@@ -141,8 +143,8 @@ public class ZlInvoiceController {
 
     @ApiOperation(value = "删除发票抬头")
     @UserLoginToken
-    @GetMapping("deleteinvoice/{invoiceid}")
-    public ReturnString delete(HttpServletRequest request, @PathVariable Integer invoiceid) {
+    @PostMapping("deleteInvoice/{invoiceid}")
+    public ReturnString deleteInvoice(HttpServletRequest request, @PathVariable Integer invoiceid) {
             // 解析token获取userid
             Long userid = TokenUtil.getUserId(request.getHeader("token"));
                 service.deleteInvoice(userid, invoiceid);
@@ -150,14 +152,43 @@ public class ZlInvoiceController {
     }
 
 
-    @ApiOperation(value = "查询发票详情")
+    @ApiOperation(value = "查询发票抬头详情")
     @UserLoginToken
-    @GetMapping("findinvoicedetails/{invoiceid}")
-    public ReturnString<Map<String,Object>> findinvoicedetails(HttpServletRequest request, @PathVariable Integer invoiceid) {
+    @GetMapping("findInvoiceDetails/{invoiceid}")
+    public ReturnString<Map<String,Object>> findInvoiceDetails(HttpServletRequest request, @PathVariable Integer invoiceid) {
         // 解析token获取userid
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
         Map<String,Object> map = service.findinvoicedetails(userid, invoiceid);
             return new ReturnString<>(map);
     }
+
+
+    @ApiOperation(value = "查询发票订单详情")
+    @UserLoginToken
+    @GetMapping("findInvoiceOrderDetails")
+    public ReturnString<InvoiceOrderVO> findInvoiceOrderDetails(HttpServletRequest request, String invoiceordernumber) {
+        if(invoiceordernumber == null || "".equals(invoiceordernumber)){
+            return new ReturnString<>(-1,"订单编号为空，请重新再试");
+        }
+        // 解析token获取userid
+        Long userid = TokenUtil.getUserId(request.getHeader("token"));
+        InvoiceOrderVO vo = service.findInvoiceOrderdetail(userid,invoiceordernumber);
+        return new ReturnString<>(vo);
+    }
+
+
+    @ApiOperation(value = "取消开票订单预约")
+    @PostMapping("cancelInvoiceOrder")
+    @UserLoginToken
+    public ReturnString cancelInvoiceOrder(HttpServletRequest request,String invoiceordernumber) {
+        if(invoiceordernumber == null || "".equals(invoiceordernumber)){
+            return new ReturnString<>(-1,"订单编号为空，请重新再试");
+        }
+        Integer nowTime = DateUtils.javaToPhpNowDateTime();
+        Long userid = TokenUtil.getUserId(request.getHeader("token"));
+        service.cancelInvoiceOrder(userid,invoiceordernumber,nowTime);
+        return new ReturnString<>(0,"预约已取消");
+    }
+
 
 }

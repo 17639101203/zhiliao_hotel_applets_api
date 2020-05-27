@@ -158,4 +158,27 @@
       </if>
     </trim>
   </insert>
+
+  <!--  查询发票订单详情-->
+  <select id="queryInvoiceOrderdetail" resultType="com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO">
+        select
+           InvoiceType,MainBodyType,ElectronicPaperType,Title,
+           Identifier,Tel,Remark,InvoiceStatus,Bank,BankAccountNumber,
+           CompanyTel,CompanyAddress,InvoiceOrderNumber,CreateDate,UpdateDate
+        from
+            zl_invoiceorder
+        where
+            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and InvoiceOrderNumber=#{invoiceordernumber,jdbcType=INTEGER}
+    </select>
+
+
+<!--  取消预约开票-->
+  <update id="removeInvoiceOrder">
+    update
+        zl_invoiceorder
+    set
+        InvoiceStatus="-1" , UpdateDate = #{updatedate,jdbcType=INTEGER}
+    where
+        UserID = #{userid,jdbcType=BIGINT} AND InvoiceOrderNumber=#{invoiceordernumber,jdbcType=INTEGER} AND IsDelete = 0
+  </update>
 </mapper>

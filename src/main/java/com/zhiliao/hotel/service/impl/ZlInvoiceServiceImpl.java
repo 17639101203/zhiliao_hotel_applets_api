@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
+import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
 import com.zhiliao.hotel.mapper.ZlInvoiceMapper;
 import com.zhiliao.hotel.mapper.ZlInvoiceOrderMapper;
 import com.zhiliao.hotel.model.ZlInvoice;
@@ -68,6 +69,16 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     @Override
     public void changeInvoice(ZlInvoice zlInvoice) {
         mapper.updateInvoiceMsg(zlInvoice);
+    }
+
+    @Override
+    public InvoiceOrderVO findInvoiceOrderdetail(Long userid, String invoiceordernumber) {
+        return orderMapper.queryInvoiceOrderdetail(userid,invoiceordernumber);
+    }
+
+    @Override
+    public void cancelInvoiceOrder(Long userid, String invoiceordernumber, Integer updatedate) {
+        orderMapper.removeInvoiceOrder(userid,invoiceordernumber,updatedate);
     }
 
 }

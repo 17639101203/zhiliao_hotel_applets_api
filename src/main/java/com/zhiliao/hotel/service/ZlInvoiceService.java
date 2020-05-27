@@ -1,8 +1,10 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
 import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.model.ZlInvoiceOrder;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -62,6 +64,24 @@ public interface ZlInvoiceService {
      * @param zlInvoice
      */
     void changeInvoice(ZlInvoice zlInvoice);
+
+
+    /**
+     * 查询开票订单详情
+     * @param userid
+     * @param invoiceordernumber
+     * @return
+     */
+    InvoiceOrderVO findInvoiceOrderdetail(Long userid,String invoiceordernumber);
+
+
+    /**
+     * 取消开票预约
+     * @param userid
+     * @param invoiceordernumber
+     * @param updatedate
+     */
+    void cancelInvoiceOrder(Long userid,String invoiceordernumber, Integer updatedate);
 }
 
 

@@ -70,7 +70,7 @@ public class ZlRepairController {
 
 
     @ApiOperation(value = "查询报修订单详情")
-    @PostMapping("findRepairOrder/{serialnumber}")
+    @GetMapping("findRepairOrder/{serialnumber}")
     @UserLoginToken
     public ReturnString<Map<String,Object>> findRepairOrder(HttpServletRequest request,@PathVariable("serialnumber") String serialnumber) {
             Long userid = TokenUtil.getUserId(request.getHeader("token"));
