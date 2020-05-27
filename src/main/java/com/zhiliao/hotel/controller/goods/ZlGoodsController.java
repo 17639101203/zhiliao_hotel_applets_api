@@ -4,10 +4,12 @@ import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.goods.vo.EsGoods;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.controller.goods.vo.GoodsSkuListVo;
 import com.zhiliao.hotel.service.ZlGoodsService;
+import com.zhiliao.hotel.utils.RedisCommonUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -36,9 +38,12 @@ public class ZlGoodsController {
 
     private final ZlGoodsService zlGoodsService;
 
+    private final RedisCommonUtil redisCommonUtil;
+
     @Autowired
-    public ZlGoodsController(ZlGoodsService zlGoodsService) {
+    public ZlGoodsController(ZlGoodsService zlGoodsService, RedisCommonUtil redisCommonUtil) {
         this.zlGoodsService = zlGoodsService;
+        this.redisCommonUtil = redisCommonUtil;
     }
 
     @ApiOperation(value = "获取商品分类_谢辉益")
@@ -112,6 +117,10 @@ public class ZlGoodsController {
             List<String> propertyNameList = new ArrayList<>();
             for (GoodsSkuListVo goodsSkuListVo : goodsSkuList) {
                 propertyNameList.add(goodsSkuListVo.getPropertyName());
+                // 获取酒店商品sku锁定库存
+                Integer lockingStock = (Integer) redisCommonUtil.getCache(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + goodsSkuListVo.getHotelGoodsSkuId());
+                lockingStock = lockingStock == null ? 0 : lockingStock;
+                goodsSkuListVo.setStockCount(goodsSkuListVo.getStockCount() - lockingStock);
             }
             Map<String, Object> dataMap = new HashMap<>(2);
             dataMap.put("propertyNameList", propertyNameList);
