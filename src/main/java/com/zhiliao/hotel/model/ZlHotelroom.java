@@ -9,6 +9,11 @@ import java.io.Serializable;
  * @date 2020-04-14
  */
 public class ZlHotelroom implements Serializable {
+
+
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * 
      */
@@ -60,9 +65,9 @@ public class ZlHotelroom implements Serializable {
     private String serialnumber;
 
     /**
-     * 是否是房间 0否;1是
+     * 是否是房间 0前台;1房间
      */
-    private Boolean isroom;
+    private Boolean roomTypeFlag;
 
     /**
      * 
@@ -78,9 +83,6 @@ public class ZlHotelroom implements Serializable {
      * 创建时间
      */
     private Integer createdate;
-
-
-    private static final long serialVersionUID = 1L;
 
 
     public Integer getRoomid() {
@@ -125,6 +127,14 @@ public class ZlHotelroom implements Serializable {
 
     public String getRoomnumber() {
         return roomnumber;
+    }
+
+    public Boolean getRoomTypeFlag() {
+        return roomTypeFlag;
+    }
+
+    public void setRoomTypeFlag(Boolean roomTypeFlag) {
+        this.roomTypeFlag = roomTypeFlag;
     }
 
 
@@ -185,14 +195,6 @@ public class ZlHotelroom implements Serializable {
     }
 
 
-    public Boolean getIsroom() {
-        return isroom;
-    }
-
-
-    public void setIsroom(Boolean isroom) {
-        this.isroom = isroom;
-    }
 
 
     public String getIsdelete() {
@@ -241,7 +243,7 @@ public class ZlHotelroom implements Serializable {
         sb.append(", wifipwd=").append(wifipwd);
         sb.append(", roomstatus=").append(roomstatus);
         sb.append(", serialnumber=").append(serialnumber);
-        sb.append(", isroom=").append(isroom);
+        sb.append(", roomTypeFlag=").append(roomTypeFlag);
         sb.append(", isdelete=").append(isdelete);
         sb.append(", updatedate=").append(updatedate);
         sb.append(", createdate=").append(createdate);

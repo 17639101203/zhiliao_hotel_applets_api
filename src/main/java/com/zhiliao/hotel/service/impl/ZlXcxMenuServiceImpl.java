@@ -33,7 +33,10 @@ public class ZlXcxMenuServiceImpl implements ZlXcxMenuService {
                     Collectors.collectingAndThen(
                             Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(ZlXcxmenu::getMenuname))), ArrayList::new)
             );
-            return zlXcxMenuArrayList;
+
+            List<ZlXcxmenu> collect = zlXcxMenuArrayList.stream().filter(a -> a.getIsdelete()==0).collect(Collectors.toList());
+
+            return collect;
         }
         return Lists.newArrayList();
     }

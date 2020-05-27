@@ -1,7 +1,8 @@
 package com.zhiliao.hotel.controller.hotel;
 
 import com.zhiliao.hotel.common.*;
-import com.zhiliao.hotel.model.ZlHotelUserHistory;
+import com.zhiliao.hotel.model.ZlHotelRoomQrcode;
+import com.zhiliao.hotel.service.ZlHotelRoomQrcodeService;
 import com.zhiliao.hotel.service.ZlHotelService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -28,16 +29,22 @@ public class ZlHotelController {
     @Resource
     private ZlHotelService zlHotelService;
 
+    @Resource
+    private ZlHotelRoomQrcodeService zlHotelRoomQrcodeService;
+
     @ApiOperation(value = "陈荣_首页")
     @UserLoginToken
     @GetMapping("getHotelList")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "String", required = true, value = "酒店ID"),
-            @ApiImplicitParam(paramType = "query", name = "roomId", dataType = "String", required = false, value = "客房ID"),
+            @ApiImplicitParam(paramType = "query", name = "codeId", dataType = "String", required = true, value = "二维码ID"),
     })
-    public ReturnString getHotelList(String hotelId, String roomId, HttpServletRequest request) {
+    public ReturnString getHotelList(String codeId, HttpServletRequest request) {
         String token = request.getHeader("token");
-        return zlHotelService.getById(hotelId, roomId, token);
+        ZlHotelRoomQrcode roomQrcodeId = zlHotelRoomQrcodeService.getRoomQrcodeId(codeId);
+        if(roomQrcodeId!=null){
+            return  zlHotelService.getById(String.valueOf(roomQrcodeId.getHotelID()),String.valueOf(roomQrcodeId.getRoomID()), token);
+        }
+        return new ReturnString("二维码不存在,请联系管理员");
     }
 
     @ApiOperation(value = "高翔_获取入住酒店历史")

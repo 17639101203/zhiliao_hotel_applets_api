@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiliao.hotel.mapper.ZlHotelRoomQrcodeMapper">
+
+    <select id="getRoomQrcodeId" resultType="com.zhiliao.hotel.model.ZlHotelRoomQrcode">
+
+        select  QrCodeID,QrCodeUrl,HotelID,RoomID,SerialNumber,UseDate,Status from zl_hotelroomqrcode
+         where Status=1 and IsBind=1 and IsDelete=0 and QrCodeID=#{codeId}
+    </select>
+</mapper>

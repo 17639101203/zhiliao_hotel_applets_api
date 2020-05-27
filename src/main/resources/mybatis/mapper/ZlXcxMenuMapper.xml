@@ -5,14 +5,16 @@
 <mapper namespace="com.zhiliao.hotel.mapper.ZlXcxMenuMapper">
 
     <sql id="selectColumn">
-      MenuID,HotelID,ParentID,MenuName,IconUrl,HaveBanner,ServiceOpenTime,MenuStatus,ComeFromID,ServiceTime,LinkUrl,IsFrontendShow
+      MenuID,HotelID,ParentID,MenuName,IconUrl,HaveBanner,ServiceOpenTime,MenuStatus,ComeFromID,ServiceTime,LinkUrl,IsFrontendShow,IsDelete
     </sql>
 
     <select id="getMenuList" resultType="com.zhiliao.hotel.model.ZlXcxmenu">
 
         select  <include refid="selectColumn"/>
         from zl_xcxmenu zl where (zl.HotelID=#{hotelId} and MenuStatus=1
-        and IsDelete=0 and ComeFromID=1 ) or (HotelID=0 and ParentID=0) order by CreateDate desc
+         and ComeFromID=1 )
+             or (HotelID=0 and ParentID=0)
+          and IsFrontendShow=1 and IsDelete=0  order by CreateDate desc
 
     </select>
 

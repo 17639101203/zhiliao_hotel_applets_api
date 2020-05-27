@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -61,25 +62,20 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 //根据酒店id，客房id
                 zlHotelroom = zlHotelRoomMapper.getById(roomId, hotelId);
                 if (zlHotelroom != null) {
-                    //判断房间是否被绑定
-                    if (zlHotelroom.getRoomstatus() == 1) {
-                        return new ReturnString("该房号已被绑定");
-                    }
 
                     if (!StringUtils.isEmpty(token)) {
                         //获取 token得到微信用户Id
                         Long weiXinUserId = TokenUtil.getUserId(token);
                         if (weiXinUserId != null) {
-                            //客房状态改变为已被绑定
-                            zlHotelRoomMapper.updateById(roomId);
-
-                            //客房扫描率录入
-                            addZlUserLoginLog(weiXinUserId, Integer.valueOf(roomId), zlHotelroom.getRoomnumber());
+                                //客房扫描率录入
+                                addZlUserLoginLog(weiXinUserId, Integer.valueOf(roomId), zlHotelroom.getRoomnumber());
                         }
                     }
                 }
+
             }
-            ZlHotelIn zlHotel = new ZlHotelIn(zlHotelMapper.getById(hotelId));
+            ZlHotel byId = zlHotelMapper.getById(hotelId);
+            ZlHotelIn zlHotel = new ZlHotelIn(byId);
             if (zlHotel != null) {
                 //获取缓存value
                 String bannerValue = (String) redisCommonUtil.getCache(RedisKeyConstant.BANNER_KEY + ":" + hotelId);
@@ -102,8 +98,17 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 zlHotel.setZlXcxMenus(zlXcxMenuList);
 
                 //根据酒店Id获取公告
-                List<ZlNews> zlNews = zlNewsMapper.findAllJiuDianId(zlHotel.getHotelID(), 1, 1);
-                zlHotel.setZlNews(zlNews);
+                List<ZlNews> zlNews = zlNewsMapper.getNewsByHotel(String.valueOf(zlHotel.getHotelID()));
+
+                List<ZlNews> zlNewsList = zlNews.stream().collect(
+                        Collectors.collectingAndThen(
+                                Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(ZlNews::getContent))), ArrayList::new)
+                );
+
+
+                List<ZlNews> collect = zlNewsList.stream().filter(a -> a.getType() == 1 && a.getIsDelete() == 0).collect(Collectors.toList());
+
+                zlHotel.setZlNews(collect);
             }
             //获取客房数据
             zlHotel.setHotelRoom(zlHotelroom);

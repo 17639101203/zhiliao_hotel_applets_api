@@ -99,6 +99,16 @@ public class ZlNews implements Serializable {
      */
     private String hotelName;
 
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    private Integer isDelete;
+
     public String getHotelName() {
         return hotelName;
     }

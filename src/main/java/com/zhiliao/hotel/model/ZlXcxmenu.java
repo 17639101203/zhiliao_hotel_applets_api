@@ -77,7 +77,7 @@ public class ZlXcxmenu implements Serializable {
     /**
      * 删除状态:0正常;1删除;
      */
-    private Boolean isdelete;
+    private Integer isdelete;
 
     /**
      * 添加时间
@@ -369,7 +369,7 @@ public class ZlXcxmenu implements Serializable {
      *
      * @mbg.generated Tue Apr 14 11:13:59 CST 2020
      */
-    public Boolean getIsdelete() {
+    public Integer getIsdelete() {
         return isdelete;
     }
 
@@ -381,7 +381,7 @@ public class ZlXcxmenu implements Serializable {
      *
      * @mbg.generated Tue Apr 14 11:13:59 CST 2020
      */
-    public void setIsdelete(Boolean isdelete) {
+    public void setIsdelete(Integer isdelete) {
         this.isdelete = isdelete;
     }
 
