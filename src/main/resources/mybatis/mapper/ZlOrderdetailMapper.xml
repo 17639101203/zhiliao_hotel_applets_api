@@ -36,4 +36,17 @@
             AND BelongModule = #{belongModule})
     </update>
 
+    <update id="autoUpdateOrderDetailUpdateDate">
+        UPDATE
+          zl_orderdetail
+        SET
+          UpdateDate = #{updateDate}
+        WHERE OrderID in
+          (SELECT
+            OrderID
+          FROM
+            zl_order
+          WHERE OrderSerialNo = #{out_trade_no}
+    </update>
+
 </mapper>

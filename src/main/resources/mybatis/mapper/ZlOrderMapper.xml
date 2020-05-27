@@ -96,4 +96,12 @@
           AND BelongModule = #{belongModule}
     </update>
 
+    <update id="autoUpdateOrderUpdateDate">
+        UPDATE
+          zl_order
+        SET
+          UpdateDate = #{updateDate}
+        WHERE OrderSerialNo = #{out_trade_no}
+    </update>
+
 </mapper>

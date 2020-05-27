@@ -347,6 +347,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
         } else {
             redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no, goodsShortInfoVOList);
         }
+
         Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
         //修改数据库支付/取消时间
         zlOrderMapper.updateOrderUpdateDate(out_trade_no, belongModule, updateDate);
@@ -393,6 +394,11 @@ public class ZlOrderServiceIml implements ZlOrderService {
         }
         //删除redis中锁定的订单商品
         redisTemplate.delete(RedisKeyConstant.ORDER_ORDERSERIALNO + out_trade_no);
+
+        Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
+        //修改数据库支付/取消时间
+        zlOrderMapper.autoUpdateOrderUpdateDate(out_trade_no, updateDate);
+        zlOrderDetailMapper.autoUpdateOrderDetailUpdateDate(out_trade_no, updateDate);
 
         //拿出存入redis的订单商品所使用的优惠券的集合
         if (redisTemplate.hasKey(RedisKeyConstant.ORDER_RECID_ORDERSERIALNO + out_trade_no)) {
