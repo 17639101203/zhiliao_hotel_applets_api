@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
+import com.zhiliao.hotel.controller.couponuser.result.ZlCouponUserResult;
 import com.zhiliao.hotel.mapper.ZlCouponUserMapper;
 import com.zhiliao.hotel.model.ZlCouponUser;
 import com.zhiliao.hotel.service.ZlCouponUserService;
@@ -35,40 +36,37 @@ public class ZlCouponUserServiceImpl implements ZlCouponUserService {
      * @return
      */
     @Override
-    public List<ZlCouponUser> listCouponUser(Long userId, Integer pageNo, Integer pageSize) {
+    public List<ZlCouponUserResult> listCouponUser(Long userId, Integer pageNo, Integer pageSize) {
 
         //当前时间
         Integer date = Math.toIntExact(System.currentTimeMillis() / 1000);
         System.out.println(date);
 
         //查询有效优惠卷
-        List<ZlCouponUser> effective = couponUserMapper.effectiveCouponUser(userId, date);
+        List<ZlCouponUserResult> effective = couponUserMapper.effectiveCouponUser(userId, date);
         //已使用的优惠卷
-        List<ZlCouponUser> used = couponUserMapper.usedCouponUser(userId);
+        List<ZlCouponUserResult> used = couponUserMapper.usedCouponUser(userId);
         //已过期
-        List<ZlCouponUser> beOverdue = couponUserMapper.beOverdue(userId, date);
+        List<ZlCouponUserResult> beOverdue = couponUserMapper.beOverdue(userId, date);
         //总集合
         PageHelper.startPage(pageNo, pageSize);
-        List<ZlCouponUser> couponUserList = new LinkedList<>();
-        for (ZlCouponUser zlCouponUser : effective) {
+        List<ZlCouponUserResult> couponUserList = new LinkedList<>();
+        for (ZlCouponUserResult zlCouponUser : effective) {
             couponUserList.add(zlCouponUser);
         }
-        for (ZlCouponUser zlCouponUser : used) {
+        for (ZlCouponUserResult zlCouponUser : used) {
             couponUserList.add(zlCouponUser);
         }
-        for (ZlCouponUser zlCouponUser : beOverdue) {
+        for (ZlCouponUserResult zlCouponUser : beOverdue) {
             couponUserList.add(zlCouponUser);
-        }
-        for (int i = 0; i < couponUserList.size(); i++) {
-            System.out.println(couponUserList.get(i));
         }
         //集合分页
-        List<ZlCouponUser> list = new LinkedList<>();
+        List<ZlCouponUserResult> list = new LinkedList<>();
 
         int index = (pageNo-1)* pageSize  < couponUserList.size()?(pageNo-1)* pageSize:couponUserList.size();
         int dx = (pageNo-1)* pageSize + pageSize > couponUserList.size() ? couponUserList.size():(pageNo-1)* pageSize  + pageSize;
         for (int i = index; i < dx; i++) {
-            ZlCouponUser zlCouponUser = couponUserList.get(i);
+            ZlCouponUserResult zlCouponUser = couponUserList.get(i);
             list.add(zlCouponUser);
         }
 
@@ -83,7 +81,7 @@ public class ZlCouponUserServiceImpl implements ZlCouponUserService {
      */
     @Override
     public Integer count(Long userId) {
-        List<ZlCouponUser> effective = getZlCouponUsers(userId);
+        List<ZlCouponUserResult> effective = getZlCouponUsers(userId);
         return effective.size();
     }
 
@@ -97,8 +95,8 @@ public class ZlCouponUserServiceImpl implements ZlCouponUserService {
     public PageInfoResult effective(Long userId, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo, pageSize);
         //当前时间
-        List<ZlCouponUser> effective = getZlCouponUsers(userId);
-        PageInfo<ZlCouponUser> pageInfo = new PageInfo<>(effective);
+        List<ZlCouponUserResult> effective = getZlCouponUsers(userId);
+        PageInfo<ZlCouponUserResult> pageInfo = new PageInfo<>(effective);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
@@ -108,11 +106,11 @@ public class ZlCouponUserServiceImpl implements ZlCouponUserService {
      * @param userId
      * @return
      */
-    private List<ZlCouponUser> getZlCouponUsers(Long userId) {
+    private List<ZlCouponUserResult> getZlCouponUsers(Long userId) {
         //当前时间
         Integer date = Math.toIntExact(System.currentTimeMillis() / 1000);
         //查询有效优惠卷
-        List<ZlCouponUser> effective = couponUserMapper.effectiveCouponUser(userId, date);
+        List<ZlCouponUserResult> effective = couponUserMapper.effectiveCouponUser(userId, date);
         if (effective != null) {
             for (int i = 0; i < effective.size(); i++) {
                 Integer recid = effective.get(i).getRecid();

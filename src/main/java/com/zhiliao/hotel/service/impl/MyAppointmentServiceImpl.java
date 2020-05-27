@@ -30,12 +30,6 @@ import java.util.Map;
 @Service
 public class MyAppointmentServiceImpl implements MyAppointmentService {
 
-    private final ZlCleanOrderMyMapper zlCleanOrderMyMapper;
-
-    private final ZlInvoiceMyMapper zlInvoiceMyMapper;
-
-    private final ZlRepairorderMyMapper zlRepairorderMyMapper;
-
     private final ZlCleanOrderMapper cleanOrderMapper;
 
     private final ZlInvoiceMapper invoiceMapper;
@@ -44,14 +38,15 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     private ZlHotelFacilityOrderService facilityOrderService;
 
     @Autowired
-    private ZlServiceorderMyMapper serviceorderMyMapper;
+    private ZlServiceorderMapper serviceorderMapper;
+    @Autowired
+    private ZlRepairorderMapper repairorderMapper;
+    @Autowired
+    private MyAppointmentMapper myAppointmentMapper;
 
 
     @Autowired
-    public MyAppointmentServiceImpl(ZlCleanOrderMyMapper zlCleanOrderMyMapper,ZlInvoiceMapper invoiceMapper, ZlCleanOrderMapper cleanOrderMapper,ZlInvoiceMyMapper zlInvoiceMyMapper, ZlRepairorderMyMapper zlRepairorderMyMapper) {
-        this.zlCleanOrderMyMapper = zlCleanOrderMyMapper;
-        this.zlInvoiceMyMapper = zlInvoiceMyMapper;
-        this.zlRepairorderMyMapper = zlRepairorderMyMapper;
+    public MyAppointmentServiceImpl(ZlInvoiceMapper invoiceMapper, ZlCleanOrderMapper cleanOrderMapper) {
         this.cleanOrderMapper = cleanOrderMapper;
         this.invoiceMapper = invoiceMapper;
     }
@@ -67,7 +62,7 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     @Override
     public PageInfoResult cleanFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
-        List<ZlCleanOrder> cleanorders = zlCleanOrderMyMapper.findAllByStatus(userId,orderstatus);
+        List<ZlCleanOrder> cleanorders = myAppointmentMapper.findAllClean(userId,orderstatus);
         PageInfo<ZlCleanOrder> pageInfo = new PageInfo<>(cleanorders);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
@@ -85,7 +80,7 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     @Override
     public PageInfoResult invoiceFindAll(Long userId, Integer invoicestatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
-        List<ZlInvoice> invoices = zlInvoiceMyMapper.findAllByUserId(userId,invoicestatus);
+        List<ZlInvoice> invoices = myAppointmentMapper.findAllInvoice(userId,invoicestatus);
         PageInfo<ZlInvoice> pageInfo = new PageInfo<>(invoices);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
@@ -105,7 +100,7 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     @Override
     public PageInfoResult repairFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
-        List<ZlRepairorder> repairOrders = zlRepairorderMyMapper.findAllByUserId(userId,orderstatus);
+        List<ZlRepairorder> repairOrders = myAppointmentMapper.findAllRepair(userId,orderstatus);
         PageInfo<ZlRepairorder> pageInfo = new PageInfo<>(repairOrders);
 
         return PageInfoResult.getPageInfoResult(pageInfo);
@@ -122,7 +117,7 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     @Override
     public PageInfoResult serviceFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
-        List<ZlServiceorderResult> results = serviceorderMyMapper.serviceFindAll(userId,orderstatus);
+        List<ZlServiceorderResult> results = myAppointmentMapper.serviceFindAll(userId,orderstatus);
         PageInfo<ZlServiceorderResult> pageInfo = new PageInfo<>(results);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
@@ -164,11 +159,11 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     public void cancelRepairOrder(Long orderid) {
         ZlRepairorder zlRepairorder = new ZlRepairorder();
         zlRepairorder.setOrderid(orderid);
-        ZlRepairorder repairorder = zlRepairorderMyMapper.selectOne(zlRepairorder);
+        ZlRepairorder repairorder = repairorderMapper.selectOne(zlRepairorder);
         if (repairorder != null){
             repairorder.setOrderstatus((byte) -1);
             repairorder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
-            zlRepairorderMyMapper.updateByPrimaryKeySelective(repairorder);
+            repairorderMapper.updateByPrimaryKeySelective(repairorder);
         }
     }
 
@@ -209,11 +204,11 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     public void canceServiceOrder(Long orderid){
         ZlServiceorder serviceorder = new ZlServiceorder();
         serviceorder.setOrderid(orderid);
-        ZlServiceorder order = serviceorderMyMapper.selectOne(serviceorder);
+        ZlServiceorder order = serviceorderMapper.selectOne(serviceorder);
         if (serviceorder != null){
             order.setOrderstatus((byte) -1);
             order.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
-            serviceorderMyMapper.updateByPrimaryKeySelective(order);
+            serviceorderMapper.updateByPrimaryKeySelective(order);
         }
 
     }

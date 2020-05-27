@@ -19,10 +19,22 @@
   </resultMap>
 
   <!--已使用优惠卷-->
-  <select id="usedCouponUser" resultType="com.zhiliao.hotel.model.ZlCouponUser">
+  <select id="usedCouponUser" resultType="com.zhiliao.hotel.controller.couponuser.result.ZlCouponUserResult">
     select
-      cu.*,c.CouponName couponname
-    from zl_couponuser cu,zl_coupon c
+      cu.RecID,
+      cu.UserID,
+      cu.CouponID,
+      cu.IsUsed,
+      cu.ExpiredDate,
+      cu.CreateDate,
+      c.CouponName couponname,
+      c.MinMoney minMoney,
+      c.DiscountMoney discountMoney,
+      c.LimitCategoryType limitCategoryType,
+      c.LimitDateType limitDateType,
+      c.BelongModule belongModule
+    from
+      zl_couponuser cu,zl_coupon c
     where
       cu.UserID = #{userId}
     and
@@ -31,6 +43,10 @@
       cu.IsDelete = 0
     and
       cu.IsUsed = 1
+    and
+      c.CouponStatus = 1
+    and
+      c.IsDelete = 0
     order by cu.CreateDate DESC
   </select>
 
@@ -39,9 +55,20 @@
     select count (id) from zl_couponuser where UserID = #{userId} and ExpiredDate > #{newDate} and IsUsed = 0 and IsDelete = 0
   </select>-->
   <!--有效优惠卷-->
-  <select id="effectiveCouponUser" resultType="com.zhiliao.hotel.model.ZlCouponUser">
+  <select id="effectiveCouponUser" resultType="com.zhiliao.hotel.controller.couponuser.result.ZlCouponUserResult">
     select
-      cu.*,c.CouponName couponname
+      cu.RecID,
+      cu.UserID,
+      cu.CouponID,
+      cu.IsUsed,
+      cu.ExpiredDate,
+      cu.CreateDate,
+      c.CouponName couponname,
+      c.MinMoney minMoney,
+      c.DiscountMoney discountMoney,
+      c.LimitCategoryType limitCategoryType,
+      c.LimitDateType limitDateType,
+      c.BelongModule belongModule
     from zl_couponuser cu,zl_coupon c
     where
       cu.UserID = #{userId}
@@ -56,9 +83,20 @@
     order by cu.CreateDate DESC
   </select>
   <!--过期优惠卷-->
-  <select id="beOverdue" resultType="com.zhiliao.hotel.model.ZlCouponUser">
+  <select id="beOverdue" resultType="com.zhiliao.hotel.controller.couponuser.result.ZlCouponUserResult">
     select
-      cu.*,c.CouponName couponname
+      cu.RecID,
+      cu.UserID,
+      cu.CouponID,
+      cu.IsUsed,
+      cu.ExpiredDate,
+      cu.CreateDate,
+      c.CouponName couponname,
+      c.MinMoney minMoney,
+      c.DiscountMoney discountMoney,
+      c.LimitCategoryType limitCategoryType,
+      c.LimitDateType limitDateType,
+      c.BelongModule belongModule
     from zl_couponuser cu,zl_coupon c
     where
       cu.UserID = #{userId}
@@ -73,17 +111,7 @@
     order by cu.CreateDate DESC
   </select>
 
-  <select id="list" resultType="com.zhiliao.hotel.model.ZlCouponUser">
-    select
-      cu.*,c.CouponName couponname
-    from zl_couponuser cu,zl_coupon c
-    where
-      cu.UserID = #{userId}
-    and
-      cu.CouponID = c.CouponID
-    and
-      cu.IsDelete = 0
-  </select>
+
 
   <update id="updateCouponUser">
     UPDATE
@@ -94,5 +122,18 @@
       OrderID = #{out_trade_no}
     WHERE RecID = #{recID}
   </update>
+
+
+  <!--<select id="list" resultType="com.zhiliao.hotel.model.ZlCouponUser">
+    select
+      cu.*,c.CouponName couponname
+    from zl_couponuser cu,zl_coupon c
+    where
+      cu.UserID = #{userId}
+    and
+      cu.CouponID = c.CouponID
+    and
+      cu.IsDelete = 0
+  </select>-->
 
 </mapper>

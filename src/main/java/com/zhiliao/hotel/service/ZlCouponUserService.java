@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.controller.couponuser.result.ZlCouponUserResult;
 import com.zhiliao.hotel.model.ZlCouponUser;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  */
 public interface ZlCouponUserService {
 
-    List<ZlCouponUser> listCouponUser(Long userId, Integer pageNo, Integer pageSize);
+    List<ZlCouponUserResult> listCouponUser(Long userId, Integer pageNo, Integer pageSize);
 
     Integer count(Long userId);
 

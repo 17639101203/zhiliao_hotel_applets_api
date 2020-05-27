@@ -2,10 +2,11 @@ package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.model.ZlRepairorder;
 import org.apache.ibatis.annotations.Param;
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.Map;
 
-public interface ZlRepairorderMapper {
+public interface ZlRepairorderMapper extends Mapper<ZlRepairorder> {
 
     /**
      * 报修下单

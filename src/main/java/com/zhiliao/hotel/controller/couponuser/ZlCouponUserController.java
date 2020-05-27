@@ -4,6 +4,7 @@ import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.controller.couponuser.result.ZlCouponUserResult;
 import com.zhiliao.hotel.model.ZlCouponUser;
 import com.zhiliao.hotel.service.ZlCouponUserService;
 import com.zhiliao.hotel.utils.TokenUtil;
@@ -45,7 +46,7 @@ public class ZlCouponUserController {
             //Long userId= TokenUtil.getUserId(token);
             Long userId = (long)10;
             logger.info("我的优惠卷，用户ID："+userId);
-            List<ZlCouponUser> result = couponUserService.listCouponUser(userId,pageNo,pageSize);
+            List<ZlCouponUserResult> result = couponUserService.listCouponUser(userId,pageNo,pageSize);
             return new ReturnString(result);
 
         }catch(Exception e){
