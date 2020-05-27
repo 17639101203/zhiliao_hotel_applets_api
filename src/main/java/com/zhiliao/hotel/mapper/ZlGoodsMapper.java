@@ -19,11 +19,11 @@ public interface ZlGoodsMapper extends Mapper<ZlHotelGoods> {
 
     List<GoodsListVo> findGoodsList(@Param("hotelId") Integer hotelId, @Param("belongModule") Integer belongModule, @Param("categoryName") String categoryName);
 
-    List<GoodsSkuListVo> findGoodsSkuList(@Param("hotelGoodsSkuId") Integer hotelGoodsSkuId);
+    List<GoodsSkuListVo> findGoodsSkuList(@Param("hotelId") Integer hotelId, @Param("goodsId") Integer goodsId);
 
-    GoodsListVo findGoodsDetail(@Param("goodsID") Integer goodsID);
+    GoodsListVo findGoodsDetail(@Param("goodsId") Integer goodsId);
 
-    void updateTotalVisitCount(@Param("goodsID") Integer goodsID, @Param("totalvisitcount") Integer totalvisitcount);
+    void updateGoodsTotalVisitCount(@Param("goodsId") Integer goodsId);
 
     void updateGoods(@Param("hotelGoodsSkuID") Integer hotelGoodsSkuID, @Param("goodsCount") Integer goodsCount);
 

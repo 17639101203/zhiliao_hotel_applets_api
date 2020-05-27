@@ -17,6 +17,7 @@
     <select id="findGoodsList" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
         select
             zhgs.HotelGoodsSkuID,
+            zg.GoodsID,
             zg.GoodsName,
             zg.CoverImgUrl,
             zg.OriginalPrice,
@@ -51,35 +52,25 @@
         from zl_hotelgoodssku zhgs
         left join zl_goodssku zgs on zhgs.SkuID=zgs.SkuID
         left join zl_goodsproperty zgp on zgs.PropertyID=zgp.PropertyID
-        where zhgs.IsDelete=0 and zgp.IsDelete=0
-        and zhgs.GoodsID=(select a.GoodsID from zl_hotelgoodssku a where a.HotelGoodsSkuID=#{hotelGoodsSkuId})
+        where zhgs.IsDelete=0 and zgp.IsDelete=0 and zhgs.HotelID=#{hotelId}
+        and zhgs.GoodsID=#{goodsId}
         order by zgp.PropertyName desc
     </select>
 
-    <!--根据商品id商品详情数据-->
     <select id="findGoodsDetail" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
-      SELECT
-          zg.GoodsID,
-          zg.CoverImgUrl,
-          zg.GoodsName,
-          zg.OriginalPrice,
-          zg.CurrentPrice,
-          zg.TotalSoldCount,
-          zg.TotalVirtualSoldCount,
-          zg.Content,
-          zg.TotalVisitCount
-        FROM
-          zl_goods zg
-        WHERE zg.GoodsID = #{goodsID}
+        select
+            GoodsID,
+            CoverImgUrl,
+            GoodsName,
+            OriginalPrice,
+            CurrentPrice,
+            Content
+        from zl_goods
+        where GoodsID=#{goodsId}
     </select>
 
-    <!--根据商品id更新商品点击量-->
-    <update id="updateTotalVisitCount">
-      UPDATE
-          zl_goods
-        SET
-          zl_goods.TotalVisitCount = #{totalvisitcount} +1
-        WHERE zl_goods.GoodsID = #{goodsID}
+    <update id="updateGoodsTotalVisitCount">
+      update zl_goods set TotalVisitCount = TotalVisitCount + 1 where GoodsID = #{goodsId}
     </update>
 
     <update id="updateGoods">

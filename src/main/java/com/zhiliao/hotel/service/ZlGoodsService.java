@@ -18,9 +18,9 @@ public interface ZlGoodsService {
 
     PageInfoResult findGoodsList(Integer hotelId, Integer belongModule, Integer pageNo, Integer pageSize, String categoryName);
 
-    List<GoodsSkuListVo> findGoodsSkuList(Integer hotelGoodsSkuId);
+    List<GoodsSkuListVo> findGoodsSkuList(Integer hotelId, Integer goodsId);
 
-    GoodsListVo findGoodsDetail(Integer goodsID);
+    GoodsListVo findGoodsDetail(Integer goodsId);
 
     void updateGoodsCount(String out_trade_no);
 

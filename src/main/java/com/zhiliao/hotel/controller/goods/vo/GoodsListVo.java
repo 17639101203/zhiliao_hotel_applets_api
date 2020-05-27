@@ -17,6 +17,9 @@ public class GoodsListVo {
     @ApiModelProperty(value = "酒店商品skuId", required = true)
     private Integer hotelGoodsSkuId;
 
+    @ApiModelProperty(value = "商品id", required = true)
+    private Integer goodsId;
+
     @ApiModelProperty(value = "商品名称", required = true)
     private String goodsName;
 
@@ -37,7 +40,4 @@ public class GoodsListVo {
 
     @ApiModelProperty(value = "商品详情", required = true)
     private String content;
-
-    @ApiModelProperty(value = "总访问量", required = true)
-    private Integer totalVisitCount;
 }

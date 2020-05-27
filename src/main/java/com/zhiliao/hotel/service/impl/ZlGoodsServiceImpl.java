@@ -61,15 +61,15 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
     }
 
     @Override
-    public List<GoodsSkuListVo> findGoodsSkuList(Integer hotelGoodsSkuId) {
-        return zlGoodsMapper.findGoodsSkuList(hotelGoodsSkuId);
+    public List<GoodsSkuListVo> findGoodsSkuList(Integer hotelId, Integer goodsId) {
+        return zlGoodsMapper.findGoodsSkuList(hotelId, goodsId);
     }
 
     @Override
-    public GoodsListVo findGoodsDetail(Integer goodsID) {
-        GoodsListVo goodsListVo = zlGoodsMapper.findGoodsDetail(goodsID);
+    public GoodsListVo findGoodsDetail(Integer goodsId) {
+        GoodsListVo goodsListVo = zlGoodsMapper.findGoodsDetail(goodsId);
         if (goodsListVo != null) {
-            zlGoodsMapper.updateTotalVisitCount(goodsID, goodsListVo.getTotalVisitCount());
+            zlGoodsMapper.updateGoodsTotalVisitCount(goodsId);
         }
         return goodsListVo;
     }

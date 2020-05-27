@@ -86,7 +86,7 @@ public class ZlGoodsController {
     @UserLoginToken
     @GetMapping("findGoodsList/{hotelId}/{belongModule}/{pageNo}/{pageSize}")
     public ReturnString<PageInfoResult<GoodsListVo>> findGoodsList(@PathVariable Integer hotelId, @PathVariable Integer belongModule,
-                                                      @PathVariable Integer pageNo, @PathVariable Integer pageSize, String categoryName) {
+                                                                   @PathVariable Integer pageNo, @PathVariable Integer pageSize, String categoryName) {
         try {
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|页码：" + pageNo + "|每页大小：" + pageSize + "|分类名称：" + categoryName);
             pageSize = pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize;
@@ -100,14 +100,15 @@ public class ZlGoodsController {
 
     @ApiOperation(value = "获取商品规格_谢辉益")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "hotelGoodsSkuId", dataType = "String", required = true, value = "酒店商品skuId")
+            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
+            @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id")
     })
     @UserLoginToken
-    @GetMapping("findGoodsSkuList/{hotelGoodsSkuId}")
-    public ReturnString<List<Map<String, Object>>> findGoodsSkuList(@PathVariable Integer hotelGoodsSkuId) {
+    @GetMapping("findGoodsSkuList/{hotelId}/{goodsId}")
+    public ReturnString findGoodsSkuList(@PathVariable Integer hotelId, @PathVariable Integer goodsId) {
         try {
-            logger.info("开始请求->参数->酒店商品skuId：" + hotelGoodsSkuId);
-            List<GoodsSkuListVo> goodsSkuList = zlGoodsService.findGoodsSkuList(hotelGoodsSkuId);
+            logger.info("开始请求->参数->酒店id：" + hotelId + "|商品id：" + goodsId);
+            List<GoodsSkuListVo> goodsSkuList = zlGoodsService.findGoodsSkuList(hotelId, goodsId);
             List<String> propertyNameList = new ArrayList<>();
             for (GoodsSkuListVo goodsSkuListVo : goodsSkuList) {
                 propertyNameList.add(goodsSkuListVo.getPropertyName());
@@ -124,17 +125,18 @@ public class ZlGoodsController {
 
     @ApiOperation(value = "获取商品详情数据_谢辉益")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "goodsID", dataType = "String", required = true, value = "商品id")
+            @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id")
     })
     @UserLoginToken
-    @GetMapping("findGoodsDetail/{goodsID}")
-    public ReturnString<GoodsListVo> findGoodsDetail(@PathVariable Integer goodsID) {
+    @GetMapping("findGoodsDetail/{goodsId}")
+    public ReturnString<GoodsListVo> findGoodsDetail(@PathVariable Integer goodsId) {
         try {
-            GoodsListVo goodsListVo = zlGoodsService.findGoodsDetail(goodsID);
-            return new ReturnString<>(goodsListVo);
+            logger.info("开始请求->参数->商品id：" + goodsId);
+            GoodsListVo goodsListVo = zlGoodsService.findGoodsDetail(goodsId);
+            return new ReturnString(goodsListVo);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString<>("获取出错");
+            return new ReturnString("获取商品详情数据出错!");
         }
     }
 
