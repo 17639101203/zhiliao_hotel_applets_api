@@ -2,7 +2,7 @@ package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.controller.goods.vo.GoodsSkuListVo;
-import com.zhiliao.hotel.model.ZlHotelGoods;
+import com.zhiliao.hotel.model.ZlHotelgoodssku;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -13,7 +13,7 @@ import java.util.Map;
  * Created by xiegege on 2020/4/15.
  */
 
-public interface ZlGoodsMapper extends Mapper<ZlHotelGoods> {
+public interface ZlGoodsMapper extends Mapper<ZlHotelgoodssku> {
 
     List<Map<String, String>> findGoodsCategory(@Param("hotelId") Integer hotelId, @Param("belongModule") Integer belongModule);
 
