@@ -46,8 +46,6 @@ public class ZlOrderServiceIml implements ZlOrderService {
     @Autowired
     private ZlOrderMapper zlOrderMapper;
 
-    @Autowired
-    private  ZlHotelgoodsskuMapper zlHotelgoodsskuMapper;
 
     @Override
     public PageInfoResult findAllOrder(OrderInfoVO vo) {
@@ -279,7 +277,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 Integer hotelGoodsSkuID = goodsInfoVOList.get(i).getHotelGoodsSkuID();
                 Integer goodsCount = goodsInfoVOList.get(i).getGoodsCount();
                 //判断酒店该商品库存是否足够
-                Integer stockCount = zlHotelgoodsskuMapper.getStockCount(hotelID, hotelGoodsSkuID);
+                Integer stockCount = zlGoodsMapper.getStockCount(hotelID, hotelGoodsSkuID);
                 if (stockCount > goodsCount) {
                     Boolean bool = redisTemplate.hasKey(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
                     Integer count = 0;
@@ -438,7 +436,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
             Integer hotelGoodsSkuID = goodsInfoVOList.get(i).getHotelGoodsSkuID();
             Integer goodsCount = goodsInfoVOList.get(i).getGoodsCount();
             //判断酒店该商品库存是否足够
-            Integer stockCount = zlHotelgoodsskuMapper.getStockCount(hotelID, hotelGoodsSkuID);
+            Integer stockCount = zlGoodsMapper.getStockCount(hotelID, hotelGoodsSkuID);
             if (stockCount > goodsCount) {
                 Boolean bool = redisTemplate.hasKey(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
                 Integer count = 0;

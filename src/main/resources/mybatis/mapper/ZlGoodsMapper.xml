@@ -111,4 +111,8 @@
         WHERE HotelGoodsSkuID = #{hotelGoodsSkuID}
     </update>
 
+    <select id="getStockCount" resultType="integer">
+        SELECT StockCount FROM zl_hotelgoodssku WHERE HotelID = #{hotelID} AND HotelGoodsSkuID = #{hotelGoodsSkuID}
+    </select>
+
 </mapper>
