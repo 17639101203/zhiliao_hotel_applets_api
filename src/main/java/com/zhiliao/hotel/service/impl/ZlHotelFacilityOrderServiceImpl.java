@@ -61,11 +61,13 @@ public class ZlHotelFacilityOrderServiceImpl implements ZlHotelFacilityOrderServ
      */
     @Override
     public ReturnString cancelFacilityOrder(Long orderID) {
-        //定义一小时的毫秒值
-        Integer oneHour = 60 * 60 * 1000;
+
         //当前时间
         Integer date = Math.toIntExact(System.currentTimeMillis() / 1000);
         ZlHotelFacilityOrder facilityOrder = hotelFacilityOrderMapper.findOrderById(orderID);
+        ZlHotelFacility hotelFacilityDetail = facilityMapper.getHotelFacilityDetail(facilityOrder.getFacilityid());
+        //可取消订单时间
+        Integer oneHour = hotelFacilityDetail.getCancancelorderminute() * 60;
         try {
             if (facilityOrder != null){
                 if (facilityOrder.getUsebegindate() - date <= oneHour) {

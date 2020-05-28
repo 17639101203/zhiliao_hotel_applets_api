@@ -1,6 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
-import com.zhiliao.hotel.controller.couponuser.result.ZlCouponUserResult;
+import com.zhiliao.hotel.controller.coupon.result.ZlCouponUserResult;
 import com.zhiliao.hotel.model.ZlCouponUser;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;

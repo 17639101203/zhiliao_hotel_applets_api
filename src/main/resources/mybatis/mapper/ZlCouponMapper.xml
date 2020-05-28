@@ -15,4 +15,20 @@
         LIMIT 1
    </select>
 
+    <select id="findAll" resultType="com.zhiliao.hotel.model.ZlCoupon">
+        SELECT
+        zc.*
+        FROM
+        zl_coupon zc
+        LEFT JOIN zl_couponuser zcu ON zc.CouponID = zcu.CouponID
+        WHERE
+        UserID IS NULL
+        AND zc.CouponStatus = 1
+        AND #{date} &gt; zc.FetchBeginDate
+        AND #{date} &lt; zc.FetchEndDate
+    </select>
+
+    <update id="updateById">
+        update zl_coupon set CouponCount = CouponCount - 1,UpdateDate = #{date} where CouponID = #{couponid}
+    </update>
 </mapper>

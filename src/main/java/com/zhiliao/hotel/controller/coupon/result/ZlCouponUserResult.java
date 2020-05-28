@@ -1,4 +1,4 @@
-package com.zhiliao.hotel.controller.couponuser.result;
+package com.zhiliao.hotel.controller.coupon.result;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -63,6 +63,14 @@ public class ZlCouponUserResult implements Serializable {
      * 所属模块: 1便利店;2餐饮服务;3情趣用品;4土特产
      */
     private Integer belongModule;
+    /**
+     * 允许开始使用时间
+     */
+    private Integer AllowBeginUseDate;
+    /**
+     * 允许结束使用时间
+     */
+    private Integer AllowEndUseDate;
 
 
     /**
@@ -72,6 +80,22 @@ public class ZlCouponUserResult implements Serializable {
      * @mbg.generated Mon May 25 15:01:52 CST 2020
      */
     private static final long serialVersionUID = 1L;
+
+    public Integer getAllowBeginUseDate() {
+        return AllowBeginUseDate;
+    }
+
+    public void setAllowBeginUseDate(Integer allowBeginUseDate) {
+        AllowBeginUseDate = allowBeginUseDate;
+    }
+
+    public Integer getAllowEndUseDate() {
+        return AllowEndUseDate;
+    }
+
+    public void setAllowEndUseDate(Integer allowEndUseDate) {
+        AllowEndUseDate = allowEndUseDate;
+    }
 
     public BigDecimal getMinMoney() {
         return minMoney;

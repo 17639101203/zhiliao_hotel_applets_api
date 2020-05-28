@@ -17,7 +17,7 @@ public interface ZlHotelFacilityOrderMapper extends Mapper<ZlHotelFacilityOrder>
 
     int byOrderId(ZlHotelFacilityOrder order);
 
-    void addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder);
+    //void addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder);
 
     ZlHotelFacilityOrder findByBiginAndEndDate(@Param("beginusedate") Integer beginusedate,
                                                @Param("endusedate") Integer endusedate,

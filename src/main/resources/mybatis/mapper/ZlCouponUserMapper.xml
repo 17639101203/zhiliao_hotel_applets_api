@@ -19,7 +19,7 @@
   </resultMap>
 
   <!--已使用优惠卷-->
-  <select id="usedCouponUser" resultType="com.zhiliao.hotel.controller.couponuser.result.ZlCouponUserResult">
+  <select id="usedCouponUser" resultType="com.zhiliao.hotel.controller.coupon.result.ZlCouponUserResult">
     select
       cu.RecID,
       cu.UserID,
@@ -32,7 +32,7 @@
       c.DiscountMoney discountMoney,
       c.LimitCategoryType limitCategoryType,
       c.LimitDateType limitDateType,
-      c.BelongModule belongModule
+      c.BelongModule belongModule,
     from
       zl_couponuser cu,zl_coupon c
     where
@@ -55,7 +55,7 @@
     select count (id) from zl_couponuser where UserID = #{userId} and ExpiredDate > #{newDate} and IsUsed = 0 and IsDelete = 0
   </select>-->
   <!--有效优惠卷-->
-  <select id="effectiveCouponUser" resultType="com.zhiliao.hotel.controller.couponuser.result.ZlCouponUserResult">
+  <select id="effectiveCouponUser" resultType="com.zhiliao.hotel.controller.coupon.result.ZlCouponUserResult">
     select
       cu.RecID,
       cu.UserID,
@@ -68,7 +68,9 @@
       c.DiscountMoney discountMoney,
       c.LimitCategoryType limitCategoryType,
       c.LimitDateType limitDateType,
-      c.BelongModule belongModule
+      c.BelongModule belongModule,
+      c.AllowBeginUseDate,
+      c.AllowEndUseDate
     from zl_couponuser cu,zl_coupon c
     where
       cu.UserID = #{userId}
@@ -83,7 +85,7 @@
     order by cu.CreateDate DESC
   </select>
   <!--过期优惠卷-->
-  <select id="beOverdue" resultType="com.zhiliao.hotel.controller.couponuser.result.ZlCouponUserResult">
+  <select id="beOverdue" resultType="com.zhiliao.hotel.controller.coupon.result.ZlCouponUserResult">
     select
       cu.RecID,
       cu.UserID,

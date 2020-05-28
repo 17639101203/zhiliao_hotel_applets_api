@@ -14,8 +14,8 @@
       <result column="FacilityRemainCount" jdbcType="INTEGER" property="facilityremaincount" />
       <result column="AllowPersonCount" jdbcType="INTEGER" property="allowpersoncount" />
       <result column="ImgUrl" jdbcType="VARCHAR" property="imgurl" />
-      <result column="ServiceBeginDate" jdbcType="CHAR" property="servicebegindate" />
-      <result column="ServiceEndDate" jdbcType="CHAR" property="serviceenddate" />
+      <result column="ServiceBeginDate" jdbcType="INTEGER" property="servicebegindate" />
+      <result column="ServiceEndDate" jdbcType="INTEGER" property="serviceenddate" />
       <result column="UseMinute" jdbcType="INTEGER" property="useminute" />
       <result column="UseCount" jdbcType="INTEGER" property="usecount" />
       <result column="CanCancelOrderMinute" jdbcType="INTEGER" property="cancancelorderminute" />
@@ -30,30 +30,44 @@
 
   <select id="getHotelFacilityList" resultType="com.zhiliao.hotel.model.ZlHotelFacility">
     select
-       h.FacilityID,
-       h.HotelID
-       h.FacilityCount,
-       h.FacilityName,
-       h.ImgUrl,
-       h.ServiceBeginDate,
-       h.ServiceEndDate,
-       h.Price,
-       h.CreateDate
-    from zl_hotelfacility h
-    where h.HotelID = #{hotelId} and h.FacilityStatus = 1 and h.IsDelete = 0
+       FacilityID,
+        HotelID,
+        FacilityCount,
+        FacilityName,
+        ImgUrl,
+        FacilityRemainCount,
+        AllowPersonCount,
+        Content,
+        ServiceBeginDate,
+        ServiceEndDate,
+        UseMinute,
+        UseCount,
+        CanCancelOrderMinute,
+        Price,
+        BookMoney,
+        CreateDate
+    from zl_hotelfacility
+    where HotelID = #{hotelId} and FacilityStatus = 1 and IsDelete = 0
     order by CreateDate DESC
   </select>
 
   <select id="getHotelFacilityDetail" resultType="com.zhiliao.hotel.model.ZlHotelFacility">
     select
         FacilityID,
+        HotelID,
         FacilityCount,
         FacilityName,
         ImgUrl,
+        FacilityRemainCount,
+        AllowPersonCount,
         Content,
         ServiceBeginDate,
         ServiceEndDate,
+        UseMinute,
+        UseCount,
+        CanCancelOrderMinute,
         Price,
+        BookMoney,
         CreateDate
     from
         zl_hotelfacility

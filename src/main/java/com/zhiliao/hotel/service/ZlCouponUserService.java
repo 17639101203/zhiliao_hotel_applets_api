@@ -1,8 +1,7 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.controller.couponuser.result.ZlCouponUserResult;
-import com.zhiliao.hotel.model.ZlCouponUser;
+import com.zhiliao.hotel.controller.coupon.result.ZlCouponUserResult;
 
 import java.util.List;
 
