@@ -41,13 +41,13 @@ public class ZlOrderServiceIml implements ZlOrderService {
     private ZlGoodsMapper zlGoodsMapper;
 
     @Autowired
-    private ZlHotelGoodsMapper zlHotelGoodsMapper;
-
-    @Autowired
     private ZlHotelDetailMapper zlHotelDetailMapper;
 
     @Autowired
     private ZlOrderMapper zlOrderMapper;
+
+    @Autowired
+    private  ZlHotelgoodsskuMapper zlHotelgoodsskuMapper;
 
     @Override
     public PageInfoResult findAllOrder(OrderInfoVO vo) {
@@ -250,7 +250,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
         //将该订单商品放入redis,进行锁定
         redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO + orderSerialNo, goodsShortInfoVOList);
         //将该订单商品标记放入redis,时间最长为5分钟
-        redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + orderSerialNo, goodsShortInfoVOList, 5, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + orderSerialNo, goodsShortInfoVOList, 1, TimeUnit.MINUTES);
 
         if (goodsCouponInfoVOList.size() > 0) {
             //将该订单优惠券集合放入redis
@@ -279,7 +279,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 Integer hotelGoodsSkuID = goodsInfoVOList.get(i).getHotelGoodsSkuID();
                 Integer goodsCount = goodsInfoVOList.get(i).getGoodsCount();
                 //判断酒店该商品库存是否足够
-                Integer stockCount = zlHotelGoodsMapper.getStockCount(hotelID, hotelGoodsSkuID);
+                Integer stockCount = zlHotelgoodsskuMapper.getStockCount(hotelID, hotelGoodsSkuID);
                 if (stockCount > goodsCount) {
                     Boolean bool = redisTemplate.hasKey(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
                     Integer count = 0;
@@ -438,7 +438,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
             Integer hotelGoodsSkuID = goodsInfoVOList.get(i).getHotelGoodsSkuID();
             Integer goodsCount = goodsInfoVOList.get(i).getGoodsCount();
             //判断酒店该商品库存是否足够
-            Integer stockCount = zlHotelGoodsMapper.getStockCount(hotelID, hotelGoodsSkuID);
+            Integer stockCount = zlHotelgoodsskuMapper.getStockCount(hotelID, hotelGoodsSkuID);
             if (stockCount > goodsCount) {
                 Boolean bool = redisTemplate.hasKey(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
                 Integer count = 0;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhiliao.hotel.mapper.ZlHotelGoodsMapper">
+<mapper namespace="com.zhiliao.hotel.mapper.ZlHotelgoodsskuMapper">
 
     <select id="getStockCount" resultType="integer">
-        SELECT StockCount FROM zl_hotelgoodssku WHERE HotelID = #{hotelID} AND SkuID = #{skuID}
+        SELECT StockCount FROM zl_hotelgoodssku WHERE HotelID = #{hotelID} AND HotelGoodsSkuID = #{hotelGoodsSkuID}
     </select>
 
 </mapper>
