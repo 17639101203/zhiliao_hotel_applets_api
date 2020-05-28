@@ -82,13 +82,6 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         List<ZlServiceorderdetail> orderDetails = new ArrayList<>();
         //根据 token得到微信用户Id
         Long userId = TokenUtil.getUserId(token);
-        Integer createdate;
-        if(scp.getIsUrgent() == 1){
-            //尽快送达
-            createdate = scp.getBookdate();
-        }else{
-            createdate = DateUtils.javaToPhpNowDateTime();
-        }
         //校验订单物品数量是否大于当日可提交数量
         for (ZlServicegoods zlServicegoods : zlServicegoodsList) {
             //判断订单商品是否超过该商品单次购买数量
@@ -118,12 +111,17 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
             orderDetail.setGoodscoverurl(zlServicegoods.getCoverimgurl());
             orderDetail.setPrice(zlServicegoods.getSaleprice());
             orderDetail.setGoodscount(buyNum);
-            orderDetail.setCreatedate(createdate);
+            orderDetail.setCreatedate(DateUtils.javaToPhpNowDateTime());
             orderDetails.add(orderDetail);
         }
         //todo 校验送达时间是否在服务时间内
         //todo 超时时间  暂时按15分钟  送达时间、超时时间要放到redis，key暂定
-        Integer timeoutDate = scp.getBookdate() + (15 * 60);
+        Integer timeoutDate;
+        if(scp.getBookdate() == 0){
+            timeoutDate = DateUtils.javaToPhpNowDateTime() + (15 * 60);
+        }else{
+            timeoutDate = scp.getBookdate() + (15 * 60);
+        }
         //获取用户信息
         ZlWxuserdetail zlWxuserdetail = Optional.ofNullable(zlWxuserdetailMapper.findByUserId(userId)).orElse(new ZlWxuserdetail());
         //生成客房服务订单
@@ -142,7 +140,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
                 scp.getBookdate(),
                 timeoutDate,
                 scp.getRemark(),
-                createdate
+                DateUtils.javaToPhpNowDateTime()
         );
         zlServiceorderMapper.insert(order);
         //插入客服服务订单商品表数据
@@ -177,16 +175,14 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         serviceorderInfoVo.setOrderGoodsList(orderGoodsList);
         //根据字段复制实体
         BeanUtils.copyProperties(order, serviceorderInfoVo);
-        //处理时间
-        serviceorderInfoVo.setIsUrgent(0);
-        if(order.getCreatedate().compareTo(order.getBookdate()) == 0){
-            //即可送达
-            serviceorderInfoVo.setIsUrgent(1);
-        }
         String createdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getCreatedate()).toString());
         serviceorderInfoVo.setCreatedate(createdate);
-        String bookdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getBookdate()).toString());
-        serviceorderInfoVo.setBookdate(bookdate);
+        if(order.getBookdate() == 0){
+            serviceorderInfoVo.setBookdate("0");
+        }else{
+            String bookdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getBookdate()).toString());
+            serviceorderInfoVo.setBookdate(bookdate);
+        }
         return serviceorderInfoVo;
     }
 
