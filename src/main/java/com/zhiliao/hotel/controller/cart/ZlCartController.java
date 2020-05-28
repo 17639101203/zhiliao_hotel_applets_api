@@ -72,7 +72,7 @@ public class ZlCartController {
             return new ReturnString(userCartVoList);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("获取出错");
+            return new ReturnString("获取购物车出错!");
         }
     }
 
