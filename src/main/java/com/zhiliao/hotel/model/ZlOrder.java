@@ -126,26 +126,6 @@ public class ZlOrder implements Serializable {
     private Integer couponid;
     
     /**
-     * 所属模块: 1便利店;2餐饮服务;3情趣用品;4土特产
-     */
-    private Short belongmodule;
-    
-    /**
-     * 删除状态:0正常;1删除;2用户删除(用户端不显示)
-     */
-    private Boolean isdelete;
-    
-    /**
-     * 下单时间
-     */
-    private Integer createdate;
-    
-    /**
-     * 支付/取消时间
-     */
-    private Integer updatedate;
-    
-    /**
      * 优惠券金额
      */
     private BigDecimal couponcash;
@@ -169,6 +149,36 @@ public class ZlOrder implements Serializable {
      * 操作员备注
      */
     private String operatorremark;
+    
+    /**
+     * 所属模块: 1便利店;2餐饮服务;3情趣用品;4土特产
+     */
+    private Short belongmodule;
+    
+    /**
+     * 删除状态:0正常;1删除;
+     */
+    private Boolean isdelete;
+    
+    /**
+     * 用户删除:0否;1是
+     */
+    private Boolean isuserdelete;
+    
+    /**
+     * 送达时间;默认0表示尽快送达
+     */
+    private Integer deliverydate;
+    
+    /**
+     * 下单时间
+     */
+    private Integer createdate;
+    
+    /**
+     * 支付/取消时间
+     */
+    private Integer updatedate;
     
     private static final long serialVersionUID=1L;
     
@@ -424,6 +434,22 @@ public class ZlOrder implements Serializable {
         return serialVersionUID;
     }
     
+    public Boolean getIsuserdelete(){
+        return isuserdelete;
+    }
+    
+    public void setIsuserdelete(Boolean isuserdelete){
+        this.isuserdelete=isuserdelete;
+    }
+    
+    public Integer getDeliverydate(){
+        return deliverydate;
+    }
+    
+    public void setDeliverydate(Integer deliverydate){
+        this.deliverydate=deliverydate;
+    }
+    
     @Override
     public String toString(){
         return "ZlOrder{"+
@@ -449,15 +475,17 @@ public class ZlOrder implements Serializable {
                 ", refundstatus="+refundstatus+
                 ", refundcount="+refundcount+
                 ", couponid="+couponid+
-                ", belongmodule="+belongmodule+
-                ", isdelete="+isdelete+
-                ", createdate="+createdate+
-                ", updatedate="+updatedate+
                 ", couponcash="+couponcash+
                 ", sendcash="+sendcash+
                 ", operatorname='"+operatorname+'\''+
                 ", operatorip='"+operatorip+'\''+
                 ", operatorremark='"+operatorremark+'\''+
+                ", belongmodule="+belongmodule+
+                ", isdelete="+isdelete+
+                ", isuserdelete="+isuserdelete+
+                ", deliverydate="+deliverydate+
+                ", createdate="+createdate+
+                ", updatedate="+updatedate+
                 '}';
     }
     

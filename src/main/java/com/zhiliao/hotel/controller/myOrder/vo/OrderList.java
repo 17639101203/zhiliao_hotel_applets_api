@@ -70,6 +70,9 @@ public class OrderList{
      */
     private Integer updatedate;
     
+    /**
+     * 商品数量
+     */
     private Long goodsTotal;
     
     private List<ZlOrderDetail> zlOrderDetailList;

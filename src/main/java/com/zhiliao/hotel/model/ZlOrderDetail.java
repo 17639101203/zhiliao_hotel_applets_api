@@ -63,9 +63,14 @@ public class ZlOrderDetail implements Serializable{
     private Short belongmodule;
     
     /**
-     * 删除状态:0正常;1删除;2用户删除(用户端不显示)
+     * 删除状态:0正常;1删除
      */
     private Boolean isdelete;
+    
+    /**
+     * 用户删除:0否;1是
+     */
+    private Boolean isuserdelete;
     
     /**
      * 下单时间
@@ -177,6 +182,33 @@ public class ZlOrderDetail implements Serializable{
     
     public static long getSerialVersionUID(){
         return serialVersionUID;
+    }
+    
+    public Boolean getIsuserdelete(){
+        return isuserdelete;
+    }
+    
+    public void setIsuserdelete(Boolean isuserdelete){
+        this.isuserdelete=isuserdelete;
+    }
+    
+    @Override
+    public String toString(){
+        return "ZlOrderDetail{"+
+                "orderdetailid="+orderdetailid+
+                ", orderid="+orderid+
+                ", userid="+userid+
+                ", hotelgoodsid="+hotelgoodsid+
+                ", goodsname='"+goodsname+'\''+
+                ", goodscoverurl='"+goodscoverurl+'\''+
+                ", price="+price+
+                ", goodscount="+goodscount+
+                ", belongmodule="+belongmodule+
+                ", isdelete="+isdelete+
+                ", isuserdelete="+isuserdelete+
+                ", createdate="+createdate+
+                ", updatedate="+updatedate+
+                '}';
     }
     
 }
