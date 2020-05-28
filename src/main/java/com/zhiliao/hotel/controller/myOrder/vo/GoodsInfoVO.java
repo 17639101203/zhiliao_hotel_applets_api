@@ -50,7 +50,12 @@ public class GoodsInfoVO {
     /**
      * 配送地址
      */
-    private String DeliveryAddress;
+    private String deliveryAddress;
+
+    /**
+     * 送达时间
+     */
+    private Integer deliveryDate;
 
     /**
      * 订单编号
@@ -114,11 +119,19 @@ public class GoodsInfoVO {
     }
 
     public String getDeliveryAddress() {
-        return DeliveryAddress;
+        return deliveryAddress;
     }
 
     public void setDeliveryAddress(String deliveryAddress) {
-        DeliveryAddress = deliveryAddress;
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public Integer getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(Integer deliveryDate) {
+        this.deliveryDate = deliveryDate;
     }
 
     public Integer getRecID() {

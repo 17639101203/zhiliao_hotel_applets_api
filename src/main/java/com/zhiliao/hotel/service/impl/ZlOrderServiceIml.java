@@ -193,6 +193,9 @@ public class ZlOrderServiceIml implements ZlOrderService {
             zlOrder.setComeformid(1);
             zlOrder.setRefundstatus((byte) 1);
             zlOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+            //送达时间
+            Integer deliveryDate = goodsInfoVOList.get(0).getDeliveryDate();
+            zlOrder.setDeliverydate(deliveryDate / 1000);
 //            zlOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
             zlOrder.setRefundcount((byte) 0);
 
@@ -232,6 +235,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 zlOrderDetail.setBelongmodule(goodsInfoVOList.get(i).getBelongModule());
                 zlOrderDetail.setIsdelete(false);
                 zlOrderDetail.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+                zlOrderDetail.setOrderserialno(orderSerialNo);
 //                zlOrderDetail.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
                 //封装订单商品短信息,并存入列表,准备放入redis
