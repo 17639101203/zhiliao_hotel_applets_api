@@ -91,7 +91,8 @@
         UPDATE
           zl_order
         SET
-          UpdateDate = #{updateDate}
+          UpdateDate = #{updateDate},
+          OrderStatus = -1
         WHERE OrderSerialNo = #{out_trade_no}
           AND BelongModule = #{belongModule}
     </update>
@@ -100,7 +101,8 @@
         UPDATE
           zl_order
         SET
-          UpdateDate = #{updateDate}
+          UpdateDate = #{updateDate},
+          OrderStatus = -1
         WHERE OrderSerialNo = #{out_trade_no}
     </update>
 

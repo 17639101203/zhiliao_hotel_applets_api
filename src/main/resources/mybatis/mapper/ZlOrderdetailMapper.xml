@@ -46,7 +46,7 @@
             OrderID
           FROM
             zl_order
-          WHERE OrderSerialNo = #{out_trade_no}
+          WHERE OrderSerialNo = #{out_trade_no})
     </update>
 
 </mapper>

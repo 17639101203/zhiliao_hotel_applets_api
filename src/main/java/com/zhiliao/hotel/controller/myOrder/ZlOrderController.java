@@ -122,25 +122,6 @@ public class ZlOrderController {
         }
     }
 
-    @ApiOperation(value = "酒店超市_手动取消订单_姬慧慧")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号"),
-            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1便利店;2餐饮服务;3情趣用品;4土特产")
-    })
-    @PostMapping("cancelOrder/{out_trade_no}/{belongModule}")
-//    @UserLoginToken
-    @PassToken
-    @ResponseBody
-    public ReturnString cancelOrder(@PathVariable("out_trade_no") String out_trade_no, @PathVariable("belongModule") Integer belongModule) {
-        try {
-            orderService.cancelOrder(out_trade_no, belongModule);
-            return new ReturnString(0, "已取消");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnString("取消失败");
-        }
-    }
-
     @ApiOperation(value = "酒店超市_提交订单_姬慧慧")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "Long", required = true, value = "酒店ID"),
@@ -302,6 +283,25 @@ public class ZlOrderController {
 
         return new ReturnString(resXml);
 
+    }
+
+    @ApiOperation(value = "酒店超市_手动取消订单_姬慧慧")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号"),
+            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1便利店;2餐饮服务;3情趣用品;4土特产")
+    })
+    @PostMapping("cancelOrder/{out_trade_no}/{belongModule}")
+//    @UserLoginToken
+    @PassToken
+    @ResponseBody
+    public ReturnString cancelOrder(@PathVariable("out_trade_no") String out_trade_no, @PathVariable("belongModule") Integer belongModule) {
+        try {
+            orderService.cancelOrder(out_trade_no, belongModule);
+            return new ReturnString(0, "已取消");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("取消失败");
+        }
     }
 
     @ApiOperation(value = "微信支付退款")
