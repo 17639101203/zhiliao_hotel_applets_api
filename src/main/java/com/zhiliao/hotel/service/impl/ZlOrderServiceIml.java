@@ -55,8 +55,8 @@ public class ZlOrderServiceIml implements ZlOrderService {
             List<ZlOrderDetail> goods = null;
             Long goodsTotal = null;
             for (OrderList order : allOrders) {
-                goods = zlOrderDetailMapper.findGoods(order.getUserid(), order.getBelongmodule());
-                goodsTotal = zlOrderDetailMapper.countGoods(order.getUserid(), order.getBelongmodule());
+                goods = zlOrderDetailMapper.find2Goods(order.getUserid(),order.getOrderserialno() ,order.getBelongmodule());
+                goodsTotal = zlOrderDetailMapper.countGoods(order.getUserid(),order.getOrderserialno(), order.getBelongmodule());
                 order.setZlOrderDetailList(goods);
                 order.setGoodsTotal(goodsTotal);
             }

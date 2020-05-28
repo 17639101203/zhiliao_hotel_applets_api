@@ -2,6 +2,8 @@ package com.zhiliao.hotel.controller.myOrder.vo;
 
 import com.zhiliao.hotel.model.ZlOrderDetail;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -11,14 +13,59 @@ import java.util.List;
 public class OrderList{
     
     /**
+     * 订单ID
+     */
+    private Long orderid;
+    
+    /**
      * 用户ID
      */
     private Long userid;
     
     /**
+     * 父订单编号
+     */
+    private String parentorderserialno;
+    
+    /**
+     * 订单编号
+     */
+    private String orderserialno;
+    
+    /**
+     * 酒店ID
+     */
+    private Integer hotelid;
+    
+    /**
      * 酒店名
      */
     private String hotelname;
+    
+    /**
+     * 房间ID
+     */
+    private Integer roomid;
+    
+    /**
+     * 房间号
+     */
+    private String roomnumber;
+    
+    /**
+     * 第一张商品图片地址
+     */
+    private String goodscoverurl;
+    
+    /**
+     * 备注信息
+     */
+    private String remark;
+    
+    /**
+     * 总价
+     */
+    private BigDecimal totalprice;
     
     /**
      * 实际支付金额
@@ -29,6 +76,26 @@ public class OrderList{
      * 支付方式0: 无支付方式;1微信;2支付宝;3银行卡;4挂账
      */
     private Byte paytype;
+    
+    /**
+     * 配送地址(省市区合并完的详细地址), 不为空时表示土特产需要配送
+     */
+    private String deliveryaddress;
+    
+    /**
+     * 来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
+     */
+    private Integer comeformid;
+    
+    /**
+     * 快递ID
+     */
+    private Integer expressid;
+    
+    /**
+     * 物流编号
+     */
+    private String tracknumber;
     
     /**
      * 支付状态：0无须支付;1:待支付;2已支付
@@ -46,9 +113,39 @@ public class OrderList{
     private Byte refundstatus;
     
     /**
+     * 退款发起次数
+     */
+    private Byte refundcount;
+    
+    /**
      * 优惠券ID
      */
     private Integer couponid;
+    
+    /**
+     * 优惠券金额
+     */
+    private BigDecimal couponcash;
+    
+    /**
+     * 配送金额
+     */
+    private BigDecimal sendcash;
+    
+    /**
+     * 操作员
+     */
+    private String operatorname;
+    
+    /**
+     * 操作员IP
+     */
+    private String operatorip;
+    
+    /**
+     * 操作员备注
+     */
+    private String operatorremark;
     
     /**
      * 所属模块: 1便利店;2餐饮服务;3情趣用品;4土特产
@@ -56,9 +153,19 @@ public class OrderList{
     private Short belongmodule;
     
     /**
-     * 删除状态:0正常;1删除;2用户删除(用户端不显示)
+     * 删除状态:0正常;1删除;
      */
     private Boolean isdelete;
+    
+    /**
+     * 用户删除:0否;1是
+     */
+    private Boolean isuserdelete;
+    
+    /**
+     * 送达时间;默认0表示尽快送达
+     */
+    private Integer deliverydate;
     
     /**
      * 下单时间
@@ -77,6 +184,14 @@ public class OrderList{
     
     private List<ZlOrderDetail> zlOrderDetailList;
     
+    public Long getOrderid(){
+        return orderid;
+    }
+    
+    public void setOrderid(Long orderid){
+        this.orderid=orderid;
+    }
+    
     public Long getUserid(){
         return userid;
     }
@@ -85,12 +200,76 @@ public class OrderList{
         this.userid=userid;
     }
     
+    public String getParentorderserialno(){
+        return parentorderserialno;
+    }
+    
+    public void setParentorderserialno(String parentorderserialno){
+        this.parentorderserialno=parentorderserialno;
+    }
+    
+    public String getOrderserialno(){
+        return orderserialno;
+    }
+    
+    public void setOrderserialno(String orderserialno){
+        this.orderserialno=orderserialno;
+    }
+    
+    public Integer getHotelid(){
+        return hotelid;
+    }
+    
+    public void setHotelid(Integer hotelid){
+        this.hotelid=hotelid;
+    }
+    
     public String getHotelname(){
         return hotelname;
     }
     
     public void setHotelname(String hotelname){
         this.hotelname=hotelname;
+    }
+    
+    public Integer getRoomid(){
+        return roomid;
+    }
+    
+    public void setRoomid(Integer roomid){
+        this.roomid=roomid;
+    }
+    
+    public String getRoomnumber(){
+        return roomnumber;
+    }
+    
+    public void setRoomnumber(String roomnumber){
+        this.roomnumber=roomnumber;
+    }
+    
+    public String getGoodscoverurl(){
+        return goodscoverurl;
+    }
+    
+    public void setGoodscoverurl(String goodscoverurl){
+        this.goodscoverurl=goodscoverurl;
+    }
+    
+    public String getRemark(){
+        return remark;
+    }
+    
+    public void setRemark(String remark){
+        this.remark=remark;
+    }
+    
+    public BigDecimal getTotalprice(){
+        return totalprice;
+    }
+    
+    public void setTotalprice(BigDecimal totalprice){
+        this.totalprice=totalprice;
     }
     
     public BigDecimal getActuallypay(){
@@ -107,6 +286,38 @@ public class OrderList{
     
     public void setPaytype(Byte paytype){
         this.paytype=paytype;
+    }
+    
+    public String getDeliveryaddress(){
+        return deliveryaddress;
+    }
+    
+    public void setDeliveryaddress(String deliveryaddress){
+        this.deliveryaddress=deliveryaddress;
+    }
+    
+    public Integer getComeformid(){
+        return comeformid;
+    }
+    
+    public void setComeformid(Integer comeformid){
+        this.comeformid=comeformid;
+    }
+    
+    public Integer getExpressid(){
+        return expressid;
+    }
+    
+    public void setExpressid(Integer expressid){
+        this.expressid=expressid;
+    }
+    
+    public String getTracknumber(){
+        return tracknumber;
+    }
+    
+    public void setTracknumber(String tracknumber){
+        this.tracknumber=tracknumber;
     }
     
     public Byte getPaystatus(){
@@ -133,12 +344,60 @@ public class OrderList{
         this.refundstatus=refundstatus;
     }
     
+    public Byte getRefundcount(){
+        return refundcount;
+    }
+    
+    public void setRefundcount(Byte refundcount){
+        this.refundcount=refundcount;
+    }
+    
     public Integer getCouponid(){
         return couponid;
     }
     
     public void setCouponid(Integer couponid){
         this.couponid=couponid;
+    }
+    
+    public BigDecimal getCouponcash(){
+        return couponcash;
+    }
+    
+    public void setCouponcash(BigDecimal couponcash){
+        this.couponcash=couponcash;
+    }
+    
+    public BigDecimal getSendcash(){
+        return sendcash;
+    }
+    
+    public void setSendcash(BigDecimal sendcash){
+        this.sendcash=sendcash;
+    }
+    
+    public String getOperatorname(){
+        return operatorname;
+    }
+    
+    public void setOperatorname(String operatorname){
+        this.operatorname=operatorname;
+    }
+    
+    public String getOperatorip(){
+        return operatorip;
+    }
+    
+    public void setOperatorip(String operatorip){
+        this.operatorip=operatorip;
+    }
+    
+    public String getOperatorremark(){
+        return operatorremark;
+    }
+    
+    public void setOperatorremark(String operatorremark){
+        this.operatorremark=operatorremark;
     }
     
     public Short getBelongmodule(){
@@ -155,6 +414,22 @@ public class OrderList{
     
     public void setIsdelete(Boolean isdelete){
         this.isdelete=isdelete;
+    }
+    
+    public Boolean getIsuserdelete(){
+        return isuserdelete;
+    }
+    
+    public void setIsuserdelete(Boolean isuserdelete){
+        this.isuserdelete=isuserdelete;
+    }
+    
+    public Integer getDeliverydate(){
+        return deliverydate;
+    }
+    
+    public void setDeliverydate(Integer deliverydate){
+        this.deliverydate=deliverydate;
     }
     
     public Integer getCreatedate(){

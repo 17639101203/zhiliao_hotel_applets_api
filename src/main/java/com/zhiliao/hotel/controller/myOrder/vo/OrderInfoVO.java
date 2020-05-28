@@ -9,9 +9,14 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("查询订单")
 public class OrderInfoVO{
     
-    
     @ApiModelProperty(value="用户ID", hidden=true)
     private Long userId;
+    
+    /**
+     * 酒店ID
+     */
+    @ApiModelProperty(value="酒店ID")
+    private Integer hotelid;
     
     /**
      * 支付方式：0无支付方式；1微信；2支付宝；3银行卡；4挂账。
@@ -59,42 +64,79 @@ public class OrderInfoVO{
         return userId;
     }
     
+    public void setUserId(Long userId){
+        this.userId=userId;
+    }
+    
+    public Integer getHotelid(){
+        return hotelid;
+    }
+    
+    public void setHotelid(Integer hotelid){
+        this.hotelid=hotelid;
+    }
+    
     public Byte getPaytype(){
         return paytype;
+    }
+    
+    public void setPaytype(Byte paytype){
+        this.paytype=paytype;
     }
     
     public Byte getPaystatus(){
         return paystatus;
     }
     
+    public void setPaystatus(Byte paystatus){
+        this.paystatus=paystatus;
+    }
+    
     public Byte getOrderstatus(){
         return orderstatus;
+    }
+    
+    public void setOrderstatus(Byte orderstatus){
+        this.orderstatus=orderstatus;
     }
     
     public Byte getRefundstatus(){
         return refundstatus;
     }
     
+    public void setRefundstatus(Byte refundstatus){
+        this.refundstatus=refundstatus;
+    }
+    
     public Short getBelongmodule(){
         return belongmodule;
+    }
+    
+    public void setBelongmodule(Short belongmodule){
+        this.belongmodule=belongmodule;
     }
     
     public Integer getPageNo(){
         return pageNo;
     }
     
+    public void setPageNo(Integer pageNo){
+        this.pageNo=pageNo;
+    }
+    
     public Integer getPageSize(){
         return pageSize;
     }
     
-    public void setUserId(Long userId){
-        this.userId=userId;
+    public void setPageSize(Integer pageSize){
+        this.pageSize=pageSize;
     }
     
     @Override
     public String toString(){
         return "OrderInfoVO{"+
                 "userId="+userId+
+                ", hotelid="+hotelid+
                 ", paytype="+paytype+
                 ", paystatus="+paystatus+
                 ", orderstatus="+orderstatus+

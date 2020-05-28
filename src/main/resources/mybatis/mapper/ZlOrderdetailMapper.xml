@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlOrderDetailMapper">
-
-    <select id="findOrder" resultType="com.zhiliao.hotel.model.ZlOrderDetail">
+    
+    <select id="findOrder"
+            resultType="com.zhiliao.hotel.model.ZlOrderDetail">
 
         SELECT * FROM zl_orderdetail WHERE UserID=#{userID} AND OrderID=#{orderID}
 
 	</select>
     
-    <select id="findGoods"
+    <select id="find2Goods"
             resultType="com.zhiliao.hotel.model.ZlOrderDetail">
 
-        SELECT * FROM zl_orderdetail WHERE UserID=#{userID} AND BelongModule=#{belongModule} ORDER BY CreateDate DESC LIMIT 2
+        SELECT * FROM zl_orderdetail WHERE IsDelete=0 AND UserID=#{userID} AND OrderSerialNo=#{orderSerialNo} AND BelongModule=#{belongModule} ORDER BY CreateDate DESC LIMIT 2
 
 	</select>
     
     <select id="countGoods"
             resultType="java.lang.Long">
 
-        SELECT count(*) FROM zl_orderdetail WHERE UserID=#{userID} AND BelongModule=#{belongModule}
+        SELECT count(*) FROM zl_orderdetail WHERE IsDelete=0 AND UserID=#{userID} AND OrderSerialNo=#{orderSerialNo} AND BelongModule=#{belongModule}
 
 	</select>
     
@@ -35,7 +36,7 @@
           WHERE OrderSerialNo = #{out_trade_no}
             AND BelongModule = #{belongModule})
     </update>
-
+    
     <update id="autoUpdateOrderDetailUpdateDate">
         UPDATE
           zl_orderdetail

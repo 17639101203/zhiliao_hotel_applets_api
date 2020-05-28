@@ -6,20 +6,13 @@
             resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderList"
             parameterType="com.zhiliao.hotel.controller.myOrder.vo.OrderInfoVO">
 
-        SELECT
-        UserID,
-        HotelName,
-        ActuallyPay,
-        BelongModule,
-        CouponID,
-        PayStatus,
-        OrderStatus,
-        RefundStatus,
-        IsDelete,
-        IsUserDelete,
-        CreateDate,
-        UpdateDate
-        FROM zl_order WHERE UserID=#{userId}
+        SELECT * FROM zl_order WHERE UserID=#{userId}
+        
+        AND IsDelete=0
+
+        <if test="hotelid != null">
+            AND HotelID = #{hotelid}
+        </if>
 
         <if test="paytype != null">
             AND PayType = #{paytype}
