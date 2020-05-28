@@ -31,4 +31,7 @@ public interface ZlOrderMapper extends Mapper<ZlOrder> {
     OrderStatusVO getByOrderSerialNo(@Param("out_trade_no") String out_trade_no);
 
     void updateOrderUpdateDate(@Param("out_trade_no") String out_trade_no, @Param("belongModule") Integer belongModule, @Param("updateDate") Integer updateDate);
+
+    void autoUpdateOrderUpdateDate(@Param("out_trade_no") String out_trade_no, @Param("updateDate") Integer updateDate);
+
 }
