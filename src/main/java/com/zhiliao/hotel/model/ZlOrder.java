@@ -10,14 +10,14 @@ import java.math.BigDecimal;
  * @author null
  * @date 2020-04-15
  */
-@Table(name = "zl_order")
-public class ZlOrder implements Serializable {
+@Table(name="zl_order")
+public class ZlOrder implements Serializable{
     
     /**
      * 订单ID
      */
     @Id
-    @GeneratedValue(generator = "JDBC")
+    @GeneratedValue(generator="JDBC")
     private Long orderid;
     
     /**
@@ -358,38 +358,6 @@ public class ZlOrder implements Serializable {
         this.couponid=couponid;
     }
     
-    public Short getBelongmodule(){
-        return belongmodule;
-    }
-    
-    public void setBelongmodule(Short belongmodule){
-        this.belongmodule=belongmodule;
-    }
-    
-    public Boolean getIsdelete(){
-        return isdelete;
-    }
-    
-    public void setIsdelete(Boolean isdelete){
-        this.isdelete=isdelete;
-    }
-    
-    public Integer getCreatedate(){
-        return createdate;
-    }
-    
-    public void setCreatedate(Integer createdate){
-        this.createdate=createdate;
-    }
-    
-    public Integer getUpdatedate(){
-        return updatedate;
-    }
-    
-    public void setUpdatedate(Integer updatedate){
-        this.updatedate=updatedate;
-    }
-    
     public BigDecimal getCouponcash(){
         return couponcash;
     }
@@ -430,8 +398,20 @@ public class ZlOrder implements Serializable {
         this.operatorremark=operatorremark;
     }
     
-    public static long getSerialVersionUID(){
-        return serialVersionUID;
+    public Short getBelongmodule(){
+        return belongmodule;
+    }
+    
+    public void setBelongmodule(Short belongmodule){
+        this.belongmodule=belongmodule;
+    }
+    
+    public Boolean getIsdelete(){
+        return isdelete;
+    }
+    
+    public void setIsdelete(Boolean isdelete){
+        this.isdelete=isdelete;
     }
     
     public Boolean getIsuserdelete(){
@@ -448,6 +428,26 @@ public class ZlOrder implements Serializable {
     
     public void setDeliverydate(Integer deliverydate){
         this.deliverydate=deliverydate;
+    }
+    
+    public Integer getCreatedate(){
+        return createdate;
+    }
+    
+    public void setCreatedate(Integer createdate){
+        this.createdate=createdate;
+    }
+    
+    public Integer getUpdatedate(){
+        return updatedate;
+    }
+    
+    public void setUpdatedate(Integer updatedate){
+        this.updatedate=updatedate;
+    }
+    
+    public static long getSerialVersionUID(){
+        return serialVersionUID;
     }
     
     @Override

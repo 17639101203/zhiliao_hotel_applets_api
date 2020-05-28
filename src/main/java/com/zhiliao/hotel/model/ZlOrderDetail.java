@@ -48,6 +48,11 @@ public class ZlOrderDetail implements Serializable{
     private String goodscoverurl;
     
     /**
+     * 订单号
+     */
+    private String orderserialno;
+    
+    /**
      * 单价
      */
     private BigDecimal price;
@@ -132,6 +137,14 @@ public class ZlOrderDetail implements Serializable{
         this.goodscoverurl=goodscoverurl;
     }
     
+    public String getOrderserialno(){
+        return orderserialno;
+    }
+    
+    public void setOrderserialno(String orderserialno){
+        this.orderserialno=orderserialno;
+    }
+    
     public BigDecimal getPrice(){
         return price;
     }
@@ -164,6 +177,14 @@ public class ZlOrderDetail implements Serializable{
         this.isdelete=isdelete;
     }
     
+    public Boolean getIsuserdelete(){
+        return isuserdelete;
+    }
+    
+    public void setIsuserdelete(Boolean isuserdelete){
+        this.isuserdelete=isuserdelete;
+    }
+    
     public Integer getCreatedate(){
         return createdate;
     }
@@ -184,14 +205,6 @@ public class ZlOrderDetail implements Serializable{
         return serialVersionUID;
     }
     
-    public Boolean getIsuserdelete(){
-        return isuserdelete;
-    }
-    
-    public void setIsuserdelete(Boolean isuserdelete){
-        this.isuserdelete=isuserdelete;
-    }
-    
     @Override
     public String toString(){
         return "ZlOrderDetail{"+
@@ -201,6 +214,7 @@ public class ZlOrderDetail implements Serializable{
                 ", hotelgoodsid="+hotelgoodsid+
                 ", goodsname='"+goodsname+'\''+
                 ", goodscoverurl='"+goodscoverurl+'\''+
+                ", orderserialno='"+orderserialno+'\''+
                 ", price="+price+
                 ", goodscount="+goodscount+
                 ", belongmodule="+belongmodule+

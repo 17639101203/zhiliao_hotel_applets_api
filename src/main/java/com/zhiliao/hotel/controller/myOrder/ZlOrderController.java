@@ -69,7 +69,7 @@ public class ZlOrderController {
     }
 
     // TODO: 2020/5/25  @PassToken
-    @ApiOperation(value = "我的订单_林生", notes = "传入不同的请求参数，查询不同类型的订单。")
+    @ApiOperation(value = "我的订单_林生", notes = "可传入不同的请求参数，查询不同类型、不同状态的订单。")
     // @UserLoginToken
     @PassToken
     @PostMapping("all")
