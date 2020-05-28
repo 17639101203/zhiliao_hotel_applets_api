@@ -17,7 +17,7 @@
     <select id="findGoodsList" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
         select
             zhgs.HotelGoodsSkuID,
-            zg.GoodsID,
+            zhgs.GoodsID,
             zg.GoodsName,
             zg.CoverImgUrl,
             zg.OriginalPrice,
@@ -52,7 +52,7 @@
         from zl_hotelgoodssku zhgs
         left join zl_goodssku zgs on zhgs.SkuID=zgs.SkuID
         left join zl_goodsproperty zgp on zgs.PropertyID=zgp.PropertyID
-        where zhgs.IsDelete=0 and zgp.IsDelete=0 and zhgs.HotelID=#{hotelId}
+        where zhgs.IsDelete=0 and zgs.IsDelete=0 and zgp.IsDelete=0 and zhgs.HotelID=#{hotelId}
         and zhgs.GoodsID=#{goodsId}
         order by zgp.PropertyName desc
     </select>

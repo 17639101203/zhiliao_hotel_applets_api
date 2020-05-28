@@ -64,7 +64,6 @@ public class ZlCartController {
     @GetMapping("findUserCart/{hotelId}")
     public ReturnString<UserCartVo> findUserCart(@PathVariable Integer hotelId, HttpServletRequest request) {
         try {
-            // TODO: SQL等商品表确认再编写
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("开始请求->参数->酒店id：" + hotelId + "|用户id：" + userId);

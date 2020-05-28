@@ -27,6 +27,23 @@
     </insert>
 
     <select id="findUserCart" resultType="com.zhiliao.hotel.controller.cart.vo.UserCartVo">
-
+        select
+            zc.CartID,
+            zc.HotelGoodsSkuID,
+            zg.GoodsName,
+            zg.CoverImgUrl,
+            zgp.PropertyName,
+            zgs.OriginalPrice,
+            zgs.CurrentPrice,
+            zc.GoodsCount,
+            zc.BelongModule
+        from zl_cart zc
+        left join zl_hotelgoodssku zhgs on zc.HotelGoodsSkuID=zhgs.HotelGoodsSkuID
+        left join zl_goods zg on zhgs.GoodsID=zg.GoodsID
+        left join zl_goodssku zgs on zhgs.SkuID=zgs.SkuID
+        left join zl_goodsproperty zgp on zgs.PropertyID=zgp.PropertyID
+        where zhgs.IsDelete=0 and zg.GoodsStatus!='-1' and zgs.IsDelete=0 and zgp.IsDelete=0
+        and zc.UserID=#{userId} and zc.HotelID=#{hotelId}
+        order by zc.BelongModule asc,zg.GoodsName desc
     </select>
 </mapper>

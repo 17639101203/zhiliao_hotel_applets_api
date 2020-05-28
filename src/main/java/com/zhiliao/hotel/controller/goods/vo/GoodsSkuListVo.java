@@ -14,18 +14,18 @@ import java.math.BigDecimal;
 @Data
 public class GoodsSkuListVo {
 
-    @ApiModelProperty(value = "酒店商品skuId", required = true)
+    @ApiModelProperty(value = "酒店商品skuId")
     private Integer hotelGoodsSkuId;
 
-    @ApiModelProperty(value = "规格名称", required = true)
+    @ApiModelProperty(value = "规格名称")
     private String propertyName;
 
-    @ApiModelProperty(value = "原价", required = true)
+    @ApiModelProperty(value = "原价")
     private BigDecimal originalPrice;
 
-    @ApiModelProperty(value = "现价", required = true)
+    @ApiModelProperty(value = "现价")
     private BigDecimal currentPrice;
 
-    @ApiModelProperty(value = "库存", required = true)
+    @ApiModelProperty(value = "库存")
     private Integer stockCount;
 }
