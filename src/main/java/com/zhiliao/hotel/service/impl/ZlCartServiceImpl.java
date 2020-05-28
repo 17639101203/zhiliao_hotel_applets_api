@@ -26,14 +26,14 @@ public class ZlCartServiceImpl implements ZlCartService {
     }
 
     @Override
-    public void deleteUserCart(Integer hotelId, Long userId) {
-        zlCartMapper.deleteUserCart(hotelId, userId);
+    public void emptyUserCart(Integer hotelId, Long userId, Integer belongModule) {
+        zlCartMapper.emptyUserCart(hotelId, userId, belongModule);
     }
 
     @Override
     public void addUserCartBatch(Integer hotelId, Long userId, List<AddCartParam> addCartParams, Integer date) {
         // 先删除用户之前购物车数据
-        zlCartMapper.deleteUserCart(hotelId, userId);
+        zlCartMapper.emptyUserCart(hotelId, userId, 0);
         // 添加新的购物车数据
         zlCartMapper.addUserCartBatch(hotelId, userId, addCartParams, date);
     }

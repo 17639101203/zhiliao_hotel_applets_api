@@ -13,8 +13,11 @@
         <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
     </resultMap>
 
-    <delete id="deleteUserCart">
+    <delete id="emptyUserCart">
         delete from zl_cart where HotelID=#{hotelId} and UserID=#{userId}
+        <if test="belongModule != 0">
+            and BelongModule=#{belongModule}
+        </if>
     </delete>
 
     <insert id="addUserCartBatch" parameterType="java.util.List" useGeneratedKeys="false">

@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ZlCartService {
 
-    void deleteUserCart(Integer hotelId, Long userId);
+    void emptyUserCart(Integer hotelId, Long userId, Integer belongModule);
 
     void addUserCartBatch(Integer hotelId, Long userId, List<AddCartParam> addCartParams, Integer date);
 

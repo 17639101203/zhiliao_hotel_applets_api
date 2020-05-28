@@ -9,6 +9,7 @@ import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,16 +76,19 @@ public class ZlCartController {
         }
     }
 
-    @ApiOperation(value = "用户购物车清空")
-    @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id")
+    @ApiOperation(value = "用户购物车全部清空/单模块清空")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
+            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块: 1便利店;2餐饮服务;3情趣用品;4土特产（0代表清空所有）")
+    })
     @UserLoginToken
-    @PostMapping("emptyCart/{hotelId}")
-    public ReturnString emptyCart(@PathVariable Integer hotelId, HttpServletRequest request) {
+    @PostMapping("emptyUserCart/{hotelId}/{belongModule}")
+    public ReturnString emptyUserCart(@PathVariable Integer hotelId, @PathVariable Integer belongModule, HttpServletRequest request) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
-            logger.info("开始请求->参数->酒店id：" + hotelId + "|用户id：" + userId);
-            zlCartService.deleteUserCart(hotelId, userId);
+            logger.info("开始请求->参数->酒店id：" + hotelId + "|用户id：" + userId + "|清空模块：" + belongModule);
+            zlCartService.emptyUserCart(hotelId, userId, belongModule);
             return new ReturnString(0, "购物车清空成功!");
         } catch (Exception e) {
             e.printStackTrace();
