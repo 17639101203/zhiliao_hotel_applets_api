@@ -247,15 +247,17 @@ public class ZlOrderController {
             } else {
                 //根据微信官网的介绍，此处不仅对回调的参数进行验签，还需要对返回的金额与系统订单的金额进行比对等
                 if (sign.equals(returnMap.get("sign"))) {
-                    //查询下单商品信息
-                    List<OrderDetailVO> orderDetailVOList = zlOrderService.getOrderDetail(out_trade_no);
-                    //比较实际付款价格和总价是否一致
+
+                    //查询该订单下的订单金额信息
+                    List<OrderPayShortInfoVO> orderPayShortInfoVOList = zlOrderService.getOrderByOrderSerialNo(out_trade_no);
+                    //判断付款金额参数是否正常
                     BigDecimal totalPrice = null;
-                    for (OrderDetailVO orderDetailVO : orderDetailVOList) {
-                        totalPrice = totalPrice.add(orderDetailVO.getPrice().multiply(BigDecimal.valueOf(orderDetailVO.getGoodsCount())));
+                    for (OrderPayShortInfoVO orderPayShortInfoVO : orderPayShortInfoVOList) {
+                        BigDecimal actuallyPay = orderPayShortInfoVO.getActuallyPay();
+                        totalPrice = totalPrice.add(actuallyPay);
                     }
                     Integer total_fee = (Integer) returnMap.get("total_fee");
-                    if (totalPrice.multiply(BigDecimal.valueOf(1000)).intValue() == total_fee) {
+                    if (totalPrice.intValue() == total_fee) {
                         //订单金额相同,更改数据库状态
                         zlGoodsService.updateGoodsCount(out_trade_no);
                         zlOrderService.updateOrder(out_trade_no);
@@ -304,14 +306,11 @@ public class ZlOrderController {
         }
     }
 
-    @ApiOperation(value = "微信支付退款")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token")
-    })
+    @ApiOperation(value = "微信支付退款,目前仅支持整单退款")
     @PostMapping("wxPayRefund")
     @UserLoginToken
     @ResponseBody
-    public ReturnString wxPayRefund(String token, @RequestBody WxPayRefundParam wxPayRefundParam) {
+    public ReturnString wxPayRefund(@RequestBody WxPayRefundParam wxPayRefundParam) {
         try {
             Map<String, Object> response = wxPayService.wxPayRefund(wxPayRefundParam);
             return new ReturnString(response);

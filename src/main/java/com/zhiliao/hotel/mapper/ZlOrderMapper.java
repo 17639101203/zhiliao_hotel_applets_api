@@ -1,9 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
-import com.zhiliao.hotel.controller.myOrder.vo.OrderDetailVO;
-import com.zhiliao.hotel.controller.myOrder.vo.OrderInfoVO;
-import com.zhiliao.hotel.controller.myOrder.vo.OrderList;
-import com.zhiliao.hotel.controller.myOrder.vo.OrderStatusVO;
+import com.zhiliao.hotel.controller.myOrder.vo.*;
 import com.zhiliao.hotel.model.ZlOrder;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
@@ -33,5 +30,7 @@ public interface ZlOrderMapper extends Mapper<ZlOrder> {
     void updateOrderUpdateDate(@Param("out_trade_no") String out_trade_no, @Param("belongModule") Integer belongModule, @Param("updateDate") Integer updateDate);
 
     void autoUpdateOrderUpdateDate(@Param("out_trade_no") String out_trade_no, @Param("updateDate") Integer updateDate);
+
+    List<OrderPayShortInfoVO> getOrderByOrderSerialNo(@Param("out_trade_no") String out_trade_no);
 
 }

@@ -6,8 +6,7 @@ import com.zhiliao.hotel.controller.myOrder.util.IpUtils;
 import com.zhiliao.hotel.controller.myOrder.util.PayUtil;
 import com.zhiliao.hotel.controller.myOrder.util.StringUtils;
 import com.zhiliao.hotel.controller.myOrder.config.WxPayConfig;
-import com.zhiliao.hotel.controller.myOrder.vo.OrderDetailVO;
-import com.zhiliao.hotel.model.ZlOrderDetail;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPayShortInfoVO;
 import com.zhiliao.hotel.service.WxPayService;
 import com.zhiliao.hotel.service.ZlOrderService;
 import org.apache.http.HttpEntity;
@@ -63,7 +62,7 @@ public class WxPayServiceImpl implements WxPayService {
         packageParams.put("nonce_str", nonce_str);
         packageParams.put("body", body);
         packageParams.put("out_trade_no", out_trade_no); //商户订单号
-        packageParams.put("total_fee", String.valueOf(total_fee)); //支付金额,这边需要转成字符串类型,否则后面的签名会失败
+        packageParams.put("total_fee", String.valueOf(total_fee * 1000)); //支付金额,这边需要转成字符串类型,否则后面的签名会失败
         packageParams.put("spbill_create_ip", spbill_create_ip);
         packageParams.put("notify_url", WxPayConfig.notify_url);
         packageParams.put("trade_type", WxPayConfig.TRADETYPE);
@@ -87,7 +86,7 @@ public class WxPayServiceImpl implements WxPayService {
                 + "<openid>" + openid + "</openid>"
                 + "<out_trade_no>" + out_trade_no + "</out_trade_no>"
                 + "<spbill_create_ip>" + spbill_create_ip + "</spbill_create_ip>"
-                + "<total_fee>" + String.valueOf(total_fee) + "</total_fee>"
+                + "<total_fee>" + total_fee * 1000 + "</total_fee>"
                 + "<trade_type>" + WxPayConfig.TRADETYPE + "</trade_type>"
                 + "<sign>" + mysign + "</sign>"
                 + "</xml>";
@@ -201,7 +200,7 @@ public class WxPayServiceImpl implements WxPayService {
     @Autowired
     ZlOrderService zlOrderService;
 
-    @Override
+    /*@Override
     public Map<String, Object> wxPayRefund(WxPayRefundParam wxPayRefundParam) {
 
         //生成的随机字符串
@@ -277,6 +276,99 @@ public class WxPayServiceImpl implements WxPayService {
                 resultMap.put("resultStr", resultStr);
                 return resultMap;
             }
+        } else {
+            logger.info("订单金额参数非法,订单号:", out_trade_no);
+            resultStr = "订单金额参数非法";
+            resultMap.put("resultStr", resultStr);
+            return resultMap;
+        }
+    }*/
+
+    @Override
+    public Map<String, Object> wxPayRefund(WxPayRefundParam wxPayRefundParam) {
+
+        //生成的随机字符串
+        String nonce_str = StringUtils.getRandomStringByLength(32);
+
+        //定义返回值结果字符串
+        String resultStr = "";
+
+        //定义返回值map集合
+        Map<String, Object> resultMap = new HashMap<>();
+
+        //生成的退款单号字符串
+        String out_refund_no = StringUtils.getRandomStringByLength(64);
+
+        String out_trade_no = wxPayRefundParam.getOut_trade_no();
+        Integer refund_fee = wxPayRefundParam.getRefund_fee();
+        Integer total_fee = wxPayRefundParam.getTotal_fee();
+
+        if (refund_fee <= total_fee) {
+
+            //查询该订单下的订单金额信息
+            List<OrderPayShortInfoVO> orderPayShortInfoVOList = zlOrderService.getOrderByOrderSerialNo(out_trade_no);
+            //判断退款金额参数是否正常
+            BigDecimal totalPrice = null;
+            for (OrderPayShortInfoVO orderPayShortInfoVO : orderPayShortInfoVOList) {
+                BigDecimal actuallyPay = orderPayShortInfoVO.getActuallyPay();
+                totalPrice = totalPrice.add(actuallyPay);
+            }
+
+            if (totalPrice.intValue() == refund_fee) {
+                Map<String, String> packageParams = new HashMap<String, String>();
+                packageParams.put("appid", WxPayConfig.appid);
+                packageParams.put("mch_id", WxPayConfig.mch_id);
+                packageParams.put("nonce_str", nonce_str);
+                packageParams.put("out_refund_no", out_refund_no);
+                packageParams.put("out_trade_no", out_trade_no); //商户订单号
+                packageParams.put("refund_fee", String.valueOf(refund_fee * 1000)); //退款金额
+                packageParams.put("total_fee", String.valueOf(total_fee * 1000)); //支付金额,这边需要转成字符串类型,否则后面的签名会失败
+
+                // 除去数组中的空值和签名参数
+                packageParams = PayUtil.paraFilter(packageParams);
+                String prestr = PayUtil.createLinkString(packageParams); // 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+
+                //MD5运算生成签名
+                String mysign = PayUtil.sign(prestr, WxPayConfig.key, "utf-8").toUpperCase();
+
+                //拼接统一下单接口使用的xml数据
+                String xml = "<xml>" + "<appid>" + WxPayConfig.appid + "</appid>"
+                        + "<mch_id>" + WxPayConfig.mch_id + "</mch_id>"
+                        + "<nonce_str>" + nonce_str + "</nonce_str>"
+                        + "<out_refund_no>" + out_refund_no + "</out_refund_no>"
+                        + "<out_trade_no>" + out_trade_no + "</out_trade_no>"
+                        + "<refund_fee>" + refund_fee * 1000 + "</refund_fee>"
+                        + "<total_fee>" + total_fee * 1000 + "</total_fee>"
+                        + "<sign>" + mysign + "</sign>"
+                        + "</xml>";
+                //调用退款方法
+                try {
+                    String jsonStr = doRefund(WxPayConfig.refund_url, xml);
+                    Map<String, Object> map = PayUtil.stringToMap(jsonStr);
+                    String return_code = (String) map.get("return_code");
+                    if ("SUCCESS".equals(return_code)) {
+                        logger.info("调用退款方法成功,订单号:", out_trade_no, "退款单号:", out_refund_no);
+                        resultStr = "调用退款方法成功";
+                        resultMap.put("resultStr", resultStr);
+                        resultMap.put("map", map);
+                        return resultMap;
+                    } else {
+                        logger.info("报文为空,订单号:", out_trade_no, "退款单号:", out_refund_no);
+                        resultStr = "报文为空";
+                        resultMap.put("resultStr", resultStr);
+                        return resultMap;
+                    }
+                } catch (Exception e) {
+                    logger.info("调用退款方法出错,订单号:", out_trade_no);
+                    resultStr = "调用退款方法出错";
+                    resultMap.put("resultStr", resultStr);
+                    return resultMap;
+                }
+            }
+            logger.info("订单金额参数非法,订单号:", out_trade_no);
+            resultStr = "订单金额参数非法";
+            resultMap.put("resultStr", resultStr);
+            return resultMap;
         } else {
             logger.info("订单金额参数非法,订单号:", out_trade_no);
             resultStr = "订单金额参数非法";

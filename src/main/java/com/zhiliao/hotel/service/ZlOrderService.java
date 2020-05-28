@@ -21,4 +21,6 @@ public interface ZlOrderService {
     void autoCancelOrder(String out_trade_no);
 
     OrderStatusVO getByOrderSerialNo(String out_trade_no);
+
+    List<OrderPayShortInfoVO> getOrderByOrderSerialNo(String out_trade_no);
 }

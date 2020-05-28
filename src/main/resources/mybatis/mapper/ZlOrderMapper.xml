@@ -106,4 +106,15 @@
         WHERE OrderSerialNo = #{out_trade_no}
     </update>
 
+    <select id="getOrderByOrderSerialNo" resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderPayShortInfoVO">
+        SELECT
+          OrderID,
+          TotalPrice,
+          ActuallyPay
+        FROM
+          zl_order
+        WHERE OrderSerialNo = #{out_trade_no}
+        ORDER BY OrderID ASC
+    </select>
+
 </mapper>

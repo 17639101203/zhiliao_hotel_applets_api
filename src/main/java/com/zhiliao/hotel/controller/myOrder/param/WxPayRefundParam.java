@@ -8,9 +8,6 @@ package com.zhiliao.hotel.controller.myOrder.param;
  **/
 public class WxPayRefundParam {
 
-    //签名
-    private String sign;
-
     //订单号
     private String out_trade_no;
 
@@ -19,24 +16,6 @@ public class WxPayRefundParam {
 
     //退款金额
     private Integer refund_fee;
-
-    public WxPayRefundParam() {
-    }
-
-    public WxPayRefundParam(String sign, String out_trade_no, Integer total_fee, Integer refund_fee) {
-        this.sign = sign;
-        this.out_trade_no = out_trade_no;
-        this.total_fee = total_fee;
-        this.refund_fee = refund_fee;
-    }
-
-    public String getSign() {
-        return sign;
-    }
-
-    public void setSign(String sign) {
-        this.sign = sign;
-    }
 
     public String getOut_trade_no() {
         return out_trade_no;

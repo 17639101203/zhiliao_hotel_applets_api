@@ -248,7 +248,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
         //将该订单商品放入redis,进行锁定
         redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO + orderSerialNo, goodsShortInfoVOList);
         //将该订单商品标记放入redis,时间最长为5分钟
-        redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + orderSerialNo, goodsShortInfoVOList, 1, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG + orderSerialNo, goodsShortInfoVOList, 5, TimeUnit.MINUTES);
 
         if (goodsCouponInfoVOList.size() > 0) {
             //将该订单优惠券集合放入redis
@@ -417,6 +417,12 @@ public class ZlOrderServiceIml implements ZlOrderService {
     public OrderStatusVO getByOrderSerialNo(String out_trade_no) {
         OrderStatusVO orderStatusVO = zlOrderMapper.getByOrderSerialNo(out_trade_no);
         return null;
+    }
+
+    @Override
+    public List<OrderPayShortInfoVO> getOrderByOrderSerialNo(String out_trade_no) {
+        List<OrderPayShortInfoVO> orderPayShortInfoVOList = zlOrderMapper.getOrderByOrderSerialNo(out_trade_no);
+        return orderPayShortInfoVOList;
     }
 
     //判断用户选择的商品是否库存充足,并返回库存不足商品的集合
