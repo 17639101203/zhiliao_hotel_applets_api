@@ -55,8 +55,8 @@ public class ZlOrderServiceIml implements ZlOrderService {
             List<ZlOrderDetail> goods = null;
             Long goodsTotal = null;
             for (OrderList order : allOrders) {
-                goods = zlOrderDetailMapper.find2Goods(order.getUserid(),order.getOrderserialno() ,order.getBelongmodule());
-                goodsTotal = zlOrderDetailMapper.countGoods(order.getUserid(),order.getOrderserialno(), order.getBelongmodule());
+                goods = zlOrderDetailMapper.find2Goods(order.getUserid(), order.getOrderserialno(), order.getBelongmodule());
+                goodsTotal = zlOrderDetailMapper.countGoods(order.getUserid(), order.getOrderserialno(), order.getBelongmodule());
                 order.setZlOrderDetailList(goods);
                 order.setGoodsTotal(goodsTotal);
             }
@@ -188,6 +188,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
             zlOrder.setBelongmodule(belongModule);
             zlOrder.setPaystatus((byte) 1);
             zlOrder.setIsdelete(false);
+            zlOrder.setIsuserdelete(false);
             zlOrder.setOrderstatus((byte) 0);
             zlOrder.setPaytype((byte) 1);
             zlOrder.setComeformid(1);
