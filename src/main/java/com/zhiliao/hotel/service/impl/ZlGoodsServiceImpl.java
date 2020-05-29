@@ -75,6 +75,11 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
     }
 
     @Override
+    public List<GoodsListVo> findRecommendGoodsList(Integer hotelId) {
+        return zlGoodsMapper.findRecommendGoodsList(hotelId);
+    }
+
+    @Override
     public void updateGoodsCount(String out_trade_no) {
 
         //从redis中拿出订单商品信息

@@ -22,6 +22,8 @@ public interface ZlGoodsService {
 
     GoodsListVo findGoodsDetail(Integer goodsId);
 
+    List<GoodsListVo> findRecommendGoodsList(Integer hotelId);
+
     void updateGoodsCount(String out_trade_no);
 
     List<EsGoods> searchGoods(Integer hotelId, String selectParam, Integer belongModule, Integer pageNo, Integer pageSize);

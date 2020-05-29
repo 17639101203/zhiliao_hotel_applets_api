@@ -73,6 +73,23 @@
       update zl_goods set TotalVisitCount = TotalVisitCount + 1 where GoodsID = #{goodsId}
     </update>
 
+    <select id="findRecommendGoodsList" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
+        select
+            zhgs.HotelGoodsSkuID,
+            zhgs.GoodsID,
+            zg.CoverImgUrl,
+            zg.GoodsName,
+            zg.OriginalPrice,
+            zg.CurrentPrice,
+            max(zhgs.SoldCount) SoldCount
+        from zl_hotelgoodssku zhgs
+        left join zl_goods zg on zhgs.GoodsID=zg.GoodsID
+        where zhgs.IsDelete=0 and zg.GoodsStatus!='-1' and zg.IsRecommand=1 and zhgs.HotelID=#{hotelId}
+        group by zhgs.GoodsID
+        order by max(zhgs.SoldCount) desc,zg.Sort asc
+        limit 50
+    </select>
+
     <update id="updateGoods">
         UPDATE
           zl_goods

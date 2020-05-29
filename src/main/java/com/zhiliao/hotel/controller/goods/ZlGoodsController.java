@@ -133,9 +133,7 @@ public class ZlGoodsController {
     }
 
     @ApiOperation(value = "获取商品详情数据_谢辉益")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id")
-    })
+    @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id")
     @UserLoginToken
     @GetMapping("findGoodsDetail/{goodsId}")
     public ReturnString<GoodsListVo> findGoodsDetail(@PathVariable Integer goodsId) {
@@ -146,6 +144,20 @@ public class ZlGoodsController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取商品详情数据出错!");
+        }
+    }
+
+    @ApiOperation(value = "获取推荐商品_谢辉益")
+    @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id")
+    @UserLoginToken
+    @GetMapping("findRecommendGoodsList/{hotelId}")
+    public ReturnString<List<GoodsListVo>> findRecommendGoodsList(@PathVariable Integer hotelId) {
+        try {
+            List<GoodsListVo> recommendGoodsList = zlGoodsService.findRecommendGoodsList(hotelId);
+            return new ReturnString(recommendGoodsList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString(-1, "获取推荐商品出错!");
         }
     }
 
