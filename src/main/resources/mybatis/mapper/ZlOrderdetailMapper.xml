@@ -44,7 +44,8 @@
     <select id="countGoods"
             resultType="java.lang.Long">
 
-        SELECT count(*) FROM zl_orderdetail WHERE IsDelete=0 AND UserID=#{userID} AND OrderSerialNo=#{orderSerialNo} AND BelongModule=#{belongModule}
+        SELECT sum(GoodsCount) FROM zl_orderdetail WHERE IsDelete=0 AND UserID=#{userID} AND OrderSerialNo=#{orderSerialNo} AND BelongModule=#{belongModule}
+--      SELECT count(*) FROM zl_orderdetail WHERE IsDelete=0 AND UserID=#{userID} AND OrderSerialNo=#{orderSerialNo} AND BelongModule=#{belongModule}
 
 	</select>
     

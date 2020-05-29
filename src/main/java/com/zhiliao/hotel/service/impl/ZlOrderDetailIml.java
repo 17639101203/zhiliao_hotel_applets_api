@@ -34,6 +34,9 @@ public class ZlOrderDetailIml implements ZlOrderDetailService{
         if(orderDetailsList!=null && !orderDetailsList.isEmpty()){
             ZlOrderDetail orderDetail=orderDetailsList.get(0);
             orderDetailsReturn=zlOrderMapper.find(orderDetail.getUserid(),orderDetail.getOrderserialno(),orderDetail.getBelongmodule());
+            if(orderDetailsReturn==null){
+                orderDetailsReturn=new OrderDetailsReturn();
+            }
             orderDetailsReturn.setZlOrderDetailList(orderDetailsList);
         }
         return orderDetailsReturn;

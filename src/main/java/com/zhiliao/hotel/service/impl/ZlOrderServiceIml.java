@@ -44,18 +44,17 @@ public class ZlOrderServiceIml implements ZlOrderService {
     @Autowired
     private ZlOrderMapper zlOrderMapper;
 
-
     @Override
     public PageInfoResult findAllOrder(OrderInfoVO vo) {
 
         List<OrderList> allOrders = zlOrderMapper.findAllOrder(vo);
         if (allOrders != null && !allOrders.isEmpty()) {
-            List<ZlOrderDetail> goods = null;
+            List<ZlOrderDetail> goodsList = null;
             Long goodsTotal = null;
             for (OrderList order : allOrders) {
-                goods = zlOrderDetailMapper.find2Goods(order.getUserid(), order.getOrderserialno(), order.getBelongmodule());
+                goodsList = zlOrderDetailMapper.find2Goods(order.getUserid(), order.getOrderserialno(), order.getBelongmodule());
                 goodsTotal = zlOrderDetailMapper.countGoods(order.getUserid(), order.getOrderserialno(), order.getBelongmodule());
-                order.setZlOrderDetailList(goods);
+                order.setZlOrderDetailList(goodsList);
                 order.setGoodsTotal(goodsTotal);
             }
         }

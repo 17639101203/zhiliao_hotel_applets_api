@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  *
  */
-@ApiModel("查询订单")
+@ApiModel("查询订单详情")
 public class OrderDetailInfoVO{
     
     /**
