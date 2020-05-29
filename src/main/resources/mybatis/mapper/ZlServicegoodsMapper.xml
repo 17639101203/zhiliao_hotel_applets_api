@@ -11,6 +11,8 @@
         <result column="Content" jdbcType="LONGVARCHAR" property="content"/>
         <result column="ApplyMaxCount" jdbcType="INTEGER" property="applymaxcount"/>
         <result column="ApplyLimitCount" jdbcType="INTEGER" property="applylimitcount"/>
+        <result column="Sort" jdbcType="INTEGER" property="sort"/>
+        <result column="GoodsStatus" jdbcType="TINYINT" property="goodsstatus"/>
         <result column="CheckStatus" jdbcType="TINYINT" property="checkstatus"/>
         <result column="SalePrice" jdbcType="DECIMAL" property="saleprice"/>
         <result column="OriginalPrice" jdbcType="DECIMAL" property="originalprice"/>
@@ -19,8 +21,7 @@
         <result column="VirtualSoldCount" jdbcType="INTEGER" property="virtualsoldcount"/>
         <result column="Property" jdbcType="CHAR" property="property"/>
         <result column="IsIndexShow" jdbcType="BIT" property="isindexshow"/>
-        <result column="Sort" jdbcType="INTEGER" property="sort"/>
-        <result column="GoodsStatus" jdbcType="TINYINT" property="goodsstatus"/>
+        <result column="AdminName" jdbcType="CHAR" property="adminname"/>
         <result column="IsDelete" jdbcType="BIT" property="isdelete"/>
         <result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
         <result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
@@ -29,7 +30,7 @@
     <select id="findServicegoodsCategory" resultType="java.lang.String">
         select zsgc.CategoryName from zl_servicegoods zsg
         left join zl_servicegoodscategory zsgc on zsg.GoodsCategoryID=zsgc.GoodsCategoryID
-        where zsg.CheckStatus=2 and zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsgc.CategoryStatus=1 and zsgc.IsDelete=0
+        where zsg.CheckStatus=2 and zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsgc.CategoryStatus=1 and zsgc.IsDelete=0 and zsgc.CheckStatus=2
         and zsg.HotelID=#{hotelId} and zsgc.BelongModule=#{belongModule}
         group by zsgc.CategoryName
         order by zsgc.Sort asc,zsgc.UpdateDate desc
@@ -48,7 +49,7 @@
             zsg.MarketPrice
         from zl_servicegoods zsg
         left join zl_servicegoodscategory zsgc on zsg.GoodsCategoryID=zsgc.GoodsCategoryID
-        where zsg.CheckStatus=2 and zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsgc.CategoryStatus=1 and zsgc.IsDelete=0
+        where zsg.CheckStatus=2 and zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsgc.CategoryStatus=1 and zsgc.IsDelete=0 and zsgc.CheckStatus=2
         and zsg.HotelID=#{hotelId} and zsgc.BelongModule=#{belongModule}
         <if test='categoryName!=null and categoryName!="all"'>
             and zsgc.CategoryName=#{categoryName}

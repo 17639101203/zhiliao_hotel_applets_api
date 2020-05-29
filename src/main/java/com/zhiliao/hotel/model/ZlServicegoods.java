@@ -63,6 +63,16 @@ public class ZlServicegoods implements Serializable {
     private Integer applylimitcount;
 
     /**
+     * 排序
+     */
+    private Integer sort;
+
+    /**
+     * 0:下架;1上架
+     */
+    private Byte goodsstatus;
+
+    /**
      * 审核状态:-1驳回;0待审核;1审核中;2审核通过
      */
     private Byte checkstatus;
@@ -103,14 +113,9 @@ public class ZlServicegoods implements Serializable {
     private Boolean isindexshow;
 
     /**
-     * 排序
+     * 添加人员
      */
-    private Integer sort;
-
-    /**
-     * 0:下架;1上架
-     */
-    private Byte goodsstatus;
+    private String adminname;
 
     /**
      * 删除状态:0正常;1删除;
