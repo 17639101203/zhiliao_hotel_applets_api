@@ -1,7 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlOrderMapper">
-
+    
+    <select id="find"
+            resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderDetailsReturn">
+    
+        SELECT
+        
+           OrderSerialNo,
+           HotelName,
+           Remark,
+           TotalPrice,
+           ActuallyPay,
+           PayType,
+           DeliveryAddress,
+           ExpressID,
+           TrackNumber,
+           PayStatus,
+           OrderStatus,
+           RefundStatus,
+           RefundCount,
+           CouponCash,
+           SendCash,
+           BelongModule,
+           DeliveryDate,
+           CreateDate,
+           UpdateDate
+        
+        FROM zl_order WHERE IsDelete=0
+        AND UserID=#{userId}
+        AND OrderSerialNo=#{orderserialno}
+        AND BelongModule=#{belongmodule}
+    
+  </select>
+    
     <select id="findAllOrder"
             resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderList"
             parameterType="com.zhiliao.hotel.controller.myOrder.vo.OrderInfoVO">
@@ -116,7 +148,7 @@
         SET
           IsUserDelete = 1
         WHERE OrderSerialNo = #{orderSerialNo}
-          AND BelongModule = #{belongModule} 
+          AND BelongModule = #{belongModule}
     </delete>
 
 </mapper>

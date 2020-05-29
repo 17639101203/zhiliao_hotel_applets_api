@@ -98,21 +98,23 @@ public class ZlOrderController {
         }
 
     }
-
-    @ApiOperation(value = "订单详情")
+    
+    // TODO: 2020/5/25  @PassToken
+    @ApiOperation(value="订单详情_林生", notes="可传入不同的请求参数，查询不同批次订单的具体详情。")
     @PostMapping("Detail")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType = "query", dataType = "long", name = "orderID", value = "订单ID", required = true)
-    })
-    @UserLoginToken
+    // @UserLoginToken
     @ResponseBody
-    public ReturnString findOrderDetail(String token, Long orderID) {
-        Long userID = TokenUtil.getUserId(token);
-        logger.info("用户ID：" + userID + "，订单ID：" + orderID);
+    public ReturnString findOrderDetail(HttpServletRequest request,@RequestBody OrderDetailInfoVO vo) {
+       
+        Long userId=1590214659794L;
+        if(vo==null){
+            vo=new OrderDetailInfoVO();
+        }
+        vo.setUserid(userId);
+        logger.error("订单详情，请求参数："+vo);
         try {
-            ZlOrderDetail orderDetail = zlOrderDetailService.findOrder(userID, orderID);
-            return new ReturnString(orderDetail);
+            OrderDetailsReturn order=zlOrderDetailService.findOrder(vo);
+            return new ReturnString(order);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("查询失败");

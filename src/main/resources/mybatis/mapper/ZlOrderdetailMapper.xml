@@ -2,12 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlOrderDetailMapper">
     
-    <select id="findOrder"
+    <select id="findOrderDetails"
+            parameterType="com.zhiliao.hotel.controller.myOrder.vo.OrderDetailInfoVO"
             resultType="com.zhiliao.hotel.model.ZlOrderDetail">
-
-        SELECT * FROM zl_orderdetail WHERE UserID=#{userID} AND OrderID=#{orderID}
-
-	</select>
+        
+        SELECT * FROM zl_orderdetail WHERE IsDelete=0
+        
+        AND UserID=#{userid}
+        
+        <if test="orderdetailid != null">
+            AND OrderDetailID = #{orderdetailid}
+        </if>
+        
+        <if test="orderid != null">
+            AND OrderID = #{orderid}
+        </if>
+        
+        <if test="hotelGoodsID != null">
+            AND HotelGoodsID = #{hotelGoodsID}
+        </if>
+        
+        <if test="orderserialno != null">
+            AND OrderSerialNo = #{orderserialno}
+        </if>
+        
+        <if test="belongmodule != null">
+            AND BelongModule = #{belongmodule}
+        </if>
+        
+        ORDER BY CreateDate DESC
+    
+    </select>
     
     <select id="find2Goods"
             resultType="com.zhiliao.hotel.model.ZlOrderDetail">

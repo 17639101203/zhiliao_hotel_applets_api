@@ -1,9 +1,10 @@
 package com.zhiliao.hotel.service;
 
-import com.zhiliao.hotel.model.ZlOrderDetail;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderDetailInfoVO;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderDetailsReturn;
 
 public interface ZlOrderDetailService{
     
-    ZlOrderDetail findOrder(Long userID, Long orderID);
+    OrderDetailsReturn findOrder(OrderDetailInfoVO vo);
     
 }

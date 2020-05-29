@@ -11,7 +11,9 @@ import java.util.List;
  *
  */
 public interface ZlOrderMapper extends Mapper<ZlOrder> {
-
+    
+    OrderDetailsReturn find(@Param("userid") Long userid,@Param("orderserialno") String orderserialno,@Param("belongmodule") Short belongmodule);
+    
     List<OrderList> findAllOrder(OrderInfoVO vo);
 
     //取消订单
