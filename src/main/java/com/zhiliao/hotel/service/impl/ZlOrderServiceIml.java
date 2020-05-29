@@ -27,8 +27,6 @@ import java.util.concurrent.TimeUnit;
 public class ZlOrderServiceIml implements ZlOrderService {
 
     @Autowired
-    private ZlOrderMapper orderMapper;
-    @Autowired
     private ZlOrderDetailMapper zlOrderDetailMapper;
 
     @Autowired
@@ -50,7 +48,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
     @Override
     public PageInfoResult findAllOrder(OrderInfoVO vo) {
 
-        List<OrderList> allOrders = orderMapper.findAllOrder(vo);
+        List<OrderList> allOrders = zlOrderMapper.findAllOrder(vo);
         if (allOrders != null && !allOrders.isEmpty()) {
             List<ZlOrderDetail> goods = null;
             Long goodsTotal = null;
@@ -209,7 +207,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
             zlOrder.setOrderserialno(orderSerialNo);
 
             //将订单数据存入数据库
-            orderMapper.insert(zlOrder);
+            zlOrderMapper.insert(zlOrder);
             zlOrderList.add(zlOrder);
 
             for (int i = 0; i < goodsInfoVOList.size(); i++) {
@@ -310,12 +308,12 @@ public class ZlOrderServiceIml implements ZlOrderService {
 
     @Override
     public void updateOrder(String out_trade_no) {
-        orderMapper.updateOrder(out_trade_no);
+        zlOrderMapper.updateOrder(out_trade_no);
     }
 
     @Override
     public List<OrderDetailVO> getOrderDetail(String out_trade_no) {
-        List<OrderDetailVO> zlOrderDetailList = orderMapper.getOrderDetail(out_trade_no);
+        List<OrderDetailVO> zlOrderDetailList = zlOrderMapper.getOrderDetail(out_trade_no);
         return zlOrderDetailList;
     }
 
@@ -470,6 +468,12 @@ public class ZlOrderServiceIml implements ZlOrderService {
         }
 
         return goodsStockCountNoList;
+    }
+
+    @Override
+    public void userDeleteOrder(String orderSerialNo, Integer belongModule) {
+        zlOrderMapper.userDeleteOrder(orderSerialNo, belongModule);
+        zlOrderDetailMapper.userDeleteOrder(orderSerialNo, belongModule);
     }
 
 }

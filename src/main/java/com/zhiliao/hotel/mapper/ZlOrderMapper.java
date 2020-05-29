@@ -33,4 +33,5 @@ public interface ZlOrderMapper extends Mapper<ZlOrder> {
 
     List<OrderPayShortInfoVO> getOrderByOrderSerialNo(@Param("out_trade_no") String out_trade_no);
 
+    void userDeleteOrder(@Param("orderSerialNo") String orderSerialNo, @Param("belongModule") Integer belongModule);
 }

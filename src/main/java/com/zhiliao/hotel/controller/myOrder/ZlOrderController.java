@@ -45,10 +45,7 @@ public class ZlOrderController {
     private static final Logger logger = LoggerFactory.getLogger(ZlOrderController.class);
 
     @Autowired
-    private ZlOrderService orderService;
-
-    @Autowired
-    private ZlOrderDetailService orderDetailService;
+    private ZlOrderDetailService zlOrderDetailService;
 
     @Autowired
     private WxPayService wxPayService;
@@ -63,9 +60,9 @@ public class ZlOrderController {
     private ZlGoodsService zlGoodsService;
 
     @Autowired
-    public ZlOrderController(ZlOrderService orderService, ZlOrderDetailService orderDetailService) {
-        this.orderService = orderService;
-        this.orderDetailService = orderDetailService;
+    public ZlOrderController(ZlOrderService zlOrderService, ZlOrderDetailService zlOrderDetailService) {
+        this.zlOrderService = zlOrderService;
+        this.zlOrderDetailService = zlOrderDetailService;
     }
 
     // TODO: 2020/5/25  @PassToken
@@ -93,7 +90,7 @@ public class ZlOrderController {
 
             logger.error("我的订单，请求参数：" + vo);
 
-            PageInfoResult allOrder = orderService.findAllOrder(vo);
+            PageInfoResult allOrder = zlOrderService.findAllOrder(vo);
             return new ReturnString(allOrder);
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,7 +111,7 @@ public class ZlOrderController {
         Long userID = TokenUtil.getUserId(token);
         logger.info("用户ID：" + userID + "，订单ID：" + orderID);
         try {
-            ZlOrderDetail orderDetail = orderDetailService.findOrder(userID, orderID);
+            ZlOrderDetail orderDetail = zlOrderDetailService.findOrder(userID, orderID);
             return new ReturnString(orderDetail);
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,7 +119,7 @@ public class ZlOrderController {
         }
     }
 
-    @ApiOperation(value = "酒店超市_提交订单_姬慧慧")
+    @ApiOperation(value = "提交订单_姬慧慧")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "Long", required = true, value = "酒店ID"),
             @ApiImplicitParam(paramType = "path", name = "hotelName", dataType = "String", required = true, value = "酒店名"),
@@ -152,7 +149,7 @@ public class ZlOrderController {
         Long userID = System.currentTimeMillis();
 
         try {
-            UserGoodsReturn userGoodsReturn = orderService.submitOrder(userID, hotelBasicVO, GoodsInfoMap);
+            UserGoodsReturn userGoodsReturn = zlOrderService.submitOrder(userID, hotelBasicVO, GoodsInfoMap);
             return new ReturnString(userGoodsReturn);
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,7 +157,7 @@ public class ZlOrderController {
         }
     }
 
-    @ApiOperation(value = "酒店超市_微信下单_姬慧慧")
+    @ApiOperation(value = "微信下单_姬慧慧")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "openid", dataType = "String", required = true, value = "用户标识"),
             @ApiImplicitParam(paramType = "path", name = "body", dataType = "String", required = true, value = "商品描述"),
@@ -186,7 +183,7 @@ public class ZlOrderController {
         }
     }
 
-    @ApiOperation(value = "酒店超市_订单状态主动查询_姬慧慧")
+    @ApiOperation(value = "订单状态主动查询,仅查询结果供前端展示_姬慧慧")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号")
     })
@@ -204,7 +201,7 @@ public class ZlOrderController {
         }
     }
 
-    @ApiOperation(value = "酒店超市_订单状态自动回调_姬慧慧")
+    @ApiOperation(value = "订单状态自动回调,包括数据库的相关修改_姬慧慧")
     @UserLoginToken
     @PostMapping("autoPayReturn")
     @ResponseBody
@@ -287,7 +284,7 @@ public class ZlOrderController {
 
     }
 
-    @ApiOperation(value = "酒店超市_手动取消订单_姬慧慧")
+    @ApiOperation(value = "用户手动取消订单_姬慧慧")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号"),
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1便利店;2餐饮服务;3情趣用品;4土特产")
@@ -298,7 +295,7 @@ public class ZlOrderController {
     @ResponseBody
     public ReturnString cancelOrder(@PathVariable("out_trade_no") String out_trade_no, @PathVariable("belongModule") Integer belongModule) {
         try {
-            orderService.cancelOrder(out_trade_no, belongModule);
+            zlOrderService.cancelOrder(out_trade_no, belongModule);
             return new ReturnString(0, "已取消");
         } catch (Exception e) {
             e.printStackTrace();
@@ -306,7 +303,7 @@ public class ZlOrderController {
         }
     }
 
-    @ApiOperation(value = "微信支付退款,目前仅支持整单退款")
+    @ApiOperation(value = "微信支付退款,目前仅支持整单退款_姬慧慧")
     @PostMapping("wxPayRefund")
     @UserLoginToken
     @ResponseBody
@@ -317,6 +314,25 @@ public class ZlOrderController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("支付回调失败");
+        }
+    }
+
+    @ApiOperation(value = "用户主动删除订单_姬慧慧")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "orderSerialNo", dataType = "String", required = true, value = "商户订单号"),
+            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1便利店;2餐饮服务;3情趣用品;4土特产")
+    })
+    @PostMapping("userDeleteOrder")
+//    @UserLoginToken
+    @PassToken
+    @ResponseBody
+    public ReturnString userDeleteOrder(@PathVariable("orderSerialNo") String orderSerialNo, @PathVariable("belongModule") Integer belongModule) {
+        try {
+            zlOrderService.userDeleteOrder(orderSerialNo, belongModule);
+            return new ReturnString("删除订单成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("删除订单失败!");
         }
     }
 

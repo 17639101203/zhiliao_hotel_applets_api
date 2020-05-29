@@ -50,4 +50,13 @@
           WHERE OrderSerialNo = #{out_trade_no})
     </update>
 
+    <update id="userDeleteOrder">
+        UPDATE
+          zl_orderdetail
+        SET
+          IsUserDelete = 1
+        WHERE OrderSerialNo = #{orderSerialNo}
+          AND BelongModule = #{belongModule}
+    </update>
+
 </mapper>

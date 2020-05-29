@@ -110,4 +110,13 @@
         ORDER BY OrderID ASC
     </select>
 
+    <delete id="userDeleteOrder">
+        UPDATE
+          zl_order
+        SET
+          IsUserDelete = 1
+        WHERE OrderSerialNo = #{orderSerialNo}
+          AND BelongModule = #{belongModule} 
+    </delete>
+
 </mapper>

@@ -23,4 +23,6 @@ public interface ZlOrderService {
     OrderStatusVO getByOrderSerialNo(String out_trade_no);
 
     List<OrderPayShortInfoVO> getOrderByOrderSerialNo(String out_trade_no);
+
+    void userDeleteOrder(String orderSerialNo, Integer belongModule);
 }
