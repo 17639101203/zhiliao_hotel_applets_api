@@ -22,6 +22,13 @@ public class ZlBanner implements Serializable {
     @Column(name="BannerID")
     private Integer bannerid;
 
+
+    /**
+     * 标题
+     */
+    @Column(name="Title")
+    private String title;
+
     /**
      * banner图
      */
@@ -82,6 +89,12 @@ public class ZlBanner implements Serializable {
     private Integer checkStatus;
 
     /**
+     * 视频时:1视频在banner中第1张;5表示最后一张
+     */
+    @Column(name="VideoPosition")
+    private Integer videoPosition;
+
+    /**
      * 所属位置:1顶部，2是中部
      */
     @Column(name="Position")
@@ -127,6 +140,21 @@ public class ZlBanner implements Serializable {
         this.operatorUserName = operatorUserName;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Integer getVideoPosition() {
+        return videoPosition;
+    }
+
+    public void setVideoPosition(Integer videoPosition) {
+        this.videoPosition = videoPosition;
+    }
 
 
     public String getOperatorIp() {

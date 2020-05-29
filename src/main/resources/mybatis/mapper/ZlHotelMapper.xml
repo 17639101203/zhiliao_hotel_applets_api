@@ -4,17 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlHotelMapper">
 
-<!--    <sql id="selectColumn">-->
-<!--   HotelID,HotelName,CoverUrl,Tel,ProvinceCode,CityCode,DistrictCode,Address,-->
-<!--   MaxCreditCash,HotelType,HotelStatus,Longitude,Latitude,Settlement,MinSendCash,SendCash,-->
-<!--   ContractImgUrls,Bank,BankAccountNumber,BankAccountName,TodayMoney,AllMoney,Weather,JoinType,JoinStatus-->
-
-<!--    </sql>-->
-
     <select id="getById" resultType="com.zhiliao.hotel.model.ZlHotel">
 
         select
-        *
+          HotelID,HotelName,CoverUrl,JoinType,Tel,
+          MaxCreditMoney,HotelType,HotelStatus,ExtID,HotelNameAbbr,
+          ReceptionTel,JoinDate,PullOffDate,JoinStatus,TerminateDate
         from zl_hotel
         where HotelID=#{hotelId} and HotelStatus=1 and IsDelete=0 order by CreateDate desc
     </select>
