@@ -39,9 +39,9 @@ public class ZlHotelController {
             @ApiImplicitParam(paramType = "query", name = "codeId", dataType = "String", required = true, value = "二维码ID"),
     })
     public ReturnString getHotelList(String codeId, HttpServletRequest request) {
-        String token = request.getHeader("token");
         ZlHotelRoomQrcode roomQrcodeId = zlHotelRoomQrcodeService.getRoomQrcodeId(codeId);
         if(roomQrcodeId!=null){
+            String token = request.getHeader("token");
             return  zlHotelService.getById(String.valueOf(roomQrcodeId.getHotelID()),String.valueOf(roomQrcodeId.getRoomID()), token);
         }
         return new ReturnString("二维码不存在,请联系管理员");
