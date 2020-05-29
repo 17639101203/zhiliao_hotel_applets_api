@@ -322,7 +322,7 @@ public class ZlOrderController {
             @ApiImplicitParam(paramType = "path", name = "orderSerialNo", dataType = "String", required = true, value = "商户订单号"),
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1便利店;2餐饮服务;3情趣用品;4土特产")
     })
-    @PostMapping("userDeleteOrder")
+    @PostMapping("userDeleteOrder/{orderSerialNo}/{belongModule}")
 //    @UserLoginToken
     @PassToken
     @ResponseBody
