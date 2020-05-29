@@ -1,7 +1,6 @@
 package com.zhiliao.hotel.service.impl;
 
 import com.zhiliao.hotel.mapper.ZlDisburdeneatliveMapper;
-import com.zhiliao.hotel.mapper.ZlGoodsCateGoryMapper;
 import com.zhiliao.hotel.model.ZlDisburdeneatlive;
 import com.zhiliao.hotel.service.ZlDisburdeneatliveService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -80,7 +80,7 @@
             CurrentPrice,
             Content
         from zl_goods
-        where GoodsID=#{goodsId}
+        where GoodsStatus!='-1' and GoodsID=#{goodsId}
     </select>
 
     <update id="updateGoodsTotalVisitCount">
