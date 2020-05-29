@@ -34,15 +34,15 @@ public class ZlCouponController {
     private ZlCouponService couponService;
 
     @ApiOperation(value = "获取平台发放的优惠卷")
-    //@UserLoginToken
-    @PassToken
+    @UserLoginToken
+    //@PassToken
     @GetMapping("couponFindAll")
     public ReturnString couponFindAll(HttpServletRequest request){
 
         try {
             String token = request.getHeader("token");
-            //Long userId = TokenUtil.getUserId(token);
-            Long userId = (long)1;
+            Long userId = TokenUtil.getUserId(token);
+            //Long userId = (long)1;
             List<ZlCoupon> coupons = couponService.couponFindAll(userId);
             return new ReturnString(coupons);
         } catch (Exception e) {

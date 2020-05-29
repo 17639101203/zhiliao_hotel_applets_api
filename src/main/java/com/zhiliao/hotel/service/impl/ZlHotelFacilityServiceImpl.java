@@ -78,6 +78,9 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
                 return new ReturnString("酒店设施数量不足!");
             }
             //判断该时间段是否在营业时间
+            if (hotelFacilityDetail.getServicebegindate() > beginusedate && hotelFacilityDetail.getServiceenddate() < endusedate){
+                return new ReturnString("该时间段不在此设施的服务时间,请重新选择!");
+            }
         }
         //生成订单编号
         zlHotelFacilityOrder.setSerialnumber(OrderIDUtil.createOrderID("HS"));
@@ -90,7 +93,7 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         zlHotelFacilityOrder.setOrderstatus((byte) 0);
         zlHotelFacilityOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
-        int insert = facilityOrderMapper.insert(zlHotelFacilityOrder);
+        int insert = facilityOrderMapper.insertSelective(zlHotelFacilityOrder);
         //是否下单成功
         if (hotelFacilityDetail.getPrice().compareTo(new BigDecimal(0)) == 1) {
             if (insert > 0) {
