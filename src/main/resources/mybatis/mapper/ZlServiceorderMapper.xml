@@ -41,11 +41,11 @@
     insert into zl_serviceorder (UserID, UserName, Tel, SerialNumber,
       HotelID, HotelName, RoomID, GoodsCoverUrl, FloorNumber,
       RoomNumber, ComeFormID, BookDate, TimeoutDate, Remark,
-      CreateDate, UpdateDate)
+      CreateDate)
     values (#{userid,jdbcType=BIGINT}, #{username,jdbcType=CHAR}, #{tel,jdbcType=CHAR}, #{serialnumber,jdbcType=CHAR},
       #{hotelid,jdbcType=INTEGER}, #{hotelname,jdbcType=CHAR}, #{roomid,jdbcType=INTEGER}, #{goodscoverurl,jdbcType=VARCHAR}, #{floornumber,jdbcType=CHAR},
       #{roomnumber,jdbcType=CHAR}, #{comeformid,jdbcType=INTEGER}, #{bookdate,jdbcType=INTEGER}, #{timeoutdate,jdbcType=INTEGER}, #{remark,jdbcType=CHAR},
-      #{createdate,jdbcType=INTEGER}, #{updatedate,jdbcType=INTEGER})
+      #{createdate,jdbcType=INTEGER})
     /*获取刚插入的数据的自增ID*/
     <selectKey keyProperty="orderid" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()

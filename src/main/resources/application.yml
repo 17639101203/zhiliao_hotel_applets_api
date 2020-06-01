@@ -15,9 +15,12 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://39.108.188.110:3306/company_zhiliao?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
-      username: zhiliao_dev
-      password: y82F3FybiffN6DrT
+#      url: jdbc:mysql://39.108.188.110:3306/company_zhiliao?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
+#      username: zhiliao_dev
+#      password: y82F3FybiffN6DrT
+      url: jdbc:mysql://127.0.0.1:3306/company_zhiliao?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
+      username: root
+      password: root
 #      url: jdbc:mysql://39.108.188.110/company_zhiliao?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
 #      username: user
 #      password: 123456

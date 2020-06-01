@@ -125,23 +125,23 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         //获取用户信息
         ZlWxuserdetail zlWxuserdetail = Optional.ofNullable(zlWxuserdetailMapper.findByUserId(userId)).orElse(new ZlWxuserdetail());
         //生成客房服务订单
-        ZlServiceorder order = new ZlServiceorder(
-                userId,
-                zlWxuserdetail.getRealname() == null ? "" : zlWxuserdetail.getRealname(),
-                zlWxuserdetail.getTel() == null ? "" : zlWxuserdetail.getTel(),
-                OrderIDUtil.createOrderID("fw"),
-                scp.getHotelid(),
-                scp.getHotelname(),
-                zlHotelroom.getRoomid(),
-                goodscoverurl,
-                zlHotelroom.getRoomfloor(),
-                zlHotelroom.getRoomnumber(),
-                1, //来源，1表示小程序C端
-                scp.getBookdate(),
-                timeoutDate,
-                scp.getRemark(),
-                DateUtils.javaToPhpNowDateTime()
-        );
+        ZlServiceorder order = new ZlServiceorder().builder()
+                .userid(userId)
+                .username(zlWxuserdetail.getRealname() == null ? "" : zlWxuserdetail.getRealname())
+                .tel(zlWxuserdetail.getTel() == null ? "" : zlWxuserdetail.getTel())
+                .serialnumber(OrderIDUtil.createOrderID("fw"))
+                .hotelid(scp.getHotelid())
+                .hotelname(scp.getHotelname())
+                .roomid(zlHotelroom.getRoomid())
+                .goodscoverurl(goodscoverurl)
+                .floornumber(zlHotelroom.getRoomfloor())
+                .roomnumber(zlHotelroom.getRoomnumber())
+                .comeformid(1)
+                .bookdate(scp.getBookdate())
+                .timeoutdate(timeoutDate)
+                .remark(scp.getRemark())
+                .createdate(DateUtils.javaToPhpNowDateTime())
+                .build();
         zlServiceorderMapper.insert(order);
         //插入客服服务订单商品表数据
         orderDetails.stream().forEach(orderDetail -> orderDetail.setOrderid(order.getOrderid()));

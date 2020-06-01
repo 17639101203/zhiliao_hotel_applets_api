@@ -1,5 +1,7 @@
 package com.zhiliao.hotel.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +16,8 @@ import java.io.Serializable;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "zl_serviceorder")
 public class ZlServiceorder implements Serializable {
     /**
@@ -135,25 +139,4 @@ public class ZlServiceorder implements Serializable {
      * 修改时间
      */
     private Integer updatedate;
-
-    public ZlServiceorder(Long userid,String username, String tel, String serialnumber, Integer hotelid, String hotelname,
-                          Integer roomid, String goodscoverurl, String floornumber, String roomnumber, Integer comeformid,
-                          Integer bookdate, Integer timeoutdate, String remark, Integer createdate){
-        this.userid = userid;
-        this.username = username;
-        this.tel = tel;
-        this.serialnumber = serialnumber;
-        this.hotelid = hotelid;
-        this.hotelname = hotelname;
-        this.roomid = roomid;
-        this.goodscoverurl = goodscoverurl;
-        this.floornumber = floornumber;
-        this.roomnumber = roomnumber;
-        this.comeformid = comeformid;
-        this.bookdate = bookdate;
-        this.timeoutdate = timeoutdate;
-        this.remark = remark;
-        this.createdate = createdate;
-    }
-
 }
