@@ -60,6 +60,7 @@
         select
             zhgs.HotelGoodsSkuID,
             zgp.PropertyName,
+            zgp.ImgUrl,
             zgs.OriginalPrice,
             zgs.CurrentPrice,
             zhgs.StockCount

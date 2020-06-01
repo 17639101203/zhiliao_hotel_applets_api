@@ -20,6 +20,9 @@ public class GoodsSkuListVo {
     @ApiModelProperty(value = "规格名称")
     private String propertyName;
 
+    @ApiModelProperty(value = "规格图片")
+    private String imgUrl;
+
     @ApiModelProperty(value = "原价")
     private BigDecimal originalPrice;
 
