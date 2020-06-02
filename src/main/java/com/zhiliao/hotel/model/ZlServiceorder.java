@@ -86,11 +86,6 @@ public class ZlServiceorder implements Serializable {
     private Integer comeformid;
 
     /**
-     * 预约时间
-     */
-    private Integer bookdate;
-
-    /**
      * 超时时间
      */
     private Integer timeoutdate;
@@ -119,6 +114,11 @@ public class ZlServiceorder implements Serializable {
      * 操作人员备注
      */
     private String operatorremark;
+
+    /**
+     * 送达时间;默认0表示尽快送达
+     */
+    private Integer deliverydate;
 
     /**
      * 删除状态:0正常;1删除;2用户删除(用户端不显示)

@@ -34,7 +34,7 @@ public class ServiceorderInfoVo implements Serializable {
     private String createdate;
 
     @ApiModelProperty(value = "送达时间，尽快送达值为0")
-    private String bookdate;
+    private String deliverydate;
 
     @ApiModelProperty(value = "订单商品列表")
     private List<goods> orderGoodsList;

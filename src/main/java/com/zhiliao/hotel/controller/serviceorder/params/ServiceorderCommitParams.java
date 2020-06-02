@@ -46,7 +46,7 @@ public class ServiceorderCommitParams implements Serializable {
      * 预约时间
      */
     @ApiModelProperty(value = "预约时间(时间戳，精确到秒,尽快送达值为0)", required = true)
-    private Integer bookdate;
+    private Integer deliverydate;
 
     /**
      * 订单商品

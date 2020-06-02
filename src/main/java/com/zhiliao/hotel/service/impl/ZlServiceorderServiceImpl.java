@@ -51,8 +51,8 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         if(StringUtils.isEmpty(scp.getRoomnumber())){
             throw new BizException("房间号不能为空");
         }
-        if(scp.getBookdate() == null){
-            throw new BizException("预约时间不能为空");
+        if(scp.getDeliverydate() == null){
+            throw new BizException("送达时间不能为空");
         }
         if(CollectionUtils.isEmpty(scp.getOrderGoods())){
             throw new BizException("未选择商品，请确认！");
@@ -117,10 +117,10 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         //todo 校验送达时间是否在服务时间内
         //todo 超时时间  暂时按15分钟  送达时间、超时时间要放到redis，key暂定
         Integer timeoutDate;
-        if(scp.getBookdate() == 0){
+        if(scp.getDeliverydate() == 0){
             timeoutDate = DateUtils.javaToPhpNowDateTime() + (15 * 60);
         }else{
-            timeoutDate = scp.getBookdate() + (15 * 60);
+            timeoutDate = scp.getDeliverydate() + (15 * 60);
         }
         //获取用户信息
         ZlWxuserdetail zlWxuserdetail = Optional.ofNullable(zlWxuserdetailMapper.findByUserId(userId)).orElse(new ZlWxuserdetail());
@@ -137,7 +137,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
                 .floornumber(zlHotelroom.getRoomfloor())
                 .roomnumber(zlHotelroom.getRoomnumber())
                 .comeformid(1)
-                .bookdate(scp.getBookdate())
+                .deliverydate(scp.getDeliverydate())
                 .timeoutdate(timeoutDate)
                 .remark(scp.getRemark())
                 .createdate(DateUtils.javaToPhpNowDateTime())
@@ -177,11 +177,11 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         BeanUtils.copyProperties(order, serviceorderInfoVo);
         String createdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getCreatedate()).toString());
         serviceorderInfoVo.setCreatedate(createdate);
-        if(order.getBookdate() == 0){
-            serviceorderInfoVo.setBookdate("0");
+        if(order.getDeliverydate() == 0){
+            serviceorderInfoVo.setDeliverydate("0");
         }else{
-            String bookdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getBookdate()).toString());
-            serviceorderInfoVo.setBookdate(bookdate);
+            String bookdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getDeliverydate()).toString());
+            serviceorderInfoVo.setDeliverydate(bookdate);
         }
         return serviceorderInfoVo;
     }
