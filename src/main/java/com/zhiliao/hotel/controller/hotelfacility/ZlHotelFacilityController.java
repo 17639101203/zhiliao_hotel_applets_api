@@ -7,6 +7,7 @@ import com.zhiliao.hotel.model.ZlHotelFacility;
 import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import com.zhiliao.hotel.service.ZlHotelFacilityOrderService;
 import com.zhiliao.hotel.service.ZlHotelFacilityService;
+import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -65,18 +66,18 @@ public class ZlHotelFacilityController {
         }
     }
 
-    //@UserLoginToken
+    @UserLoginToken
     @ApiOperation(value = "酒店设施预定")
     @ApiImplicitParams({
     })
     @PostMapping("addFacilityOrder")
-    @PassToken
+    //@PassToken
     public ReturnString addFacilityOrder(HttpServletRequest request, @RequestBody ZlHotelFacilityOrder zlHotelFacilityOrder) {
 
 
             String token = request.getHeader("token");
-            //Long userId = TokenUtil.getUserId(token);
-            long userId = System.currentTimeMillis();
+            Long userId = TokenUtil.getUserId(token);
+            //long userId = System.currentTimeMillis();
             zlHotelFacilityOrder.setUserid(userId);
             ReturnString returnString = hotelFacilityService.addFacilityOrder(zlHotelFacilityOrder);
             return new ReturnString(returnString);
