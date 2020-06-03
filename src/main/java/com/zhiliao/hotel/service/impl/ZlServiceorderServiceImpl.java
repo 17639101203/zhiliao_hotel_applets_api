@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class ZlServiceorderServiceImpl implements ZlServiceorderService {
 
     private final ZlHotelRoomMapper zlHotelRoomMapper;
@@ -38,7 +39,6 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
     private final ZlWxuserdetailMapper zlWxuserdetailMapper;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public ServiceorderCommitVo serviceorderSubmit(String token, ServiceorderCommitParams scp) throws RuntimeException{
         ServiceorderCommitVo serviceorderCommitVo = new ServiceorderCommitVo();
         //校验参数
@@ -154,6 +154,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ServiceorderInfoVo getServiceorderInfo(Long orderId) throws RuntimeException{
         ServiceorderInfoVo serviceorderInfoVo = new ServiceorderInfoVo();
         //获取客房服务订单详情
