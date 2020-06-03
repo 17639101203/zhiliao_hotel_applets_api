@@ -160,6 +160,6 @@
   </insert>
 
   <select id="findByUserId" resultMap="BaseResultMap">
-    SELECT * FROM zl_wxuserdetail zwd WHERE zwd.UserID = #{userId} AND zwd.IsDelete = 0
+    SELECT zwd.RealName, zwd.Tel FROM zl_wxuserdetail zwd WHERE zwd.UserID = #{userId} AND zwd.IsDelete = 0
   </select>
 </mapper>

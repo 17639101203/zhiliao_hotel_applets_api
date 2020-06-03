@@ -32,6 +32,13 @@
     <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
     <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
   </resultMap>
+
+  <sql id="selectColumn">
+    OrderID, UserID, UserName, Tel, SerialNumber, ServiceItem, HotelID, HotelName, RoomID, GoodsCoverUrl, FloorNumber,
+    RoomNumber, ComeFormID, DeliveryDate, TimeoutDate, Remark, OrderStatus, OperatorName, OperatorIP, OperatorRemark,
+    CreateDate, UpdateDate
+  </sql>
+
   <insert id="insert" parameterType="com.zhiliao.hotel.model.ZlServiceorder" useGeneratedKeys="true" keyProperty="orderid">
     <!--
       WARNING - @mbg.generated
@@ -161,7 +168,8 @@
   </insert>
 
   <select id="getByOrderId" resultMap="BaseResultMap">
-    SELECT * FROM zl_serviceorder so WHERE so.OrderID = #{orderId, jdbcType=BIGINT}
+    SELECT <include refid="selectColumn" />
+    FROM zl_serviceorder so WHERE so.OrderID = #{orderId, jdbcType=BIGINT}
     AND so.IsDelete = 0 AND so.IsUserDelete = 0
   </select>
 

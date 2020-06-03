@@ -81,7 +81,9 @@
     </update>
 
     <select id="findAllByHotelIdAndGoodsIds" resultMap="BaseResultMap">
-        SELECT * FROM zl_servicegoods zsg
+        SELECT zsg.GoodsID, zsg.GoodsName, zsg.ApplyMaxCount, zsg.ApplyLimitCount,
+        zsg.SalePrice, zsg.CoverImgUrl
+        FROM zl_servicegoods zsg
         WHERE zsg.HotelID = #{hotelId} AND zsg.GoodsID IN (${goodsIds})
         AND zsg.IsDelete = 0 AND zsg.GoodsStatus = 1 AND zsg.CheckStatus = 2
     </select>
