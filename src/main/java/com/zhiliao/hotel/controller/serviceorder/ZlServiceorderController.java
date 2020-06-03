@@ -57,4 +57,22 @@ public class ZlServiceorderController {
             return new ReturnString(r.getMessage());
         }
     }
+
+    /**
+     * 取消客房服务订单
+     */
+    @ApiOperation(value = "高翔_客房服务订单取消")
+    @ApiImplicitParam(paramType = "path", name = "orderId", dataType = "int", required = true, value = "客房服务订单id")
+    @UserLoginToken
+//    @PassToken
+    @PostMapping("serviceorderCancel/{orderId}")
+    public ReturnString serviceorderCancel(@PathVariable Long orderId){
+        try {
+            //取消客房服务订单
+            zlServiceorderService.serviceorderCancel(orderId);
+            return new ReturnString(0, "订单取消成功");
+        }catch (RuntimeException r){
+            return new ReturnString(r.getMessage());
+        }
+    }
 }

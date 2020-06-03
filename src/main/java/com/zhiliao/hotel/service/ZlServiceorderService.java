@@ -19,5 +19,12 @@ public interface ZlServiceorderService {
      * @param orderId
      * @return
      */
-    ServiceorderInfoVo getServiceorderInfo(Long orderId)  throws RuntimeException;
+    ServiceorderInfoVo getServiceorderInfo(Long orderId) throws RuntimeException;
+
+    /**
+     * 客房服务订单取消
+     * @param orderId
+     * @throws RuntimeException
+     */
+    void serviceorderCancel(Long orderId) throws RuntimeException;
 }

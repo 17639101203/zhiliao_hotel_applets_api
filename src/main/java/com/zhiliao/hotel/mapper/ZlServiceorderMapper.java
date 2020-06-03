@@ -22,4 +22,6 @@ public interface ZlServiceorderMapper extends Mapper<ZlServiceorder> {
     int insertSelective(ZlServiceorder record);
 
     ZlServiceorder getByOrderId(@Param("orderId") Long orderId);
+
+    int updateOrderStatusById(@Param("orderId") Long orderId, @Param("updateDate") Integer updateDate);
 }

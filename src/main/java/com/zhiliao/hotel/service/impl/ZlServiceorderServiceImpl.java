@@ -186,4 +186,19 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         return serviceorderInfoVo;
     }
 
+    @Override
+    public void serviceorderCancel(Long orderId) throws RuntimeException{
+        //获取客房服务订单详情
+        ZlServiceorder order = zlServiceorderMapper.getByOrderId(orderId);
+        if(order == null){
+            throw new BizException("该订单不存在，请刷新页面重试！");
+        }
+        if(order.getOrderstatus() != 0){
+            throw new BizException("该订单状态已发生改变，请刷新页面重试！");
+        }
+        //修改订单状态
+        Integer updateDate = DateUtils.javaToPhpNowDateTime();
+        zlServiceorderMapper.updateOrderStatusById(orderId, updateDate);
+    }
+
 }
