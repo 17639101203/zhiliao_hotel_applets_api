@@ -37,39 +37,39 @@
     <select id="findAllOrder"
             resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderList"
             parameterType="com.zhiliao.hotel.controller.myOrder.vo.OrderInfoVO">
-
+        
         SELECT * FROM zl_order WHERE UserID=#{userId}
         
         AND IsDelete=0
-
+        
         <if test="hotelid != null">
             AND HotelID = #{hotelid}
         </if>
-
+        
         <if test="paytype != null">
             AND PayType = #{paytype}
         </if>
-
+        
         <if test="paystatus != null">
             AND PayStatus = #{paystatus}
         </if>
-
+        
         <if test="orderstatus != null">
             AND OrderStatus = #{orderstatus}
         </if>
-
+        
         <if test="refundstatus != null">
             AND RefundStatus = #{refundstatus}
         </if>
-
+        
         <if test="belongmodule != null">
             AND BelongModule = #{belongmodule}
         </if>
-
+        
         ORDER BY CreateDate DESC
-
+    
     </select>
-
+    
     <select id="findById"
             resultType="com.zhiliao.hotel.model.ZlOrder">
     select * from zl_order where OrderID = #{orderid}
@@ -78,7 +78,7 @@
     <!--parameterType="com.zhiliao.hotel.model.ZlOrder">-->
     <!--update zl_order set OrderStatus = #{orderstatus},UpdateDate = #{updatedate} where OrderID = #{orderid}-->
     <!--</update>-->
-
+    
     <select id="getOrderDetail"
             resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderDetailVO">
         SELECT
@@ -92,7 +92,7 @@
         WHERE zo.OrderSerialNo = #{out_trade_no}
         ORDER BY zod.HotelGoodsID ASC
     </select>
-
+    
     <update id="updateOrder">
         UPDATE
           zl_order
@@ -101,8 +101,9 @@
           OrderStatus = 1
         WHERE OrderSerialNo = #{out_trade_no}
     </update>
-
-    <select id="getByOrderSerialNo" resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderStatusVO">
+    
+    <select id="getByOrderSerialNo"
+            resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderStatusVO">
         SELECT DISTINCT
           OrderSerialNo,
           PayStatus,
@@ -111,7 +112,7 @@
           zl_order
         WHERE OrderSerialNo = #{out_trade_no}
     </select>
-
+    
     <update id="updateOrderUpdateDate">
         UPDATE
           zl_order
@@ -121,7 +122,7 @@
         WHERE OrderSerialNo = #{out_trade_no}
           AND BelongModule = #{belongModule}
     </update>
-
+    
     <update id="autoUpdateOrderUpdateDate">
         UPDATE
           zl_order
@@ -130,8 +131,9 @@
           OrderStatus = -1
         WHERE OrderSerialNo = #{out_trade_no}
     </update>
-
-    <select id="getOrderByOrderSerialNo" resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderPayShortInfoVO">
+    
+    <select id="getOrderByOrderSerialNo"
+            resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderPayShortInfoVO">
         SELECT
           OrderID,
           TotalPrice,
@@ -141,7 +143,7 @@
         WHERE OrderSerialNo = #{out_trade_no}
         ORDER BY OrderID ASC
     </select>
-
+    
     <delete id="userDeleteOrder">
         UPDATE
           zl_order
@@ -150,5 +152,23 @@
         WHERE OrderSerialNo = #{orderSerialNo}
           AND BelongModule = #{belongModule}
     </delete>
+    
+    <select id="waitForPayTotal"
+            resultType="java.lang.Long">
+
+        SELECT COUNT(OrderID) FROM zl_order WHERE IsDelete=0 AND PayStatus=1 AND UserID=#{userid}
+	</select>
+    
+    <select id="waitForGoodsTotal"
+            resultType="java.lang.Long">
+
+          SELECT COUNT(OrderID) FROM zl_order WHERE IsDelete=0 AND OrderStatus=1 AND UserID=#{userid}
+	</select>
+    
+    <select id="allOrderTotal"
+            resultType="java.lang.Long">
+
+          SELECT COUNT(OrderID) FROM zl_order WHERE IsDelete=0 AND UserID=#{userid}
+	</select>
 
 </mapper>

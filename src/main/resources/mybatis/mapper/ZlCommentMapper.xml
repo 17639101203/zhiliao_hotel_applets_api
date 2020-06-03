@@ -182,5 +182,11 @@
       where
           a.UserID = #{userid} and a.IsDelete = 0 and a.CommentID = #{commentid} and a.Type = 0 and a.CommentStatus = 1
   </update>
+    
+    <select id="waitAppraiseTotal"
+            resultType="java.lang.Long">
+          SELECT COUNT(CommentID) FROM zl_comment WHERE IsDelete=0 AND ReplyReadStatus=0 AND UserID=#{userid}
+	</select>
+
 
 </mapper>

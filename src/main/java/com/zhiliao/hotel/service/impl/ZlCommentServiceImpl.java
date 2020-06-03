@@ -7,7 +7,6 @@ import com.zhiliao.hotel.controller.comment.commentparm.CommentVO;
 import com.zhiliao.hotel.mapper.ZlCommentMapper;
 import com.zhiliao.hotel.mapper.ZlTagMapper;
 import com.zhiliao.hotel.model.ZlComment;
-import com.zhiliao.hotel.model.ZlTag;
 import com.zhiliao.hotel.service.ZlCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,4 +83,10 @@ public class ZlCommentServiceImpl implements ZlCommentService {
         zlCommentMapper.changeReplyReadStatus(userid, commentid);
         return comment;
     }
+    
+    @Override
+    public Long waitAppraiseTotal(Long userid){
+        return zlCommentMapper.waitAppraiseTotal(userid);
+    }
+    
 }

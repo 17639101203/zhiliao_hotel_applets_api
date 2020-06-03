@@ -6,23 +6,30 @@ import com.zhiliao.hotel.controller.myOrder.vo.*;
 import java.util.List;
 import java.util.Map;
 
-public interface ZlOrderService {
-
+public interface ZlOrderService{
+    
     PageInfoResult findAllOrder(OrderInfoVO vo);
-
-    UserGoodsReturn submitOrder(Long userID, HotelBasicVO hotelBasicVO, Map<String, List<GoodsInfoVO>> goodsInfoMap);
-
+    
+    UserGoodsReturn submitOrder(Long userID,HotelBasicVO hotelBasicVO,Map<String,List<GoodsInfoVO>> goodsInfoMap);
+    
     void updateOrder(String out_trade_no);
-
+    
     List<OrderDetailVO> getOrderDetail(String out_trade_no);
-
-    void cancelOrder(String out_trade_no, Integer belongModule);
-
+    
+    void cancelOrder(String out_trade_no,Integer belongModule);
+    
     void autoCancelOrder(String out_trade_no);
-
+    
     OrderStatusVO getByOrderSerialNo(String out_trade_no);
-
+    
     List<OrderPayShortInfoVO> getOrderByOrderSerialNo(String out_trade_no);
-
-    void userDeleteOrder(String orderSerialNo, Integer belongModule);
+    
+    void userDeleteOrder(String orderSerialNo,Integer belongModule);
+    
+    Long waitForPayTotal(Long userId);
+    
+    Long waitForGoodsTotal(Long userId);
+    
+    Long allOrderTotal(Long userId);
+    
 }

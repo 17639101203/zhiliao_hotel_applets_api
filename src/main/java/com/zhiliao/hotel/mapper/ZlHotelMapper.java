@@ -12,5 +12,6 @@ import tk.mybatis.mapper.common.Mapper;
 public interface ZlHotelMapper extends Mapper<ZlHotel> {
 
     ZlHotel getById(@Param("hotelId") String hotelId);
-
+    
+    String getReceptionTel(@Param("hotelId")Integer hotelId);
 }

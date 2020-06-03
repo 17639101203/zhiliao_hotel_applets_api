@@ -474,5 +474,20 @@ public class ZlOrderServiceIml implements ZlOrderService {
         zlOrderMapper.userDeleteOrder(orderSerialNo, belongModule);
         zlOrderDetailMapper.userDeleteOrder(orderSerialNo, belongModule);
     }
-
+    
+    @Override
+    public Long waitForPayTotal(Long userId){
+        return zlOrderMapper.waitForPayTotal(userId);
+    }
+    
+    @Override
+    public Long waitForGoodsTotal(Long userId){
+        return zlOrderMapper.waitForGoodsTotal(userId);
+    }
+    
+    @Override
+    public Long allOrderTotal(Long userId){
+        return zlOrderMapper.allOrderTotal(userId);
+    }
+    
 }

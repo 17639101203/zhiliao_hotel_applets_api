@@ -1,11 +1,8 @@
 package com.zhiliao.hotel.controller.eatRent;
 
-import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
-import com.zhiliao.hotel.controller.myOrder.vo.OrderInfoVO;
 import com.zhiliao.hotel.model.ZlDisburdeneatlive;
-import com.zhiliao.hotel.service.MyAppointmentService;
 import com.zhiliao.hotel.service.ZlDisburdeneatliveService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -13,7 +10,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  *
  */
-@Api(tags="安心食住接口_林生")
+@Api(tags="首页_安心食住接口_林生")
 @RestController
 @RequestMapping("eatRent")
 public class ZlDisburdeneatliveController{
