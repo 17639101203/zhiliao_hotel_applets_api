@@ -7,6 +7,7 @@ import com.zhiliao.hotel.service.ZlXcxMenuService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 /**
  * 小程序菜单业务实现类
+ *
  * @author chenrong
  * @created date 2020/4/14
  */
@@ -31,10 +33,13 @@ public class ZlXcxMenuServiceImpl implements ZlXcxMenuService {
         if (!CollectionUtils.isEmpty(menuList)) {
             List<ZlXcxmenu> zlXcxMenuArrayList = menuList.stream().collect(
                     Collectors.collectingAndThen(
-                            Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(ZlXcxmenu::getMenuname))), ArrayList::new)
+                            Collectors.toCollection(() -> new TreeSet<>
+                                    (Comparator.comparing(ZlXcxmenu::getMenuname))),
+                            ArrayList::new)
             );
 
-            List<ZlXcxmenu> ZlXcxMenuCollect = zlXcxMenuArrayList.stream().filter(a -> a.getIsdelete()==0).collect(Collectors.toList());
+            List<ZlXcxmenu> ZlXcxMenuCollect = zlXcxMenuArrayList.stream().filter(a ->
+                    a.getIsdelete() == 0).collect(Collectors.toList());
 
             return ZlXcxMenuCollect;
         }
