@@ -59,6 +59,19 @@ public class ZlNews implements Serializable {
      */
     private Boolean status;
 
+    public Integer getCheckstatus() {
+        return checkstatus;
+    }
+
+    public void setCheckstatus(Integer checkstatus) {
+        this.checkstatus = checkstatus;
+    }
+
+    /**
+     * 审核状态:-1驳回;0待审核;1审核中;2审核通过
+     */
+    private Integer checkstatus;
+
     /**
      * 创建人
      */
