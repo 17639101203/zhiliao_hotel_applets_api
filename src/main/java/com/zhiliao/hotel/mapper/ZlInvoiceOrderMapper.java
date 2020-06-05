@@ -3,8 +3,9 @@ package com.zhiliao.hotel.mapper;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
 import com.zhiliao.hotel.model.ZlInvoiceOrder;
 import org.apache.ibatis.annotations.Param;
+import tk.mybatis.mapper.common.Mapper;
 
-public interface ZlInvoiceOrderMapper {
+public interface ZlInvoiceOrderMapper extends Mapper<ZlInvoiceOrder> {
 
     void insertInvoiceOrder(ZlInvoiceOrder zlInvoiceOrder);
 

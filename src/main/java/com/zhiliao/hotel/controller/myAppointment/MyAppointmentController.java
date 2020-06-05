@@ -161,7 +161,8 @@ public class MyAppointmentController {
     @ApiOperation(value = "取消订单_徐向向")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path",name = "orderid",dataType = "long",required = true,value = "订单id"),
-            @ApiImplicitParam(paramType = "path",name = "orderServiceType",dataType = "int",required = true,value = "每个服务订单的类型标识 1: 清扫订单, 2: 发票订单, 3: 报修订单,4: 设施订单")
+            @ApiImplicitParam(paramType = "path",name = "orderServiceType",dataType = "int",required = true,
+                    value = "每个服务订单的类型标识 1: 清扫订单, 2: 发票订单, 3: 报修订单,4: 设施订单,5:客房服务订单,")
     })
     @GetMapping("cancelOrder/{orderid}/{orderServiceType}")
     @UserLoginToken
@@ -175,4 +176,20 @@ public class MyAppointmentController {
         }
         return new ReturnString(0,"已取消");
     }
+
+    @ApiOperation(value = "我的预约各订单类型的数量_徐向向")
+    @GetMapping("myAppointementCount")
+    @UserLoginToken
+    public ReturnString myAppointementCount(HttpServletRequest request){
+        String token = request.getHeader("token");
+        Long userId = TokenUtil.getUserId(token);
+        try {
+            Map<String,Integer> resultCount = myAppointmentService.myAppointementCount(userId);
+            return new ReturnString(resultCount);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("获取失败");
+        }
+    }
+
 }

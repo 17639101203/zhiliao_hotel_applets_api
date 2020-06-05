@@ -71,7 +71,7 @@ public class ZlHotelFacilityOrderServiceImpl implements ZlHotelFacilityOrderServ
         try {
             if (facilityOrder != null){
                 if (facilityOrder.getUsebegindate() - date <= oneHour) {
-                    return new ReturnString("很抱歉，需提前1小时取消预约，现在已不能取消！");
+                    return new ReturnString("很抱歉，需提前"+hotelFacilityDetail.getCancancelorderminute()+"小时取消预约，现在已不能取消！");
                 }
                 facilityOrder.setOrderstatus((byte) -1);
                 facilityOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
@@ -80,6 +80,8 @@ public class ZlHotelFacilityOrderServiceImpl implements ZlHotelFacilityOrderServ
                 ZlHotelFacility facilityDetail = facilityMapper.getHotelFacilityDetail(facilityOrder.getFacilityid());
                 if (facilityDetail != null){
                     facilityDetail.setFacilitycount(facilityDetail.getFacilitycount() + 1);
+                    facilityDetail.setFacilityremaincount(facilityDetail.getFacilityremaincount() + 1);
+                    facilityDetail.setUsecount(facilityDetail.getUsecount() - 1);
                     facilityDetail.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
                     facilityMapper.updateByPrimaryKeySelective(facilityDetail);
                 }

@@ -18,12 +18,21 @@
     order by CreateDate DESC
   </select>
   <!--发票服务订单列表-->
-  <select id="findAllInvoice" resultType="com.zhiliao.hotel.model.ZlInvoice">
-    select InvoiceID, UserID, InvoiceType,
-    MainBodyType, Title, Identifier,
-    Tel, Remark, InvoiceStatus,
-    IsDelete, CreateDate, UpdateDate
-    from zl_invoice
+  <select id="findAllInvoice" resultType="com.zhiliao.hotel.model.ZlInvoiceOrder">
+    select
+    InvoiceOrderID,
+    InvoiceID,
+    HotelID,
+    InvoiceType,
+    MainBodyType,
+    ElectronicPaperType,
+    Title,
+    Identifier,
+    Tel,
+    Remark,
+    InvoiceStatus,
+    CreateDate
+    from zl_invoiceorder
     where 1 = 1 and IsDelete = '0'
     <if test="userId != null and userId != '' ">
       and UserID = #{userId}

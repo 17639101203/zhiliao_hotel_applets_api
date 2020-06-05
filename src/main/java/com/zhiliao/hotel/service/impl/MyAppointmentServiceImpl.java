@@ -5,20 +5,15 @@ import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.myAppointment.result.ZlServiceorderResult;
 import com.zhiliao.hotel.mapper.*;
-import com.zhiliao.hotel.model.ZlCleanOrder;
-import com.zhiliao.hotel.model.ZlInvoice;
-import com.zhiliao.hotel.model.ZlRepairorder;
-import com.zhiliao.hotel.model.ZlServiceorder;
+import com.zhiliao.hotel.model.*;
 import com.zhiliao.hotel.service.MyAppointmentService;
 import com.zhiliao.hotel.service.ZlHotelFacilityOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 我的预约服务订单
@@ -43,6 +38,10 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     private ZlRepairorderMapper repairorderMapper;
     @Autowired
     private MyAppointmentMapper myAppointmentMapper;
+    @Autowired
+    private ZlInvoiceOrderMapper invoiceOrderMapper;
+    @Autowired
+    private ZlHotelFacilityOrderMapper facilityOrderMapper;
 
 
     @Autowired
@@ -80,8 +79,8 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     @Override
     public PageInfoResult invoiceFindAll(Long userId, Integer invoicestatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo,pageSize);
-        List<ZlInvoice> invoices = myAppointmentMapper.findAllInvoice(userId,invoicestatus);
-        PageInfo<ZlInvoice> pageInfo = new PageInfo<>(invoices);
+        List<ZlInvoiceOrder> invoiceOrders = myAppointmentMapper.findAllInvoice(userId,invoicestatus);
+        PageInfo<ZlInvoiceOrder> pageInfo = new PageInfo<>(invoiceOrders);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
@@ -122,11 +121,56 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
+    /**
+     * 各订单类型数量
+     * @param userId
+     * @return
+     */
+    @Override
+    public Map<String, Integer> myAppointementCount(Long userId) {
 
+        //清扫订单数量
+        ZlCleanOrder cleanOrder = new ZlCleanOrder();
+        cleanOrder.setUserid(userId);
+        cleanOrder.setIsdelete(false);
+        int cleanOrderCount = cleanOrderMapper.selectCount(cleanOrder);
+        //发票订单数量
+        ZlInvoiceOrder invoiceOrder = new ZlInvoiceOrder();
+        invoiceOrder.setUserid(userId);
+        invoiceOrder.setIsdelete(false);
+        int invoiceOrderCount = invoiceOrderMapper.selectCount(invoiceOrder);
+        //报修订单数量
+        ZlRepairorder repairorder = new ZlRepairorder();
+        repairorder.setUserid(userId);
+        repairorder.setIsdelete(false);
+        repairorder.setIsuserdelete(false);
+        int repairOrderCount = repairorderMapper.selectCount(repairorder);
+        //客房服务订单数量
+        ZlServiceorder serviceorder = new ZlServiceorder();
+        serviceorder.setIsdelete(false);
+        serviceorder.setIsuserdelete(false);
+        serviceorder.setUserid(userId);
+        int serviceOrderCount = serviceorderMapper.selectCount(serviceorder);
+        //设施订单数量
+        ZlHotelFacilityOrder facilityOrder = new ZlHotelFacilityOrder();
+        facilityOrder.setUserid(userId);
+        facilityOrder.setIsdelete(false);
+        facilityOrder.setIsuserdelete(false);
+        int facilityOrderCount = facilityOrderMapper.selectCount(facilityOrder);
+        //叫醒服务订单数量
 
+        //租车订单数量
 
+        //退续住服务订单数量
 
-
+        Map<String,Integer> map = new HashMap<>();
+        map.put("cleanOrderCount",cleanOrderCount);
+        map.put("invoiceOrderCount",invoiceOrderCount);
+        map.put("repairOrderCount",repairOrderCount);
+        map.put("serviceOrderCount",serviceOrderCount);
+        map.put("facilityOrderCount",facilityOrderCount);
+        return map;
+    }
 
 
     /**
@@ -144,6 +188,8 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
             cancelRepairOrder(orderid);
         }else if (orderServiceType == 4){
             facilityOrderService.cancelFacilityOrder(orderid);
+        }else if (orderServiceType == 5){
+            canceServiceOrder(orderid);
         }
         else {
             new RuntimeException("订单标识不符");

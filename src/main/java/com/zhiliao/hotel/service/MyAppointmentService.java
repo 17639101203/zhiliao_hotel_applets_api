@@ -5,6 +5,8 @@ import com.zhiliao.hotel.model.ZlCleanOrder;
 import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.model.ZlRepairorder;
 
+import java.util.Map;
+
 public interface MyAppointmentService {
     /**
      * 获取所有清扫订单
@@ -42,4 +44,6 @@ public interface MyAppointmentService {
     void cancelOrder(Long orderid, Integer orderServiceType);
 
     PageInfoResult serviceFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize);
+
+    Map<String, Integer> myAppointementCount(Long userId);
 }
