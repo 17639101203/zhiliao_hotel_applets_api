@@ -67,7 +67,7 @@ public class ZlHotelFacilityController {
     }
 
     @UserLoginToken
-    @ApiOperation(value = "酒店设施预定")
+    @ApiOperation(value = "酒店设施预定订单提交")
     @ApiImplicitParams({
     })
     @PostMapping("addFacilityOrder")
@@ -93,7 +93,6 @@ public class ZlHotelFacilityController {
     @ResponseBody
     public ReturnString findOrderDetail(@PathVariable Long orderID) {
 
-
         try {
             ZlHotelFacilityOrder zlHotelFacilityOrder = hotelFacilityOrderService.findOrder( orderID);
             return new ReturnString(zlHotelFacilityOrder);
@@ -102,4 +101,7 @@ public class ZlHotelFacilityController {
             return new ReturnString("查询失败");
         }
     }
+
+
+
 }
