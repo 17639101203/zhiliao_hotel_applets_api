@@ -3,7 +3,9 @@ package com.zhiliao.hotel.controller.wake;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.controller.hotelfacility.ZlHotelFacilityController;
 import com.zhiliao.hotel.controller.wake.params.ZlWaqkeOrderParam;
+import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import com.zhiliao.hotel.model.ZlWakeOrder;
 import com.zhiliao.hotel.service.ZlWakeOrderService;
 import com.zhiliao.hotel.utils.TokenUtil;
@@ -49,8 +51,10 @@ public class ZlWakeOrderController {
         wakeOrder.setHotelname(wakeOrderParm.getHotelName());
         wakeOrder.setRoomid(wakeOrderParm.getRoomId());
         wakeOrder.setRoomnumber(wakeOrderParm.getRoomNumber());
-        wakeOrder.setWakedate(wakeOrderParm.getWakeDate());
+        wakeOrder.setWakedate(wakeOrderParm.getWakeDate() / 1000);
         wakeOrder.setRemark(wakeOrderParm.getRemark());
+        wakeOrder.setUsername(wakeOrderParm.getUserName());
+        wakeOrder.setTel(wakeOrderParm.getTel());
 
         try {
              Map<String,Object> map = wakeOrderService.addWakeOrder(userId, wakeOrder);
@@ -97,7 +101,7 @@ public class ZlWakeOrderController {
         }
     }
 
-    @ApiOperation(value = "删除叫醒订单")
+    @ApiOperation(value = "用户删除叫醒订单")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", dataType = "long", name = "orderID", value = "订单ID", required = true)
     })
