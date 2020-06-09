@@ -30,12 +30,12 @@ public class ZlContinueLiveOrderParam {
      * 退房时间
      */
     @ApiModelProperty(value = "退房时间", required = true)
-    private Integer CheckOutDate;
+    private Long CheckOutDate;
 
     /**
      * 续住时间
      */
     @ApiModelProperty(value = "续住时间", required = true)
-    private Integer ContinueLiveDate;
+    private Long ContinueLiveDate;
 
 }

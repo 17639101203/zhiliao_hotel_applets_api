@@ -5,9 +5,9 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.ValueFilter;
 
 /**
+ * @param <T>
  * @author xiegege
  * @date 2020/5/20
- * @param <T>
  */
 public class ReturnString<T> {
 

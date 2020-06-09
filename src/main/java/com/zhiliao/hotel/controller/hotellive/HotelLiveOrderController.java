@@ -70,7 +70,7 @@ public class HotelLiveOrderController {
         Long userID = TokenUtil.getUserId(token);
 //        Long userID = 9L;
         try {
-            Map<String,Object> map = hotelLiveOrderService.checkoutOrder(userID, hotelBasicVO, zlCheckoutOrderParam);
+            Map<String, Object> map = hotelLiveOrderService.checkoutOrder(userID, hotelBasicVO, zlCheckoutOrderParam);
             return new ReturnString(map);
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,7 +89,7 @@ public class HotelLiveOrderController {
     public ReturnString cancelCheckoutOrder(@PathVariable("orderID") Long orderID) {
         try {
             hotelLiveOrderService.cancelCheckoutOrder(orderID);
-            return new ReturnString("取消退房成功!");
+            return new ReturnString(0, "取消退房成功!");
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("取消退房失败!");
@@ -115,7 +115,6 @@ public class HotelLiveOrderController {
     }
 
 
-
     @ApiOperation(value = "用户删除退房订单_姬慧慧")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "退房订单ID")
@@ -124,7 +123,7 @@ public class HotelLiveOrderController {
     @UserLoginToken
 //    @PassToken
     @ResponseBody
-    public ReturnString  userDeleteCheckoutOrder(@PathVariable("orderID") Long orderID) {
+    public ReturnString userDeleteCheckoutOrder(@PathVariable("orderID") Long orderID) {
         try {
             hotelLiveOrderService.userDeleteCheckoutOrder(orderID);
             return new ReturnString("用户删除退房成功!");
@@ -165,7 +164,7 @@ public class HotelLiveOrderController {
 //        Long userID = 9L;
         try {
             hotelLiveOrderService.continueLiveOrder(userID, hotelBasicVO, zlContinueLiveOrderParam);
-            return new ReturnString("续住成功!");
+            return new ReturnString(0, "续住成功!");
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("续住失败!");
@@ -183,7 +182,7 @@ public class HotelLiveOrderController {
     public ReturnString cancelContinueLiveOrder(@PathVariable("orderID") Long orderID) {
         try {
             hotelLiveOrderService.cancelContinueLiveOrder(orderID);
-            return new ReturnString("取消续住成功!");
+            return new ReturnString(0, "取消续住成功!");
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("取消续住失败!");
@@ -198,10 +197,10 @@ public class HotelLiveOrderController {
     @UserLoginToken
 //    @PassToken
     @ResponseBody
-    public ReturnString  userDeleteContinueLiveOrder(@PathVariable("orderID") Long orderID) {
+    public ReturnString userDeleteContinueLiveOrder(@PathVariable("orderID") Long orderID) {
         try {
             hotelLiveOrderService.userDeleteContinueLiveOrder(orderID);
-            return new ReturnString("用户删除退房成功!");
+            return new ReturnString(0, "用户删除退房成功!");
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("用户删除退房失败!");

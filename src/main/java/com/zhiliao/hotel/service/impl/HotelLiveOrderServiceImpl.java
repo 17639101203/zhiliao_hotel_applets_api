@@ -38,7 +38,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
     private ZlContinueLiveOrderMapper zlContinueLiveOrderMapper;
 
     @Override
-    public Map<String,Object> checkoutOrder(Long userID, HotelBasicVO hotelBasicVO, ZlCheckoutOrderParam zlCheckoutOrderParam) {
+    public Map<String, Object> checkoutOrder(Long userID, HotelBasicVO hotelBasicVO, ZlCheckoutOrderParam zlCheckoutOrderParam) {
 
         //调用工具类生成订单编号
         String orderSerialNo = OrderIDUtil.createOrderID("TF");
@@ -56,14 +56,14 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         zlCheckoutOrder.setOrderstatus((byte) 0);
         zlCheckoutOrder.setIsdelete(false);
         zlCheckoutOrder.setIsuserdelete(false);
-        zlCheckoutOrder.setCheckoutdate(zlCheckoutOrderParam.getCheckOutDate());
+        zlCheckoutOrder.setCheckoutdate((int) (zlCheckoutOrderParam.getCheckOutDate() / 1000));
         zlCheckoutOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         zlCheckoutOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
         zlCheckoutOrderMapper.insert(zlCheckoutOrder);
 
-        Map<String,Object> map = new HashMap<>();
-        map.put("orderid",zlCheckoutOrder.getOrderid());
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderid", zlCheckoutOrder.getOrderid());
         return map;
     }
 
@@ -86,8 +86,8 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         zlContinueLiveOrder.setOrderstatus((byte) 0);
         zlContinueLiveOrder.setIsdelete(false);
         zlContinueLiveOrder.setIsuserdelete(false);
-        zlContinueLiveOrder.setContinuelivedate(zlContinueLiveOrderParam.getContinueLiveDate());
-        zlContinueLiveOrder.setCheckoutdate(zlContinueLiveOrderParam.getCheckOutDate());
+        zlContinueLiveOrder.setContinuelivedate((int) (zlContinueLiveOrderParam.getContinueLiveDate() / 1000));
+        zlContinueLiveOrder.setCheckoutdate((int) (zlContinueLiveOrderParam.getCheckOutDate() / 1000));
         zlContinueLiveOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         zlContinueLiveOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
@@ -120,6 +120,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
 
     /**
      * 退房订单详情
+     *
      * @param orderID
      * @return
      */
@@ -130,6 +131,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
 
     /**
      * 续住订单详情
+     *
      * @param orderID
      * @return
      */
