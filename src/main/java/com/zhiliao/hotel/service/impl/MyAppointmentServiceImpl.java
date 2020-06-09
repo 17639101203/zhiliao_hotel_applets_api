@@ -6,13 +6,13 @@ import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.myAppointment.result.ZlServiceorderResult;
 import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.model.*;
-import com.zhiliao.hotel.service.MyAppointmentService;
-import com.zhiliao.hotel.service.ZlHotelFacilityOrderService;
+import com.zhiliao.hotel.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -42,6 +42,20 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     private ZlInvoiceOrderMapper invoiceOrderMapper;
     @Autowired
     private ZlHotelFacilityOrderMapper facilityOrderMapper;
+    @Autowired
+    private ZlWakeOrderMapper wakeOrderMapper;
+    @Autowired
+    private ZlRentCarOrderMapper rentCarOrderMapper;
+    @Autowired
+    private ZlContinueLiveOrderMapper continueLiveOrderMapper;
+    @Autowired
+    private ZlCheckoutOrderMapper checkoutOrderMapper;
+    @Autowired
+    private ZlWakeOrderService wakeOrderService;
+    @Autowired
+    private ZlRentCarGoodsService rentCarGoodsService;
+    @Autowired
+    private HotelLiveOrderService hotelLiveOrderService;
 
 
     @Autowired
@@ -122,6 +136,70 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     }
 
     /**
+     * 叫醒服务订单列表
+     * @param userId
+     * @param orderStatus
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageInfoResult findAllWakeOrder(Long userId, Integer orderStatus, Integer pageNo, Integer pageSize) {
+        PageHelper.startPage(pageNo,pageSize);
+        List<ZlWakeOrder> wakeOrders = myAppointmentMapper.findAllWakeOrder(userId,orderStatus);
+        PageInfo<ZlWakeOrder> pageInfo = new PageInfo<>(wakeOrders);
+        return PageInfoResult.getPageInfoResult(pageInfo);
+    }
+
+    /**
+     * 租车服务订单列表
+     * @param userId
+     * @param orderStatus
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageInfoResult findAllRentCarOrder(Long userId, Integer orderStatus, Integer pageNo, Integer pageSize) {
+        PageHelper.startPage(pageNo,pageSize);
+        List<ZlRentCarOrder> rentCarOrders = myAppointmentMapper.findAllRentCarOrder(userId,orderStatus);
+        PageInfo<ZlRentCarOrder> pageInfo = new PageInfo<>(rentCarOrders);
+        return PageInfoResult.getPageInfoResult(pageInfo);
+    }
+
+    /**
+     * 退房服务订单
+     * @param userId
+     * @param orderStatus
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageInfoResult findAllCheckOutOrder(Long userId, Integer orderStatus, Integer pageNo, Integer pageSize) {
+        PageHelper.startPage(pageNo,pageSize);
+        List<ZlCheckoutOrder> checkoutOrders = myAppointmentMapper.findAllCheckOutOrder(userId,orderStatus);
+        PageInfo<ZlCheckoutOrder> pageInfo = new PageInfo<>(checkoutOrders);
+        return PageInfoResult.getPageInfoResult(pageInfo);
+    }
+
+    /**
+     * 续住服务订单
+     * @param userId
+     * @param orderStatus
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageInfoResult findAllContinueLiveOrder(Long userId, Integer orderStatus, Integer pageNo, Integer pageSize) {
+        PageHelper.startPage(pageNo,pageSize);
+        List<ZlContinueLiveOrder> checkoutOrders = myAppointmentMapper.findAllContinueLiveOrder(userId,orderStatus);
+        PageInfo<ZlContinueLiveOrder> pageInfo = new PageInfo<>(checkoutOrders);
+        return PageInfoResult.getPageInfoResult(pageInfo);
+    }
+
+    /**
      * 各订单类型数量
      * @param userId
      * @return
@@ -130,47 +208,38 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     public Map<String, Integer> myAppointementCount(Long userId) {
 
         //清扫订单数量
-        ZlCleanOrder cleanOrder = new ZlCleanOrder();
-        cleanOrder.setUserid(userId);
-        cleanOrder.setIsdelete(false);
-        int cleanOrderCount = cleanOrderMapper.selectCount(cleanOrder);
+        int cleanOrderCount = cleanOrderMapper.selectCountClean(userId);
         //发票订单数量
-        ZlInvoiceOrder invoiceOrder = new ZlInvoiceOrder();
-        invoiceOrder.setUserid(userId);
-        invoiceOrder.setIsdelete(false);
-        int invoiceOrderCount = invoiceOrderMapper.selectCount(invoiceOrder);
+        int invoiceOrderCount = invoiceOrderMapper.selectCountInvoice(userId);
         //报修订单数量
-        ZlRepairorder repairorder = new ZlRepairorder();
-        repairorder.setUserid(userId);
-        repairorder.setIsdelete(false);
-        repairorder.setIsuserdelete(false);
-        int repairOrderCount = repairorderMapper.selectCount(repairorder);
+        int repairOrderCount = repairorderMapper.selectCountRepair(userId);
         //客房服务订单数量
-        ZlServiceorder serviceorder = new ZlServiceorder();
-        serviceorder.setIsdelete(false);
-        serviceorder.setIsuserdelete(false);
-        serviceorder.setUserid(userId);
-        int serviceOrderCount = serviceorderMapper.selectCount(serviceorder);
+        int serviceOrderCount = serviceorderMapper.selectCountService(userId);
         //设施订单数量
-        ZlHotelFacilityOrder facilityOrder = new ZlHotelFacilityOrder();
-        facilityOrder.setUserid(userId);
-        facilityOrder.setIsdelete(false);
-        facilityOrder.setIsuserdelete(false);
-        int facilityOrderCount = facilityOrderMapper.selectCount(facilityOrder);
+        int facilityOrderCount = facilityOrderMapper.selectCountFacility(userId);
         //叫醒服务订单数量
-
+        int wakeOrderCount = wakeOrderMapper.selectCountWake(userId);
         //租车订单数量
-
-        //退续住服务订单数量
+        int rentCarOrderCount = rentCarOrderMapper.selectCountRentCar(userId);
+        //退房服务订单数量
+        int checkoutOrderCount = checkoutOrderMapper.selectCountCheckOut(userId);
+        //续住服务订单
+        int continueLiveOrderCount = continueLiveOrderMapper.selectCountLive(userId);
 
         Map<String,Integer> map = new HashMap<>();
         map.put("cleanOrderCount",cleanOrderCount);
         map.put("invoiceOrderCount",invoiceOrderCount);
         map.put("repairOrderCount",repairOrderCount);
         map.put("serviceOrderCount",serviceOrderCount);
+        map.put("wakeOrderCount",wakeOrderCount);
+        map.put("rentCarOrderCount",rentCarOrderCount);
+        map.put("checkoutOrderCount",checkoutOrderCount);
+        map.put("continueLiveOrderCount",continueLiveOrderCount);
         map.put("facilityOrderCount",facilityOrderCount);
         return map;
     }
+
+
 
 
     /**
@@ -190,12 +259,19 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
             facilityOrderService.cancelFacilityOrder(orderid);
         }else if (orderServiceType == 5){
             canceServiceOrder(orderid);
+        }else if (orderServiceType == 6){
+            wakeOrderService.cancelWakeOrder(orderid);
+        }else if (orderServiceType == 7){
+            rentCarGoodsService.cancelRentCarOrder(orderid);
+        }else if (orderServiceType == 8){
+            hotelLiveOrderService.cancelCheckoutOrder(orderid);
+        }else if (orderServiceType == 9){
+            hotelLiveOrderService.cancelContinueLiveOrder(orderid);
         }
         else {
             new RuntimeException("订单标识不符");
         }
     }
-
 
 
     /**
@@ -207,12 +283,22 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         zlRepairorder.setOrderid(orderid);
         ZlRepairorder repairorder = repairorderMapper.selectOne(zlRepairorder);
         if (repairorder != null){
-            repairorder.setOrderstatus((byte) -1);
-            repairorder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
-            repairorderMapper.updateByPrimaryKeySelective(repairorder);
+            repairorderMapper.removeRepairOrder(repairorder.getSerialnumber(),Math.toIntExact(System.currentTimeMillis() / 1000));
         }
     }
 
+    /**
+     * 取消
+     * @param orderid
+     */
+    public void canceWakeOrder(Long orderid) {
+        ZlCleanOrder zlCleanOrder = new ZlCleanOrder();
+        zlCleanOrder.setOrderid(orderid);
+        ZlCleanOrder cleanOrder = cleanOrderMapper.selectOne(zlCleanOrder);
+        if (cleanOrder != null){
+            cleanOrderMapper.removeCleanOrder(cleanOrder.getSerialnumber(),Math.toIntExact(System.currentTimeMillis() / 1000));
+        }
+    }
     /**
      * 取消清扫订单
      * @param orderid
@@ -222,9 +308,7 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         zlCleanOrder.setOrderid(orderid);
         ZlCleanOrder cleanOrder = cleanOrderMapper.selectOne(zlCleanOrder);
         if (cleanOrder != null){
-            cleanOrder.setOrderstatus((byte) -1);
-            cleanOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
-            cleanOrderMapper.updateByPrimaryKeySelective(cleanOrder);
+            cleanOrderMapper.removeCleanOrder(cleanOrder.getSerialnumber(),Math.toIntExact(System.currentTimeMillis() / 1000));
         }
     }
     /**
@@ -232,13 +316,11 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
      * @param invoiceid
      */
     public void canceInvoiceOrder(Integer invoiceid) {
-        ZlInvoice zlInvoice = new ZlInvoice();
-        zlInvoice.setInvoiceid(invoiceid);
-        ZlInvoice invoice = invoiceMapper.selectOne(zlInvoice);
+        ZlInvoiceOrder invoiceOrder = new ZlInvoiceOrder();
+        invoiceOrder.setInvoiceid(invoiceid);
+        ZlInvoiceOrder invoice = invoiceOrderMapper.selectOne(invoiceOrder);
         if (invoice != null){
-            invoice.setInvoicestatus((byte) -1);
-            invoice.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
-            invoiceMapper.updateByPrimaryKeySelective(invoice);
+            invoiceOrderMapper.removeInvoiceOrder(invoice.getInvoiceordernumber(),Math.toIntExact(System.currentTimeMillis() / 1000));
         }
     }
 
@@ -254,9 +336,7 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         if (serviceorder != null){
             order.setOrderstatus((byte) -1);
             order.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
-            serviceorderMapper.updateByPrimaryKeySelective(order);
+            serviceorderMapper.updateOrderStatusById(orderid,Math.toIntExact(System.currentTimeMillis() / 1000));
         }
-
     }
-
 }

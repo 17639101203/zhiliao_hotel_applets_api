@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 酒店控制层
+ *
  * @author chenrong
  * @created date 2020/4/10
  */
@@ -34,15 +35,16 @@ public class ZlHotelController {
 
     @ApiOperation(value = "陈荣_首页")
     @UserLoginToken
+//    @PassToken
     @GetMapping("getHotelList")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "codeId", dataType = "String", required = true, value = "二维码ID"),
     })
     public ReturnString getHotelList(String codeId, HttpServletRequest request) {
         ZlHotelRoomQrcode roomQrcodeId = zlHotelRoomQrcodeService.getRoomQrcodeId(codeId);
-        if(roomQrcodeId!=null){
+        if (roomQrcodeId != null) {
             String token = request.getHeader("token");
-            return  zlHotelService.getById(String.valueOf(roomQrcodeId.getHotelID()),String.valueOf(roomQrcodeId.getRoomID()), token);
+            return zlHotelService.getById(String.valueOf(roomQrcodeId.getHotelID()), String.valueOf(roomQrcodeId.getRoomID()), token);
         }
         return new ReturnString("二维码不存在,请联系管理员");
     }
@@ -54,7 +56,7 @@ public class ZlHotelController {
     })
     @UserLoginToken
     @GetMapping("getHotelHistoryList/{pageNo}/{pageSize}")
-    public ReturnString<PageInfoResult> getHotelHistoryList(HttpServletRequest request, @PathVariable Integer pageNo, @PathVariable Integer pageSize){
+    public ReturnString<PageInfoResult> getHotelHistoryList(HttpServletRequest request, @PathVariable Integer pageNo, @PathVariable Integer pageSize) {
         String token = request.getHeader("token");
         PageInfoResult hotelHistoryList = zlHotelService.getHotelHistoryList(token, pageNo, pageSize);
         return new ReturnString<>(hotelHistoryList);

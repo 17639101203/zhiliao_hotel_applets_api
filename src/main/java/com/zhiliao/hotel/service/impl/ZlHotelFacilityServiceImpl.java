@@ -57,14 +57,14 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
      * @return
      */
     @Override
-    public ReturnString addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder) {
+    public Map<String,Object> addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder) {
         Integer facilityID = zlHotelFacilityOrder.getFacilityid();
         //定义map集合,用于封装返回信息
         Map<String,Object> map = new HashMap<>();
 
         ZlHotelFacility hotelFacilityDetail = hotelFacilityMapper.getHotelFacilityDetail(facilityID);
         if (hotelFacilityDetail == null) {
-            return new ReturnString("该酒店没有此设施,请询问酒店前台");
+            throw  new RuntimeException("该酒店没有此设施,请询问酒店前台");
         }
 
         //开始时间
@@ -75,11 +75,11 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         if (hotelFacilityDetail.getPrice().compareTo(new BigDecimal(0)) == 1) {
             //判断酒店设施数量是否充足
             if (hotelFacilityDetail.getFacilitycount() <= 0) {
-                return new ReturnString("酒店设施数量不足!");
+                throw  new RuntimeException("酒店设施数量不足!");
             }
             //判断该时间段是否在营业时间
             if (hotelFacilityDetail.getServicebegindate() > beginusedate && hotelFacilityDetail.getServiceenddate() < endusedate){
-                return new ReturnString("该时间段不在此设施的服务时间,请重新选择!");
+                throw  new RuntimeException("该时间段不在此设施的服务时间,请重新选择!");
             }
         }
         //生成订单编号
@@ -98,10 +98,11 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         if (hotelFacilityDetail.getPrice().compareTo(new BigDecimal(0)) == 1) {
             if (insert > 0) {
                 hotelFacilityMapper.updateCount(facilityID, Math.toIntExact(System.currentTimeMillis() / 1000));
+            }else {
+                throw new RuntimeException("提交失败");
             }
         }
         map.put("orderId",zlHotelFacilityOrder.getOrderid());
-        return new ReturnString(0,"预定成功,请联系前台进行设施启用",map);
-
+        return map;
     }
 }

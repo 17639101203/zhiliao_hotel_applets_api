@@ -4,7 +4,7 @@ import com.zhiliao.hotel.model.ZlHotelRoomQrcode;
 import org.apache.ibatis.annotations.Param;
 
 /**
- *  二维码Mapper
+ * 二维码Mapper
  */
 public interface ZlHotelRoomQrcodeMapper {
 

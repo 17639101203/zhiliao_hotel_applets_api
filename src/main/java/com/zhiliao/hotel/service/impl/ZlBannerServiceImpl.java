@@ -38,7 +38,7 @@ public class ZlBannerServiceImpl implements ZlBannerService {
 
         List<ZlBanner> zlBanners = zlBannerMapper.findBanner(hotelID, menuID);
 
-        int numberFive =ZlBannerConstant.NUMBER_FIVE ,numberZero=ZlBannerConstant.NUMBER_ZERO;
+        int numberFive = ZlBannerConstant.NUMBER_FIVE, numberZero = ZlBannerConstant.NUMBER_ZERO;
 
         int size = CollectionUtils.isEmpty(zlBanners) ? numberZero : zlBanners.size();
 

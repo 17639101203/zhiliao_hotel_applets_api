@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.controller.myOrder.params.GoodsInfoParam;
 import com.zhiliao.hotel.controller.myOrder.vo.*;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface ZlOrderService{
     
     PageInfoResult findAllOrder(OrderInfoVO vo);
     
-    UserGoodsReturn submitOrder(Long userID,HotelBasicVO hotelBasicVO,Map<String,List<GoodsInfoVO>> goodsInfoMap);
+    UserGoodsReturn submitOrder(Long userID,HotelBasicVO hotelBasicVO,Map<String,List<GoodsInfoParam>> goodsInfoParamMap);
     
     void updateOrder(String out_trade_no);
     

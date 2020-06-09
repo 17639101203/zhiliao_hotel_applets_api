@@ -45,4 +45,19 @@
     zl_wakeorder
     where OrderID = #{orderID} and IsDelete = 0 and IsUserDelete = 0
   </select>
+
+  <update id="updateById" parameterType="com.zhiliao.hotel.model.ZlWakeOrder">
+    update zl_wakeorder
+    set
+    <if test="orderstatus != null">
+      OrderStatus = #{orderstatus},
+    </if>
+    <if test="isuserdelete != null">
+      IsUserDelete = #{isuserdelete},
+    </if>
+    <if test="updatedate != null">
+      UpdateDate = #{updatedate}
+    </if>
+     where OrderID = #{orderid}
+  </update>
 </mapper>

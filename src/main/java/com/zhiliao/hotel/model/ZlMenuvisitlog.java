@@ -23,7 +23,7 @@ public class ZlMenuvisitlog implements Serializable {
     /**
      * 用户ID
      */
-    private Integer userid;
+    private Long userid;
 
     /**
      * 创建时间（点击时间）
@@ -62,12 +62,16 @@ public class ZlMenuvisitlog implements Serializable {
         this.userip = userip;
     }
 
-    public Integer getUserid() {
+    public Long getUserid() {
         return userid;
     }
 
-    public void setUserid(Integer userid) {
+    public void setUserid(Long userid) {
         this.userid = userid;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public Integer getCreatedate() {

@@ -13,12 +13,12 @@ import java.util.List;
  */
 public interface ZlNewsMapper extends Mapper<ZlNews> {
 
-    List<ZlNews> findAllJiuDianId(@Param("hotelID") Integer hotelID, @Param("type") Integer type, @Param("status") Integer status);
+    List<ZlNews> findAllJiuDianId(@Param("hotelID") Integer hotelID);
 
     ZlNews findById(@Param("newsid") Integer newsid);
 
     @Select(" select NewsID,HotelID,Type,Author,Title,Content,ImgUrl,CreateDate,IsDelete\n" +
             "    from zl_news\n" +
             "    where   Type=1 and Status = 1 and HotelID=#{hotelId}   or (HotelID = 0) and IsDelete = 0 ")
-    List<ZlNews>getNewsByHotel(@Param("hotelId") String hotelId);
+    List<ZlNews> getNewsByHotel(@Param("hotelId") String hotelId);
 }

@@ -1,8 +1,10 @@
 package com.zhiliao.hotel.controller.wake;
 
+import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.hotelfacility.ZlHotelFacilityController;
+import com.zhiliao.hotel.controller.wake.params.ZlWaqkeOrderParam;
 import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import com.zhiliao.hotel.model.ZlWakeOrder;
 import com.zhiliao.hotel.service.ZlWakeOrderService;
@@ -37,11 +39,20 @@ public class ZlWakeOrderController {
 
 
     @UserLoginToken
+    //@PassToken
     @ApiOperation(value = "提交叫醒订单")
     @PostMapping("addWakeOrder")
-    public ReturnString addWakeOrder(HttpServletRequest request, @RequestBody ZlWakeOrder wakeOrder){
+    public ReturnString addWakeOrder(HttpServletRequest request, @RequestBody ZlWaqkeOrderParam wakeOrderParm){
         String token = request.getHeader("token");
         Long userId = TokenUtil.getUserId(token);
+        //long userId = System.currentTimeMillis();
+        ZlWakeOrder wakeOrder = new ZlWakeOrder();
+        wakeOrder.setHotelid(wakeOrderParm.getHotelId());
+        wakeOrder.setHotelname(wakeOrderParm.getHotelName());
+        wakeOrder.setRoomid(wakeOrderParm.getRoomId());
+        wakeOrder.setRoomnumber(wakeOrderParm.getRoomNumber());
+        wakeOrder.setWakedate(wakeOrderParm.getWakeDate());
+        wakeOrder.setRemark(wakeOrderParm.getRemark());
 
         try {
              Map<String,Object> map = wakeOrderService.addWakeOrder(userId, wakeOrder);
@@ -57,7 +68,8 @@ public class ZlWakeOrderController {
     })
     @GetMapping("wakeOrderDetail/{orderID}")
     @UserLoginToken
-    @ResponseBody
+    @PassToken
+    //@ResponseBody
     public ReturnString wakeOrderDetail(@PathVariable Long orderID) {
 
 
@@ -76,14 +88,31 @@ public class ZlWakeOrderController {
     })
     @GetMapping("cancelWakeOrder/{orderID}")
     @UserLoginToken
+    @PassToken
     public ReturnString cancelWakeOrder(@PathVariable Long orderID){
 
         try {
             wakeOrderService.cancelWakeOrder(orderID);
             return new ReturnString(0,"已取消");
         } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnString("取消失败");
+            return new ReturnString(e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "删除叫醒订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", dataType = "long", name = "orderID", value = "订单ID", required = true)
+    })
+    @GetMapping("dlWakeOrder/{orderID}")
+    @UserLoginToken
+    @PassToken
+    public ReturnString dlWakeOrder(@PathVariable Long orderID){
+
+        try {
+            wakeOrderService.dlWakeOrder(orderID);
+            return new ReturnString(0,"删除成功");
+        } catch (Exception e) {
+            return new ReturnString(e.getMessage());
         }
     }
 }

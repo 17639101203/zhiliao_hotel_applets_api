@@ -7,8 +7,8 @@ import tk.mybatis.mapper.common.Mapper;
 /**
  *
  */
-public interface ZlDisburdeneatliveMapper extends Mapper<ZlDisburdeneatlive>{
-    
-    ZlDisburdeneatlive find(@Param("userID") Integer userID,@Param("hotelID") Integer hotelID);
-    
+public interface ZlDisburdeneatliveMapper extends Mapper<ZlDisburdeneatlive> {
+
+    ZlDisburdeneatlive find(@Param("hotelID") Integer hotelID);
+
 }

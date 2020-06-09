@@ -49,12 +49,6 @@
     <if test="hotelID != null and hotelID != '' ">
       and HotelID = #{hotelID}
     </if>
-    <if test="type != null and type != '' ">
-      and Type = #{type}
-    </if>
-    <if test="status != null and status != '' ">
-      and Status = #{status}
-    </if>
     order by CreateDate DESC
 
   </select>

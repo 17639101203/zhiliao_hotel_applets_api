@@ -1,8 +1,8 @@
 package com.zhiliao.hotel.controller.hotelfacility;
 
-import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.controller.hotelfacility.params.HotelFacilityOrderParam;
 import com.zhiliao.hotel.model.ZlHotelFacility;
 import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import com.zhiliao.hotel.service.ZlHotelFacilityOrderService;
@@ -38,7 +38,7 @@ public class ZlHotelFacilityController {
     @ApiOperation(value = "酒店设施列表展示")
     @GetMapping("getHotelFacilityList")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "Integer", required = true, value = "酒店ID")
+            @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "int", required = true, value = "酒店ID")
     })
     public ReturnString getHotelFacilityList(Integer hotelId) {
         try {
@@ -68,19 +68,34 @@ public class ZlHotelFacilityController {
 
     @UserLoginToken
     @ApiOperation(value = "酒店设施预定订单提交")
-    @ApiImplicitParams({
-    })
     @PostMapping("addFacilityOrder")
     //@PassToken
-    public ReturnString addFacilityOrder(HttpServletRequest request, @RequestBody ZlHotelFacilityOrder zlHotelFacilityOrder) {
+    public ReturnString addFacilityOrder(HttpServletRequest request, @RequestBody HotelFacilityOrderParam orderParam) {
 
 
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             //long userId = System.currentTimeMillis();
-            zlHotelFacilityOrder.setUserid(userId);
-            ReturnString returnString = hotelFacilityService.addFacilityOrder(zlHotelFacilityOrder);
-            return new ReturnString(returnString);
+        ZlHotelFacilityOrder facilityOrder = new ZlHotelFacilityOrder();
+        facilityOrder.setUserid(userId);
+        facilityOrder.setFacilityid(orderParam.getFacilityId());
+        facilityOrder.setHotelid(orderParam.getHotelId());
+        facilityOrder.setHotelname(orderParam.getHotelName());
+        facilityOrder.setRoomid(orderParam.getRoomid());
+        facilityOrder.setRoomnumber(orderParam.getRoomnumber());
+        facilityOrder.setFacilityname(orderParam.getFacilityName());
+        facilityOrder.setCoverurl(orderParam.getCoverUrl());;
+        facilityOrder.setActuallypay(orderParam.getActuallyPay());
+        facilityOrder.setUsebegindate(orderParam.getUsebegindate());
+        facilityOrder.setUseenddate(orderParam.getUseenddate());
+
+        try {
+            Map<String,Object> map = hotelFacilityService.addFacilityOrder(facilityOrder);
+            return new ReturnString(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
 
     }
 
@@ -102,6 +117,22 @@ public class ZlHotelFacilityController {
         }
     }
 
+    @ApiOperation(value = "取消酒店设施订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", dataType = "long", name = "orderid", value = "订单ID", required = true)
+    })
+    @GetMapping("cancelRentCarOrder/{orderid}")
+    @UserLoginToken
+    //@PassToken
+    public ReturnString cancelRentCarOrder(@PathVariable Long orderid){
 
+        try {
+            hotelFacilityOrderService.cancelFacilityOrder(orderid);
+            return new ReturnString(0,"已取消");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+    }
 
 }

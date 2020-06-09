@@ -77,11 +77,10 @@ public interface ZlInvoiceService {
 
     /**
      * 取消开票预约
-     * @param userid
      * @param invoiceordernumber
      * @param updatedate
      */
-    void cancelInvoiceOrder(Long userid,String invoiceordernumber, Integer updatedate);
+    void cancelInvoiceOrder(String invoiceordernumber, Integer updatedate);
 }
 
 

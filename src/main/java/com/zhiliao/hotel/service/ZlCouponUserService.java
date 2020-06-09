@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface ZlCouponUserService {
 
-    List<ZlCouponUserResult> listCouponUser(Long userId, Integer pageNo, Integer pageSize);
+    PageInfoResult listCouponUser(Long userId, Integer pageNo, Integer pageSize);
 
     Integer count(Long userId);
 

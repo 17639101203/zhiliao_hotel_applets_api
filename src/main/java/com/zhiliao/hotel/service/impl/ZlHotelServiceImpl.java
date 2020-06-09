@@ -67,6 +67,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                     if (!StringUtils.isEmpty(token)) {
                         //获取 token得到微信用户Id
                         Long weiXinUserId = TokenUtil.getUserId(token);
+//                        Long weiXinUserId = 4L;
                         if (weiXinUserId != null) {
                             //客房扫描率录入
                             addZlUserLoginLog(weiXinUserId, Integer.valueOf(roomId), zlHotelroom.getRoomnumber());
@@ -112,7 +113,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 );
 
                 //数据过滤type 1&IsDeleted0
-                List<ZlNews> zlNewsCollect = zlNewsList.stream().filter(a ->a.getType() == 1 && a.getIsDelete() == 0).collect(
+                List<ZlNews> zlNewsCollect = zlNewsList.stream().filter(a -> a.getType() == 1 && a.getIsDelete() == 0).collect(
                         Collectors.toList());
 
                 zlHotel.setZlNews(zlNewsCollect);

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
+import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.model.ZlNews;
 import com.zhiliao.hotel.service.ZlNewsService;
 import io.swagger.annotations.Api;
@@ -33,46 +34,39 @@ public class ZlNewsController {
 
     @ApiOperation(value = "酒店咨讯展示")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
-            @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "Integer", required = true, value = "酒品id"),
-            @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码值"),
-            @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数"),
+            @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "int", required = true, value = "酒品id"),
+            @ApiImplicitParam(paramType = "query", name = "pageNo", dataType = "int", required = true, value = "页码值"),
+            @ApiImplicitParam(paramType = "query", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
     })
-    @PostMapping("findByjiudianId/{hotelID}")
+    @GetMapping("findByHoteId/{hotelID}")
     @ResponseBody
-    @PassToken
-    public ReturnString findByjiudianId(String token, @PathVariable Integer hotelID,Integer pageNo,Integer pageSize){
+    //@PassToken
+    @UserLoginToken
+    public ReturnString findByjiudianId(@PathVariable Integer hotelID, Integer pageNo, Integer pageSize) {
         try {
             logger.info("酒店ID：" + hotelID);
-            PageInfoResult allJiuDianId;
-            PageInfo pageInfo;
-            Integer type = 1;
-            Integer status = 1;
-            if (hotelID == 0){
-                allJiuDianId = zlNewsService.findAllJiuDianId(hotelID,type,status,pageNo,pageSize);
 
-            }else {
-                type = 2;
-                allJiuDianId = zlNewsService.findAllJiuDianId(hotelID, type,status,pageNo,pageSize);
+            PageInfoResult allNews = zlNewsService.findAllHoteId(hotelID,pageNo, pageSize);
 
-            }
-            return new ReturnString(allJiuDianId);
+            return new ReturnString(allNews);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取失败");
         }
     }
+
     @ApiOperation(value = "酒店咨讯详情展示")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "token"),
             @ApiImplicitParam(paramType = "path", name = "newsid", dataType = "Integer", required = true, value = "咨讯id")
     })
-    @PostMapping("findById/{newsid}")
+    @GetMapping("findById/{newsid}")
     @ResponseBody
-    @PassToken
-    public ReturnString findById(String token, @PathVariable Integer newsid){
+    //@PassToken
+    @UserLoginToken
+    public ReturnString findById(String token, @PathVariable Integer newsid) {
         try {
-            logger.info("咨讯id： " +newsid);
+            logger.info("咨讯id： " + newsid);
             ZlNews zlNews = zlNewsService.findById(newsid);
             return new ReturnString(zlNews);
         } catch (Exception e) {

@@ -3,19 +3,22 @@ package com.zhiliao.hotel.mapper;
 import com.zhiliao.hotel.model.ZlCleanOrder;
 import jdk.nashorn.internal.ir.annotations.Reference;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 import java.util.Map;
 
 
-
 public interface ZlCleanOrderMapper extends Mapper<ZlCleanOrder> {
 
     Integer addCleanOrder(ZlCleanOrder zlCleanOrder);
 
-    Map<String,Object> selectCleanDetails(@Param("userid") Long userid, @Param("serialnumber") String serialnumber);
+    Map<String, Object> selectCleanDetails(@Param("serialnumber") String serialnumber);
 
-    void removeCleanOrder(@Param("userid") Long userid, @Param("serialnumber") String serialnumber,
+    void removeCleanOrder(@Param("serialnumber") String serialnumber,
                           @Param("updatedate") Integer updatedate);
+
+    @Select("select count(*) from zl_cleanorder where UserID = #{userId} and IsDelete = 0 ")
+    int selectCountClean(Long userId);
 }

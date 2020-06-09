@@ -2,6 +2,7 @@ package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.model.ZlServiceorder;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
 public interface ZlServiceorderMapper extends Mapper<ZlServiceorder> {
@@ -24,4 +25,7 @@ public interface ZlServiceorderMapper extends Mapper<ZlServiceorder> {
     ZlServiceorder getByOrderId(@Param("orderId") Long orderId);
 
     int updateOrderStatusById(@Param("orderId") Long orderId, @Param("updateDate") Integer updateDate);
+
+    @Select("select count(*) from zl_serviceorder where UserID = #{userId} and IsDelete = 0 and IsUserDelete = 0")
+    int selectCountService(Long userId);
 }

@@ -7,11 +7,11 @@ import javax.crypto.spec.SecretKeySpec;
 public class AESUtil {
 
     public static void main(String args[]) throws Exception {
-        String content = "2020-06-03 15:18:00";
+        String content = "2020-06-08 15:19:00";
         //加密
         String encrypted = encrypt(content);
         //解密
-        String decrypted = decrypt(encrypted);
+        String decrypted = decrypt("D14B050948DCA5B5925F04F925C8F8ECDC5C3212C10F9879E7CC98ADB41BCA80");
 
         System.out.println("加密前：" + content);
 

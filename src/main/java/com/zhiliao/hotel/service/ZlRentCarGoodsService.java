@@ -2,6 +2,9 @@ package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.model.ZlRentCarGoods;
+import com.zhiliao.hotel.model.ZlRentCarOrder;
+
+import java.util.Map;
 
 /**
  * @program: zhiliao-hotel-applets-api
@@ -13,4 +16,10 @@ public interface ZlRentCarGoodsService {
     PageInfoResult carGoodsList(Integer hotelid, Integer pageNo, Integer pageSize);
 
     ZlRentCarGoods rentCarDetail(Integer goodsid);
+
+    Map<String, Object> addRentCar(Long userId, ZlRentCarOrder rentCarOrder,Integer goodsid);
+
+    ZlRentCarOrder rentCarOrderDetail(long orderid);
+
+    void cancelRentCarOrder(Long orderid);
 }

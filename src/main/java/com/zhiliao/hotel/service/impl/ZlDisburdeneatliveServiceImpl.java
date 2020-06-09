@@ -18,8 +18,8 @@ public class ZlDisburdeneatliveServiceImpl implements ZlDisburdeneatliveService{
     private ZlDisburdeneatliveMapper disburdeneatliveMapper;
     
     @Override
-    public ZlDisburdeneatlive find(Integer userID,Integer hotelId){
-        return disburdeneatliveMapper.find(userID,hotelId);
+    public ZlDisburdeneatlive findEatRentInfo(Integer hotelId){
+        return disburdeneatliveMapper.find(hotelId);
     }
     
 }

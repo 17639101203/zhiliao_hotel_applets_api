@@ -5,11 +5,10 @@ import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.myOrder.config.WxPayConfig;
-import com.zhiliao.hotel.controller.myOrder.param.WxPayRefundParam;
+import com.zhiliao.hotel.controller.myOrder.params.GoodsInfoParam;
+import com.zhiliao.hotel.controller.myOrder.params.WxPayRefundParam;
 import com.zhiliao.hotel.controller.myOrder.util.PayUtil;
 import com.zhiliao.hotel.controller.myOrder.vo.*;
-import com.zhiliao.hotel.model.ZlOrder;
-import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.WxPayService;
 import com.zhiliao.hotel.service.ZlGoodsService;
 import com.zhiliao.hotel.service.ZlOrderDetailService;
@@ -61,18 +60,18 @@ public class ZlOrderController {
 
     // TODO: 2020/5/25  @PassToken
     @ApiOperation(value = "我的订单_林生", notes = "可传入不同的请求参数，查询不同类型、不同状态的订单。查询全部订单：传入用户ID、每页条数、页码即可。")
-    // @UserLoginToken
-    @PassToken
+    @UserLoginToken
+//    @PassToken
     @PostMapping("all")
     public ReturnString findAllOrder(HttpServletRequest request, @RequestBody OrderInfoVO vo) {
 
         try {
 
             // TODO: 2020/5/23  userId
-            // String token=request.getHeader("token");
-            // Long userId=TokenUtil.getUserId(token);
+            String token = request.getHeader("token");
+            Long userId = TokenUtil.getUserId(token);
 
-            Long userId = 1590214659794L;
+//            Long userId = 150L;
 
             if (vo == null) {
                 vo = new OrderInfoVO();
@@ -93,17 +92,17 @@ public class ZlOrderController {
     // TODO: 2020/5/25  @PassToken
     @ApiOperation(value = "订单详情_林生", notes = "可传入不同的请求参数，查询不同批次订单的具体详情。")
     @PostMapping("Detail")
-    @PassToken
-    // @UserLoginToken
+//    @PassToken
+    @UserLoginToken
     @ResponseBody
     public ReturnString findOrderDetail(HttpServletRequest request, @RequestBody OrderDetailInfoVO vo) {
         try {
 
             // TODO: 2020/5/23  userId
-            // String token=request.getHeader("token");
-            // Long userId=TokenUtil.getUserId(token);
+            String token = request.getHeader("token");
+            Long userId = TokenUtil.getUserId(token);
 
-            Long userId = 1590214659794L;
+//            Long userId = 1590214659794L;
             if (vo == null) {
                 vo = new OrderDetailInfoVO();
             }
@@ -134,7 +133,7 @@ public class ZlOrderController {
             @PathVariable("hotelName") String hotelName,
             @PathVariable("roomID") Integer roomID,
             @PathVariable("roomNumber") String roomNumber,
-            @RequestBody Map<String, List<GoodsInfoVO>> GoodsInfoMap) {
+            @RequestBody Map<String, List<GoodsInfoParam>> goodsInfoParamMap) {
         //封装对象
         HotelBasicVO hotelBasicVO = new HotelBasicVO();
         hotelBasicVO.setHotelID(hotelID);
@@ -144,10 +143,10 @@ public class ZlOrderController {
         //获取用户id
         String token = httpServletRequest.getHeader("token");
         Long userID = TokenUtil.getUserId(token);
-//        Long userID = System.currentTimeMillis();
+//        Long userID = 150L;
 
         try {
-            UserGoodsReturn userGoodsReturn = zlOrderService.submitOrder(userID, hotelBasicVO, GoodsInfoMap);
+            UserGoodsReturn userGoodsReturn = zlOrderService.submitOrder(userID, hotelBasicVO, goodsInfoParamMap);
             return new ReturnString(userGoodsReturn);
         } catch (Exception e) {
             e.printStackTrace();

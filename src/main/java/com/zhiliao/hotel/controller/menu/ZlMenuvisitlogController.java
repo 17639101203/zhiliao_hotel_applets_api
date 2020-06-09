@@ -4,12 +4,15 @@ import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.service.ZlMenuvisitlogService;
+import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * '菜单模块访问记录表（埋点）
@@ -29,12 +32,18 @@ public class ZlMenuvisitlogController {
 
     @ApiOperation(value = "添加记录")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "menuId", dataType = "String", required = true, value = "菜单ID"),
-            @ApiImplicitParam(paramType = "path", name = "userId", dataType = "String", required = true, value = "用户ID")
+            @ApiImplicitParam(paramType = "path", name = "menuId", dataType = "String", required = true, value = "菜单ID")
     })
     @UserLoginToken
-    @PostMapping("add/{menuId}/{userId}")
-    public ReturnString findBanner(@PathVariable Integer menuId, @PathVariable Integer userId) {
+//    @PassToken
+    @PostMapping("add/{menuId}")
+    public ReturnString findBanner(@PathVariable Integer menuId, HttpServletRequest httpServletRequest) {
+
+        //获取用户id
+        String token = httpServletRequest.getHeader("token");
+        Long userId = TokenUtil.getUserId(token);
+//        Long userId = System.currentTimeMillis();
+
         try {
             zlMenuvisitlogService.add(menuId, userId);
             return new ReturnString(0, "添加成功");

@@ -1,6 +1,6 @@
 package com.zhiliao.hotel.service;
 
-import com.zhiliao.hotel.controller.myOrder.param.WxPayRefundParam;
+import com.zhiliao.hotel.controller.myOrder.params.WxPayRefundParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;

@@ -78,8 +78,33 @@ public class ZlWakeOrderServiceImpl implements ZlWakeOrderService {
         if (wakeOrder != null){
             wakeOrder.setOrderstatus((byte) -1);
             wakeOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
-            wakeOrderMapper.updateByPrimaryKeySelective(wakeOrder);
+            int num = wakeOrderMapper.updateById(wakeOrder);
+            if (num == 0){
+                throw new RuntimeException("取消失败");
+            }
         }
 
+    }
+
+    /**
+     * 用户删除订单
+     * @param orderID
+     */
+    @Override
+    public void dlWakeOrder(Long orderID) {
+        ZlWakeOrder wakeOrder = wakeOrderMapper.wakeOrderDetail(orderID);
+        if (wakeOrder == null){
+            throw new RuntimeException("此订单不存在");
+        }
+        if (wakeOrder.getOrderstatus() == -1 || wakeOrder.getOrderstatus() == 1){
+            wakeOrder.setIsuserdelete(true);
+            wakeOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+            int num = wakeOrderMapper.updateById(wakeOrder);
+            if (num == 0){
+                throw new RuntimeException("删除失败");
+            }
+        }else {
+            throw new RuntimeException("此订单待处理订单,请先取消订单再删除");
+        }
     }
 }

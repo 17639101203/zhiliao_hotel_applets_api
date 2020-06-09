@@ -2,6 +2,7 @@ package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.model.ZlWakeOrder;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
 /**
@@ -12,4 +13,9 @@ import tk.mybatis.mapper.common.Mapper;
  **/
 public interface ZlWakeOrderMapper extends Mapper<ZlWakeOrder> {
     ZlWakeOrder wakeOrderDetail(@Param("orderID") Long orderID);
+
+    int updateById(ZlWakeOrder wakeOrder);
+
+    @Select("select count(*) from zl_wakeorder where UserID = #{userId} and IsDelete = 0 and IsUserDelete = 0")
+    int selectCountWake(Long userId);
 }

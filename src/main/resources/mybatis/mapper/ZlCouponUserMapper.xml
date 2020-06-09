@@ -20,34 +20,31 @@
 
   <!--已使用优惠卷-->
   <select id="usedCouponUser" resultType="com.zhiliao.hotel.controller.coupon.result.ZlCouponUserResult">
-    select
-      cu.RecID,
-      cu.UserID,
-      cu.CouponID,
-      cu.IsUsed,
-      cu.ExpiredDate,
-      cu.CreateDate,
-      c.CouponName couponname,
-      c.MinMoney minMoney,
-      c.DiscountMoney discountMoney,
-      c.LimitCategoryType limitCategoryType,
-      c.LimitDateType limitDateType,
-      c.BelongModule belongModule,
-    from
-      zl_couponuser cu,zl_coupon c
-    where
-      cu.UserID = #{userId}
-    and
-      cu.CouponID = c.CouponID
-    and
-      cu.IsDelete = 0
-    and
-      cu.IsUsed = 1
-    and
-      c.CouponStatus = 1
-    and
-      c.IsDelete = 0
-    order by cu.CreateDate DESC
+    SELECT
+	cu.RecID,
+	cu.UserID,
+	cu.CouponID,
+	cu.IsUsed,
+	cu.ExpiredDate,
+	cu.CreateDate,
+	c.CouponName couponname,
+	c.MinMoney minMoney,
+	c.DiscountMoney discountMoney,
+	c.LimitCategoryType limitCategoryType,
+	c.LimitDateType limitDateType,
+	c.BelongModule belongModule
+
+FROM
+	zl_couponuser cu
+	LEFT JOIN zl_coupon c ON cu.CouponID = c.CouponID
+	AND c.CouponStatus = 1
+	AND c.IsDelete = 0
+WHERE
+	cu.UserID = 10
+	AND cu.IsDelete = 0
+	AND cu.IsUsed = 1
+ORDER BY
+	cu.CreateDate DESC
   </select>
 
   <!--可使用优惠卷-->
@@ -73,9 +70,9 @@
       c.AllowEndUseDate
     from zl_couponuser cu,zl_coupon c
     where
-      cu.UserID = #{userId}
-    and
       cu.CouponID = c.CouponID
+    and
+      cu.UserID = #{userId}
     and
       cu.IsDelete = 0
     and
@@ -101,9 +98,9 @@
       c.BelongModule belongModule
     from zl_couponuser cu,zl_coupon c
     where
-      cu.UserID = #{userId}
-    and
       cu.CouponID = c.CouponID
+    and
+      cu.UserID = #{userId}
     and
       cu.IsDelete = 0
     and

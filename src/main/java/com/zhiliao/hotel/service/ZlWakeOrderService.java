@@ -17,4 +17,6 @@ public interface ZlWakeOrderService {
     ZlWakeOrder wakeOrderDetail(Long orderID);
 
     void cancelWakeOrder(Long orderID);
+
+    void dlWakeOrder(Long orderID);
 }

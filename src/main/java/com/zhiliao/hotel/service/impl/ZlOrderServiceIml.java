@@ -3,6 +3,7 @@ package com.zhiliao.hotel.service.impl;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
+import com.zhiliao.hotel.controller.myOrder.params.GoodsInfoParam;
 import com.zhiliao.hotel.controller.myOrder.vo.*;
 import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.model.ZlOrder;
@@ -65,19 +66,19 @@ public class ZlOrderServiceIml implements ZlOrderService {
     @Override
     public UserGoodsReturn submitOrder(Long userID,
                                        HotelBasicVO hotelBasicVO,
-                                       Map<String, List<GoodsInfoVO>> goodsInfoMap) {
+                                       Map<String, List<GoodsInfoParam>> goodsInfoParamMap) {
 
-        if (goodsInfoMap.size() == 1) {
+        if (goodsInfoParamMap.size() == 1) {
             //集合数量为1,说明只有一个模块商品数据
-            Set<String> keySet = goodsInfoMap.keySet();
+            Set<String> keySet = goodsInfoParamMap.keySet();
             for (String key : keySet) {
-                List<GoodsInfoVO> goodsInfoVOList = goodsInfoMap.get(key);
+                List<GoodsInfoParam> goodsInfoParamList = goodsInfoParamMap.get(key);
                 //获取订单号
-                String orderSerialNo = goodsInfoVOList.get(0).getOrderSerialNo();
+                String orderSerialNo = goodsInfoParamList.get(0).getOrderSerialNo();
                 //如果订单号不为空,说明是被拆单的订单
                 if (StringUtils.isNoneBlank(orderSerialNo)) {
                     //先删除总订单中该小模块的数据信息
-                    Short belongModuleVO = goodsInfoVOList.get(0).getBelongModule();
+                    Short belongModuleVO = goodsInfoParamList.get(0).getBelongModule();
                     int belongModule = belongModuleVO;
                     this.cancelOrder(orderSerialNo, belongModule);
                 }
@@ -97,7 +98,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
         BigDecimal sendCash = zlHotelDetailMapper.findSendCashByHotelID(hotelBasicVO.getHotelID());
 
         //调用判断用户选择的商品是否库存充足
-        List<GoodsStockCountNo> goodsStockCountNoList = judgeStock(hotelBasicVO, goodsInfoMap);
+        List<GoodsStockCountNo> goodsStockCountNoList = judgeStock(hotelBasicVO, goodsInfoParamMap);
         if (goodsStockCountNoList.size() > 0) {
             //集合长度大于0,说明有库存不足的商品
             userGoodsReturn.setUserGoodsInfoList(goodsStockCountNoList);
@@ -108,7 +109,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
         //封装订单信息列表
         List<ZlOrder> zlOrderList = new LinkedList<>();
 
-        Set<String> keySet = goodsInfoMap.keySet();
+        Set<String> keySet = goodsInfoParamMap.keySet();
 
         //调用工具类生成订单编号
         String orderSerialNo = OrderIDUtil.createOrderID("");
@@ -123,15 +124,15 @@ public class ZlOrderServiceIml implements ZlOrderService {
             zlOrder.setRoomid(hotelBasicVO.getRoomID());
             zlOrder.setRoomnumber(hotelBasicVO.getRoomNumber());
             //获取每个模块类型的商品数据
-            List<GoodsInfoVO> goodsInfoVOList = goodsInfoMap.get(key);
+            List<GoodsInfoParam> goodsInfoParamList = goodsInfoParamMap.get(key);
             //获取该模块类型商品的第一张商品图片地址
-            String coverImgUrl = goodsInfoVOList.get(0).getCoverImgUrl();
+            String coverImgUrl = goodsInfoParamList.get(0).getCoverImgUrl();
             //获取该模块类型商品的类型
-            Short belongModule = goodsInfoVOList.get(0).getBelongModule();
+            Short belongModule = goodsInfoParamList.get(0).getBelongModule();
 
             //如果该模块是土特产,则需要判断是否需要配送
             if (key.equals("TTC")) {
-                String deliveryAddress = goodsInfoVOList.get(0).getDeliveryAddress();
+                String deliveryAddress = goodsInfoParamList.get(0).getDeliveryAddress();
                 //不为空说明需要配送
                 if (deliveryAddress != null) {
                     zlOrder.setDeliveryaddress(deliveryAddress);
@@ -139,18 +140,18 @@ public class ZlOrderServiceIml implements ZlOrderService {
             }
 
             //遍历每个模块类型的商品价格并相加
-            for (int i = 0; i < goodsInfoVOList.size(); i++) {
-                BigDecimal price = goodsInfoVOList.get(i).getPrice();
-                BigDecimal goodsCount = BigDecimal.valueOf(goodsInfoVOList.get(i).getGoodsCount());
+            for (int i = 0; i < goodsInfoParamList.size(); i++) {
+                BigDecimal price = goodsInfoParamList.get(i).getPrice();
+                BigDecimal goodsCount = BigDecimal.valueOf(goodsInfoParamList.get(i).getGoodsCount());
                 totalPrice = totalPrice.add(price.multiply(goodsCount));
             }
             totalPrice = totalPrice.add(sendCash);
             zlOrder.setTotalprice(totalPrice);
 
             //获取优惠券自增id
-            Integer recID = goodsInfoVOList.get(0).getRecID();
+            Integer recID = goodsInfoParamList.get(0).getRecID();
             //获取备注信息
-            String remark = goodsInfoVOList.get(0).getRemark();
+            String remark = goodsInfoParamList.get(0).getRemark();
 
             //如果用户优惠券自增id不为-1,说明用户在该模块使用了优惠券
             if (recID != -1) {
@@ -192,13 +193,13 @@ public class ZlOrderServiceIml implements ZlOrderService {
             zlOrder.setRefundstatus((byte) 1);
             zlOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
             //送达时间
-            Integer deliveryDate = goodsInfoVOList.get(0).getDeliveryDate();
+            Integer deliveryDate = goodsInfoParamList.get(0).getDeliveryDate();
             zlOrder.setDeliverydate(deliveryDate / 1000);
-//            zlOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+            zlOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
             zlOrder.setRefundcount((byte) 0);
 
             //获取订单号
-            String orderSerialNoOld = goodsInfoMap.get(key).get(0).getOrderSerialNo();
+            String orderSerialNoOld = goodsInfoParamMap.get(key).get(0).getOrderSerialNo();
             //如果订单号不为空,说明是被拆单的订单
             if (StringUtils.isNoneBlank(orderSerialNoOld)) {
                 zlOrder.setParentorderserialno(orderSerialNoOld);
@@ -209,12 +210,12 @@ public class ZlOrderServiceIml implements ZlOrderService {
             zlOrderMapper.insert(zlOrder);
             zlOrderList.add(zlOrder);
 
-            for (int i = 0; i < goodsInfoVOList.size(); i++) {
+            for (int i = 0; i < goodsInfoParamList.size(); i++) {
                 //封装订单详情信息
                 ZlOrderDetail zlOrderDetail = new ZlOrderDetail();
                 //获取用户选择的商品hotelGoodsSkuID和数量
-                Integer hotelGoodsSkuID = goodsInfoVOList.get(i).getHotelGoodsSkuID();
-                Integer goodsCount = goodsInfoVOList.get(i).getGoodsCount();
+                Integer hotelGoodsSkuID = goodsInfoParamList.get(i).getHotelGoodsSkuID();
+                Integer goodsCount = goodsInfoParamList.get(i).getGoodsCount();
                 if (redisTemplate.hasKey(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID)) {
                     //如果存在该键,就更新商品数量
                     Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
@@ -226,21 +227,21 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 zlOrderDetail.setOrderid(zlOrder.getOrderid());
                 zlOrderDetail.setUserid(userID);
                 zlOrderDetail.setHotelgoodsid(hotelGoodsSkuID);
-                zlOrderDetail.setGoodsname(goodsInfoVOList.get(i).getGoodsName());
-                zlOrderDetail.setGoodscoverurl(goodsInfoVOList.get(i).getCoverImgUrl());
-                zlOrderDetail.setPrice(goodsInfoVOList.get(i).getPrice());
-                zlOrderDetail.setGoodscount(goodsInfoVOList.get(i).getGoodsCount());
-                zlOrderDetail.setBelongmodule(goodsInfoVOList.get(i).getBelongModule());
+                zlOrderDetail.setGoodsname(goodsInfoParamList.get(i).getGoodsName());
+                zlOrderDetail.setGoodscoverurl(goodsInfoParamList.get(i).getCoverImgUrl());
+                zlOrderDetail.setPrice(goodsInfoParamList.get(i).getPrice());
+                zlOrderDetail.setGoodscount(goodsInfoParamList.get(i).getGoodsCount());
+                zlOrderDetail.setBelongmodule(goodsInfoParamList.get(i).getBelongModule());
                 zlOrderDetail.setIsdelete(false);
                 zlOrderDetail.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
                 zlOrderDetail.setOrderserialno(orderSerialNo);
-//                zlOrderDetail.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+                zlOrderDetail.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
                 //封装订单商品短信息,并存入列表,准备放入redis
                 GoodsShortInfoVO goodsShortInfoVO = new GoodsShortInfoVO();
-                goodsShortInfoVO.setGoodsCount(goodsInfoVOList.get(i).getGoodsCount());
+                goodsShortInfoVO.setGoodsCount(goodsInfoParamList.get(i).getGoodsCount());
                 goodsShortInfoVO.setHotelGoodsSkuID(hotelGoodsSkuID);
-                goodsShortInfoVO.setBelongModule(goodsInfoVOList.get(i).getBelongModule());
+                goodsShortInfoVO.setBelongModule(goodsInfoParamList.get(i).getBelongModule());
                 goodsShortInfoVO.setHotelID(hotelBasicVO.getHotelID());
                 goodsShortInfoVOList.add(goodsShortInfoVO);
                 //将订单详情数据存入数据库
@@ -263,21 +264,21 @@ public class ZlOrderServiceIml implements ZlOrderService {
     }
 
     //判断用户选择的商品是否库存充足,并返回库存不足商品的集合
-    private List<GoodsStockCountNo> judgeStock(HotelBasicVO hotelBasicVO, Map<String, List<GoodsInfoVO>> goodsInfoMap) {
-        //封装库存不足商品信息
-        GoodsStockCountNo goodsStockCountNo = new GoodsStockCountNo();
+    private List<GoodsStockCountNo> judgeStock(HotelBasicVO hotelBasicVO, Map<String, List<GoodsInfoParam>> goodsInfoParamMap) {
+
         List<GoodsStockCountNo> goodsStockCountNoList = new LinkedList<>();
-        Set<String> keySet = goodsInfoMap.keySet();
+        Set<String> keySet = goodsInfoParamMap.keySet();
         Integer hotelID = hotelBasicVO.getHotelID();
 
         for (String key : keySet) {
             //获取每个模块类型的商品数据
-            List<GoodsInfoVO> goodsInfoVOList = goodsInfoMap.get(key);
+            List<GoodsInfoParam> goodsInfoParamList = goodsInfoParamMap.get(key);
 
-            for (int i = 0; i < goodsInfoVOList.size(); i++) {
+            for (int i = 0; i < goodsInfoParamList.size(); i++) {
                 //获取用户选择的商品hotelGoodsSkuID和数量
-                Integer hotelGoodsSkuID = goodsInfoVOList.get(i).getHotelGoodsSkuID();
-                Integer goodsCount = goodsInfoVOList.get(i).getGoodsCount();
+                Integer hotelGoodsSkuID = goodsInfoParamList.get(i).getHotelGoodsSkuID();
+                Integer goodsCount = goodsInfoParamList.get(i).getGoodsCount();
+                String goodsName = goodsInfoParamList.get(i).getGoodsName();
                 //判断酒店该商品库存是否足够
                 Integer stockCount = zlGoodsMapper.getStockCount(hotelID, hotelGoodsSkuID);
                 if (stockCount > goodsCount) {
@@ -290,13 +291,18 @@ public class ZlOrderServiceIml implements ZlOrderService {
                     if (stockCount - count > goodsCount) {
                         continue;
                     } else {
-                        goodsStockCountNo.setGoodsName(goodsInfoVOList.get(i).getGoodsName());
-                        goodsStockCountNo.setHotelGoodsSkuID(goodsInfoVOList.get(i).getHotelGoodsSkuID());
+                        //封装库存不足商品信息
+                        GoodsStockCountNo goodsStockCountNo = new GoodsStockCountNo();
+                        goodsStockCountNo.setGoodsName(goodsName);
+                        goodsStockCountNo.setHotelGoodsSkuID(hotelGoodsSkuID);
                         goodsStockCountNoList.add(goodsStockCountNo);
                     }
                 } else {
-                    goodsStockCountNo.setGoodsName(goodsInfoVOList.get(i).getGoodsName());
-                    goodsStockCountNo.setHotelGoodsSkuID(goodsInfoVOList.get(i).getHotelGoodsSkuID());
+                    //封装库存不足商品信息
+                    GoodsStockCountNo goodsStockCountNo = new GoodsStockCountNo();
+                    goodsStockCountNo.setGoodsName(goodsName);
+                    goodsStockCountNo.setHotelGoodsSkuID(hotelGoodsSkuID);
+//                    System.out.println(goodsStockCountNo.getGoodsName());
                     goodsStockCountNoList.add(goodsStockCountNo);
                 }
             }
@@ -427,67 +433,25 @@ public class ZlOrderServiceIml implements ZlOrderService {
         return orderPayShortInfoVOList;
     }
 
-    //判断用户选择的商品是否库存充足,并返回库存不足商品的集合
-    private List<GoodsStockCountNo> judgeSmallStock(HotelBasicVO hotelBasicVO, List<GoodsInfoVO> goodsInfoVOList) {
-        //封装库存不足商品信息
-        GoodsStockCountNo goodsStockCountNo = new GoodsStockCountNo();
-        List<GoodsStockCountNo> goodsStockCountNoList = new LinkedList<>();
-        Integer hotelID = hotelBasicVO.getHotelID();
-        String orderSerialNo = goodsInfoVOList.get(0).getOrderSerialNo();
-        if (StringUtils.isNoneBlank(orderSerialNo)) {
-
-        }
-
-        for (int i = 0; i < goodsInfoVOList.size(); i++) {
-
-            //获取用户选择的商品hotelGoodsSkuID和数量
-            Integer hotelGoodsSkuID = goodsInfoVOList.get(i).getHotelGoodsSkuID();
-            Integer goodsCount = goodsInfoVOList.get(i).getGoodsCount();
-            //判断酒店该商品库存是否足够
-            Integer stockCount = zlGoodsMapper.getStockCount(hotelID, hotelGoodsSkuID);
-            if (stockCount > goodsCount) {
-                Boolean bool = redisTemplate.hasKey(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
-                Integer count = 0;
-                if (bool) {
-                    //存在该键,就查询出该商品被锁定的库存数量
-                    count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
-                }
-                if (stockCount - count > goodsCount) {
-                    continue;
-                } else {
-                    goodsStockCountNo.setGoodsName(goodsInfoVOList.get(i).getGoodsName());
-                    goodsStockCountNo.setHotelGoodsSkuID(goodsInfoVOList.get(i).getHotelGoodsSkuID());
-                    goodsStockCountNoList.add(goodsStockCountNo);
-                }
-            } else {
-                goodsStockCountNo.setGoodsName(goodsInfoVOList.get(i).getGoodsName());
-                goodsStockCountNo.setHotelGoodsSkuID(goodsInfoVOList.get(i).getHotelGoodsSkuID());
-                goodsStockCountNoList.add(goodsStockCountNo);
-            }
-        }
-
-        return goodsStockCountNoList;
-    }
-
     @Override
     public void userDeleteOrder(String orderSerialNo, Integer belongModule) {
         zlOrderMapper.userDeleteOrder(orderSerialNo, belongModule);
         zlOrderDetailMapper.userDeleteOrder(orderSerialNo, belongModule);
     }
-    
+
     @Override
-    public Long waitForPayTotal(Long userId){
+    public Long waitForPayTotal(Long userId) {
         return zlOrderMapper.waitForPayTotal(userId);
     }
-    
+
     @Override
-    public Long waitForGoodsTotal(Long userId){
+    public Long waitForGoodsTotal(Long userId) {
         return zlOrderMapper.waitForGoodsTotal(userId);
     }
-    
+
     @Override
-    public Long allOrderTotal(Long userId){
+    public Long allOrderTotal(Long userId) {
         return zlOrderMapper.allOrderTotal(userId);
     }
-    
+
 }

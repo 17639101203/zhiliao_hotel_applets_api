@@ -28,11 +28,11 @@
   <select id="carGoodsList" resultType="com.zhiliao.hotel.model.ZlRentCarGoods">
     select
     GoodsID,
-    CoverImgUrl
-    GoodsName
-    CarNumber
-    Tags
-    RentPrice
+    CoverImgUrl,
+    GoodsName,
+    CarNumber,
+    Tags,
+    RentPrice,
     CreateDate
     from
     zl_rentcargoods

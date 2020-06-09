@@ -1,7 +1,7 @@
 package com.zhiliao.hotel.service.impl;
 
 import com.zhiliao.hotel.controller.myOrder.ZlOrderController;
-import com.zhiliao.hotel.controller.myOrder.param.WxPayRefundParam;
+import com.zhiliao.hotel.controller.myOrder.params.WxPayRefundParam;
 import com.zhiliao.hotel.controller.myOrder.util.IpUtils;
 import com.zhiliao.hotel.controller.myOrder.util.PayUtil;
 import com.zhiliao.hotel.controller.myOrder.util.StringUtils;

@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.controller.cart;
 
+import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.cart.params.AddCartParam;
@@ -40,12 +41,14 @@ public class ZlCartController {
     @ApiOperation(value = "用户购物车添加")
     @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id")
     @UserLoginToken
+//    @PassToken
     @PostMapping("addCart/{hotelId}")
     public ReturnString addCart(@PathVariable Integer hotelId, @RequestBody List<AddCartParam> addCartParams, HttpServletRequest request) {
         try {
             if (addCartParams.size() > 0) {
                 String token = request.getHeader("token");
                 Long userId = TokenUtil.getUserId(token);
+//                Long userId = System.currentTimeMillis();
                 logger.info("开始请求->参数->酒店id：" + hotelId + "|用户id：" + userId + "|购物车长度：" + addCartParams.size());
                 // 添加新的购物车数据
                 Integer date = DateUtils.javaToPhpNowDateTime();
@@ -62,11 +65,13 @@ public class ZlCartController {
     @ApiOperation(value = "用户购物车查询")
     @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id")
     @UserLoginToken
+//    @PassToken
     @GetMapping("findUserCart/{hotelId}")
     public ReturnString<UserCartVo> findUserCart(@PathVariable Integer hotelId, HttpServletRequest request) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
+//            Long userId = 1591601237852L;
             logger.info("开始请求->参数->酒店id：" + hotelId + "|用户id：" + userId);
             List<UserCartVo> userCartVoList = zlCartService.findUserCart(hotelId, userId);
             return new ReturnString(userCartVoList);
@@ -82,11 +87,14 @@ public class ZlCartController {
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块: 1便利店;2餐饮服务;3情趣用品;4土特产（0代表清空所有）")
     })
     @UserLoginToken
+//    @PassToken
     @PostMapping("emptyUserCart/{hotelId}/{belongModule}")
     public ReturnString emptyUserCart(@PathVariable Integer hotelId, @PathVariable Integer belongModule, HttpServletRequest request) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
+//            Long userId = 1591601237852L;
+
             logger.info("开始请求->参数->酒店id：" + hotelId + "|用户id：" + userId + "|清空模块：" + belongModule);
             zlCartService.emptyUserCart(hotelId, userId, belongModule);
             return new ReturnString(0, "购物车清空成功!");

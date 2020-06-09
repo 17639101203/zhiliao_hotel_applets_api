@@ -8,5 +8,5 @@ package com.zhiliao.hotel.service;
  */
 public interface ZlMenuvisitlogService {
 
-    void add(Integer menuId, Integer userId);
+    void add(Integer menuId, Long userId);
 }

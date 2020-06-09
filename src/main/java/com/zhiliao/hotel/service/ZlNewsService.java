@@ -8,7 +8,7 @@ import com.zhiliao.hotel.model.ZlNews;
  * 咨讯service接口
  */
 public interface ZlNewsService {
-    PageInfoResult findAllJiuDianId(Integer pageNo, Integer pageSize, Integer hotelID, Integer type, Integer status);
+    PageInfoResult findAllHoteId(Integer pageNo, Integer pageSize, Integer hotelID);
 
     ZlNews findById(Integer newsid);
 }

@@ -13,5 +13,5 @@ public interface ZlHotelFacilityService {
 
     ZlHotelFacility getHotelFacilityDetail(Integer facilityId);
 
-    ReturnString addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder);
+    Map<String,Object> addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder);
 }

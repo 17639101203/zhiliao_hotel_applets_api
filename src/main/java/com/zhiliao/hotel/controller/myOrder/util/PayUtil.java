@@ -97,7 +97,7 @@ public class PayUtil {
     }
 
     /**
-     * 生成6位或10位随机数 param codeLength(多少位)
+     * 生成6位或10位随机数 params codeLength(多少位)
      *
      * @return
      */

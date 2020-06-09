@@ -77,8 +77,8 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     }
 
     @Override
-    public void cancelInvoiceOrder(Long userid, String invoiceordernumber, Integer updatedate) {
-        orderMapper.removeInvoiceOrder(userid,invoiceordernumber,updatedate);
+    public void cancelInvoiceOrder(String invoiceordernumber, Integer updatedate) {
+        orderMapper.removeInvoiceOrder(invoiceordernumber,updatedate);
     }
 
 }

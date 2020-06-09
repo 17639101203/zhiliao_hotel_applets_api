@@ -36,7 +36,7 @@ public class ZlMenuvisitlogServiceImpl implements ZlMenuvisitlogService {
      * @param userId
      */
     @Override
-    public void add(Integer menuId, Integer userId) {
+    public void add(Integer menuId, Long userId) {
 
         ZlMenuvisitlog zlMenuvisitlog = new ZlMenuvisitlog();
         //菜单id

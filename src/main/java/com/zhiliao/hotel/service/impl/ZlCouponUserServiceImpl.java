@@ -35,7 +35,7 @@ public class ZlCouponUserServiceImpl implements ZlCouponUserService {
      * @return
      */
     @Override
-    public List<ZlCouponUserResult> listCouponUser(Long userId, Integer pageNo, Integer pageSize) {
+    public PageInfoResult listCouponUser(Long userId, Integer pageNo, Integer pageSize) {
 
         //当前时间
         Integer date = Math.toIntExact(System.currentTimeMillis() / 1000);
@@ -69,7 +69,13 @@ public class ZlCouponUserServiceImpl implements ZlCouponUserService {
             list.add(zlCouponUser);
         }
 
-        return list;
+        PageInfoResult<ZlCouponUserResult> result = new PageInfoResult<>();
+        result.setPageNo(pageNo);
+        result.setCurrentPageNumber(pageSize);
+        result.setTotalItem(list.size());
+        result.setTotalPages((list.size() + pageSize - 1) / pageSize);
+        result.setList(list);
+        return result;
     }
 
     /**

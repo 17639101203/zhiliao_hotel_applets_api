@@ -184,6 +184,6 @@
     set
         OrderStatus = '-1', UpdateDate = #{updatedate,jdbcType=INTEGER}
     where
-        UserID=#{userid,jdbcType=BIGINT} and SerialNumber=#{serialnumber,jdbcType=CHAR} and IsDelete='0' and IsUserDelete='0'
+        SerialNumber=#{serialnumber,jdbcType=CHAR} and IsDelete='0' and IsUserDelete='0'
   </update>
 </mapper>

@@ -37,39 +37,37 @@ public class UploadFileController {
     private String backPath;
 
 
-
-
-
     /**
      * 传入文件，返回文件路径 mapkey值为：filePathBase
      */
     @ApiOperation(value = "文件上传")
-    @PostMapping(value = "uploadFile", consumes = { "multipart/*" }, headers = "content-type=multipart/form-data")
+    @PostMapping(value = "uploadFile", consumes = {"multipart/*"}, headers = "content-type=multipart/form-data")
+//    @PassToken
     @NoLoginRequiredToken
-    public ReturnString<List<String>> uploadFile(MultipartFile[] multipartFiles) {  //param  token
+    public ReturnString<List<String>> uploadFile(MultipartFile[] multipartFiles) {  //params  token
         try {
-                 List<String> pathList = new ArrayList<>();
-                for(MultipartFile multipartFile : multipartFiles){
-                    if (multipartFile == null) {
-                        return new ReturnString<>(-1,"未接收到文件信息,请重新上传！");
-                    }
-                    UploadFileContext context = new UploadFileContext();
-                    // 获取文件后缀（不带.）
-                    String fileSuffix = getFileSuffix(multipartFile);
-                    log.info("文件后缀："+fileSuffix);
-                    context.factory(fileSuffix);
-                    Map dataMap = context.uploadFileStrategyMethod(multipartFile, savePath, backPath);
-                    log.info("文件map："+dataMap);
-                    // 判断是否成功返回文件路径
-                    if (dataMap == null) {
-                        return new ReturnString<>(-1,"获取文件路径信息出错！");
-                    }
-                     pathList.add((String)dataMap.get("filePathBase"));
+            List<String> pathList = new ArrayList<>();
+            for (MultipartFile multipartFile : multipartFiles) {
+                if (multipartFile == null) {
+                    return new ReturnString<>(-1, "未接收到文件信息,请重新上传！");
                 }
-                return new ReturnString<>(pathList);
+                UploadFileContext context = new UploadFileContext();
+                // 获取文件后缀（不带.）
+                String fileSuffix = getFileSuffix(multipartFile);
+                log.info("文件后缀：" + fileSuffix);
+                context.factory(fileSuffix);
+                Map dataMap = context.uploadFileStrategyMethod(multipartFile, savePath, backPath);
+                log.info("文件map：" + dataMap);
+                // 判断是否成功返回文件路径
+                if (dataMap == null) {
+                    return new ReturnString<>(-1, "获取文件路径信息出错！");
+                }
+                pathList.add((String) dataMap.get("filePathBase"));
+            }
+            return new ReturnString<>(pathList);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString<>(-1,"获取出错");
+            return new ReturnString<>(-1, "获取出错");
 
         }
     }

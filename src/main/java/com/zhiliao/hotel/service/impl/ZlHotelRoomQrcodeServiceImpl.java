@@ -16,7 +16,7 @@ public class ZlHotelRoomQrcodeServiceImpl implements ZlHotelRoomQrcodeService {
     @Override
     public ZlHotelRoomQrcode getRoomQrcodeId(String codeId) {
         ZlHotelRoomQrcode roomQrcodeId = zlHotelRoomQrcodeMapper.getRoomQrcodeId(codeId);
-        if(roomQrcodeId!=null){
+        if (roomQrcodeId != null) {
             return roomQrcodeId;
         }
         return null;

@@ -5,8 +5,19 @@
 <mapper namespace="com.zhiliao.hotel.mapper.ZlHotelRoomQrcodeMapper">
 
     <select id="getRoomQrcodeId" resultType="com.zhiliao.hotel.model.ZlHotelRoomQrcode">
-
-        select  QrCodeID,QrCodeUrl,HotelID,RoomID,SerialNumber,UseDate,Status from zl_hotelroomqrcode
-         where Status=1 and IsBind=1 and IsDelete=0 and QrCodeID=#{codeId}
+        SELECT
+          QrCodeID,
+          QrCodeUrl,
+          HotelID,
+          RoomID,
+          SerialNumber,
+          UseDate,
+          STATUS
+        FROM
+          zl_hotelroomqrcode
+        WHERE STATUS = 1
+          AND IsBind = 1
+          AND IsDelete = 0
+          AND QrCodeID = #{codeId}
     </select>
 </mapper>

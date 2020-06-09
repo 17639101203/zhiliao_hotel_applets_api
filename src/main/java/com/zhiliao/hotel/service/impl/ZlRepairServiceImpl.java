@@ -32,6 +32,6 @@ public class ZlRepairServiceImpl implements ZlRepairService {
 
     @Override
     public void cancelRepairOrder(Long Userid, String serialnumber, Integer updatedate) {
-        zlRepairorderMapper.removeRepairOrder(Userid,serialnumber,updatedate);
+        zlRepairorderMapper.removeRepairOrder(serialnumber,updatedate);
     }
 }

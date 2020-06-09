@@ -179,6 +179,6 @@
     set
         InvoiceStatus="-1" , UpdateDate = #{updatedate,jdbcType=INTEGER}
     where
-        UserID = #{userid,jdbcType=BIGINT} AND InvoiceOrderNumber=#{invoiceordernumber,jdbcType=INTEGER} AND IsDelete = 0
+        InvoiceOrderNumber=#{invoiceordernumber,jdbcType=INTEGER} AND IsDelete = 0
   </update>
 </mapper>

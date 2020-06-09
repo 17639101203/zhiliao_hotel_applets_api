@@ -3,6 +3,7 @@ package com.zhiliao.hotel.mapper;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
 import com.zhiliao.hotel.model.ZlInvoiceOrder;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
 public interface ZlInvoiceOrderMapper extends Mapper<ZlInvoiceOrder> {
@@ -11,6 +12,8 @@ public interface ZlInvoiceOrderMapper extends Mapper<ZlInvoiceOrder> {
 
     InvoiceOrderVO queryInvoiceOrderdetail(@Param("userid") Long userid, @Param("invoiceordernumber") String invoiceordernumber);
 
-    void removeInvoiceOrder(@Param("userid") Long userid, @Param("invoiceordernumber") String invoiceordernumber,
+    void removeInvoiceOrder(@Param("invoiceordernumber") String invoiceordernumber,
                           @Param("updatedate") Integer updatedate);
+    @Select("select count(*) from zl_invoiceorder where UserID = #{userId} and IsDelete = 0 ")
+    int selectCountInvoice(Long userId);
 }

@@ -112,7 +112,95 @@
     <if test="orderstatus != null">
       and s.OrderStatus = #{orderstatus}
     </if>
-    order by
-    CreateDate DESC
+    order by CreateDate DESC
+  </select>
+  <!--叫醒服务列表-->
+  <select id="findAllWakeOrder" resultType="com.zhiliao.hotel.model.ZlWakeOrder">
+    select
+    OrderID,
+    OrderSerialNo,
+    UserName,
+    Tel,
+    OrderStatus,
+    WakeDate,
+    Remark,
+    CreateDate
+    from zl_wakeorder
+    where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
+    <if test="userId != null">
+      and UserID = #{userId}
+    </if>
+    <if test="orderstatus != null">
+      and OrderStatus = #{orderstatus}
+    </if>
+    order by CreateDate DESC
+  </select>
+  <!--租车服务列表-->
+  <select id="findAllRentCarOrder" resultType="com.zhiliao.hotel.model.ZlRentCarOrder">
+    select
+    OrderID,
+    OrderSerialNo,
+    UserName,
+    Tel,
+    OrderStatus,
+    GoodsName,
+    CarNumber,
+    RentBeginDate,
+    RentEndDate,
+    GiveBackDate,
+    RentTotalPrice,
+    Remark,
+    CreateDate
+    from zl_rentcarorder
+    where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
+    <if test="userId != null">
+      and UserID = #{userId}
+    </if>
+    <if test="orderstatus != null">
+      and OrderStatus = #{orderstatus}
+    </if>
+    order by CreateDate DESC
+  </select>
+  <!--续住订单列表-->
+  <select id="findAllContinueLiveOrder" resultType="com.zhiliao.hotel.model.ZlContinueLiveOrder">
+    select
+    OrderID,
+    OrderSerialNo,
+    UserName,
+    Tel,
+    OrderStatus,
+    ContinueLiveDate,
+    CheckOutDate,
+    CreateDate
+    from zl_continueliveorder
+    where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
+    <if test="userId != null">
+      and UserID = #{userId}
+    </if>
+    <if test="orderstatus != null">
+      and OrderStatus = #{orderstatus}
+    </if>
+    order by CreateDate DESC
+  </select>
+  <!--退房订单列表-->
+  <select id="findAllCheckOutOrder" resultType="com.zhiliao.hotel.model.ZlCheckoutOrder">
+    select
+    OrderID,
+    OrderSerialNo,
+    UserName,
+    Tel,
+    OrderStatus,
+    CheckOutDate,
+    Remark,
+    CreateDate
+    from zl_checkoutorder
+    where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
+    <if test="userId != null">
+      and UserID = #{userId}
+    </if>
+    <if test="orderstatus != null">
+      and OrderStatus = #{orderstatus}
+    </if>
+    order by CreateDate DESC
   </select>
 </mapper>

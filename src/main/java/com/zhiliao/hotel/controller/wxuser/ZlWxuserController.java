@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zhiliao.hotel.common.NoLoginRequiredToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.controller.wxuser.params.WxuserLoginParam;
 import com.zhiliao.hotel.model.ZlWxuser;
 import com.zhiliao.hotel.service.ZlWxuserService;
 import com.zhiliao.hotel.utils.DateUtils;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -66,17 +68,12 @@ public class ZlWxuserController {
     }
 
     @ApiOperation(value = "微信用户登录")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "code", dataType = "String", required = true, value = "code"),
-            @ApiImplicitParam(paramType = "query", name = "encryptedData", dataType = "String", required = true, value = "加密秘钥"),
-            @ApiImplicitParam(paramType = "query", name = "iv", dataType = "String", required = true, value = "偏移量")
-    })
     @NoLoginRequiredToken
     @PostMapping("wxuserLogin")
-    public ReturnString wxuserLogin(String code, String encryptedData, String iv) {
+    public ReturnString wxuserLogin(@RequestBody WxuserLoginParam wxuserLoginParam) {
         try {
-            logger.info("开始请求->参数->code：" + code + "|加密秘钥：" + encryptedData + "|偏移量：" + iv);
-            String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + APP_ID + "&secret=" + SECRET + "&js_code=" + code + "&grant_type=authorization_code";
+            logger.info("开始请求->参数->code：" + wxuserLoginParam.getCode() + "|加密秘钥：" + wxuserLoginParam.getEncryptedData() + "|偏移量：" + wxuserLoginParam.getIv());
+            String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + APP_ID + "&secret=" + SECRET + "&js_code=" + wxuserLoginParam.getCode() + "&grant_type=authorization_code";
             JSONObject res = getJsonObject(url);
             if (res != null && res.get("errcode") != null) {
                 return new ReturnString("解析失败!");
@@ -86,7 +83,7 @@ public class ZlWxuserController {
             ZlWxuser wxuser = zlWxuserService.findWxuserByWxOpenId(openid);
             if (wxuser == null) {
                 // 用户不存在，新增注册用户
-                JSONObject res1 = getUserInfo(encryptedData, String.valueOf(res.get("session_key")), iv);
+                JSONObject res1 = getUserInfo(wxuserLoginParam.getEncryptedData(), String.valueOf(res.get("session_key")), wxuserLoginParam.getIv());
                 if (res1 == null) {
                     return new ReturnString("解析失败!");
                 }

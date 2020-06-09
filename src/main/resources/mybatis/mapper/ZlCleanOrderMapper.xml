@@ -1,183 +1,184 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlCleanOrderMapper">
-  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlCleanOrder">
-    <id column="OrderID" jdbcType="BIGINT" property="orderid" />
-    <result column="UserID" jdbcType="BIGINT" property="userid" />
-    <result column="UserName" jdbcType="CHAR" property="username" />
-    <result column="Tel" jdbcType="CHAR" property="tel" />
-    <result column="SerialNumber" jdbcType="CHAR" property="serialnumber" />
-    <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
-    <result column="HotelName" jdbcType="CHAR" property="hotelname" />
-    <result column="FloorNumber" jdbcType="CHAR" property="floornumber" />
-    <result column="RoomID" jdbcType="INTEGER" property="roomid" />
-    <result column="RoomNumber" jdbcType="CHAR" property="roomnumber" />
-    <result column="ComeFormID" jdbcType="INTEGER" property="comeformid" />
-    <result column="BookDate" jdbcType="INTEGER" property="bookdate" />
-    <result column="TimeoutDate" jdbcType="INTEGER" property="timeoutdate" />
-    <result column="Remark" jdbcType="CHAR" property="remark" />
-    <result column="OrderStatus" jdbcType="TINYINT" property="orderstatus" />
-    <result column="OperatorName" jdbcType="CHAR" property="operatorname" />
-    <result column="OperatorIP" jdbcType="CHAR" property="operatorip" />
-    <result column="OperatorRemark" jdbcType="CHAR" property="operatorremark" />
-    <result column="IsDelete" jdbcType="BIT" property="isdelete" />
-    <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
-    <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlCleanOrder">
+        <id column="OrderID" jdbcType="BIGINT" property="orderid"/>
+        <result column="UserID" jdbcType="BIGINT" property="userid"/>
+        <result column="UserName" jdbcType="CHAR" property="username"/>
+        <result column="Tel" jdbcType="CHAR" property="tel"/>
+        <result column="SerialNumber" jdbcType="CHAR" property="serialnumber"/>
+        <result column="HotelID" jdbcType="INTEGER" property="hotelid"/>
+        <result column="HotelName" jdbcType="CHAR" property="hotelname"/>
+        <result column="FloorNumber" jdbcType="CHAR" property="floornumber"/>
+        <result column="RoomID" jdbcType="INTEGER" property="roomid"/>
+        <result column="RoomNumber" jdbcType="CHAR" property="roomnumber"/>
+        <result column="ComeFormID" jdbcType="INTEGER" property="comeformid"/>
+        <result column="BookDate" jdbcType="INTEGER" property="bookdate"/>
+        <result column="TimeoutDate" jdbcType="INTEGER" property="timeoutdate"/>
+        <result column="Remark" jdbcType="CHAR" property="remark"/>
+        <result column="OrderStatus" jdbcType="TINYINT" property="orderstatus"/>
+        <result column="OperatorName" jdbcType="CHAR" property="operatorname"/>
+        <result column="OperatorIP" jdbcType="CHAR" property="operatorip"/>
+        <result column="OperatorRemark" jdbcType="CHAR" property="operatorremark"/>
+        <result column="IsDelete" jdbcType="BIT" property="isdelete"/>
+        <result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
+        <result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
+    </resultMap>
 
-  <insert id="addCleanOrder" parameterType="com.zhiliao.hotel.model.ZlCleanOrder">
-    insert into zl_cleanorder
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="orderid != null">
-        OrderID,
-      </if>
-      <if test="userid != null">
-        UserID,
-      </if>
-      <if test="username != null">
-        UserName,
-      </if>
-      <if test="tel != null">
-        Tel,
-      </if>
-      <if test="serialnumber != null">
-        SerialNumber,
-      </if>
-      <if test="hotelid != null">
-        HotelID,
-      </if>
-      <if test="hotelname != null">
-        HotelName,
-      </if>
-      <if test="floornumber != null">
-        FloorNumber,
-      </if>
-      <if test="roomid != null">
-        RoomID,
-      </if>
-      <if test="roomnumber != null">
-        RoomNumber,
-      </if>
-      <if test="comeformid != null">
-        ComeFormID,
-      </if>
-      <if test="bookdate != null">
-        BookDate,
-      </if>
-      <if test="timeoutdate != null">
-        TimeoutDate,
-      </if>
-      <if test="remark != null">
-        Remark,
-      </if>
-      <if test="orderstatus != null">
-        OrderStatus,
-      </if>
-      <if test="operatorname != null">
-        OperatorName,
-      </if>
-      <if test="operatorip != null">
-        OperatorIP,
-      </if>
-      <if test="operatorremark != null">
-        OperatorRemark,
-      </if>
-      <if test="isdelete != null">
-        IsDelete,
-      </if>
-      <if test="createdate != null">
-        CreateDate,
-      </if>
-      <if test="updatedate != null">
-        UpdateDate,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="orderid != null">
-        #{orderid,jdbcType=BIGINT},
-      </if>
-      <if test="userid != null">
-        #{userid,jdbcType=BIGINT},
-      </if>
-      <if test="username != null">
-        #{username,jdbcType=CHAR},
-      </if>
-      <if test="tel != null">
-        #{tel,jdbcType=CHAR},
-      </if>
-      <if test="serialnumber != null">
-        #{serialnumber,jdbcType=CHAR},
-      </if>
-      <if test="hotelid != null">
-        #{hotelid,jdbcType=INTEGER},
-      </if>
-      <if test="hotelname != null">
-        #{hotelname,jdbcType=CHAR},
-      </if>
-      <if test="floornumber != null">
-        #{floornumber,jdbcType=CHAR},
-      </if>
-      <if test="roomid != null">
-        #{roomid,jdbcType=INTEGER},
-      </if>
-      <if test="roomnumber != null">
-        #{roomnumber,jdbcType=CHAR},
-      </if>
-      <if test="comeformid != null">
-        #{comeformid,jdbcType=INTEGER},
-      </if>
-      <if test="bookdate != null">
-        #{bookdate,jdbcType=INTEGER},
-      </if>
-      <if test="timeoutdate != null">
-        #{timeoutdate,jdbcType=INTEGER},
-      </if>
-      <if test="remark != null">
-        #{remark,jdbcType=CHAR},
-      </if>
-      <if test="orderstatus != null">
-        #{orderstatus,jdbcType=TINYINT},
-      </if>
-      <if test="operatorname != null">
-        #{operatorname,jdbcType=CHAR},
-      </if>
-      <if test="operatorip != null">
-        #{operatorip,jdbcType=CHAR},
-      </if>
-      <if test="operatorremark != null">
-        #{operatorremark,jdbcType=CHAR},
-      </if>
-      <if test="isdelete != null">
-        #{isdelete,jdbcType=BIT},
-      </if>
-      <if test="createdate != null">
-        #{createdate,jdbcType=INTEGER},
-      </if>
-      <if test="updatedate != null">
-        #{updatedate,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
+    <insert id="addCleanOrder" parameterType="com.zhiliao.hotel.model.ZlCleanOrder">
+        insert into zl_cleanorder
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderid != null">
+                OrderID,
+            </if>
+            <if test="userid != null">
+                UserID,
+            </if>
+            <if test="username != null">
+                UserName,
+            </if>
+            <if test="tel != null">
+                Tel,
+            </if>
+            <if test="serialnumber != null">
+                SerialNumber,
+            </if>
+            <if test="hotelid != null">
+                HotelID,
+            </if>
+            <if test="hotelname != null">
+                HotelName,
+            </if>
+            <if test="floornumber != null">
+                FloorNumber,
+            </if>
+            <if test="roomid != null">
+                RoomID,
+            </if>
+            <if test="roomnumber != null">
+                RoomNumber,
+            </if>
+            <if test="comeformid != null">
+                ComeFormID,
+            </if>
+            <if test="bookdate != null">
+                BookDate,
+            </if>
+            <if test="timeoutdate != null">
+                TimeoutDate,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="orderstatus != null">
+                OrderStatus,
+            </if>
+            <if test="operatorname != null">
+                OperatorName,
+            </if>
+            <if test="operatorip != null">
+                OperatorIP,
+            </if>
+            <if test="operatorremark != null">
+                OperatorRemark,
+            </if>
+            <if test="isdelete != null">
+                IsDelete,
+            </if>
+            <if test="createdate != null">
+                CreateDate,
+            </if>
+            <if test="updatedate != null">
+                UpdateDate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderid != null">
+                #{orderid,jdbcType=BIGINT},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=BIGINT},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=CHAR},
+            </if>
+            <if test="tel != null">
+                #{tel,jdbcType=CHAR},
+            </if>
+            <if test="serialnumber != null">
+                #{serialnumber,jdbcType=CHAR},
+            </if>
+            <if test="hotelid != null">
+                #{hotelid,jdbcType=INTEGER},
+            </if>
+            <if test="hotelname != null">
+                #{hotelname,jdbcType=CHAR},
+            </if>
+            <if test="floornumber != null">
+                #{floornumber,jdbcType=CHAR},
+            </if>
+            <if test="roomid != null">
+                #{roomid,jdbcType=INTEGER},
+            </if>
+            <if test="roomnumber != null">
+                #{roomnumber,jdbcType=CHAR},
+            </if>
+            <if test="comeformid != null">
+                #{comeformid,jdbcType=INTEGER},
+            </if>
+            <if test="bookdate != null">
+                #{bookdate,jdbcType=INTEGER},
+            </if>
+            <if test="timeoutdate != null">
+                #{timeoutdate,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=CHAR},
+            </if>
+            <if test="orderstatus != null">
+                #{orderstatus,jdbcType=TINYINT},
+            </if>
+            <if test="operatorname != null">
+                #{operatorname,jdbcType=CHAR},
+            </if>
+            <if test="operatorip != null">
+                #{operatorip,jdbcType=CHAR},
+            </if>
+            <if test="operatorremark != null">
+                #{operatorremark,jdbcType=CHAR},
+            </if>
+            <if test="isdelete != null">
+                #{isdelete,jdbcType=BIT},
+            </if>
+            <if test="createdate != null">
+                #{createdate,jdbcType=INTEGER},
+            </if>
+            <if test="updatedate != null">
+                #{updatedate,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 
-<!--  查询清扫订单详情-->
-  <select id="selectCleanDetails" resultType="java.util.HashMap">
-    SELECT
-        HotelName,RoomNumber,BookDate,Remark,OrderStatus,CreateDate,SerialNumber,UpdateDate
-    FROM
-        zl_cleanorder
-    WHERE
-        UserID = #{userid} AND SerialNumber = #{serialnumber} AND IsDelete = 0
+    <!--  查询清扫订单详情-->
+    <select id="selectCleanDetails" resultType="java.util.HashMap">
+        SELECT
+            HotelName,RoomNumber,BookDate,Remark,OrderStatus,CreateDate,SerialNumber,UpdateDate
+        FROM
+            zl_cleanorder
+        WHERE
+            SerialNumber = #{serialnumber} AND IsDelete = 0
   </select>
 
 
-  <!-- 取消清扫预约 -->
-  <update id="removeCleanOrder">
-    update
-        zl_cleanorder
-    set
-        OrderStatus="-1" , UpdateDate = #{updatedate,jdbcType=INTEGER}
-    where
-        UserID = #{userid} AND SerialNumber = #{serialnumber} AND IsDelete = 0
+    <!-- 取消清扫预约 -->
+    <update id="removeCleanOrder">
+        UPDATE
+          zl_cleanorder
+        SET
+          OrderStatus = -1,
+          UpdateDate = #{updatedate}
+        WHERE SerialNumber = #{serialnumber}
+          AND IsDelete = 0
   </update>
 
 </mapper>
