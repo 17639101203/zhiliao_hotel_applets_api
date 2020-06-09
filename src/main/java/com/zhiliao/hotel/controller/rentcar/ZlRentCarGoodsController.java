@@ -1,9 +1,13 @@
 package com.zhiliao.hotel.controller.rentcar;
 
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.rentcar.params.RentCarOrderParam;
+import com.zhiliao.hotel.controller.wake.ZlWakeOrderController;
+import com.zhiliao.hotel.model.ZlRentCarGoods;
+import com.zhiliao.hotel.model.ZlRentCarOrder;
 import com.zhiliao.hotel.service.ZlRentCarGoodsService;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
@@ -87,11 +91,13 @@ public class ZlRentCarGoodsController {
         rentCarOrder.setRoomnumber(carOrderParam.getRoomNumber());
         rentCarOrder.setGoodsname(carOrderParam.getGoodsName());
         rentCarOrder.setCarnumber(carOrderParam.getCarNumber());
-        rentCarOrder.setRentbegindate(carOrderParam.getRentBeginDate());
-        rentCarOrder.setRentenddate(carOrderParam.getRentEndDate());
+        rentCarOrder.setRentbegindate(carOrderParam.getRentBeginDate() / 1000);
+        rentCarOrder.setRentenddate(carOrderParam.getRentEndDate() / 1000);
         rentCarOrder.setRentprice(carOrderParam.getRentPrice());
         rentCarOrder.setRenttotalprice(carOrderParam.getRentTotalPrice());
         rentCarOrder.setRemark(carOrderParam.getRemark());
+        rentCarOrder.setUsername(carOrderParam.getUserName());
+        rentCarOrder.setTel(carOrderParam.getTel());
 
         try {
             Map<String,Object> map = rentCarGoodsService.addRentCar(userId,rentCarOrder,goodsid);
@@ -132,6 +138,23 @@ public class ZlRentCarGoodsController {
             return new ReturnString(0,"已取消");
         } catch (Exception e) {
             e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "用户删除租车订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", dataType = "long", name = "orderid", value = "订单ID", required = true)
+    })
+    @GetMapping("dlRentCarOrder/{orderid}")
+    @UserLoginToken
+    @PassToken
+    public ReturnString dlRentCarOrder(@PathVariable Long orderid){
+
+        try {
+            rentCarGoodsService.dlRentCarOrder(orderid);
+            return new ReturnString(0,"删除成功");
+        } catch (Exception e) {
             return new ReturnString(e.getMessage());
         }
     }

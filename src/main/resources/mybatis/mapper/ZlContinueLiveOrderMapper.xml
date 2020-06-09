@@ -21,4 +21,21 @@
         WHERE OrderID = #{orderID}
     </update>
 
+    <select id="continueLiveOrderDetail" resultType="com.zhiliao.hotel.model.ZlContinueLiveOrder">
+        select
+          OrderID,
+          OrderSerialNo,
+          UserName,
+          Tel,
+          OrderStatus,
+          ContinueLiveDate,
+          CheckOutDate,
+          CreateDate,
+          UpdateDate
+        from
+          zl_continueliveorder
+        where
+          OrderID = #{orderID} and IsDelete = 0 and IsUserDelete = 0
+    </select>
+
 </mapper>

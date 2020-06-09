@@ -10,6 +10,8 @@ import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,5 +91,22 @@ public class ZlRepairController {
         return new ReturnString<>(0,"预约已取消");
     }
 
+    @ApiOperation(value = "用户删除报修订单_徐向向")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "退房订单ID")
+    })
+    @PostMapping("userDeleteRepairOrder/{orderID}")
+    @UserLoginToken
+//    @PassToken
+    @ResponseBody
+    public ReturnString  userDeleteRepairOrder(@PathVariable("orderID") Long orderID) {
+        try {
+            service.userDeleteRepairOrder(orderID);
+            return new ReturnString("用户删除报修成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("用户删除报修失败!");
+        }
+    }
 
 }

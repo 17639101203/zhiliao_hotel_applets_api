@@ -4,6 +4,7 @@ import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.wake.params.ZlWaqkeOrderParam;
+import com.zhiliao.hotel.model.ZlWakeOrder;
 import com.zhiliao.hotel.service.ZlWakeOrderService;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;

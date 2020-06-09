@@ -9,6 +9,7 @@ import com.zhiliao.hotel.controller.serviceorder.vo.ServiceorderInfoVo;
 import com.zhiliao.hotel.service.ZlServiceorderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,6 +74,24 @@ public class ZlServiceorderController {
             return new ReturnString(0, "订单取消成功");
         }catch (RuntimeException r){
             return new ReturnString(r.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "用户删除客房服务订单订单_徐向向")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "orderid", dataType = "Long", required = true, value = "退房订单ID")
+    })
+    @PostMapping("userDeleteServiceOrder/{orderid}")
+    @UserLoginToken
+//    @PassToken
+    @ResponseBody
+    public ReturnString  userDeleteServiceOrder(@PathVariable("orderid") Long orderid) {
+        try {
+            zlServiceorderService.userDeleteServiceOrder(orderid);
+            return new ReturnString("用户删除客房服务成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("用户删除客房服务失败!");
         }
     }
 }

@@ -1,11 +1,15 @@
 package com.zhiliao.hotel.controller.hotellive;
 
+import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.hotellive.param.ZlCheckoutOrderParam;
 import com.zhiliao.hotel.controller.hotellive.param.ZlContinueLiveOrderParam;
 import com.zhiliao.hotel.controller.myOrder.ZlOrderController;
 import com.zhiliao.hotel.controller.myOrder.vo.HotelBasicVO;
+import com.zhiliao.hotel.model.ZlCheckoutOrder;
+import com.zhiliao.hotel.model.ZlContinueLiveOrder;
+import com.zhiliao.hotel.service.HotelLiveOrderService;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -17,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * @program: zhiliao_hotel_applets_api
@@ -65,49 +70,11 @@ public class HotelLiveOrderController {
         Long userID = TokenUtil.getUserId(token);
 //        Long userID = 9L;
         try {
-            hotelLiveOrderService.checkoutOrder(userID, hotelBasicVO, zlCheckoutOrderParam);
-            return new ReturnString("退房订单提交成功!");
+            Map<String,Object> map = hotelLiveOrderService.checkoutOrder(userID, hotelBasicVO, zlCheckoutOrderParam);
+            return new ReturnString(map);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("退房订单提交失败!");
-        }
-    }
-
-    @ApiOperation(value = "查询退房订单_姬慧慧")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "Long", required = true, value = "酒店ID"),
-            @ApiImplicitParam(paramType = "path", name = "hotelName", dataType = "String", required = true, value = "酒店名"),
-            @ApiImplicitParam(paramType = "path", name = "roomID", dataType = "Long", required = true, value = "房间ID"),
-            @ApiImplicitParam(paramType = "path", name = "roomNumber", dataType = "String", required = true, value = "房间编号")
-    })
-    @PostMapping("findCheckoutOrder/{hotelID}/{hotelName}/{roomID}/{roomNumber}")
-    @UserLoginToken
-//    @PassToken
-    @ResponseBody
-    public ReturnString findCheckoutOrder(
-            HttpServletRequest httpServletRequest,
-            @PathVariable("hotelID") Integer hotelID,
-            @PathVariable("hotelName") String hotelName,
-            @PathVariable("roomID") Integer roomID,
-            @PathVariable("roomNumber") String roomNumber,
-            @RequestBody ZlCheckoutOrderParam zlCheckoutOrderParam) {
-
-        //封装对象
-        HotelBasicVO hotelBasicVO = new HotelBasicVO();
-        hotelBasicVO.setHotelID(hotelID);
-        hotelBasicVO.setHotelName(hotelName);
-        hotelBasicVO.setRoomID(roomID);
-        hotelBasicVO.setRoomNumber(roomNumber);
-        //获取用户id
-        String token = httpServletRequest.getHeader("token");
-        Long userID = TokenUtil.getUserId(token);
-//        Long userID = 9L;
-        try {
-            hotelLiveOrderService.checkoutOrder(userID, hotelBasicVO, zlCheckoutOrderParam);
-            return new ReturnString("退房订单提交成功!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnString("退房订单提交失败!");
+            return new ReturnString("退房失败!");
         }
     }
 
@@ -128,6 +95,26 @@ public class HotelLiveOrderController {
             return new ReturnString("取消退房失败!");
         }
     }
+
+    @ApiOperation(value = "退房订单详情_姬慧慧")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "退房订单ID")
+    })
+    @PostMapping("checkoutOrderDetail/{orderID}")
+    @UserLoginToken
+    //@PassToken
+    @ResponseBody
+    public ReturnString checkoutOrderDetail(@PathVariable("orderID") Long orderID) {
+        try {
+            ZlCheckoutOrder checkoutOrder = hotelLiveOrderService.checkoutOrderDetail(orderID);
+            return new ReturnString(checkoutOrder);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("获取失败!");
+        }
+    }
+
+
 
     @ApiOperation(value = "用户删除退房订单_姬慧慧")
     @ApiImplicitParams({
@@ -221,4 +208,21 @@ public class HotelLiveOrderController {
         }
     }
 
+    @ApiOperation(value = "续住订单详情_姬慧慧")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "退房订单ID")
+    })
+    @PostMapping("continueLiveOrderDetail/{orderID}")
+    @UserLoginToken
+    //@PassToken
+    @ResponseBody
+    public ReturnString continueLiveOrderDetail(@PathVariable("orderID") Long orderID) {
+        try {
+            ZlContinueLiveOrder continueLiveOrder = hotelLiveOrderService.continueLiveOrderDetail(orderID);
+            return new ReturnString(continueLiveOrder);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("获取失败!");
+        }
+    }
 }

@@ -4,7 +4,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.mapper.ZlRentCarGoodsMapper;
+import com.zhiliao.hotel.mapper.ZlRentCarOrderMapper;
 import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
+import com.zhiliao.hotel.model.ZlRentCarGoods;
+import com.zhiliao.hotel.model.ZlRentCarOrder;
 import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.ZlRentCarGoodsService;
 import com.zhiliao.hotel.utils.OrderIDUtil;
@@ -71,13 +74,9 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
      */
     @Override
     public Map<String, Object> addRentCar(Long userId, ZlRentCarOrder rentCarOrder,Integer goodsid) {
-        //获取用户姓名和手机号
-        ZlWxuserdetail wxuserdetail = wxuserdetailMapper.findByUserId(userId);
-        if (wxuserdetail != null){
-            rentCarOrder.setUsername(wxuserdetail.getRealname());
-            rentCarOrder.setTel(wxuserdetail.getTel());
-            rentCarOrder.setUserid(userId);
-        }
+
+        rentCarOrder.setUserid(userId);
+
         //判断该车型数量充足
         ZlRentCarGoods rentCarGoods = rentCarGoodsMapper.rentCarDetail(goodsid);
         if (rentCarGoods == null){
@@ -125,6 +124,25 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
         rentCarOrder.setOrderstatus((byte) -1);
         rentCarOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         int num = rentCarOrderMapper.updateById(rentCarOrder);
+        if (num == 0){
+            throw new RuntimeException("取消失败");
+
+        }
+    }
+
+    /**
+     * 用户删除订单
+     * @param orderid
+     */
+    @Override
+    public void dlRentCarOrder(Long orderid) {
+        ZlRentCarOrder rentCarOrder = rentCarOrderMapper.rentCarOrderDetail(orderid);
+        if (rentCarOrder == null){
+            throw new RuntimeException("没有此订单");
+        }
+        rentCarOrder.setIsuserdelete(true);
+        rentCarOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+        int num = rentCarOrderMapper.dlRentCarOrder(rentCarOrder);
         if (num == 0){
             throw new RuntimeException("取消失败");
 

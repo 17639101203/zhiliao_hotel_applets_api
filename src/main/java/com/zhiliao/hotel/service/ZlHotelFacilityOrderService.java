@@ -11,4 +11,6 @@ public interface ZlHotelFacilityOrderService {
     ZlHotelFacilityOrder findOrder(Long orderID);
 
     void cancelFacilityOrder(Long orderID);
+
+    void userDeleteFacilityOrder(Long orderID);
 }

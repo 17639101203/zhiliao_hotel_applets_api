@@ -36,15 +36,15 @@ public class ZlCouponUserController {
             @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码"),
             @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数"),
     })
-    //@UserLoginToken
-    @PassToken
+    @UserLoginToken
+    //@PassToken
     @GetMapping("couponUserAll")
     public ReturnString listCouponUsers(HttpServletRequest request, Integer pageNo, Integer pageSize){
 
         try{
             String token = request.getHeader("token");
-            //Long userId= TokenUtil.getUserId(token);
-            Long userId = (long)150;
+            Long userId= TokenUtil.getUserId(token);
+            //Long userId = (long)150;
             logger.info("我的优惠卷，用户ID："+userId);
             PageInfoResult result = couponUserService.listCouponUser(userId,pageNo,pageSize);
             return new ReturnString(result);

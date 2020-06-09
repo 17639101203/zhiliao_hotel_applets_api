@@ -21,11 +21,14 @@ public interface ZlRepairService {
      * @param
      * @return
      */
-    Map<String,Object> findRepairOrder(Long Userid,String serialnumber);
+    Map<String,Object> findRepairOrder(Long Userid, String serialnumber);
 
 
     /**
      * 取消报修预约
      */
-    void cancelRepairOrder(Long Userid,String serialnumber,Integer updatedate);
+    void cancelRepairOrder(Long Userid, String serialnumber, Integer updatedate);
+
+    //用户删除报修订单
+    void userDeleteRepairOrder(Long orderID);
 }

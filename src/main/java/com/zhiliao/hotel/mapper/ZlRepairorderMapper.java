@@ -34,4 +34,6 @@ public interface ZlRepairorderMapper extends Mapper<ZlRepairorder> {
 
     @Select("select count(*) from zl_repairorder where UserID = #{userId} and IsDelete = 0 and IsUserDelete = 0")
     int selectCountRepair(Long userId);
+
+    void userDeleteRepairOrder(@Param("orderID") Long orderID, @Param("updatedate") Integer updateDate);
 }

@@ -202,4 +202,14 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         zlServiceorderMapper.updateOrderStatusById(orderId, updateDate);
     }
 
+    /**
+     * 用户删除客房服务订单
+     * @param orderid
+     */
+    @Override
+    public void userDeleteServiceOrder(Long orderid) {
+        Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
+        zlServiceorderMapper.userDeleteServiceOrder(orderid,updateDate);
+    }
+
 }

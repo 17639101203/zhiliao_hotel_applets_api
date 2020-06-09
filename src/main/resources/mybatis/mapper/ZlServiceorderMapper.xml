@@ -176,4 +176,14 @@
   <update id="updateOrderStatusById">
     UPDATE zl_serviceorder so SET so.OrderStatus = -1, so.UpdateDate = #{updateDate} WHERE so.OrderID = #{orderId} AND so.IsDelete = 0 AND so.IsUserDelete = 0
   </update>
+
+
+  <update id="userDeleteServiceOrder">
+    update
+        zl_serviceorder
+    set
+        IsUserDelete = 1, UpdateDate = #{updatedate,jdbcType=INTEGER}
+    where
+        OrderID=#{orderID,jdbcType=CHAR} and IsDelete='0' and IsUserDelete='0'
+  </update>
 </mapper>

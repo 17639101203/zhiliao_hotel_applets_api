@@ -2,6 +2,7 @@ package com.zhiliao.hotel.service.impl;
 
 import com.zhiliao.hotel.mapper.ZlWakeOrderMapper;
 import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
+import com.zhiliao.hotel.model.ZlWakeOrder;
 import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.ZlWakeOrderService;
 import com.zhiliao.hotel.utils.OrderIDUtil;

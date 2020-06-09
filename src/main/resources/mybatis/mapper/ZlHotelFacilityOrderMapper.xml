@@ -74,4 +74,13 @@
     where
       OrderID = #{orderid} and IsDelete = 0 and IsUserDelete = 0
   </update>
+
+  <update id="userDeleteFacilityOrder">
+    update
+        zl_hotelfacilityorder
+    set
+        IsUserDelete = 1, UpdateDate = #{updatedate,jdbcType=INTEGER}
+    where
+        OrderID=#{orderID,jdbcType=CHAR} and IsDelete='0' and IsUserDelete='0'
+  </update>
 </mapper>

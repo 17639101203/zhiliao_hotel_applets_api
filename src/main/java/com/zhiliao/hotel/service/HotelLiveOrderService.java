@@ -3,6 +3,10 @@ package com.zhiliao.hotel.service;
 import com.zhiliao.hotel.controller.hotellive.param.ZlCheckoutOrderParam;
 import com.zhiliao.hotel.controller.hotellive.param.ZlContinueLiveOrderParam;
 import com.zhiliao.hotel.controller.myOrder.vo.HotelBasicVO;
+import com.zhiliao.hotel.model.ZlCheckoutOrder;
+import com.zhiliao.hotel.model.ZlContinueLiveOrder;
+
+import java.util.Map;
 
 /**
  * @program: zhiliao_hotel_applets_api
@@ -12,7 +16,7 @@ import com.zhiliao.hotel.controller.myOrder.vo.HotelBasicVO;
  **/
 public interface HotelLiveOrderService {
 
-    void checkoutOrder(Long userID, HotelBasicVO hotelBasicVO, ZlCheckoutOrderParam zlCheckoutOrderParam);
+    Map<String,Object> checkoutOrder(Long userID, HotelBasicVO hotelBasicVO, ZlCheckoutOrderParam zlCheckoutOrderParam);
 
     void continueLiveOrder(Long userID, HotelBasicVO hotelBasicVO, ZlContinueLiveOrderParam zlContinueLiveOrderParam);
 
@@ -23,4 +27,8 @@ public interface HotelLiveOrderService {
     void userDeleteCheckoutOrder(Long orderID);
 
     void userDeleteContinueLiveOrder(Long orderID);
+
+    ZlCheckoutOrder checkoutOrderDetail(Long orderID);
+
+    ZlContinueLiveOrder continueLiveOrderDetail(Long orderID);
 }

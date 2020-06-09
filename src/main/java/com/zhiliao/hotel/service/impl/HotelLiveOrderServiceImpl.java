@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @program: zhiliao_hotel_applets_api
  * @description
@@ -35,7 +38,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
     private ZlContinueLiveOrderMapper zlContinueLiveOrderMapper;
 
     @Override
-    public void checkoutOrder(Long userID, HotelBasicVO hotelBasicVO, ZlCheckoutOrderParam zlCheckoutOrderParam) {
+    public Map<String,Object> checkoutOrder(Long userID, HotelBasicVO hotelBasicVO, ZlCheckoutOrderParam zlCheckoutOrderParam) {
 
         //调用工具类生成订单编号
         String orderSerialNo = OrderIDUtil.createOrderID("TF");
@@ -53,12 +56,15 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         zlCheckoutOrder.setOrderstatus((byte) 0);
         zlCheckoutOrder.setIsdelete(false);
         zlCheckoutOrder.setIsuserdelete(false);
-        zlCheckoutOrder.setCheckoutdate(zlCheckoutOrderParam.getCheckOutDate()/1000);
+        zlCheckoutOrder.setCheckoutdate(zlCheckoutOrderParam.getCheckOutDate());
         zlCheckoutOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         zlCheckoutOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
         zlCheckoutOrderMapper.insert(zlCheckoutOrder);
 
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderid",zlCheckoutOrder.getOrderid());
+        return map;
     }
 
     @Override
@@ -66,15 +72,17 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         //调用工具类生成订单编号
         String orderSerialNo = OrderIDUtil.createOrderID("TF");
 
+        ZlWxuserdetail zlWxuserdetail = zlWxuserdetailMapper.findByUserId(userID);
         ZlContinueLiveOrder zlContinueLiveOrder = new ZlContinueLiveOrder();
         zlContinueLiveOrder.setUserid(userID);
         zlContinueLiveOrder.setOrderserialno(orderSerialNo);
+        zlContinueLiveOrder.setUserid(userID);
         zlContinueLiveOrder.setHotelid(hotelBasicVO.getHotelID());
         zlContinueLiveOrder.setHotelname(hotelBasicVO.getHotelName());
         zlContinueLiveOrder.setRoomid(hotelBasicVO.getRoomID());
         zlContinueLiveOrder.setRoomnumber(hotelBasicVO.getRoomNumber());
-        zlContinueLiveOrder.setUsername(zlContinueLiveOrderParam.getUserName());
-        zlContinueLiveOrder.setTel(zlContinueLiveOrderParam.getTel());
+        zlContinueLiveOrder.setUsername(zlWxuserdetail.getRealname());
+        zlContinueLiveOrder.setTel(zlWxuserdetail.getTel());
         zlContinueLiveOrder.setOrderstatus((byte) 0);
         zlContinueLiveOrder.setIsdelete(false);
         zlContinueLiveOrder.setIsuserdelete(false);
@@ -108,6 +116,26 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
     public void userDeleteContinueLiveOrder(Long orderID) {
         Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
         zlContinueLiveOrderMapper.userDeleteContinueLiveOrder(orderID, updateDate);
+    }
+
+    /**
+     * 退房订单详情
+     * @param orderID
+     * @return
+     */
+    @Override
+    public ZlCheckoutOrder checkoutOrderDetail(Long orderID) {
+        return zlCheckoutOrderMapper.checkoutOrderDetail(orderID);
+    }
+
+    /**
+     * 续住订单详情
+     * @param orderID
+     * @return
+     */
+    @Override
+    public ZlContinueLiveOrder continueLiveOrderDetail(Long orderID) {
+        return zlContinueLiveOrderMapper.continueLiveOrderDetail(orderID);
     }
 
 

@@ -95,4 +95,14 @@ public class ZlHotelFacilityOrderServiceImpl implements ZlHotelFacilityOrderServ
         }
 
     }
+
+    /**
+     * 用户删除设施订单
+     * @param orderID
+     */
+    @Override
+    public void userDeleteFacilityOrder(Long orderID) {
+        Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
+        hotelFacilityOrderMapper.userDeleteFacilityOrder(orderID,updateDate);
+    }
 }

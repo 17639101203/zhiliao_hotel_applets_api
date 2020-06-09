@@ -18,4 +18,6 @@ public interface ZlCheckoutOrderMapper extends Mapper<ZlCheckoutOrder> {
 
     @Select("select count(*) from zl_checkoutorder where UserID = #{userId} and IsDelete = 0 and IsUserDelete = 0")
     int selectCountCheckOut(Long userId);
+
+    ZlCheckoutOrder checkoutOrderDetail(@Param("orderID") Long orderID);
 }

@@ -34,4 +34,14 @@ public class ZlRepairServiceImpl implements ZlRepairService {
     public void cancelRepairOrder(Long Userid, String serialnumber, Integer updatedate) {
         zlRepairorderMapper.removeRepairOrder(serialnumber,updatedate);
     }
+
+    /**
+     * 用户删除报修订单
+     * @param orderID
+     */
+    @Override
+    public void userDeleteRepairOrder(Long orderID) {
+        Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
+        zlRepairorderMapper.userDeleteRepairOrder(orderID,updateDate);
+    }
 }

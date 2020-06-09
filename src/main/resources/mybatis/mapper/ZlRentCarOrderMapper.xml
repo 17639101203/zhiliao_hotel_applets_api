@@ -67,4 +67,8 @@
   <update id="updateById" parameterType="com.zhiliao.hotel.model.ZlRentCarOrder">
     update zl_rentcarorder set OrderStatus = #{orderstatus},UpdateDate = #{updatedate} where OrderID = #{orderid}
   </update>
+
+  <update id="dlRentCarOrder" parameterType="com.zhiliao.hotel.model.ZlRentCarOrder">
+    update zl_rentcarorder set IsUserDelete = #{isuserdelete},UpdateDate = #{updatedate} where OrderID = #{orderid}
+  </update>
 </mapper>

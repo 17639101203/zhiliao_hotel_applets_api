@@ -21,4 +21,21 @@
         WHERE OrderID = #{orderID}
     </update>
 
+    <select id="checkoutOrderDetail" resultType="com.zhiliao.hotel.model.ZlCheckoutOrder">
+        select
+          OrderID,
+          OrderSerialNo,
+          UserName,
+          Tel,
+          OrderStatus,
+          CheckOutDate,
+          Remark,
+          CreateDate,
+          UpdateDate
+        from
+          zl_checkoutorder
+        where
+          OrderID = #{orderID} and IsUserDelete = 0 and IsDelete = 0
+    </select>
+
 </mapper>

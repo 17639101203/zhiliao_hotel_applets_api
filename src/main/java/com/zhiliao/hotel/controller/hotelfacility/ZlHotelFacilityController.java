@@ -86,8 +86,9 @@ public class ZlHotelFacilityController {
         facilityOrder.setFacilityname(orderParam.getFacilityName());
         facilityOrder.setCoverurl(orderParam.getCoverUrl());;
         facilityOrder.setActuallypay(orderParam.getActuallyPay());
-        facilityOrder.setUsebegindate(orderParam.getUsebegindate());
-        facilityOrder.setUseenddate(orderParam.getUseenddate());
+        facilityOrder.setUsebegindate(orderParam.getUsebegindate() / 1000);
+        facilityOrder.setUseenddate(orderParam.getUseenddate() / 1000);
+
 
         try {
             Map<String,Object> map = hotelFacilityService.addFacilityOrder(facilityOrder);
@@ -132,6 +133,24 @@ public class ZlHotelFacilityController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString(e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "用户删除酒店设施订单_徐向向")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "orderid", dataType = "Long", required = true, value = "退房订单ID")
+    })
+    @PostMapping("userDeleteFacilityOrder/{orderid}")
+    @UserLoginToken
+//    @PassToken
+    @ResponseBody
+    public ReturnString  userDeleteFacilityOrder(@PathVariable("orderid") Long orderid) {
+        try {
+            hotelFacilityOrderService.userDeleteFacilityOrder(orderid);
+            return new ReturnString("用户删除酒店设施成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("用户删除酒店设施失败!");
         }
     }
 

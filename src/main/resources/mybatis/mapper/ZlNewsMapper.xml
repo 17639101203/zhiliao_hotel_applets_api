@@ -17,10 +17,13 @@
     <result column="VisitCount" jdbcType="INTEGER" property="visitcount" />
     <result column="Sort" jdbcType="SMALLINT" property="sort" />
     <result column="Status" jdbcType="BIT" property="status" />
+    <result column="CheckStatus" jdbcType="BIT" property="checkstatus" />
     <result column="CreatorUserName" jdbcType="VARCHAR" property="creatorusername" />
     <result column="CreatorUsrIP" jdbcType="VARCHAR" property="creatorusrip" />
     <result column="ModifyUserName" jdbcType="VARCHAR" property="modifyusername" />
     <result column="ModifyUserIP" jdbcType="VARCHAR" property="modifyuserip" />
+    <result column="OperatorRemark" jdbcType="VARCHAR" property="operatorremark" />
+    <result column="IsDelete" jdbcType="VARCHAR" property="isDelete" />
     <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
     <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
   </resultMap>
@@ -43,11 +46,11 @@
 
   <select id="findAllJiuDianId" resultType="com.zhiliao.hotel.model.ZlNews">
     select
-      NewsID,HotelID,Type,Author,Title,Content,ImgUrl,CreateDate
+      NewsID,HotelID,Type,Author,Title,Content,ImgUrl,CreateDate,VisitCount
     from zl_news
-    where 1 = 1 and IsDelete = 0
+    where 1 = 1 and IsDelete = 0 and Status = 1 and CheckStatus = 2
     <if test="hotelID != null and hotelID != '' ">
-      and HotelID = #{hotelID}
+      and HotelID in (0,#{hotelID})
     </if>
     order by CreateDate DESC
 
@@ -62,10 +65,11 @@
       n.Content,
       n.ImgUrl,
       n.CreateDate,
-      h.HotelName hotelName
+      n.UpdateDate
     from
-      zl_news n,zl_hotel h
+      zl_news n
     where
-    n.NewsID = #{newsid} and n.HotelID = h.HotelID
+    n.NewsID = #{newsid}
+    and n.IsDelete = 0
   </select>
 </mapper>

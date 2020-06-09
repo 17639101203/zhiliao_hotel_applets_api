@@ -27,4 +27,6 @@ public interface ZlServiceorderService {
      * @throws RuntimeException
      */
     void serviceorderCancel(Long orderId) throws RuntimeException;
+
+    void userDeleteServiceOrder(Long orderid);
 }
