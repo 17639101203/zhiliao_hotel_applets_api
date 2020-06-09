@@ -1,13 +1,9 @@
 package com.zhiliao.hotel.service.impl;
 
-import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.mapper.ZlWakeOrderMapper;
 import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
-import com.zhiliao.hotel.model.ZlWakeOrder;
-import com.zhiliao.hotel.model.ZlWxuser;
 import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.ZlWakeOrderService;
-import com.zhiliao.hotel.service.ZlWxuserService;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

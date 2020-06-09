@@ -1,4 +1,4 @@
-package com.zhiliao.hotel.controller.myOrder.param;
+package com.zhiliao.hotel.controller.myOrder.params;
 
 /**
  * @program: zhiliao_hotel_applets_api
