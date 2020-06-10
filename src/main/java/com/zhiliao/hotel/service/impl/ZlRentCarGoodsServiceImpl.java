@@ -111,7 +111,7 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
      * @return
      */
     @Override
-    public ZlRentCarOrder rentCarOrderDetail(long orderid) {
+    public ZlRentCarOrder rentCarOrderDetail(Long orderid) {
         return rentCarOrderMapper.rentCarOrderDetail(orderid);
     }
 

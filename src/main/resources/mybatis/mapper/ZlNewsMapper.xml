@@ -45,15 +45,24 @@
   </sql>
 
   <select id="findAllJiuDianId" resultType="com.zhiliao.hotel.model.ZlNews">
-    select
-      NewsID,HotelID,Type,Author,Title,Content,ImgUrl,CreateDate,VisitCount
-    from zl_news
-    where 1 = 1 and IsDelete = 0 and Status = 1 and CheckStatus = 2
-    <if test="hotelID != null and hotelID != '' ">
-      and HotelID in (0,#{hotelID})
-    </if>
-    order by CreateDate DESC
-
+    SELECT
+    NewsID,
+    HotelID,
+    TYPE,
+    Author,
+    Title,
+    Content,
+    ImgUrl,
+    CreateDate,
+    VisitCount
+    FROM
+    zl_news
+    WHERE 1 = 1
+    AND IsDelete = 0
+    AND STATUS = 1
+    AND CheckStatus = 2
+    AND HotelID = #{hotelID}
+    ORDER BY CreateDate DESC
   </select>
   <select id="findById" resultType="com.zhiliao.hotel.model.ZlNews">
     select

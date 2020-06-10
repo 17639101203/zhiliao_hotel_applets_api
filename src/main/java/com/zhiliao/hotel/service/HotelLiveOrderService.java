@@ -16,9 +16,9 @@ import java.util.Map;
  **/
 public interface HotelLiveOrderService {
 
-    Map<String,Object> checkoutOrder(Long userID, HotelBasicVO hotelBasicVO, ZlCheckoutOrderParam zlCheckoutOrderParam);
+    Map<String, Object> checkoutOrder(Long userID, HotelBasicVO hotelBasicVO, ZlCheckoutOrderParam zlCheckoutOrderParam);
 
-    void continueLiveOrder(Long userID, HotelBasicVO hotelBasicVO, ZlContinueLiveOrderParam zlContinueLiveOrderParam);
+    Map<String, Object> continueLiveOrder(Long userID, HotelBasicVO hotelBasicVO, ZlContinueLiveOrderParam zlContinueLiveOrderParam);
 
     void cancelCheckoutOrder(Long orderID);
 
@@ -28,7 +28,7 @@ public interface HotelLiveOrderService {
 
     void userDeleteContinueLiveOrder(Long orderID);
 
-    ZlCheckoutOrder checkoutOrderDetail(Long orderID);
+    ZlCheckoutOrder checkoutOrderDetail(Long orderID, Byte orderStatus);
 
-    ZlContinueLiveOrder continueLiveOrderDetail(Long orderID);
+    ZlContinueLiveOrder continueLiveOrderDetail(Long orderID, Byte orderStatus);
 }

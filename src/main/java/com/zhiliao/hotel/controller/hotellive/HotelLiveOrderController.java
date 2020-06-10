@@ -68,7 +68,7 @@ public class HotelLiveOrderController {
         //获取用户id
         String token = httpServletRequest.getHeader("token");
         Long userID = TokenUtil.getUserId(token);
-//        Long userID = 9L;
+//        Long userID = 150L;
         try {
             Map<String, Object> map = hotelLiveOrderService.checkoutOrder(userID, hotelBasicVO, zlCheckoutOrderParam);
             return new ReturnString(map);
@@ -98,15 +98,16 @@ public class HotelLiveOrderController {
 
     @ApiOperation(value = "退房订单详情_姬慧慧")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "退房订单ID")
+            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "退房订单ID"),
+            @ApiImplicitParam(paramType = "path", name = "orderStatus", dataType = "Byte", required = true, value = "订单状态:-1:取消退房;0等待退房;1完成退房")
     })
-    @PostMapping("checkoutOrderDetail/{orderID}")
+    @PostMapping("checkoutOrderDetail/{orderID}/{orderStatus}")
     @UserLoginToken
-    //@PassToken
+//    @PassToken
     @ResponseBody
-    public ReturnString checkoutOrderDetail(@PathVariable("orderID") Long orderID) {
+    public ReturnString checkoutOrderDetail(@PathVariable("orderID") Long orderID, @PathVariable("orderStatus") Byte orderStatus) {
         try {
-            ZlCheckoutOrder checkoutOrder = hotelLiveOrderService.checkoutOrderDetail(orderID);
+            ZlCheckoutOrder checkoutOrder = hotelLiveOrderService.checkoutOrderDetail(orderID, orderStatus);
             return new ReturnString(checkoutOrder);
         } catch (Exception e) {
             e.printStackTrace();
@@ -163,8 +164,8 @@ public class HotelLiveOrderController {
         Long userID = TokenUtil.getUserId(token);
 //        Long userID = 9L;
         try {
-            hotelLiveOrderService.continueLiveOrder(userID, hotelBasicVO, zlContinueLiveOrderParam);
-            return new ReturnString(0, "续住成功!");
+            Map<String, Object> map = hotelLiveOrderService.continueLiveOrder(userID, hotelBasicVO, zlContinueLiveOrderParam);
+            return new ReturnString(map);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("续住失败!");
@@ -209,15 +210,16 @@ public class HotelLiveOrderController {
 
     @ApiOperation(value = "续住订单详情_姬慧慧")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "退房订单ID")
+            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "退房订单ID"),
+            @ApiImplicitParam(paramType = "path", name = "orderStatus", dataType = "Byte", required = true, value = "订单状态:-1:已取消;0待处理;1处理完成")
     })
-    @PostMapping("continueLiveOrderDetail/{orderID}")
+    @PostMapping("continueLiveOrderDetail/{orderID}/{orderStatus}")
     @UserLoginToken
     //@PassToken
     @ResponseBody
-    public ReturnString continueLiveOrderDetail(@PathVariable("orderID") Long orderID) {
+    public ReturnString continueLiveOrderDetail(@PathVariable("orderID") Long orderID, @PathVariable("orderStatus") Byte orderStatus) {
         try {
-            ZlContinueLiveOrder continueLiveOrder = hotelLiveOrderService.continueLiveOrderDetail(orderID);
+            ZlContinueLiveOrder continueLiveOrder = hotelLiveOrderService.continueLiveOrderDetail(orderID, orderStatus);
             return new ReturnString(continueLiveOrder);
         } catch (Exception e) {
             e.printStackTrace();

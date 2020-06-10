@@ -7,12 +7,14 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.GeneratedValue;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Data
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="zl_invoice")
 public class ZlInvoice implements Serializable {
     /**
      * 发票ID

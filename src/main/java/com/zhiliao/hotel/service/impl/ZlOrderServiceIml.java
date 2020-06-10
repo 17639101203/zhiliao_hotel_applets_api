@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
@@ -47,7 +48,8 @@ public class ZlOrderServiceIml implements ZlOrderService {
 
     @Override
     public PageInfoResult findAllOrder(OrderInfoVO vo) {
-
+        //分页插件 pageNo:起始页，pageSize：每页显示条数
+        PageHelper.startPage(vo.getPageNo(), vo.getPageSize());
         List<OrderList> allOrders = zlOrderMapper.findAllOrder(vo);
         if (allOrders != null && !allOrders.isEmpty()) {
             List<ZlOrderDetail> goodsList = null;

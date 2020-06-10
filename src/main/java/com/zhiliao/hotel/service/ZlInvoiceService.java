@@ -16,7 +16,7 @@ public interface ZlInvoiceService {
      * 新增发票
      * @param Invoice 发票对象
      */
-    void addInvoice(ZlInvoice Invoice);
+    Map<String, Object> addInvoice(ZlInvoice Invoice);
 
     /***
      * 根据用户查询发票信息

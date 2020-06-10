@@ -6,7 +6,7 @@ import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 
 public interface ZlHotelFacilityOrderService {
-    PageInfoResult findAllOrder(Long userId, Integer orderStatus, Integer pageNo, Integer pageSize);
+    PageInfoResult findAllOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize);
 
     ZlHotelFacilityOrder findOrder(Long orderID);
 

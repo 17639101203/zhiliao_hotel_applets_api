@@ -38,15 +38,15 @@ public class ZlNewsController {
             @ApiImplicitParam(paramType = "query", name = "pageNo", dataType = "int", required = true, value = "页码值"),
             @ApiImplicitParam(paramType = "query", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
     })
-    @GetMapping("findByHoteId/{hotelID}")
+    @GetMapping("findByHoteId/{hotelID}/{pageNo}/{pageSize}")
     @ResponseBody
-    @PassToken
-    //@UserLoginToken
+//    @PassToken
+    @UserLoginToken
     public ReturnString findByjiudianId(@PathVariable Integer hotelID, Integer pageNo, Integer pageSize) {
         try {
             logger.info("酒店ID：" + hotelID);
 
-            PageInfoResult allNews = zlNewsService.findAllHoteId(hotelID,pageNo, pageSize);
+            PageInfoResult allNews = zlNewsService.findAllHoteId(hotelID, pageNo, pageSize);
 
             return new ReturnString(allNews);
         } catch (Exception e) {
@@ -61,8 +61,8 @@ public class ZlNewsController {
     })
     @GetMapping("findById/{newsid}")
     @ResponseBody
-    @PassToken
-    //@UserLoginToken
+//    @PassToken
+    @UserLoginToken
     public ReturnString findById(@PathVariable Integer newsid) {
         try {
             logger.info("咨讯id： " + newsid);

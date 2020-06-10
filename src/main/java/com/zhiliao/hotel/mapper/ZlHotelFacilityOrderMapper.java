@@ -11,7 +11,7 @@ import java.util.Map;
 
 public interface ZlHotelFacilityOrderMapper extends Mapper<ZlHotelFacilityOrder> {
     List<ZlHotelFacilityOrder> findAllOrder(@Param("userId") Long userId,
-                                            @Param("orderStatus") Integer orderStatus
+                                            @Param("orderStatus") Byte orderStatus
     );
 
     ZlHotelFacilityOrder findOrderById(@Param("orderID") Long orderID);
@@ -30,5 +30,5 @@ public interface ZlHotelFacilityOrderMapper extends Mapper<ZlHotelFacilityOrder>
 
     void updateById(ZlHotelFacilityOrder facilityOrder);
 
-    void userDeleteFacilityOrder(Long orderID, Integer updateDate);
+    void userDeleteFacilityOrder(@Param("orderID")Long orderID,@Param("updateDate") Integer updateDate);
 }

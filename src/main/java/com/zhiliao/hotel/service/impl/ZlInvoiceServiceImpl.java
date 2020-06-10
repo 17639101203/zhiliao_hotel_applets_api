@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,27 +24,34 @@ import java.util.Map;
 public class ZlInvoiceServiceImpl implements ZlInvoiceService {
 
     @Autowired
-    private  ZlInvoiceMapper mapper;
+    private ZlInvoiceMapper mapper;
 
     @Autowired
     private ZlInvoiceOrderMapper orderMapper;
 
 
+    @Override
+    public Map<String, Object> addInvoice(ZlInvoice invoice) {
+        Map<String, Object> map = new HashMap<>();
+        mapper.insertInvoice(invoice);
+        map.put("invoiceID", invoice.getInvoiceid());
+        map.put("invoiceType", invoice.getInvoicetype());
+        return map;
+    }
 
     @Override
-    public void addInvoice(ZlInvoice Invoice) {  mapper.insertInvoice(Invoice); }
+    public void deleteInvoice(Long userid, Integer invoiceid) {
+        mapper.deleteInvoice(userid, invoiceid);
+    }
+
 
     @Override
-    public void deleteInvoice(Long userid, Integer invoiceid) { mapper.deleteInvoice(userid,invoiceid); }
-
-
-    @Override
-    public PageInfoResult<List<Map<String,Object>>> queryByUserID(Long userid,Integer pageNo,Integer pageSize) {
+    public PageInfoResult<List<Map<String, Object>>> queryByUserID(Long userid, Integer pageNo, Integer pageSize) {
         // 设定当前页码，以及当前页显示的条数
         PageHelper.startPage(pageNo, pageSize);
-        List<Map<String,Object>> list = mapper.queryInvoiceByUserID(userid);
-        PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(list);
-        if(list==null){
+        List<Map<String, Object>> list = mapper.queryInvoiceByUserID(userid);
+        PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(list);
+        if (list == null) {
             throw new RuntimeException("开票抬头查询失败,请重新再试！");
         }
         return PageInfoResult.getPageInfoResult(pageInfo);
@@ -51,8 +59,8 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
 
 
     @Override
-    public Map<String,Object> findinvoicedetails(Long userid, Integer invoiceid) {
-        return mapper.queryInvoicedetail(userid,invoiceid);
+    public Map<String, Object> findinvoicedetails(Long userid, Integer invoiceid) {
+        return mapper.queryInvoicedetail(userid, invoiceid);
     }
 
 
@@ -73,12 +81,12 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
 
     @Override
     public InvoiceOrderVO findInvoiceOrderdetail(Long userid, String invoiceordernumber) {
-        return orderMapper.queryInvoiceOrderdetail(userid,invoiceordernumber);
+        return orderMapper.queryInvoiceOrderdetail(userid, invoiceordernumber);
     }
 
     @Override
     public void cancelInvoiceOrder(String invoiceordernumber, Integer updatedate) {
-        orderMapper.removeInvoiceOrder(invoiceordernumber,updatedate);
+        orderMapper.removeInvoiceOrder(invoiceordernumber, updatedate);
     }
 
 }

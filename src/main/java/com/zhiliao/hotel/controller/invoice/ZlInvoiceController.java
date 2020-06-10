@@ -42,14 +42,14 @@ public class ZlInvoiceController {
 
 
     @ApiOperation(value = "保存/修改发票抬头")
-//    @UserLoginToken
-    @PassToken
+    @UserLoginToken
+//    @PassToken
     @PostMapping("addInvoice")
     public ReturnString addInvoice(@RequestBody InvoiceParam ip, HttpServletRequest request) {
         ZlInvoice invoice = new ZlInvoice();
         // 解析token获取userid
-//        Long userid = TokenUtil.getUserId(request.getHeader("token"));
-        Long userid = System.currentTimeMillis();
+        Long userid = TokenUtil.getUserId(request.getHeader("token"));
+//        Long userid = System.currentTimeMillis();
         Integer nowTime = DateUtils.javaToPhpNowDateTime();
         invoice.setUserid(userid);        //  UserID
         invoice.setInvoicetype(ip.getInvoicetype());    //  发票类型:1:增值税普通发票;2增值税专用发票
@@ -67,11 +67,11 @@ public class ZlInvoiceController {
         invoice.setUpdatedate(nowTime);     //修改时间
         if (ip.getSaveType().equals("1")) {       //  保存类型为新增
             if (ip.getInvoicetype() == 1) {      //个人开票
-                zlInvoiceService.addInvoice(invoice);
-                return new ReturnString<>(0, "增值税普通发票抬头保存成功");
+                Map<String, Object> map = zlInvoiceService.addInvoice(invoice);
+                return new ReturnString<>(map);
             } else if (ip.getInvoicetype() == 2) {  //企业开票
-                zlInvoiceService.addInvoice(invoice);
-                return new ReturnString<>(0, "增值税专用发票抬头保存成功");
+                Map<String, Object> map = zlInvoiceService.addInvoice(invoice);
+                return new ReturnString<>(map);
             }
             return new ReturnString<>(-1, "开票类型错误，请重新再试!");
         } else if (ip.getSaveType().equals("2")) { //保存类型为修改
@@ -94,10 +94,10 @@ public class ZlInvoiceController {
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
 //        Long userid = System.currentTimeMillis();
         // 生成订单ID
-        String orderid = OrderIDUtil.createOrderID("");
-        map.put("invoiceordernumber", orderid);
+        String invoiceOrderNumber = OrderIDUtil.createOrderID("");
+        map.put("invoiceordernumber", invoiceOrderNumber);
         Integer nowTime = DateUtils.javaToPhpNowDateTime();
-        zlInvoiceOrder.setInvoiceordernumber(orderid);    // 订单ID
+        zlInvoiceOrder.setInvoiceordernumber(invoiceOrderNumber);    // 订单ID
         zlInvoiceOrder.setInvoiceid(invoiceOrderParam.getInvoiceid());   // 发票ID
         zlInvoiceOrder.setHotelid(invoiceOrderParam.getHotelid());        //酒店ID
         zlInvoiceOrder.setRoomnumber(invoiceOrderParam.getRoomnumber());  //房间号
@@ -128,6 +128,7 @@ public class ZlInvoiceController {
 
     @ApiOperation(value = "查询发票抬头")
     @UserLoginToken
+//    @PassToken
     @GetMapping("findInvoiceHeads/{hotelid}/{pageNo}/{pageSize}")
     public ReturnString findInvoiceHeads(HttpServletRequest request, @PathVariable Integer hotelid,
                                          @PathVariable Integer pageNo, @PathVariable Integer pageSize) {
@@ -138,7 +139,7 @@ public class ZlInvoiceController {
         }
         // 解析token获取userid
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
-//        Long userid = System.currentTimeMillis();
+//        Long userid = 74L;
         pageSize = pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize;
         PageInfoResult<List<Map<String, Object>>> list = zlInvoiceService.queryByUserID(userid, pageNo, pageSize);
         if (list == null) {

@@ -38,7 +38,7 @@ public class ZlHotelFacilityOrderServiceImpl implements ZlHotelFacilityOrderServ
      * @return
      */
     @Override
-    public PageInfoResult findAllOrder(Long userId, Integer orderStatus, Integer pageNo, Integer pageSize) {
+    public PageInfoResult findAllOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo, pageSize);
         List<ZlHotelFacilityOrder> hotelFacilityOrderList = hotelFacilityOrderMapper.findAllOrder(userId, orderStatus);
 

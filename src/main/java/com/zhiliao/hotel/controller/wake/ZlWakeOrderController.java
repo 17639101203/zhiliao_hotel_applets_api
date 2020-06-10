@@ -42,7 +42,7 @@ public class ZlWakeOrderController {
     //@PassToken
     @ApiOperation(value = "提交叫醒订单")
     @PostMapping("addWakeOrder")
-    public ReturnString addWakeOrder(HttpServletRequest request, @RequestBody ZlWaqkeOrderParam wakeOrderParm){
+    public ReturnString addWakeOrder(HttpServletRequest request, @RequestBody ZlWaqkeOrderParam wakeOrderParm) {
         String token = request.getHeader("token");
         Long userId = TokenUtil.getUserId(token);
         //long userId = System.currentTimeMillis();
@@ -57,13 +57,14 @@ public class ZlWakeOrderController {
         wakeOrder.setTel(wakeOrderParm.getTel());
 
         try {
-             Map<String,Object> map = wakeOrderService.addWakeOrder(userId, wakeOrder);
-             return new ReturnString(0,"提交成功,祝您好梦!",map);
+            Map<String, Object> map = wakeOrderService.addWakeOrder(userId, wakeOrder);
+            return new ReturnString(0, "提交成功,祝您好梦!", map);
 
         } catch (Exception e) {
             return new ReturnString("提交失败");
         }
     }
+
     @ApiOperation(value = "叫醒订单详情")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", dataType = "long", name = "orderID", value = "订单ID", required = true)
@@ -76,7 +77,7 @@ public class ZlWakeOrderController {
 
 
         try {
-            ZlWakeOrder wakeOrder = wakeOrderService.wakeOrderDetail( orderID);
+            ZlWakeOrder wakeOrder = wakeOrderService.wakeOrderDetail(orderID);
             return new ReturnString(wakeOrder);
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,11 +92,11 @@ public class ZlWakeOrderController {
     @GetMapping("cancelWakeOrder/{orderID}")
     @UserLoginToken
     @PassToken
-    public ReturnString cancelWakeOrder(@PathVariable Long orderID){
+    public ReturnString cancelWakeOrder(@PathVariable Long orderID) {
 
         try {
             wakeOrderService.cancelWakeOrder(orderID);
-            return new ReturnString(0,"已取消");
+            return new ReturnString(0, "已取消");
         } catch (Exception e) {
             return new ReturnString(e.getMessage());
         }
@@ -108,11 +109,11 @@ public class ZlWakeOrderController {
     @GetMapping("dlWakeOrder/{orderID}")
     @UserLoginToken
     @PassToken
-    public ReturnString dlWakeOrder(@PathVariable Long orderID){
+    public ReturnString dlWakeOrder(@PathVariable Long orderID) {
 
         try {
             wakeOrderService.dlWakeOrder(orderID);
-            return new ReturnString(0,"删除成功");
+            return new ReturnString(0, "删除成功");
         } catch (Exception e) {
             return new ReturnString(e.getMessage());
         }

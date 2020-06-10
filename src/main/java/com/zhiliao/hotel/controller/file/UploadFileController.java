@@ -44,7 +44,7 @@ public class UploadFileController {
     @PostMapping(value = "uploadFile", consumes = {"multipart/*"}, headers = "content-type=multipart/form-data")
 //    @PassToken
     @NoLoginRequiredToken
-    public ReturnString<List<String>> uploadFile(MultipartFile[] multipartFiles) {  //params  token
+    public ReturnString<List<String>> uploadFile(MultipartFile[] multipartFiles) {  //OrderShowParam  token
         try {
             List<String> pathList = new ArrayList<>();
             for (MultipartFile multipartFile : multipartFiles) {

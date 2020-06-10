@@ -19,7 +19,7 @@ public interface ZlRentCarGoodsService {
 
     Map<String, Object> addRentCar(Long userId, ZlRentCarOrder rentCarOrder, Integer goodsid);
 
-    ZlRentCarOrder rentCarOrderDetail(long orderid);
+    ZlRentCarOrder rentCarOrderDetail(Long orderid);
 
     void cancelRentCarOrder(Long orderid);
 

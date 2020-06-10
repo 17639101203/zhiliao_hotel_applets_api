@@ -73,9 +73,9 @@ public class ZlHotelFacilityController {
     public ReturnString addFacilityOrder(HttpServletRequest request, @RequestBody HotelFacilityOrderParam orderParam) {
 
 
-            String token = request.getHeader("token");
-            Long userId = TokenUtil.getUserId(token);
-            //long userId = System.currentTimeMillis();
+        String token = request.getHeader("token");
+        Long userId = TokenUtil.getUserId(token);
+        //long userId = System.currentTimeMillis();
         ZlHotelFacilityOrder facilityOrder = new ZlHotelFacilityOrder();
         facilityOrder.setUserid(userId);
         facilityOrder.setFacilityid(orderParam.getFacilityId());
@@ -84,14 +84,15 @@ public class ZlHotelFacilityController {
         facilityOrder.setRoomid(orderParam.getRoomid());
         facilityOrder.setRoomnumber(orderParam.getRoomnumber());
         facilityOrder.setFacilityname(orderParam.getFacilityName());
-        facilityOrder.setCoverurl(orderParam.getCoverUrl());;
+        facilityOrder.setCoverurl(orderParam.getCoverUrl());
+        ;
         facilityOrder.setActuallypay(orderParam.getActuallyPay());
         facilityOrder.setUsebegindate(orderParam.getUsebegindate() / 1000);
         facilityOrder.setUseenddate(orderParam.getUseenddate() / 1000);
 
 
         try {
-            Map<String,Object> map = hotelFacilityService.addFacilityOrder(facilityOrder);
+            Map<String, Object> map = hotelFacilityService.addFacilityOrder(facilityOrder);
             return new ReturnString(map);
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,7 +111,7 @@ public class ZlHotelFacilityController {
     public ReturnString findOrderDetail(@PathVariable Long orderID) {
 
         try {
-            ZlHotelFacilityOrder zlHotelFacilityOrder = hotelFacilityOrderService.findOrder( orderID);
+            ZlHotelFacilityOrder zlHotelFacilityOrder = hotelFacilityOrderService.findOrder(orderID);
             return new ReturnString(zlHotelFacilityOrder);
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,11 +126,11 @@ public class ZlHotelFacilityController {
     @GetMapping("cancelRentCarOrder/{orderid}")
     @UserLoginToken
     //@PassToken
-    public ReturnString cancelRentCarOrder(@PathVariable Long orderid){
+    public ReturnString cancelRentCarOrder(@PathVariable Long orderid) {
 
         try {
             hotelFacilityOrderService.cancelFacilityOrder(orderid);
-            return new ReturnString(0,"已取消");
+            return new ReturnString(0, "已取消");
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString(e.getMessage());
@@ -144,7 +145,7 @@ public class ZlHotelFacilityController {
     @UserLoginToken
 //    @PassToken
     @ResponseBody
-    public ReturnString  userDeleteFacilityOrder(@PathVariable("orderid") Long orderid) {
+    public ReturnString userDeleteFacilityOrder(@PathVariable("orderid") Long orderid) {
         try {
             hotelFacilityOrderService.userDeleteFacilityOrder(orderid);
             return new ReturnString("用户删除酒店设施成功!");

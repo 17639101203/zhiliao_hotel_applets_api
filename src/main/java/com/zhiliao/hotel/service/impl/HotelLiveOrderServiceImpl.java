@@ -52,6 +52,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         zlCheckoutOrder.setRoomid(hotelBasicVO.getRoomID());
         zlCheckoutOrder.setRoomnumber(hotelBasicVO.getRoomNumber());
         zlCheckoutOrder.setUsername(zlWxuserdetail.getRealname());
+        zlCheckoutOrder.setRemark(zlCheckoutOrderParam.getRemark());
         zlCheckoutOrder.setTel(zlCheckoutOrder.getTel());
         zlCheckoutOrder.setOrderstatus((byte) 0);
         zlCheckoutOrder.setIsdelete(false);
@@ -68,7 +69,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
     }
 
     @Override
-    public void continueLiveOrder(Long userID, HotelBasicVO hotelBasicVO, ZlContinueLiveOrderParam zlContinueLiveOrderParam) {
+    public Map<String, Object> continueLiveOrder(Long userID, HotelBasicVO hotelBasicVO, ZlContinueLiveOrderParam zlContinueLiveOrderParam) {
         //调用工具类生成订单编号
         String orderSerialNo = OrderIDUtil.createOrderID("TF");
 
@@ -92,6 +93,10 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         zlContinueLiveOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
         zlContinueLiveOrderMapper.insert(zlContinueLiveOrder);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderid", zlContinueLiveOrder.getOrderid());
+        return map;
     }
 
     @Override
@@ -125,8 +130,8 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
      * @return
      */
     @Override
-    public ZlCheckoutOrder checkoutOrderDetail(Long orderID) {
-        return zlCheckoutOrderMapper.checkoutOrderDetail(orderID);
+    public ZlCheckoutOrder checkoutOrderDetail(Long orderID, Byte orderStatus) {
+        return zlCheckoutOrderMapper.checkoutOrderDetail(orderID, orderStatus);
     }
 
     /**
@@ -136,8 +141,8 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
      * @return
      */
     @Override
-    public ZlContinueLiveOrder continueLiveOrderDetail(Long orderID) {
-        return zlContinueLiveOrderMapper.continueLiveOrderDetail(orderID);
+    public ZlContinueLiveOrder continueLiveOrderDetail(Long orderID, Byte orderStatus) {
+        return zlContinueLiveOrderMapper.continueLiveOrderDetail(orderID, orderStatus);
     }
 
 

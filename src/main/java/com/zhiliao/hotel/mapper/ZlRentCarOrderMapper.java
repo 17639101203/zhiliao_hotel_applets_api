@@ -15,7 +15,7 @@ import java.util.List;
  **/
 public interface ZlRentCarOrderMapper extends Mapper<ZlRentCarOrder> {
 
-    ZlRentCarOrder rentCarOrderDetail(long orderid);
+    ZlRentCarOrder rentCarOrderDetail(@Param("orderid") Long orderid);
 
     int updateById(ZlRentCarOrder rentCarOrder);
 

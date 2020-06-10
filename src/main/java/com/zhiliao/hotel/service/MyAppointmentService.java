@@ -16,7 +16,7 @@ public interface MyAppointmentService {
      * @param pageSize
      * @return
      */
-    PageInfoResult cleanFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize);
+    PageInfoResult cleanFindAll(Long userId, Byte orderstatus, Integer pageNo, Integer pageSize);
 
 
     /**
@@ -27,7 +27,7 @@ public interface MyAppointmentService {
      * @param pageSize
      * @return
      */
-    PageInfoResult invoiceFindAll(Long userId, Integer invoicestatus, Integer pageNo, Integer pageSize);
+    PageInfoResult invoiceFindAll(Long userId, Byte invoicestatus, Integer pageNo, Integer pageSize);
 
 
     /**
@@ -38,20 +38,20 @@ public interface MyAppointmentService {
      * @param pageSize
      * @return
      */
-    PageInfoResult repairFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize);
+    PageInfoResult repairFindAll(Long userId, Byte orderstatus, Integer pageNo, Integer pageSize);
 
 
     void cancelOrder(Long orderid, Integer orderServiceType);
 
-    PageInfoResult serviceFindAll(Long userId, Integer orderstatus, Integer pageNo, Integer pageSize);
+    PageInfoResult serviceFindAll(Long userId, Byte orderstatus, Integer pageNo, Integer pageSize);
 
     Map<String, Integer> myAppointementCount(Long userId);
 
-    PageInfoResult findAllWakeOrder(Long userId, Integer orderStatus, Integer pageNo, Integer pageSize);
+    PageInfoResult findAllWakeOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize);
 
-    PageInfoResult findAllRentCarOrder(Long userId, Integer orderStatus, Integer pageNo, Integer pageSize);
+    PageInfoResult findAllRentCarOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize);
 
-    PageInfoResult findAllCheckOutOrder(Long userId, Integer orderStatus, Integer pageNo, Integer pageSize);
+    PageInfoResult findAllCheckOutOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize);
 
-    PageInfoResult findAllContinueLiveOrder(Long userId, Integer orderStatus, Integer pageNo, Integer pageSize);
+    PageInfoResult findAllContinueLiveOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize);
 }

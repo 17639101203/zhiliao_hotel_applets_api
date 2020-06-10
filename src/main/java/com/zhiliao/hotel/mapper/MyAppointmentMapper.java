@@ -14,7 +14,7 @@ import java.util.List;
  **/
 public interface MyAppointmentMapper {
     //清扫订单列表
-    List<ZlCleanOrder> findAllClean(@Param("userId") Long userId, @Param("orderstatus") Integer orderstatus);
+    List<ZlCleanOrder> findAllClean(@Param("userId") Long userId, @Param("orderstatus") Byte orderstatus);
 
     /**
      * 获取所有发票服务订单
@@ -22,17 +22,17 @@ public interface MyAppointmentMapper {
      * @param invoicestatus
      * @return
      */
-    List<ZlInvoiceOrder> findAllInvoice(@Param("userId") Long userId, @Param("invoicestatus") Integer invoicestatus);
+    List<ZlInvoiceOrder> findAllInvoice(@Param("userId") Long userId, @Param("invoicestatus") Byte invoicestatus);
     //报修订单列表
-    List<ZlRepairorder> findAllRepair(@Param("userId") Long userId, @Param("orderstatus") Integer orderstatus);
+    List<ZlRepairorder> findAllRepair(@Param("userId") Long userId, @Param("orderstatus") Byte orderstatus);
     //客房服务订单列表
-    List<ZlServiceorderResult> serviceFindAll(@Param("userId") Long userId, @Param("orderstatus") Integer orderstatus);
+    List<ZlServiceorderResult> serviceFindAll(@Param("userId") Long userId, @Param("orderstatus") Byte orderstatus);
     //叫醒服务订单列表
-    List<ZlWakeOrder> findAllWakeOrder(@Param("userId")Long userId, @Param("orderstatus")Integer orderStatus);
+    List<ZlWakeOrder> findAllWakeOrder(@Param("userId")Long userId, @Param("orderstatus")Byte orderStatus);
     //租车服务订单列表
-    List<ZlRentCarOrder> findAllRentCarOrder(@Param("userId")Long userId, @Param("orderstatus")Integer orderStatus);
+    List<ZlRentCarOrder> findAllRentCarOrder(@Param("userId")Long userId, @Param("orderstatus")Byte orderStatus);
     //续住服务订单列表
-    List<ZlContinueLiveOrder> findAllContinueLiveOrder(@Param("userId")Long userId, @Param("orderstatus")Integer orderStatus);
+    List<ZlContinueLiveOrder> findAllContinueLiveOrder(@Param("userId")Long userId, @Param("orderstatus")Byte orderStatus);
     //退房服务订单列表
-    List<ZlCheckoutOrder> findAllCheckOutOrder(@Param("userId")Long userId, @Param("orderstatus")Integer orderStatus);
+    List<ZlCheckoutOrder> findAllCheckOutOrder(@Param("userId")Long userId, @Param("orderstatus")Byte orderStatus);
 }

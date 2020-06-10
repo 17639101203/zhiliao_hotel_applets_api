@@ -81,7 +81,7 @@ public class ZlCommentController {
     @ApiOperation(value = "获取点赞吐槽标签")
     @GetMapping("findTags/{hotelid}")
     @PassToken
-    public ReturnString<List<Map<String,Object>>> findTags(@PathVariable Integer hotelid) {
+    public ReturnString findTags(@PathVariable Integer hotelid) {
         List<Map<String,Object>> zlTagList = zlCommentService.findTags(hotelid);
         return new ReturnString<>(zlTagList);
     }
@@ -89,11 +89,11 @@ public class ZlCommentController {
     @ApiOperation(value = "点赞吐槽详情列表获取")
     @GetMapping("findCommentList/{pageNo}/{pageSize}")
     @UserLoginToken
-    public PageInfoResult<List<CommentVO>> findCommentList(HttpServletRequest request,
+    public ReturnString findCommentList(HttpServletRequest request,
                                                          @PathVariable Integer pageNo,@PathVariable Integer pageSize) {
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
         PageInfoResult<List<CommentVO>> list = zlCommentService.findComments(userid,pageNo,pageSize);
-        return list;
+        return new ReturnString<>(list);
     }
 
 

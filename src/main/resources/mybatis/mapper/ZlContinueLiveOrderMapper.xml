@@ -35,7 +35,7 @@
         from
           zl_continueliveorder
         where
-          OrderID = #{orderID} and IsDelete = 0 and IsUserDelete = 0
+          OrderID = #{orderID} and OrderStatus = #{orderStatus} and IsDelete = 0 and IsUserDelete = 0
     </select>
 
 </mapper>

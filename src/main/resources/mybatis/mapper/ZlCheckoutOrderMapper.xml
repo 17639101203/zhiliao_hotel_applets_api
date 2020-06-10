@@ -27,6 +27,8 @@
           OrderSerialNo,
           UserName,
           Tel,
+          HotelName,
+          RoomNumber,
           OrderStatus,
           CheckOutDate,
           Remark,
@@ -35,7 +37,7 @@
         from
           zl_checkoutorder
         where
-          OrderID = #{orderID} and IsUserDelete = 0 and IsDelete = 0
+          OrderID = #{orderID} and OrderStatus = #{orderStatus} and IsUserDelete = 0 and IsDelete = 0
     </select>
 
 </mapper>

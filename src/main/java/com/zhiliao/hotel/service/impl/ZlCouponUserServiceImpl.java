@@ -62,8 +62,8 @@ public class ZlCouponUserServiceImpl implements ZlCouponUserService {
         //集合分页
         List<ZlCouponUserResult> list = new LinkedList<>();
 
-        int index = (pageNo-1)* pageSize  < couponUserList.size()?(pageNo-1)* pageSize:couponUserList.size();
-        int dx = (pageNo-1)* pageSize + pageSize > couponUserList.size() ? couponUserList.size():(pageNo-1)* pageSize  + pageSize;
+        int index = (pageNo - 1) * pageSize < couponUserList.size() ? (pageNo - 1) * pageSize : couponUserList.size();
+        int dx = (pageNo - 1) * pageSize + pageSize > couponUserList.size() ? couponUserList.size() : (pageNo - 1) * pageSize + pageSize;
         for (int i = index; i < dx; i++) {
             ZlCouponUserResult zlCouponUser = couponUserList.get(i);
             list.add(zlCouponUser);
