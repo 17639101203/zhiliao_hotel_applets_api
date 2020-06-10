@@ -35,14 +35,16 @@ public class ZlNewsController {
     @ApiOperation(value = "酒店咨讯展示")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "int", required = true, value = "酒店id"),
-            @ApiImplicitParam(paramType = "query", name = "pageNo", dataType = "int", required = true, value = "页码值"),
-            @ApiImplicitParam(paramType = "query", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码值"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数")
     })
-    @GetMapping("findByHoteId/{hotelID}/{pageNo}/{pageSize}")
+    @GetMapping("findAllHoteId/{hotelID}/{pageNo}/{pageSize}")
     @ResponseBody
 //    @PassToken
     @UserLoginToken
-    public ReturnString findByjiudianId(@PathVariable Integer hotelID, Integer pageNo, Integer pageSize) {
+    public ReturnString findAllHoteId(@PathVariable("hotelID") Integer hotelID,
+                                        @PathVariable("pageNo") Integer pageNo,
+                                        @PathVariable("pageSize") Integer pageSize) {
         try {
             logger.info("酒店ID：" + hotelID);
 

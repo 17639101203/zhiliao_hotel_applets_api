@@ -147,12 +147,12 @@
 
   <!--  根据用户ID,发票ID删除发票抬头-->
   <update id="deleteInvoice">
-        update
-            zl_invoice
-        set
-            IsDelete='1', UpdateDate = #{updatedate,jdbcType=INTEGER}
-        where
-            UserID=#{userid,jdbcType=BIGINT} and InvoiceID=#{invoiceid,jdbcType=INTEGER}
+      UPDATE
+        zl_invoice
+      SET
+        IsDelete = 1,
+        UpdateDate = #{updateDate}
+      WHERE InvoiceID = #{invoiceid}
   </update>
 
 

@@ -10,16 +10,18 @@
 
     <select id="getById" resultType="com.zhiliao.hotel.model.ZlHotelroom">
 
-        select <include refid="selectColumn"/>
-        from zl_hotelroom zm where (RoomID =#{roomId}  and zm.IsDelete=0
+        select
+        <include refid="selectColumn"/>
+        from zl_hotelroom zm where (RoomID =#{roomId} and zm.IsDelete=0
         and zm.HotelID =(select zh.HotelID FROM zl_hotel zh where zh.HotelID=#{hotelId})) and RoomTypeFlag=1
-        order  by zm.CreateDate desc
+        order by zm.CreateDate desc
 
     </select>
 
     <select id="getByHotelIDAndRoomNumber" resultType="com.zhiliao.hotel.model.ZlHotelroom">
 
-        SELECT <include refid="selectColumn"/>
+        SELECT
+        <include refid="selectColumn"/>
         FROM zl_hotelroom zm
         WHERE zm.RoomNumber = #{roomNumber} AND zm.RoomStatus = 1 AND zm.IsDelete = 0
         AND zm.RoomTypeFlag = 1 AND zm.HotelID = #{hotelId}
@@ -28,9 +30,20 @@
 
     <update id="updateById" parameterType="java.lang.String">
         update zl_hotelroom
-        <trim prefix="set" suffix="  where RoomID=#{roomId}"  >
-        RoomStatus=1
+        <trim prefix="set" suffix="  where RoomID=#{roomId}">
+            RoomStatus=1
         </trim>
     </update>
+
+    <select id="getByRoomNumber" resultType="com.zhiliao.hotel.model.ZlHotelroom">
+        SELECT
+          *
+        FROM
+        zl_hotelroom
+        WHERE HotelID = #{hotelID}
+        AND RoomNumber = #{roomNumber}
+        AND RoomTypeFlag = 1
+        AND IsDelete = 0
+    </select>
 
 </mapper>

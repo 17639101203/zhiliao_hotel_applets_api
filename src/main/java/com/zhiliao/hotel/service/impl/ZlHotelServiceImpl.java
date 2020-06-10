@@ -54,7 +54,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
     private final ZlHotelUserHistoryMapper zlHotelUserHistoryMapper;
 
     @Override
-    public ReturnString getById(String hotelId, String roomId, String token) {
+    public ReturnString getById(Integer hotelId, String roomId, String token) {
         ZlHotelroom zlHotelroom = null;
         //固定 小程序渠道 1为C端
         String state = "1";
@@ -137,7 +137,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
             //微信用户昵称
             zlUserloginlog.setNickname(zlWxuser.getNickname());
             //根据用户所属酒店Id
-            ZlHotel zlHotel = zlHotelMapper.getById(String.valueOf(zlWxuser.getHotelid()));
+            ZlHotel zlHotel = zlHotelMapper.getById(zlWxuser.getHotelid());
             //酒店名称
             zlUserloginlog.setHotelname(zlHotel.getHotelName());
             //酒店id
@@ -172,6 +172,11 @@ public class ZlHotelServiceImpl implements ZlHotelService {
     @Override
     public String getReceptionTel(Integer hotelID) {
         return zlHotelMapper.getReceptionTel(hotelID);
+    }
+
+    @Override
+    public ZlHotel getByHotelID(Integer hotelId) {
+        return zlHotelMapper.getById(hotelId);
     }
 
 }

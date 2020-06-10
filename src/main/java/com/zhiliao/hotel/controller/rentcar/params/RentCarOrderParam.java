@@ -19,12 +19,6 @@ public class RentCarOrderParam {
     @ApiModelProperty(value = "酒店ID", required = true)
     private Integer hotelId;
 
-    @ApiModelProperty(value = "酒店名称", required = true)
-    private String hotelName;
-
-    @ApiModelProperty(value = "房间Id", required = true)
-    private Integer roomId;
-
     @ApiModelProperty(value = "房间号", required = true)
     private String roomNumber;
 
@@ -35,10 +29,10 @@ public class RentCarOrderParam {
     private String carNumber;
 
     @ApiModelProperty(value = "租车开始时间", required = true)
-    private Integer rentBeginDate;
+    private long rentBeginDate;
 
     @ApiModelProperty(value = "租车结束时间", required = true)
-    private Integer rentEndDate;
+    private long rentEndDate;
 
     @ApiModelProperty(value = "租金/天", required = true)
     private BigDecimal rentPrice;

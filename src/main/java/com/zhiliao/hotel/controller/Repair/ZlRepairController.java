@@ -39,14 +39,14 @@ public class ZlRepairController {
     @ApiOperation(value = "添加报修信息")
     @PostMapping(value = "addrepair", consumes = {"multipart/*"}, headers = "content-type=multipart/form-data")
     @UserLoginToken
-    public ReturnString<Map<String, Object>> addrepair( RepairParam repairParam,
-                                  @RequestParam("multipartFiles") MultipartFile[] multipartFiles,
-                                  HttpServletRequest request) {
+    public ReturnString addrepair(RepairParam repairParam,
+                                                       @RequestParam("multipartFiles") MultipartFile[] multipartFiles,
+                                                       HttpServletRequest request) {
 
         Integer now = DateUtils.javaToPhpNowDateTime();
         String orderid = OrderIDUtil.createOrderID("");
         Map<String, Object> map = new HashMap<>();
-        map.put("serialnumber",orderid);
+        map.put("serialnumber", orderid);
         ZlRepairorder zlRepairorder = new ZlRepairorder();
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
         zlRepairorder.setUserid(userid);
@@ -67,28 +67,28 @@ public class ZlRepairController {
         });
         zlRepairorder.setImgurls(Imgurls.toString());     // 获得图片地址，多个用|隔开
         service.addRepairMsg(zlRepairorder);
-        return new ReturnString<>(0,"报修已提交",map);
+        return new ReturnString<>(0, "报修已提交", map);
     }
 
 
     @ApiOperation(value = "查询报修订单详情")
     @GetMapping("findRepairOrder/{serialnumber}")
     @UserLoginToken
-    public ReturnString<Map<String,Object>> findRepairOrder(HttpServletRequest request,@PathVariable("serialnumber") String serialnumber) {
-            Long userid = TokenUtil.getUserId(request.getHeader("token"));
-            Map<String,Object> map = service.findRepairOrder(userid,serialnumber);
-            return new ReturnString<>(map);
+    public ReturnString<Map<String, Object>> findRepairOrder(HttpServletRequest request, @PathVariable("serialnumber") String serialnumber) {
+        Long userid = TokenUtil.getUserId(request.getHeader("token"));
+        Map<String, Object> map = service.findRepairOrder(userid, serialnumber);
+        return new ReturnString<>(map);
     }
 
 
     @ApiOperation(value = "取消报修预约")
     @PostMapping("cancelRepairOrder/{serialnumber}")
     @UserLoginToken
-    public ReturnString cancelRepairOrder(HttpServletRequest request,@PathVariable("serialnumber") String serialnumber) {
+    public ReturnString cancelRepairOrder(HttpServletRequest request, @PathVariable("serialnumber") String serialnumber) {
         Integer nowTime = DateUtils.javaToPhpNowDateTime();
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
-        service.cancelRepairOrder(userid,serialnumber,nowTime);
-        return new ReturnString<>(0,"预约已取消");
+        service.cancelRepairOrder(userid, serialnumber, nowTime);
+        return new ReturnString<>(0, "预约已取消");
     }
 
     @ApiOperation(value = "用户删除报修订单_徐向向")
@@ -99,9 +99,9 @@ public class ZlRepairController {
     @UserLoginToken
 //    @PassToken
     @ResponseBody
-    public ReturnString  userDeleteRepairOrder(@PathVariable("orderID") Long orderID) {
+    public ReturnString userDeleteRepairOrder(@PathVariable("serialnumber") String serialnumber) {
         try {
-            service.userDeleteRepairOrder(orderID);
+            service.userDeleteRepairOrder(serialnumber);
             return new ReturnString("用户删除报修成功!");
         } catch (Exception e) {
             e.printStackTrace();

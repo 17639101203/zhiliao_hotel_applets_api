@@ -30,5 +30,5 @@ public interface ZlRepairService {
     void cancelRepairOrder(Long Userid, String serialnumber, Integer updatedate);
 
     //用户删除报修订单
-    void userDeleteRepairOrder(Long orderID);
+    void userDeleteRepairOrder(String serialnumber);
 }

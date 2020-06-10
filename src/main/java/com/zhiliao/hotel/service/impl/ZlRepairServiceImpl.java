@@ -10,13 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.Map;
 
-@Transactional(rollbackFor=Exception.class)
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class ZlRepairServiceImpl implements ZlRepairService {
 
     @Autowired
-    private  ZlRepairorderMapper zlRepairorderMapper;
-
+    private ZlRepairorderMapper zlRepairorderMapper;
 
 
     @Override
@@ -26,22 +25,23 @@ public class ZlRepairServiceImpl implements ZlRepairService {
 
 
     @Override
-    public Map<String,Object> findRepairOrder(Long Userid,String serialnumber) {
-        return zlRepairorderMapper.queryRepairMsg(Userid,serialnumber);
+    public Map<String, Object> findRepairOrder(Long Userid, String serialnumber) {
+        return zlRepairorderMapper.queryRepairMsg(Userid, serialnumber);
     }
 
     @Override
     public void cancelRepairOrder(Long Userid, String serialnumber, Integer updatedate) {
-        zlRepairorderMapper.removeRepairOrder(serialnumber,updatedate);
+        zlRepairorderMapper.removeRepairOrder(serialnumber, updatedate);
     }
 
     /**
      * 用户删除报修订单
-     * @param orderID
+     *
+     * @param serialnumber
      */
     @Override
-    public void userDeleteRepairOrder(Long orderID) {
+    public void userDeleteRepairOrder(String serialnumber) {
         Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
-        zlRepairorderMapper.userDeleteRepairOrder(orderID,updateDate);
+        zlRepairorderMapper.userDeleteRepairOrder(serialnumber, updateDate);
     }
 }

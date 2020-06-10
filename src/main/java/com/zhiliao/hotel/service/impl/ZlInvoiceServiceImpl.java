@@ -40,8 +40,9 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     }
 
     @Override
-    public void deleteInvoice(Long userid, Integer invoiceid) {
-        mapper.deleteInvoice(userid, invoiceid);
+    public void deleteInvoice(Integer invoiceid) {
+        Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
+        mapper.deleteInvoice(invoiceid, updateDate);
     }
 
 

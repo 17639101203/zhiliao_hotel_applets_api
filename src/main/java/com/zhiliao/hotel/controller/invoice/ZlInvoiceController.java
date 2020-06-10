@@ -151,10 +151,8 @@ public class ZlInvoiceController {
     @ApiOperation(value = "删除发票抬头")
     @UserLoginToken
     @PostMapping("deleteInvoice/{invoiceid}")
-    public ReturnString deleteInvoice(HttpServletRequest request, @PathVariable Integer invoiceid) {
-        // 解析token获取userid
-        Long userid = TokenUtil.getUserId(request.getHeader("token"));
-        zlInvoiceService.deleteInvoice(userid, invoiceid);
+    public ReturnString deleteInvoice(@PathVariable Integer invoiceid) {
+        zlInvoiceService.deleteInvoice(invoiceid);
         return new ReturnString<>(0, "发票抬头删除成功");
     }
 

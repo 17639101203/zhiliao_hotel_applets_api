@@ -6,8 +6,12 @@ import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.rentcar.params.RentCarOrderParam;
 import com.zhiliao.hotel.controller.wake.ZlWakeOrderController;
+import com.zhiliao.hotel.model.ZlHotel;
+import com.zhiliao.hotel.model.ZlHotelroom;
 import com.zhiliao.hotel.model.ZlRentCarGoods;
 import com.zhiliao.hotel.model.ZlRentCarOrder;
+import com.zhiliao.hotel.service.ZlHotelRoomService;
+import com.zhiliao.hotel.service.ZlHotelService;
 import com.zhiliao.hotel.service.ZlRentCarGoodsService;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
@@ -38,19 +42,25 @@ public class ZlRentCarGoodsController {
     @Autowired
     private ZlRentCarGoodsService rentCarGoodsService;
 
+    @Autowired
+    private ZlHotelRoomService zlHotelRoomService;
+
+    @Autowired
+    private ZlHotelService zlHotelService;
+
     @ApiOperation(value = "租车车型商品列表")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", dataType = "int", name = "hotelid", value = "酒店ID", required = true),
-            @ApiImplicitParam(paramType="query", name="pageNo", dataType="int", required=true, value="页码值"),
-            @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数")
+            @ApiImplicitParam(paramType = "query", name = "pageNo", dataType = "int", required = true, value = "页码值"),
+            @ApiImplicitParam(paramType = "query", name = "pageSize", dataType = "int", required = true, value = "每页条数")
     })
     @GetMapping("carGoodsList/{hotelid}")
     @UserLoginToken
-    //@PassToken
-    public ReturnString carGoodsList(@PathVariable Integer hotelid,Integer pageNo,Integer pageSize){
+//    @PassToken
+    public ReturnString carGoodsList(@PathVariable Integer hotelid, Integer pageNo, Integer pageSize) {
 
         try {
-            PageInfoResult carGoodsList = rentCarGoodsService.carGoodsList(hotelid,pageNo,pageSize);
+            PageInfoResult carGoodsList = rentCarGoodsService.carGoodsList(hotelid, pageNo, pageSize);
             return new ReturnString(carGoodsList);
         } catch (Exception e) {
             return new ReturnString("获取失败");
@@ -63,7 +73,7 @@ public class ZlRentCarGoodsController {
     })
     @GetMapping("rentCarDetail/{goodsid}")
     @UserLoginToken
-    public ReturnString rentCarDetail(@PathVariable Integer goodsid){
+    public ReturnString rentCarDetail(@PathVariable Integer goodsid) {
 
         try {
             ZlRentCarGoods rentCarGoods = rentCarGoodsService.rentCarDetail(goodsid);
@@ -78,21 +88,23 @@ public class ZlRentCarGoodsController {
             @ApiImplicitParam(paramType = "path", dataType = "int", name = "goodsid", value = "车型ID", required = true),
     })
     @PostMapping("addRentCar/{goodsid}")
-    @UserLoginToken
-    //@PassToken
-    public ReturnString addRentCar(HttpServletRequest request,@RequestBody RentCarOrderParam carOrderParam, @PathVariable Integer goodsid){
+//    @UserLoginToken
+    @PassToken
+    public ReturnString addRentCar(HttpServletRequest request, @RequestBody RentCarOrderParam carOrderParam, @PathVariable Integer goodsid) {
         String token = request.getHeader("token");
         Long userId = TokenUtil.getUserId(token);
-        //long userId = System.currentTimeMillis();
+//        long userId = System.currentTimeMillis();
         ZlRentCarOrder rentCarOrder = new ZlRentCarOrder();
         rentCarOrder.setHotelid(carOrderParam.getHotelId());
-        rentCarOrder.setHotelname(carOrderParam.getHotelName());
-        rentCarOrder.setRoomid(carOrderParam.getRoomId());
+        ZlHotel zlHotel = zlHotelService.getByHotelID(carOrderParam.getHotelId());
+        rentCarOrder.setHotelname(zlHotel.getHotelName());
+        ZlHotelroom zlHotelroom = zlHotelRoomService.getByRoomNumber(carOrderParam.getRoomNumber(), carOrderParam.getHotelId());
+        rentCarOrder.setRoomid(zlHotelroom.getRoomid());
         rentCarOrder.setRoomnumber(carOrderParam.getRoomNumber());
         rentCarOrder.setGoodsname(carOrderParam.getGoodsName());
         rentCarOrder.setCarnumber(carOrderParam.getCarNumber());
-        rentCarOrder.setRentbegindate(carOrderParam.getRentBeginDate() / 1000);
-        rentCarOrder.setRentenddate(carOrderParam.getRentEndDate() / 1000);
+        rentCarOrder.setRentbegindate((int) (carOrderParam.getRentBeginDate() / 1000));
+        rentCarOrder.setRentenddate((int) (carOrderParam.getRentEndDate() / 1000));
         rentCarOrder.setRentprice(carOrderParam.getRentPrice());
         rentCarOrder.setRenttotalprice(carOrderParam.getRentTotalPrice());
         rentCarOrder.setRemark(carOrderParam.getRemark());
@@ -100,7 +112,7 @@ public class ZlRentCarGoodsController {
         rentCarOrder.setTel(carOrderParam.getTel());
 
         try {
-            Map<String,Object> map = rentCarGoodsService.addRentCar(userId,rentCarOrder,goodsid);
+            Map<String, Object> map = rentCarGoodsService.addRentCar(userId, rentCarOrder, goodsid);
             return new ReturnString(map);
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,28 +126,29 @@ public class ZlRentCarGoodsController {
     })
     @GetMapping("rentCarOrderDetail/{orderid}")
     @UserLoginToken
-    //@PassToken
-    public ReturnString rentCarOrderDetail(@PathVariable long orderid){
+//    @PassToken
+    public ReturnString rentCarOrderDetail(@PathVariable long orderid) {
 
         try {
             ZlRentCarOrder rentCarOrder = rentCarGoodsService.rentCarOrderDetail(orderid);
-            return new ReturnString(0,"添加成功",rentCarOrder);
+            return new ReturnString(rentCarOrder);
         } catch (Exception e) {
             return new ReturnString("获取失败");
         }
     }
+
     @ApiOperation(value = "取消租车订单")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", dataType = "long", name = "orderid", value = "订单ID", required = true)
     })
     @GetMapping("cancelRentCarOrder/{orderid}")
     @UserLoginToken
-    //@PassToken
-    public ReturnString cancelRentCarOrder(@PathVariable Long orderid){
+//    @PassToken
+    public ReturnString cancelRentCarOrder(@PathVariable Long orderid) {
 
         try {
             rentCarGoodsService.cancelRentCarOrder(orderid);
-            return new ReturnString(0,"已取消");
+            return new ReturnString(0, "已取消");
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString(e.getMessage());
@@ -148,12 +161,12 @@ public class ZlRentCarGoodsController {
     })
     @GetMapping("dlRentCarOrder/{orderid}")
     @UserLoginToken
-    @PassToken
-    public ReturnString dlRentCarOrder(@PathVariable Long orderid){
+//    @PassToken
+    public ReturnString dlRentCarOrder(@PathVariable Long orderid) {
 
         try {
             rentCarGoodsService.dlRentCarOrder(orderid);
-            return new ReturnString(0,"删除成功");
+            return new ReturnString(0, "删除成功");
         } catch (Exception e) {
             return new ReturnString(e.getMessage());
         }

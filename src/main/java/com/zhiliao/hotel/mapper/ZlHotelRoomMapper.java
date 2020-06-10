@@ -18,9 +18,11 @@ public interface ZlHotelRoomMapper extends Mapper<ZlHotelroom> {
     @Select("select  WiFiName,WiFiPwd from zl_hotelroom where HotelID = #{hotelID}")
     List<WifiVo> findWiFi(@Param("hotelID") Integer hotelID);
 
-    ZlHotelroom getById(@Param("roomId") String roomId, @Param("hotelId") String hotelId);
+    ZlHotelroom getById(@Param("roomId") String roomId, @Param("hotelId") Integer hotelId);
 
     ZlHotelroom getByHotelIDAndRoomNumber(@Param("roomNumber") String roomNumber, @Param("hotelId") Integer hotelId);
 
-    boolean updateById(@Param("roomId")String roomId);
+    boolean updateById(@Param("roomId") String roomId);
+
+    ZlHotelroom getByRoomNumber(@Param("roomNumber") String roomNumber, @Param("hotelID") Integer hotelID);
 }

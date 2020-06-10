@@ -1,6 +1,8 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.controller.wifi.vo.WifiVo;
+import com.zhiliao.hotel.model.ZlHotelroom;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -10,5 +12,7 @@ import java.util.Map;
  */
 public interface ZlHotelRoomService {
 
-    List<WifiVo> findWiFi(Integer hotelID);
+    List<WifiVo> findWiFi(@Param("hotelID") Integer hotelID);
+
+    ZlHotelroom getByRoomNumber(@Param("roomNumber") String roomNumber, @Param("hotelID") Integer hotelID);
 }

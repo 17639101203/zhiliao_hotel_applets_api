@@ -2,6 +2,7 @@ package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.ReturnString;
+import com.zhiliao.hotel.model.ZlHotel;
 
 /**
  * @author chenrong
@@ -9,7 +10,7 @@ import com.zhiliao.hotel.common.ReturnString;
  */
 public interface ZlHotelService {
 
-    ReturnString getById(String hotelId, String roomId, String token);
+    ReturnString getById(Integer hotelId, String roomId, String token);
 
     /**
      * 获取用户酒店入住历史
@@ -23,4 +24,5 @@ public interface ZlHotelService {
 
     String getReceptionTel(Integer hotelID);
 
+    ZlHotel getByHotelID(Integer hotelId);
 }

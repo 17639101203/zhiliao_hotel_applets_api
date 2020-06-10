@@ -85,7 +85,7 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         //生成订单编号
         zlHotelFacilityOrder.setSerialnumber(OrderIDUtil.createOrderID("HS"));
         zlHotelFacilityOrder.setComeformid(1);
-        ZlHotel zlHotel = hotelMapper.getById(String.valueOf(zlHotelFacilityOrder.getHotelid()));
+        ZlHotel zlHotel = hotelMapper.getById(zlHotelFacilityOrder.getHotelid());
         if (zlHotel != null){
             //获取酒店名称
             zlHotelFacilityOrder.setHotelname(zlHotel.getHotelName());

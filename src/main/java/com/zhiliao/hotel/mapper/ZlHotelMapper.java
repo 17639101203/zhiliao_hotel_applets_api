@@ -2,6 +2,7 @@ package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.model.ZlHotel;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.data.annotation.Id;
 import tk.mybatis.mapper.common.Mapper;
 
 /**
@@ -11,7 +12,8 @@ import tk.mybatis.mapper.common.Mapper;
  */
 public interface ZlHotelMapper extends Mapper<ZlHotel> {
 
-    ZlHotel getById(@Param("hotelId") String hotelId);
+    ZlHotel getById(@Param("hotelId") Integer hotelId);
     
     String getReceptionTel(@Param("hotelId")Integer hotelId);
+
 }

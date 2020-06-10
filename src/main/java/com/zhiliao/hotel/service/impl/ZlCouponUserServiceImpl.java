@@ -62,18 +62,33 @@ public class ZlCouponUserServiceImpl implements ZlCouponUserService {
         //集合分页
         List<ZlCouponUserResult> list = new LinkedList<>();
 
-        int index = (pageNo - 1) * pageSize < couponUserList.size() ? (pageNo - 1) * pageSize : couponUserList.size();
-        int dx = (pageNo - 1) * pageSize + pageSize > couponUserList.size() ? couponUserList.size() : (pageNo - 1) * pageSize + pageSize;
-        for (int i = index; i < dx; i++) {
+        int pageNoMax = 0;
+        if (couponUserList.size() % pageSize == 0) {
+            pageNoMax = couponUserList.size() / pageSize;
+        } else {
+            pageNoMax = couponUserList.size() / pageSize + 1;
+        }
+
+
+        int startPageNo = pageNo < pageNoMax ? pageNo : pageNoMax;
+        int startIndex = (startPageNo - 1) * pageSize;
+//        int dx = (pageNo - 1) * pageSize + pageSize > couponUserList.size() ? couponUserList.size() : (pageNo - 1) * pageSize + pageSize;
+        int endIndex = (startPageNo - 1) * pageSize + pageSize < couponUserList.size() ? (startPageNo - 1) * pageSize + pageSize : couponUserList.size();
+
+        for (int i = startIndex; i < endIndex; i++) {
             ZlCouponUserResult zlCouponUser = couponUserList.get(i);
             list.add(zlCouponUser);
         }
 
         PageInfoResult<ZlCouponUserResult> result = new PageInfoResult<>();
         result.setPageNo(pageNo);
-        result.setCurrentPageNumber(pageSize);
-        result.setTotalItem(list.size());
-        result.setTotalPages((list.size() + pageSize - 1) / pageSize);
+        result.setCurrentPageNumber(list.size());
+        result.setTotalItem(couponUserList.size());
+        if (couponUserList.size() % pageSize == 0) {
+            result.setTotalPages(couponUserList.size() / pageSize);
+        } else {
+            result.setTotalPages(couponUserList.size() / pageSize + 1);
+        }
         result.setList(list);
         return result;
     }

@@ -95,6 +95,7 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
         rentCarOrder.setIsdelete(false);
         rentCarOrder.setIsuserdelete(false);
         rentCarOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+        rentCarOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         int num = rentCarOrderMapper.insertSelective(rentCarOrder);
         if (num > 0){
             Map<String,Object> map = new HashMap<>();
