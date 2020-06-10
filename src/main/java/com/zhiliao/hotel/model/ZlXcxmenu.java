@@ -69,6 +69,19 @@ public class ZlXcxmenu implements Serializable {
      */
     private Boolean menustatus;
 
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+
+    /**
+     *
+     */
+    private Integer position;
+
     /**
      * 小程序渠道：1C端，2B端
      */
