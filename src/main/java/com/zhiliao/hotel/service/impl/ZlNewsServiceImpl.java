@@ -27,7 +27,7 @@ public class ZlNewsServiceImpl implements ZlNewsService {
     }
 
     @Override
-    public PageInfoResult findAllHoteId(Integer pageNo, Integer pageSize, Integer hotelID) {
+    public PageInfoResult findAllHoteId(Integer hotelID, Integer pageNo, Integer pageSize) {
         //分页插件 pageNum:起始页，pageSize：每页显示条数
         PageHelper.startPage(pageNo,pageSize);
         List<ZlNews> news = zlNewsMapper.findAllJiuDianId(hotelID);
