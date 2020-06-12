@@ -15,8 +15,7 @@ import java.util.Map;
  */
 public interface ZlHotelRoomMapper extends Mapper<ZlHotelroom> {
 
-    @Select("select  WiFiName,WiFiPwd from zl_hotelroom where HotelID = #{hotelID}")
-    List<WifiVo> findWiFi(@Param("hotelID") Integer hotelID);
+    List<WifiVo> findWiFi(@Param("hotelID") Integer hotelID, @Param("roomID") Integer roomID);
 
     ZlHotelroom getById(@Param("roomId") String roomId, @Param("hotelId") Integer hotelId);
 

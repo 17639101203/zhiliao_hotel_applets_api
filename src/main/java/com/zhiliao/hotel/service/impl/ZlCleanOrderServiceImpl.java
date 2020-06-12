@@ -52,19 +52,21 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
         zlCleanOrder.setRemark(cleanParm.getRemark());   //其他需求备注
         zlCleanOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));   //下单时间
         zlCleanOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));   //支付/取消时间
-        zlCleanOrderMapper.addCleanOrder(zlCleanOrder);
+//        zlCleanOrderMapper.addCleanOrder(zlCleanOrder);
+        zlCleanOrderMapper.insertSelective(zlCleanOrder);
         map.put("serialnumber", serialnumber);
+        map.put("orderid", zlCleanOrder.getOrderid());
         return map;
     }
 
     @Override
-    public Map<String, Object> selectCleanDetails(String serialNumber) {
-        return zlCleanOrderMapper.selectCleanDetails(serialNumber);
+    public Map<String, Object> selectCleanDetails(Long orderID) {
+        return zlCleanOrderMapper.selectCleanDetails(orderID);
     }
 
     @Override
-    public void removeCleanOrder(String serialNumber, Integer updatedate) {
-        zlCleanOrderMapper.removeCleanOrder(serialNumber, updatedate);
+    public void removeCleanOrder(Long orderID, Integer updatedate) {
+        zlCleanOrderMapper.removeCleanOrder(orderID, updatedate);
     }
 
 

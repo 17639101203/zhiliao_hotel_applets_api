@@ -5,11 +5,13 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.GeneratedValue;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 
 @Data
 @ToString
+@Table(name = "zl_cleanorder")
 public class ZlCleanOrder implements Serializable {
     /**
      * 订单ID

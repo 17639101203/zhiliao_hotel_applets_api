@@ -14,6 +14,8 @@ import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.formula.functions.T;
@@ -112,6 +114,7 @@ public class ZlInvoiceController {
         zlInvoiceOrder.setUpdatedate(nowTime);     //修改时间
         if (invoiceOrderParam.getInvoicetype() == 1) {      //个人开票
             zlInvoiceService.addinvoiceOrder(zlInvoiceOrder);
+            map.put("invoiceorderid", zlInvoiceOrder.getInvoiceorderid());
             return new ReturnString<>(0, "增值税普通发票抬头保存成功", map);
         } else if (invoiceOrderParam.getInvoicetype() == 2) {  //企业开票
             zlInvoiceOrder.setIdentifier(invoiceOrderParam.getIdentifier());  //单位的纳税人识别号:15/18或20位
@@ -120,6 +123,7 @@ public class ZlInvoiceController {
             zlInvoiceOrder.setCompanytel(invoiceOrderParam.getCompanytel());    //单位电话
             zlInvoiceOrder.setCompanyaddress(invoiceOrderParam.getCompanyaddress());  //  单位地址
             zlInvoiceService.addinvoiceOrder(zlInvoiceOrder);
+            map.put("invoiceorderid", zlInvoiceOrder.getInvoiceorderid());
             return new ReturnString<>(0, "增值税专用发票抬头保存成功", map);
         }
         return new ReturnString<>(-1, "开票类型错误，请重新再试!");
@@ -171,27 +175,42 @@ public class ZlInvoiceController {
     @ApiOperation(value = "查询发票订单详情")
     @UserLoginToken
     @GetMapping("findInvoiceOrderDetails")
-    public ReturnString findInvoiceOrderDetails(HttpServletRequest request, String invoiceordernumber) {
-        if (invoiceordernumber == null || "".equals(invoiceordernumber)) {
-            return new ReturnString<>(-1, "订单编号为空，请重新再试");
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "invoiceorderid", dataType = "Long", required = true, value = "发票订单ID")
+    })
+    public ReturnString findInvoiceOrderDetails(Long invoiceorderid) {
+        if (invoiceorderid == null || "".equals(invoiceorderid)) {
+            return new ReturnString<>(-1, "订单号为空，请重新再试");
         }
-        // 解析token获取userid
-        Long userid = TokenUtil.getUserId(request.getHeader("token"));
-        InvoiceOrderVO vo = zlInvoiceService.findInvoiceOrderdetail(userid, invoiceordernumber);
-        return new ReturnString<>(vo);
+
+        try {
+            InvoiceOrderVO vo = zlInvoiceService.findInvoiceOrderdetail(invoiceorderid);
+            return new ReturnString(vo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("查询发票订单详情失败!");
+        }
     }
 
 
     @ApiOperation(value = "取消开票订单预约")
     @PostMapping("cancelInvoiceOrder")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "invoiceorderid", dataType = "Long", required = true, value = "发票订单ID")
+    })
     @UserLoginToken
-    public ReturnString cancelInvoiceOrder(HttpServletRequest request,String invoiceordernumber) {
-        if(invoiceordernumber == null || "".equals(invoiceordernumber)){
-            return new ReturnString<>(-1,"订单编号为空，请重新再试");
+    public ReturnString cancelInvoiceOrder(Long invoiceorderid) {
+        if (invoiceorderid == null || "".equals(invoiceorderid)) {
+            return new ReturnString<>(-1, "订单号为空，请重新再试");
         }
         Integer nowTime = DateUtils.javaToPhpNowDateTime();
-        zlInvoiceService.cancelInvoiceOrder(invoiceordernumber,nowTime);
-        return new ReturnString<>(0,"预约已取消");
+        try {
+            zlInvoiceService.cancelInvoiceOrder(invoiceorderid, nowTime);
+            return new ReturnString<>(0, "预约已取消");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString<>("取消预约失败!");
+        }
     }
 
 

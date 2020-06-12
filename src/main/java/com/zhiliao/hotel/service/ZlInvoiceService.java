@@ -73,20 +73,19 @@ public interface ZlInvoiceService {
     /**
      * 查询开票订单详情
      *
-     * @param userid
-     * @param invoiceordernumber
+     * @param invoiceorderid
      * @return
      */
-    InvoiceOrderVO findInvoiceOrderdetail(Long userid, String invoiceordernumber);
+    InvoiceOrderVO findInvoiceOrderdetail(Long invoiceorderid);
 
 
     /**
      * 取消开票预约
      *
-     * @param invoiceordernumber
+     * @param invoiceorderid
      * @param updatedate
      */
-    void cancelInvoiceOrder(String invoiceordernumber, Integer updatedate);
+    void cancelInvoiceOrder(Long invoiceorderid, Integer updatedate);
 }
 
 

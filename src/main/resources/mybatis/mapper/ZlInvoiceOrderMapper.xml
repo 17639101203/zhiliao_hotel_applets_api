@@ -1,184 +1,198 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlInvoiceOrderMapper">
-  <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlInvoiceOrder">
-    <result column="InvoiceOrderID" jdbcType="BIGINT" property="invoiceorderid" />
-    <result column="InvoiceID" jdbcType="INTEGER" property="invoiceid" />
-    <result column="UserID" jdbcType="BIGINT" property="userid" />
-    <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
-    <result column="InvoiceType" jdbcType="TINYINT" property="invoicetype" />
-    <result column="MainBodyType" jdbcType="TINYINT" property="mainbodytype" />
-    <result column="ElectronicPaperType" jdbcType="TINYINT" property="electronicpapertype" />
-    <result column="Title" jdbcType="CHAR" property="title" />
-    <result column="Identifier" jdbcType="CHAR" property="identifier" />
-    <result column="Tel" jdbcType="CHAR" property="tel" />
-    <result column="Remark" jdbcType="VARCHAR" property="remark" />
-    <result column="InvoiceStatus" jdbcType="TINYINT" property="invoicestatus" />
-    <result column="Bank" jdbcType="CHAR" property="bank" />
-    <result column="BankAccountNumber" jdbcType="CHAR" property="bankaccountnumber" />
-    <result column="CompanyTel" jdbcType="CHAR" property="companytel" />
-    <result column="CompanyAddress" jdbcType="CHAR" property="companyaddress" />
-    <result column="RoomNumber" jdbcType="CHAR" property="roomnumber" />
-    <result column="InvoiceOrderNumber" jdbcType="CHAR" property="invoiceordernumber" />
-    <result column="IsDelete" jdbcType="BIT" property="isdelete" />
-    <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
-    <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlInvoiceOrder">
+        <result column="InvoiceOrderID" jdbcType="BIGINT" property="invoiceorderid"/>
+        <result column="InvoiceID" jdbcType="INTEGER" property="invoiceid"/>
+        <result column="UserID" jdbcType="BIGINT" property="userid"/>
+        <result column="HotelID" jdbcType="INTEGER" property="hotelid"/>
+        <result column="InvoiceType" jdbcType="TINYINT" property="invoicetype"/>
+        <result column="MainBodyType" jdbcType="TINYINT" property="mainbodytype"/>
+        <result column="ElectronicPaperType" jdbcType="TINYINT" property="electronicpapertype"/>
+        <result column="Title" jdbcType="CHAR" property="title"/>
+        <result column="Identifier" jdbcType="CHAR" property="identifier"/>
+        <result column="Tel" jdbcType="CHAR" property="tel"/>
+        <result column="Remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="InvoiceStatus" jdbcType="TINYINT" property="invoicestatus"/>
+        <result column="Bank" jdbcType="CHAR" property="bank"/>
+        <result column="BankAccountNumber" jdbcType="CHAR" property="bankaccountnumber"/>
+        <result column="CompanyTel" jdbcType="CHAR" property="companytel"/>
+        <result column="CompanyAddress" jdbcType="CHAR" property="companyaddress"/>
+        <result column="RoomNumber" jdbcType="CHAR" property="roomnumber"/>
+        <result column="InvoiceOrderNumber" jdbcType="CHAR" property="invoiceordernumber"/>
+        <result column="IsDelete" jdbcType="BIT" property="isdelete"/>
+        <result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
+        <result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
+    </resultMap>
 
-  <insert id="insertInvoiceOrder" parameterType="com.zhiliao.hotel.model.ZlInvoiceOrder">
-    insert into zl_invoiceorder
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="invoiceorderid != null">
-        InvoiceOrderID,
-      </if>
-      <if test="invoiceid != null">
-        InvoiceID,
-      </if>
-      <if test="userid != null">
-        UserID,
-      </if>
-      <if test="hotelid != null">
-        HotelID,
-      </if>
-      <if test="invoicetype != null">
+    <insert id="insertInvoiceOrder" parameterType="com.zhiliao.hotel.model.ZlInvoiceOrder">
+        insert into zl_invoiceorder
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="invoiceorderid != null">
+                InvoiceOrderID,
+            </if>
+            <if test="invoiceid != null">
+                InvoiceID,
+            </if>
+            <if test="userid != null">
+                UserID,
+            </if>
+            <if test="hotelid != null">
+                HotelID,
+            </if>
+            <if test="invoicetype != null">
+                InvoiceType,
+            </if>
+            <if test="mainbodytype != null">
+                MainBodyType,
+            </if>
+            <if test="electronicpapertype != null">
+                ElectronicPaperType,
+            </if>
+            <if test="title != null">
+                Title,
+            </if>
+            <if test="identifier != null">
+                Identifier,
+            </if>
+            <if test="tel != null">
+                Tel,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="invoicestatus != null">
+                InvoiceStatus,
+            </if>
+            <if test="bank != null">
+                Bank,
+            </if>
+            <if test="bankaccountnumber != null">
+                BankAccountNumber,
+            </if>
+            <if test="companytel != null">
+                CompanyTel,
+            </if>
+            <if test="companyaddress != null">
+                CompanyAddress,
+            </if>
+            <if test="roomnumber != null">
+                RoomNumber,
+            </if>
+            <if test="invoiceordernumber != null">
+                InvoiceOrderNumber,
+            </if>
+            <if test="isdelete != null">
+                IsDelete,
+            </if>
+            <if test="createdate != null">
+                CreateDate,
+            </if>
+            <if test="updatedate != null">
+                UpdateDate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="invoiceorderid != null">
+                #{invoiceorderid,jdbcType=BIGINT},
+            </if>
+            <if test="invoiceid != null">
+                #{invoiceid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=BIGINT},
+            </if>
+            <if test="hotelid != null">
+                #{hotelid,jdbcType=INTEGER},
+            </if>
+            <if test="invoicetype != null">
+                #{invoicetype,jdbcType=TINYINT},
+            </if>
+            <if test="mainbodytype != null">
+                #{mainbodytype,jdbcType=TINYINT},
+            </if>
+            <if test="electronicpapertype != null">
+                #{electronicpapertype,jdbcType=BIT},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=CHAR},
+            </if>
+            <if test="identifier != null">
+                #{identifier,jdbcType=CHAR},
+            </if>
+            <if test="tel != null">
+                #{tel,jdbcType=CHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="invoicestatus != null">
+                #{invoicestatus,jdbcType=TINYINT},
+            </if>
+            <if test="bank != null">
+                #{bank,jdbcType=CHAR},
+            </if>
+            <if test="bankaccountnumber != null">
+                #{bankaccountnumber,jdbcType=CHAR},
+            </if>
+            <if test="companytel != null">
+                #{companytel,jdbcType=CHAR},
+            </if>
+            <if test="companyaddress != null">
+                #{companyaddress,jdbcType=CHAR},
+            </if>
+            <if test="roomnumber != null">
+                #{roomnumber,jdbcType=CHAR},
+            </if>
+            <if test="invoiceordernumber != null">
+                #{invoiceordernumber,jdbcType=CHAR},
+            </if>
+            <if test="isdelete != null">
+                #{isdelete,jdbcType=BIT},
+            </if>
+            <if test="createdate != null">
+                #{createdate,jdbcType=INTEGER},
+            </if>
+            <if test="updatedate != null">
+                #{updatedate,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!--  查询发票订单详情-->
+    <select id="queryInvoiceOrderdetail" resultType="com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO">
+      SELECT
         InvoiceType,
-      </if>
-      <if test="mainbodytype != null">
         MainBodyType,
-      </if>
-      <if test="electronicpapertype != null">
         ElectronicPaperType,
-      </if>
-      <if test="title != null">
         Title,
-      </if>
-      <if test="identifier != null">
+        HotelID,
         Identifier,
-      </if>
-      <if test="tel != null">
         Tel,
-      </if>
-      <if test="remark != null">
         Remark,
-      </if>
-      <if test="invoicestatus != null">
         InvoiceStatus,
-      </if>
-      <if test="bank != null">
         Bank,
-      </if>
-      <if test="bankaccountnumber != null">
         BankAccountNumber,
-      </if>
-      <if test="companytel != null">
         CompanyTel,
-      </if>
-      <if test="companyaddress != null">
         CompanyAddress,
-      </if>
-      <if test="roomnumber != null">
-        RoomNumber,
-      </if>
-      <if test="invoiceordernumber != null">
         InvoiceOrderNumber,
-      </if>
-      <if test="isdelete != null">
-        IsDelete,
-      </if>
-      <if test="createdate != null">
         CreateDate,
-      </if>
-      <if test="updatedate != null">
-        UpdateDate,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="invoiceorderid != null">
-        #{invoiceorderid,jdbcType=BIGINT},
-      </if>
-      <if test="invoiceid != null">
-        #{invoiceid,jdbcType=INTEGER},
-      </if>
-      <if test="userid != null">
-        #{userid,jdbcType=BIGINT},
-      </if>
-      <if test="hotelid != null">
-        #{hotelid,jdbcType=INTEGER},
-      </if>
-      <if test="invoicetype != null">
-        #{invoicetype,jdbcType=TINYINT},
-      </if>
-      <if test="mainbodytype != null">
-        #{mainbodytype,jdbcType=TINYINT},
-      </if>
-      <if test="electronicpapertype != null">
-        #{electronicpapertype,jdbcType=BIT},
-      </if>
-      <if test="title != null">
-        #{title,jdbcType=CHAR},
-      </if>
-      <if test="identifier != null">
-        #{identifier,jdbcType=CHAR},
-      </if>
-      <if test="tel != null">
-        #{tel,jdbcType=CHAR},
-      </if>
-      <if test="remark != null">
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="invoicestatus != null">
-        #{invoicestatus,jdbcType=TINYINT},
-      </if>
-      <if test="bank != null">
-        #{bank,jdbcType=CHAR},
-      </if>
-      <if test="bankaccountnumber != null">
-        #{bankaccountnumber,jdbcType=CHAR},
-      </if>
-      <if test="companytel != null">
-        #{companytel,jdbcType=CHAR},
-      </if>
-      <if test="companyaddress != null">
-        #{companyaddress,jdbcType=CHAR},
-      </if>
-      <if test="roomnumber != null">
-        #{roomnumber,jdbcType=CHAR},
-      </if>
-      <if test="invoiceordernumber != null">
-        #{invoiceordernumber,jdbcType=CHAR},
-      </if>
-      <if test="isdelete != null">
-        #{isdelete,jdbcType=BIT},
-      </if>
-      <if test="createdate != null">
-        #{createdate,jdbcType=INTEGER},
-      </if>
-      <if test="updatedate != null">
-        #{updatedate,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-
-  <!--  查询发票订单详情-->
-  <select id="queryInvoiceOrderdetail" resultType="com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO">
-        select
-           InvoiceType,MainBodyType,ElectronicPaperType,Title,HotelID,
-           Identifier,Tel,Remark,InvoiceStatus,Bank,BankAccountNumber,
-           CompanyTel,CompanyAddress,InvoiceOrderNumber,CreateDate,UpdateDate
-        from
-            zl_invoiceorder
-        where
-            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0' and InvoiceOrderNumber=#{invoiceordernumber,jdbcType=INTEGER}
+        UpdateDate
+      FROM
+        zl_invoiceorder
+      WHERE InvoiceOrderID = #{invoiceorderid}
+        AND IsDelete = '0'
     </select>
 
 
-<!--  取消预约开票-->
-  <update id="removeInvoiceOrder">
-    update
-        zl_invoiceorder
-    set
-        InvoiceStatus="-1" , UpdateDate = #{updatedate,jdbcType=INTEGER}
-    where
-        InvoiceOrderNumber=#{invoiceordernumber,jdbcType=INTEGER} AND IsDelete = 0
+    <!--  取消预约开票-->
+    <update id="removeInvoiceOrder">
+    UPDATE
+      zl_invoiceorder
+    SET
+      InvoiceStatus = "-1",
+      UpdateDate = #{updatedate}
+    WHERE invoiceorderid = #{invoiceorderid}
+      AND IsDelete = 0
   </update>
 </mapper>

@@ -162,11 +162,18 @@
     <!--  查询清扫订单详情-->
     <select id="selectCleanDetails" resultType="java.util.HashMap">
         SELECT
-            HotelName,RoomNumber,BookDate,Remark,OrderStatus,CreateDate,SerialNumber,UpdateDate
+          HotelName,
+          RoomNumber,
+          BookDate,
+          Remark,
+          OrderStatus,
+          CreateDate,
+          SerialNumber,
+          UpdateDate
         FROM
-            zl_cleanorder
-        WHERE
-            SerialNumber = #{serialnumber} AND IsDelete = 0
+          zl_cleanorder
+        WHERE OrderID = #{orderID}
+          AND IsDelete = 0
   </select>
 
 
@@ -177,7 +184,7 @@
         SET
           OrderStatus = -1,
           UpdateDate = #{updatedate}
-        WHERE SerialNumber = #{serialnumber}
+        WHERE OrderID = #{orderID}
           AND IsDelete = 0
   </update>
 

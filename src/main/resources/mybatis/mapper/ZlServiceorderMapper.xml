@@ -179,11 +179,13 @@
 
 
   <update id="userDeleteServiceOrder">
-    update
-        zl_serviceorder
-    set
-        IsUserDelete = 1, UpdateDate = #{updatedate,jdbcType=INTEGER}
-    where
-        OrderID=#{orderID,jdbcType=CHAR} and IsDelete='0' and IsUserDelete='0'
+    UPDATE
+      zl_serviceorder
+    SET
+      IsUserDelete = 1,
+      UpdateDate = #{updateDate}
+    WHERE OrderID = #{orderid}
+      AND IsDelete = '0'
+      AND IsUserDelete = '0'
   </update>
 </mapper>

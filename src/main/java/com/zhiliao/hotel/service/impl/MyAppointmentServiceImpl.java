@@ -265,7 +265,7 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         if (orderServiceType == 1) {
             canceCleanOrder(orderid);
         } else if (orderServiceType == 2) {
-            canceInvoiceOrder(Math.toIntExact(orderid));
+            canceInvoiceOrder(orderid);
         } else if (orderServiceType == 3) {
             cancelRepairOrder(orderid);
         } else if (orderServiceType == 4) {
@@ -331,14 +331,14 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     /**
      * 发票订单取消
      *
-     * @param invoiceid
+     * @param invoiceorderid
      */
-    public void canceInvoiceOrder(Integer invoiceid) {
+    public void canceInvoiceOrder(Long invoiceorderid) {
         ZlInvoiceOrder invoiceOrder = new ZlInvoiceOrder();
-        invoiceOrder.setInvoiceid(invoiceid);
+        invoiceOrder.setInvoiceorderid(invoiceorderid);
         ZlInvoiceOrder invoice = invoiceOrderMapper.selectOne(invoiceOrder);
         if (invoice != null) {
-            invoiceOrderMapper.removeInvoiceOrder(invoice.getInvoiceordernumber(), Math.toIntExact(System.currentTimeMillis() / 1000));
+            invoiceOrderMapper.removeInvoiceOrder(invoice.getInvoiceorderid(), Math.toIntExact(System.currentTimeMillis() / 1000));
         }
     }
 

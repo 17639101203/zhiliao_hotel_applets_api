@@ -54,7 +54,7 @@
   </select>
 
     <select id="findOrderByIdVO" resultType="com.zhiliao.hotel.controller.hotelfacility.vo.HotelFacilityOrderParamVO">
-        SELECT
+      SELECT
           zo.OrderID,
           zo.FacilityID,
           zo.UserID,
@@ -72,7 +72,8 @@
           zo.UseBeginDate,
           zo.UseEndDate,
           zo.CreateDate,
-          zo.UpdateDate
+          zo.UpdateDate,
+          zf.CanCancelOrderMinute
         FROM
           zl_hotelfacilityorder zo
           LEFT JOIN zl_hotelfacility zf

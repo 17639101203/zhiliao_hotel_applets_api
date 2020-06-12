@@ -55,7 +55,12 @@ public class ZlHotelFacilityOrderServiceImpl implements ZlHotelFacilityOrderServ
      */
     @Override
     public HotelFacilityOrderParamVO findOrder(Long orderID) {
-        return hotelFacilityOrderMapper.findOrderByIdVO(orderID);
+        HotelFacilityOrderParamVO hotelFacilityOrderParamVO = hotelFacilityOrderMapper.findOrderByIdVO(orderID);
+        if (hotelFacilityOrderParamVO != null) {
+            Integer cancancelorderminute = hotelFacilityOrderParamVO.getCancancelorderminute();
+            hotelFacilityOrderParamVO.setCancancelorderminute(hotelFacilityOrderParamVO.getUsebegindate() + cancancelorderminute * 60);
+        }
+        return hotelFacilityOrderParamVO;
     }
 
     /**

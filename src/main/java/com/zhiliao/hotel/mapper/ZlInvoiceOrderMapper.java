@@ -10,10 +10,10 @@ public interface ZlInvoiceOrderMapper extends Mapper<ZlInvoiceOrder> {
 
     void insertInvoiceOrder(ZlInvoiceOrder zlInvoiceOrder);
 
-    InvoiceOrderVO queryInvoiceOrderdetail(@Param("userid") Long userid, @Param("invoiceordernumber") String invoiceordernumber);
+    InvoiceOrderVO queryInvoiceOrderdetail(@Param("invoiceorderid") Long invoiceorderid);
 
-    void removeInvoiceOrder(@Param("invoiceordernumber") String invoiceordernumber,
-                          @Param("updatedate") Integer updatedate);
+    void removeInvoiceOrder(@Param("invoiceorderid") Long invoiceorderid, @Param("updatedate") Integer updatedate);
+
     @Select("select count(*) from zl_invoiceorder where UserID = #{userId} and IsDelete = 0 ")
     int selectCountInvoice(Long userId);
 }

@@ -22,13 +22,13 @@ public interface ZlCleanOrderService {
     /**
      * 清扫订单详情
      *
-     * @param serialNumber
+     * @param orderID
      * @return
      */
-    Map<String, Object> selectCleanDetails(String serialNumber);
+    Map<String, Object> selectCleanDetails(Long orderID);
 
     /**
      * 取消清扫预约
      */
-    void removeCleanOrder(String serialNumber, Integer updatedate);
+    void removeCleanOrder(Long orderID, Integer updatedate);
 }

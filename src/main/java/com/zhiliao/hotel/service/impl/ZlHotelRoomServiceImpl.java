@@ -30,8 +30,8 @@ public class ZlHotelRoomServiceImpl implements ZlHotelRoomService {
     }
 
     @Override
-    public List<WifiVo> findWiFi(Integer hotelID) {
-        List<WifiVo> wifi = zlHotelRoomMapper.findWiFi(hotelID);
+    public List<WifiVo> findWiFi(Integer hotelID, Integer roomID) {
+        List<WifiVo> wifi = zlHotelRoomMapper.findWiFi(hotelID, roomID);
         if (!CollectionUtils.isEmpty(wifi)) {
             return wifi;
         }

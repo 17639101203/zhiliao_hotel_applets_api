@@ -36,14 +36,15 @@ public class ZlHotelRoomController {
     @ApiOperation(value = "查询wifi")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "String", required = true, value = "酒店ID"),
-            @ApiImplicitParam(paramType = "query", name = "hotelID", dataType = "String", required = true, value = "房间")
+            @ApiImplicitParam(paramType = "query", name = "roomID", dataType = "String", required = false, value = "客房ID")
     })
     @PassToken
     @GetMapping("{hotelID}")
-    public ReturnString findWiFi(@PathVariable Integer hotelID){
+    public ReturnString findWiFi(@PathVariable Integer hotelID,
+                                 Integer roomID) {
         try {
-            List<WifiVo> wifi = zlHotelRoomService.findWiFi(hotelID);
-            if (wifi.size()>0) {
+            List<WifiVo> wifi = zlHotelRoomService.findWiFi(hotelID, roomID);
+            if (wifi.size() > 0) {
                 return new ReturnString(wifi);
             }
             return new ReturnString("该酒店无wifi");

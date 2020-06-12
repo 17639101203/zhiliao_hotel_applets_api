@@ -104,6 +104,11 @@ public class HotelFacilityOrderParamVO {
     private Integer useenddate;
 
     /**
+     * 可取消预约时间
+     */
+    private Integer cancancelorderminute;
+
+    /**
      * 0无须支付;1:待支付;2已支付
      */
     private Byte paystatus;

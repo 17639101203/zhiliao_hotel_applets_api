@@ -76,7 +76,9 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
 
     @Override
     public void addinvoiceOrder(ZlInvoiceOrder zlInvoiceOrder) {
-        orderMapper.insertInvoiceOrder(zlInvoiceOrder);
+//        orderMapper.insertInvoiceOrder(zlInvoiceOrder);
+//        orderMapper.insert(zlInvoiceOrder);
+        orderMapper.insertSelective(zlInvoiceOrder);
     }
 
     @Override
@@ -85,8 +87,8 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     }
 
     @Override
-    public InvoiceOrderVO findInvoiceOrderdetail(Long userid, String invoiceordernumber) {
-        InvoiceOrderVO invoiceOrderVO = orderMapper.queryInvoiceOrderdetail(userid, invoiceordernumber);
+    public InvoiceOrderVO findInvoiceOrderdetail(Long invoiceorderid) {
+        InvoiceOrderVO invoiceOrderVO = orderMapper.queryInvoiceOrderdetail(invoiceorderid);
         if (invoiceOrderVO != null) {
             ZlHotel zlHotel = zlHotelMapper.getById(invoiceOrderVO.getHotelid());
             invoiceOrderVO.setHotelname(zlHotel.getHotelName());
@@ -95,8 +97,8 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     }
 
     @Override
-    public void cancelInvoiceOrder(String invoiceordernumber, Integer updatedate) {
-        orderMapper.removeInvoiceOrder(invoiceordernumber, updatedate);
+    public void cancelInvoiceOrder(Long invoiceorderid, Integer updatedate) {
+        orderMapper.removeInvoiceOrder(invoiceorderid, updatedate);
     }
 
 }

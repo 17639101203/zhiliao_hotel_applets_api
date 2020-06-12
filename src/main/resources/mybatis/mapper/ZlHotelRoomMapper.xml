@@ -8,6 +8,17 @@
         RoomID,RoomTypeID,zm.HotelID,RoomFloor,RoomNumber,Model,WiFiName,WiFiPwd,RoomStatus,SerialNumber,RoomTypeFlag
     </sql>
 
+    <select id="findWiFi" resultType="com.zhiliao.hotel.controller.wifi.vo.WifiVo">
+        SELECT
+        WiFiName,
+        WiFiPwd
+        FROM
+        zl_hotelroom
+        WHERE HotelID = #{hotelID}
+        <if test="roomID != null">
+            and RoomID = #{roomID}
+        </if>
+    </select>
     <select id="getById" resultType="com.zhiliao.hotel.model.ZlHotelroom">
 
         select

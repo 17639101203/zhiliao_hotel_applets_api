@@ -3,14 +3,20 @@ package com.zhiliao.hotel.model;
 import lombok.Data;
 import lombok.ToString;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Data
 @ToString
+@Table(name = "zl_invoiceorder")
 public class ZlInvoiceOrder implements Serializable {
     /**
      * 发票订单ID
      */
+    @Id
+    @GeneratedValue(generator="JDBC")
     private Long invoiceorderid;
 
     /**

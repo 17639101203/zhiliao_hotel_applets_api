@@ -57,14 +57,14 @@ public class ZlCleanOrderController {
 
 
     @ApiOperation(value = "查询清扫订单详情")
-    @GetMapping("selectCleanDetails/{serialnumber}")
+    @GetMapping("selectCleanDetails/{orderID}")
     @UserLoginToken
 //    @PassToken
-    public ReturnString<Map<String, Object>> selectCleanDetails(@PathVariable("serialnumber") String serialnumber) {
+    public ReturnString<Map<String, Object>> selectCleanDetails(@PathVariable("orderID") Long orderID) {
 
         Map<String, Object> cleanmap = null;
         try {
-            cleanmap = zlCleanOrderService.selectCleanDetails(serialnumber);
+            cleanmap = zlCleanOrderService.selectCleanDetails(orderID);
             return new ReturnString<>(cleanmap);
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,12 +74,12 @@ public class ZlCleanOrderController {
 
 
     @ApiOperation(value = "取消清扫预约")
-    @PostMapping("cancelCleanOrder/{serialnumber}")
+    @PostMapping("cancelCleanOrder/{orderID}")
     @UserLoginToken
 //    @PassToken
-    public ReturnString cancelCleanOrder(@PathVariable("serialnumber") String serialnumber) {
+    public ReturnString cancelCleanOrder(@PathVariable("orderID") Long orderID) {
         Integer nowTime = DateUtils.javaToPhpNowDateTime();
-        zlCleanOrderService.removeCleanOrder(serialnumber, nowTime);
+        zlCleanOrderService.removeCleanOrder(orderID, nowTime);
         return new ReturnString<>(0, "预约已取消");
     }
 
