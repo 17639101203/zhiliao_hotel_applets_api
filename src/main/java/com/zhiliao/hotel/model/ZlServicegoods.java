@@ -53,14 +53,14 @@ public class ZlServicegoods implements Serializable {
     private String tags;
 
     /**
-     * 最多领取次数
+     * 一天可领取次数
      */
-    private Integer applymaxcount;
+    private Integer daymaxcount;
 
     /**
-     * 每次可领取数量
+     * 一天可领取数量
      */
-    private Integer applylimitcount;
+    private Integer daymaxgoodscount;
 
     /**
      * 排序

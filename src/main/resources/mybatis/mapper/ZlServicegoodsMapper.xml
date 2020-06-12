@@ -9,8 +9,8 @@
         <result column="GoodsName" jdbcType="CHAR" property="goodsname"/>
         <result column="Tags" jdbcType="CHAR" property="tags"/>
         <result column="Content" jdbcType="LONGVARCHAR" property="content"/>
-        <result column="ApplyMaxCount" jdbcType="INTEGER" property="applymaxcount"/>
-        <result column="ApplyLimitCount" jdbcType="INTEGER" property="applylimitcount"/>
+        <result column="DayMaxCount" jdbcType="INTEGER" property="daymaxcount"/>
+        <result column="DayMaxGoodsCount" jdbcType="INTEGER" property="daymaxgoodscount"/>
         <result column="Sort" jdbcType="INTEGER" property="sort"/>
         <result column="GoodsStatus" jdbcType="TINYINT" property="goodsstatus"/>
         <result column="CheckStatus" jdbcType="TINYINT" property="checkstatus"/>
@@ -82,7 +82,7 @@
     </update>
 
     <select id="findAllByHotelIdAndGoodsIds" resultMap="BaseResultMap">
-        SELECT zsg.GoodsID, zsg.GoodsName, zsg.ApplyMaxCount, zsg.ApplyLimitCount,
+        SELECT zsg.GoodsID, zsg.GoodsName, zsg.DayMaxCount, zsg.DayMaxGoodsCount,
         zsg.SalePrice, zsg.CoverImgUrl
         FROM zl_servicegoods zsg
         WHERE zsg.HotelID = #{hotelId} AND zsg.GoodsID IN (${goodsIds})

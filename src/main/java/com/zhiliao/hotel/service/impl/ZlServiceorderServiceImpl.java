@@ -74,6 +74,8 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         //获取订单商品当日已购买次数
         List<ZlServiceorderdetail> zlServiceorderdetails = zlServiceorderdetailMapper.getBuyNumByOrderIds(goodIds, scp.getHotelid(), zlHotelroom.getRoomid(), start, end);
         Map<Integer, Integer> orderHasBuyNum = zlServiceorderdetails.stream().collect(Collectors.toMap(ZlServiceorderdetail::getGoodsid, ZlServiceorderdetail::getBuyNum));
+        //获取订单商品当日已购买数量
+        Map<Integer, Integer> orderGoodsHasBuyNum = zlServiceorderdetails.stream().collect(Collectors.toMap(ZlServiceorderdetail::getGoodsid, ZlServiceorderdetail::getGoodscount));
         //订单商品购买次数
         Map<Integer, Integer> orderBuyNum = scp.getOrderGoods().stream().collect(Collectors.toMap(ServiceorderCommitParams.orderGoods::getGoodsId, ServiceorderCommitParams.orderGoods::getGoodsCount));
         //第一张商品图片地址
@@ -89,15 +91,21 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
             if (buyNum.compareTo(0) <= 0) {
                 throw new BizException(String.format("商品%s未选择购买数量，请重新选择！", zlServicegoods.getGoodsname()));
             }
-            if (buyNum.compareTo(zlServicegoods.getApplylimitcount()) > 0) {
-                throw new BizException(String.format("商品%s超过单次可购买数量%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getApplylimitcount()));
+            if(orderGoodsHasBuyNum.containsKey(zlServicegoods.getGoodsid())){
+                if((buyNum + orderGoodsHasBuyNum.get(zlServicegoods.getGoodsid())) > zlServicegoods.getDaymaxgoodscount()){
+                    throw new BizException(String.format("商品%s超过每日可购买数量%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getDaymaxgoodscount()));
+                }
+            }else{
+                if(buyNum.compareTo(zlServicegoods.getDaymaxgoodscount()) > 0){
+                    throw new BizException(String.format("商品%s超过每日可购买数量%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getDaymaxgoodscount()));
+                }
             }
-            if (zlServicegoods.getApplymaxcount().compareTo(0) == 0) {
-                throw new BizException(String.format("商品%s超过每日可购买次数%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getApplymaxcount()));
+            if (zlServicegoods.getDaymaxcount().compareTo(0) == 0) {
+                throw new BizException(String.format("商品%s超过每日可购买次数%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getDaymaxcount()));
             }
             if (orderHasBuyNum.containsKey(zlServicegoods.getGoodsid())) {
-                if (orderHasBuyNum.get(zlServicegoods.getGoodsid()).compareTo(zlServicegoods.getApplymaxcount()) >= 0) {
-                    throw new BizException(String.format("商品%s超过每日可购买次数%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getApplymaxcount()));
+                if (orderHasBuyNum.get(zlServicegoods.getGoodsid()).compareTo(zlServicegoods.getDaymaxcount()) >= 0) {
+                    throw new BizException(String.format("商品%s超过每日可购买次数%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getDaymaxcount()));
                 }
             }
             if (isFirst) {
