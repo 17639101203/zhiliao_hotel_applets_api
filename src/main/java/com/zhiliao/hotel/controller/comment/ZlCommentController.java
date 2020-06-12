@@ -80,6 +80,9 @@ public class ZlCommentController {
 
     @ApiOperation(value = "获取点赞吐槽标签")
     @GetMapping("findTags/{hotelid}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "hotelid", dataType = "int", required = true, value = "酒店id")
+    })
     @PassToken
     public ReturnString findTags(@PathVariable Integer hotelid) {
         List<Map<String,Object>> zlTagList = zlCommentService.findTags(hotelid);
@@ -88,6 +91,10 @@ public class ZlCommentController {
 
     @ApiOperation(value = "点赞吐槽详情列表获取")
     @GetMapping("findCommentList/{pageNo}/{pageSize}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "当前页码"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页个数")
+    })
     @UserLoginToken
     public ReturnString findCommentList(HttpServletRequest request,
                                                          @PathVariable Integer pageNo,@PathVariable Integer pageSize) {
@@ -99,6 +106,9 @@ public class ZlCommentController {
 
     @ApiOperation(value = "点赞吐槽详情列表页信息获取")
     @GetMapping("findComment/{commentid}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "commentid", dataType = "int", required = true, value = "评论吐槽id")
+    })
     @UserLoginToken
     public ReturnString findComment(HttpServletRequest request,@PathVariable Integer commentid) {
         Long userid = TokenUtil.getUserId(request.getHeader("token"));

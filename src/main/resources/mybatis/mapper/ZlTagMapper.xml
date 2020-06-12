@@ -14,14 +14,15 @@
 
 
     <select id="getTags" resultType="java.util.HashMap">
-    select
-        TagID,TagName
-    from
-        zl_tag
-    where
-        HotelID = #{hotelid} and IsDelete = 0 and Type = 3
-    order by
-        Sort
+    SELECT
+      TagID,
+      TagName
+    FROM
+      zl_tag
+    WHERE HotelID = #{hotelid}
+      AND IsDelete = 0
+      AND TYPE = 3
+    ORDER BY Sort
   </select>
 
 

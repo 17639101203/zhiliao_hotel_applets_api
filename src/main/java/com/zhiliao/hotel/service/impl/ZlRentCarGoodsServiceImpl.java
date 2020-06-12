@@ -3,6 +3,7 @@ package com.zhiliao.hotel.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.controller.rentcar.vo.RentCarOrderVO;
 import com.zhiliao.hotel.mapper.ZlRentCarGoodsMapper;
 import com.zhiliao.hotel.mapper.ZlRentCarOrderMapper;
 import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
@@ -112,8 +113,8 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
      * @return
      */
     @Override
-    public ZlRentCarOrder rentCarOrderDetail(Long orderid) {
-        return rentCarOrderMapper.rentCarOrderDetail(orderid);
+    public RentCarOrderVO rentCarOrderDetail(Long orderid) {
+        return rentCarOrderMapper.rentCarOrderDetailVO(orderid);
     }
 
     @Override

@@ -10,11 +10,12 @@
 
     <select id="getMenuList" resultType="com.zhiliao.hotel.model.ZlXcxmenu">
 
-        select  <include refid="selectColumn"/>
+        select
+        <include refid="selectColumn"/>
         from zl_xcxmenu zl where (zl.HotelID=#{hotelId} and MenuStatus=1
-         and ComeFromID=1 )
-             or (HotelID=0 and ParentID=0)
-          and IsFrontendShow=1 and IsDelete=0  order by CreateDate desc
+        and ComeFromID=1 )
+        or (HotelID=0 and ParentID=0)
+        and IsFrontendShow=1 and IsDelete=0 order by CreateDate desc
 
     </select>
 

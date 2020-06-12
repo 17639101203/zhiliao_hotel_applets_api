@@ -41,18 +41,18 @@ public class MyAppointmentController {
 
     @ApiOperation(value = "清扫服务订单展示_徐向向")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：取消，0：待清扫，1：已完成"),
-            @ApiImplicitParam(paramType = "query", name = "pageNo", dataType = "Integer", required = true, value = "页码值"),
-            @ApiImplicitParam(paramType = "query", name = "pageSize", dataType = "Integer", required = true, value = "每页条数")
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码值"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：取消，0：待清扫，1：已完成")
     })
-    @GetMapping("cleanFindAll/{orderStatus}/{pageNo}/{pageSize}")
+    @GetMapping("cleanFindAll/{pageNo}/{pageSize}")
     @ResponseBody
     @UserLoginToken
 //    @PassToken
     public ReturnString cleanFindAll(HttpServletRequest request,
-                                     @PathVariable("orderStatus") Byte orderStatus,
                                      @PathVariable("pageNo") Integer pageNo,
-                                     @PathVariable("pageSize") Integer pageSize) {
+                                     @PathVariable("pageSize") Integer pageSize,
+                                     Byte orderStatus) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
@@ -72,17 +72,17 @@ public class MyAppointmentController {
 
     @ApiOperation(value = "发票订单展示_徐向向")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "invoiceStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：已取消，0：未开票，1：开票中，2：已开票"),
-            @ApiImplicitParam(paramType = "query", name = "pageNo", dataType = "Integer", required = true, value = "页码值"),
-            @ApiImplicitParam(paramType = "query", name = "pageSize", dataType = "Integer", required = true, value = "每页条数")
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码值"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
+            @ApiImplicitParam(paramType = "query", name = "invoiceStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：已取消，0：未开票，1：开票中，2：已开票")
     })
-    @GetMapping("invoiceFindAll/{invoiceStatus}/{pageNo}/{pageSize}")
+    @GetMapping("invoiceFindAll/{pageNo}/{pageSize}")
     @UserLoginToken
     @ResponseBody
     public ReturnString invoiceFindAll(HttpServletRequest request,
-                                       @PathVariable("invoiceStatus") Byte invoiceStatus,
                                        @PathVariable("pageNo") Integer pageNo,
-                                       @PathVariable("pageSize") Integer pageSize) {
+                                       @PathVariable("pageSize") Integer pageSize,
+                                       Byte invoiceStatus) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
@@ -98,17 +98,17 @@ public class MyAppointmentController {
 
     @ApiOperation(value = "报修订单展示")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：已取消，0：待维修, 1: 已完成"),
-            @ApiImplicitParam(paramType = "query", name = "pageNo", dataType = "Integer", required = true, value = "页码值"),
-            @ApiImplicitParam(paramType = "query", name = "pageSize", dataType = "Integer", required = true, value = "每页条数")
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码值"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：已取消，0：待维修, 1: 已完成")
     })
     @UserLoginToken
-    @GetMapping("repairFindAll/{orderStatus}/{pageNo}/{pageSize}")
+    @GetMapping("repairFindAll/{pageNo}/{pageSize}")
     @ResponseBody
     public ReturnString repairFindAll(HttpServletRequest request,
-                                      @PathVariable("orderStatus") Byte orderStatus,
                                       @PathVariable("pageNo") Integer pageNo,
-                                      @PathVariable("pageSize") Integer pageSize) {
+                                      @PathVariable("pageSize") Integer pageSize,
+                                      Byte orderStatus) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
@@ -123,17 +123,17 @@ public class MyAppointmentController {
 
     @ApiOperation(value = "客房服务订单展示")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：取消，0：待配送, 1: 已完成"),
-            @ApiImplicitParam(paramType = "query", name = "pageNo", dataType = "Integer", required = true, value = "页码值"),
-            @ApiImplicitParam(paramType = "query", name = "pageSize", dataType = "Integer", required = true, value = "每页条数")
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码值"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：取消，0：待配送, 1: 已完成")
     })
     @UserLoginToken
-    @GetMapping("serviceFindAll/{orderStatus}/{pageNo}/{pageSize}")
+    @GetMapping("serviceFindAll/{pageNo}/{pageSize}")
     @ResponseBody
     public ReturnString serviceFindAll(HttpServletRequest request,
-                                       @PathVariable("orderStatus") Byte orderStatus,
                                        @PathVariable("pageNo") Integer pageNo,
-                                       @PathVariable("pageSize") Integer pageSize) {
+                                       @PathVariable("pageSize") Integer pageSize,
+                                       Byte orderStatus) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
@@ -149,16 +149,16 @@ public class MyAppointmentController {
 
     @ApiOperation(value = "设施预定订单展示", notes = "可传入不同的请求参数，查询各种类型的全部订单。例如：获取用户全部订单（不区分订单类型）列表的数据，传入token即可。")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.已取消；0.待确认；1.已确认"),
-            @ApiImplicitParam(paramType = "query", name = "pageNo", dataType = "Integer", required = true, value = "页码"),
-            @ApiImplicitParam(paramType = "query", name = "pageSize", dataType = "Integer", required = true, value = "每页条数"),
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.已取消；0.待确认；1.已确认")
     })
     @UserLoginToken
-    @GetMapping("facilityOrderFindall/{orderStatus}/{pageNo}/{pageSize}")
+    @GetMapping("facilityOrderFindall/{pageNo}/{pageSize}")
     public ReturnString findAllOrder(HttpServletRequest request,
-                                     @PathVariable("orderStatus") Byte orderStatus,
                                      @PathVariable("pageNo") Integer pageNo,
-                                     @PathVariable("pageSize") Integer pageSize) {
+                                     @PathVariable("pageSize") Integer pageSize,
+                                     Byte orderStatus) {
 
         try {
             String token = request.getHeader("token");
@@ -174,17 +174,17 @@ public class MyAppointmentController {
 
     @ApiOperation(value = "叫醒订单列表展示", notes = "可传入不同的请求参数，查询各种类型的全部订单。例如：获取用户全部订单（不区分订单类型）列表的数据，传入token即可。")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.已取消；0.待处理；1.已完成"),
-            @ApiImplicitParam(paramType = "query", name = "pageNo", dataType = "Integer", required = true, value = "页码"),
-            @ApiImplicitParam(paramType = "query", name = "pageSize", dataType = "Integer", required = true, value = "每页条数"),
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.已取消；0.待处理；1.已完成")
     })
     @UserLoginToken
     //@PassToken
-    @GetMapping("WakeOrderFindall/{orderStatus}/{pageNo}/{pageSize}")
+    @GetMapping("WakeOrderFindall/{pageNo}/{pageSize}")
     public ReturnString findAllWakeOrder(HttpServletRequest request,
-                                         @PathVariable("orderStatus") Byte orderStatus,
                                          @PathVariable("pageNo") Integer pageNo,
-                                         @PathVariable("pageSize") Integer pageSize) {
+                                         @PathVariable("pageSize") Integer pageSize,
+                                         Byte orderStatus) {
 
         try {
             String token = request.getHeader("token");
@@ -201,16 +201,16 @@ public class MyAppointmentController {
 
     @ApiOperation(value = "租车订单列表展示", notes = "可传入不同的请求参数，查询各种类型的全部订单。例如：获取用户全部订单（不区分订单类型）列表的数据，传入token即可。")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
             @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.已取消；0.待处理；1.已完成"),
-            @ApiImplicitParam(paramType = "query", name = "pageNo", dataType = "Integer", required = true, value = "页码"),
-            @ApiImplicitParam(paramType = "query", name = "pageSize", dataType = "Integer", required = true, value = "每页条数"),
     })
     @UserLoginToken
-    @GetMapping("rentCarOrderFindall/{orderStatus}/{pageNo}/{pageSize}")
+    @GetMapping("rentCarOrderFindall/{pageNo}/{pageSize}")
     public ReturnString findAllRentCarOrder(HttpServletRequest request,
-                                            @PathVariable("orderStatus") Byte orderStatus,
                                             @PathVariable("pageNo") Integer pageNo,
-                                            @PathVariable("pageSize") Integer pageSize) {
+                                            @PathVariable("pageSize") Integer pageSize,
+                                            Byte orderStatus) {
 
         try {
             String token = request.getHeader("token");
@@ -226,16 +226,16 @@ public class MyAppointmentController {
 
     @ApiOperation(value = "退房订单列表展示", notes = "可传入不同的请求参数，查询各种类型的全部订单。例如：获取用户全部订单（不区分订单类型）列表的数据，传入token即可。")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.取消退房；0.等待退房；1.退房完成"),
-            @ApiImplicitParam(paramType = "query", name = "pageNo", dataType = "Integer", required = true, value = "页码"),
-            @ApiImplicitParam(paramType = "query", name = "pageSize", dataType = "Integer", required = true, value = "每页条数"),
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.取消退房；0.等待退房；1.退房完成")
     })
     @UserLoginToken
-    @GetMapping("checkOutOrderFindall/{orderStatus}/{pageNo}/{pageSize}")
+    @GetMapping("checkOutOrderFindall/{pageNo}/{pageSize}")
     public ReturnString findAllCheckOutOrder(HttpServletRequest request,
-                                             @PathVariable("orderStatus") Byte orderStatus,
                                              @PathVariable("pageNo") Integer pageNo,
-                                             @PathVariable("pageSize") Integer pageSize) {
+                                             @PathVariable("pageSize") Integer pageSize,
+                                             Byte orderStatus) {
 
         try {
             String token = request.getHeader("token");
@@ -251,16 +251,16 @@ public class MyAppointmentController {
 
     @ApiOperation(value = "续住订单列表展示", notes = "可传入不同的请求参数，查询各种类型的全部订单。例如：获取用户全部订单（不区分订单类型）列表的数据，传入token即可。")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.已取消；0.待处理；1.已完成"),
-            @ApiImplicitParam(paramType = "query", name = "pageNo", dataType = "Integer", required = true, value = "页码"),
-            @ApiImplicitParam(paramType = "query", name = "pageSize", dataType = "Integer", required = true, value = "每页条数"),
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.已取消；0.待处理；1.已完成")
     })
     @UserLoginToken
-    @GetMapping("continueLiveOrderFindall/{orderStatus}/{pageNo}/{pageSize}")
+    @GetMapping("continueLiveOrderFindall/{pageNo}/{pageSize}")
     public ReturnString findAllContinueLiveOrder(HttpServletRequest request,
-                                                 @PathVariable("orderStatus") Byte orderStatus,
                                                  @PathVariable("pageNo") Integer pageNo,
-                                                 @PathVariable("pageSize") Integer pageSize) {
+                                                 @PathVariable("pageSize") Integer pageSize,
+                                                 Byte orderStatus) {
 
         try {
             String token = request.getHeader("token");
@@ -277,7 +277,7 @@ public class MyAppointmentController {
     @ApiOperation(value = "取消订单_徐向向")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "orderid", dataType = "Long", required = true, value = "订单id"),
-            @ApiImplicitParam(paramType = "path", name = "orderServiceType", dataType = "Integer", required = true,
+            @ApiImplicitParam(paramType = "path", name = "orderServiceType", dataType = "int", required = true,
                     value = "每个服务订单的类型标识 1: 取消清扫订单, 2: 取消发票订单, 3: 取消报修订单,4: 取消设施订单,5:取消客房服务订单," +
                             "6: 取消叫醒订单, 7: 取消租车订单, 8: 取消退房订单, 9: 取消续住订单")
     })

@@ -25,9 +25,6 @@ public class HotelFacilityOrderParam {
     @ApiModelProperty(value = "酒店名", required = true)
     private String hotelName;
 
-    @ApiModelProperty(value = "房间ID", required = true)
-    private Integer roomid;
-
     @ApiModelProperty(value = "房间号", required = true)
     private String roomnumber;
 
@@ -50,8 +47,8 @@ public class HotelFacilityOrderParam {
     private BigDecimal actuallyPay;
 
     @ApiModelProperty(value = "开始时间", required = true)
-    private Integer usebegindate;
+    private Long usebegindate;
 
     @ApiModelProperty(value = "结束时间", required = true)
-    private Integer useenddate;
+    private Long useenddate;
 }

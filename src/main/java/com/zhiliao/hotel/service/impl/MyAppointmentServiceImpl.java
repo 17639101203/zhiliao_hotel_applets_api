@@ -3,6 +3,7 @@ package com.zhiliao.hotel.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
 import com.zhiliao.hotel.controller.myAppointment.result.ZlServiceorderResult;
 import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.model.*;
@@ -58,6 +59,9 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     @Autowired
     private HotelLiveOrderService hotelLiveOrderService;
 
+    @Autowired
+    private ZlHotelMapper zlHotelMapper;
+
 
     @Autowired
     public MyAppointmentServiceImpl(ZlInvoiceMapper invoiceMapper, ZlCleanOrderMapper cleanOrderMapper) {
@@ -95,8 +99,12 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     @Override
     public PageInfoResult invoiceFindAll(Long userId, Byte invoicestatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo, pageSize);
-        List<ZlInvoiceOrder> invoiceOrders = myAppointmentMapper.findAllInvoice(userId, invoicestatus);
-        PageInfo<ZlInvoiceOrder> pageInfo = new PageInfo<>(invoiceOrders);
+        List<InvoiceOrderVO> invoiceOrders = myAppointmentMapper.findAllInvoice(userId, invoicestatus);
+        for (InvoiceOrderVO invoiceOrderVO : invoiceOrders) {
+            ZlHotel zlHotel = zlHotelMapper.getById(invoiceOrderVO.getHotelid());
+            invoiceOrderVO.setHotelname(zlHotel.getHotelName());
+        }
+        PageInfo<InvoiceOrderVO> pageInfo = new PageInfo<>(invoiceOrders);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 

@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface ZlTagMapper {
 
-    List<Map<String,Object>> getTags(Integer hotelid);
+    List<Map<String,Object>> getTags(@Param("hotelid")Integer hotelid);
 
     List<String> getTagName(@Param("tagids") String[] tagids);
 }

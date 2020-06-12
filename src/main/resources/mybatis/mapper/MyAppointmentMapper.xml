@@ -18,7 +18,31 @@
     order by CreateDate DESC
   </select>
   <!--发票服务订单列表-->
-  <select id="findAllInvoice" resultType="com.zhiliao.hotel.model.ZlInvoiceOrder">
+  <!--<select id="findAllInvoice" resultType="com.zhiliao.hotel.model.ZlInvoiceOrder">-->
+    <!--select-->
+    <!--InvoiceOrderID,-->
+    <!--InvoiceID,-->
+    <!--HotelID,-->
+    <!--InvoiceType,-->
+    <!--MainBodyType,-->
+    <!--ElectronicPaperType,-->
+    <!--Title,-->
+    <!--Identifier,-->
+    <!--Tel,-->
+    <!--Remark,-->
+    <!--InvoiceStatus,-->
+    <!--CreateDate-->
+    <!--from zl_invoiceorder-->
+    <!--where 1 = 1 and IsDelete = '0'-->
+    <!--<if test="userId != null and userId != '' ">-->
+      <!--and UserID = #{userId}-->
+    <!--</if>-->
+    <!--<if test="invoicestatus != null and invoicestatus != '' ">-->
+      <!--and InvoiceStatus = #{invoicestatus}-->
+    <!--</if>-->
+  <!--</select>-->
+  <!--发票服务订单列表-->
+  <select id="findAllInvoice" resultType="com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO">
     select
     InvoiceOrderID,
     InvoiceID,

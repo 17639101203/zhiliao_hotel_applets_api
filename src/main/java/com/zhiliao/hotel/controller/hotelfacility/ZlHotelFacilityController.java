@@ -3,8 +3,13 @@ package com.zhiliao.hotel.controller.hotelfacility;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.hotelfacility.params.HotelFacilityOrderParam;
+import com.zhiliao.hotel.controller.hotelfacility.vo.HotelFacilityOrderParamVO;
+import com.zhiliao.hotel.mapper.ZlHotelMapper;
+import com.zhiliao.hotel.mapper.ZlHotelRoomMapper;
+import com.zhiliao.hotel.model.ZlHotel;
 import com.zhiliao.hotel.model.ZlHotelFacility;
 import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
+import com.zhiliao.hotel.model.ZlHotelroom;
 import com.zhiliao.hotel.service.ZlHotelFacilityOrderService;
 import com.zhiliao.hotel.service.ZlHotelFacilityService;
 import com.zhiliao.hotel.utils.TokenUtil;
@@ -34,6 +39,9 @@ public class ZlHotelFacilityController {
     @Autowired
     private ZlHotelFacilityOrderService hotelFacilityOrderService;
 
+    @Autowired
+    private ZlHotelRoomMapper zlHotelRoomMapper;
+
     @UserLoginToken
     @ApiOperation(value = "酒店设施列表展示")
     @GetMapping("getHotelFacilityList")
@@ -54,7 +62,7 @@ public class ZlHotelFacilityController {
     @ApiOperation(value = "酒店设施详情")
     @GetMapping("getHotelFacilityDetail")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "facilityID", dataType = "Integer", required = true, value = "酒店ID")
+            @ApiImplicitParam(paramType = "query", name = "facilityId", dataType = "int", required = true, value = "设施ID")
     })
     public ReturnString getHotelFacilityDetail(Integer facilityId) {
         try {
@@ -81,14 +89,15 @@ public class ZlHotelFacilityController {
         facilityOrder.setFacilityid(orderParam.getFacilityId());
         facilityOrder.setHotelid(orderParam.getHotelId());
         facilityOrder.setHotelname(orderParam.getHotelName());
-        facilityOrder.setRoomid(orderParam.getRoomid());
+        ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(orderParam.getRoomnumber(), orderParam.getHotelId());
+        facilityOrder.setRoomid(zlHotelroom.getRoomid());
         facilityOrder.setRoomnumber(orderParam.getRoomnumber());
         facilityOrder.setFacilityname(orderParam.getFacilityName());
         facilityOrder.setCoverurl(orderParam.getCoverUrl());
         ;
         facilityOrder.setActuallypay(orderParam.getActuallyPay());
-        facilityOrder.setUsebegindate(orderParam.getUsebegindate() / 1000);
-        facilityOrder.setUseenddate(orderParam.getUseenddate() / 1000);
+        facilityOrder.setUsebegindate((int) (orderParam.getUsebegindate() / 1000));
+        facilityOrder.setUseenddate((int) (orderParam.getUseenddate() / 1000));
 
 
         try {
@@ -111,8 +120,8 @@ public class ZlHotelFacilityController {
     public ReturnString findOrderDetail(@PathVariable Long orderID) {
 
         try {
-            ZlHotelFacilityOrder zlHotelFacilityOrder = hotelFacilityOrderService.findOrder(orderID);
-            return new ReturnString(zlHotelFacilityOrder);
+            HotelFacilityOrderParamVO hotelFacilityOrderParamVO = hotelFacilityOrderService.findOrder(orderID);
+            return new ReturnString(hotelFacilityOrderParamVO);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("查询失败");

@@ -30,6 +30,18 @@ public class InvoiceOrderVO {
     private Byte electronicpapertype;
 
     /**
+     * 0电子发票；1纸质发票
+     */
+    @ApiModelProperty("酒店ID")
+    private Integer hotelid;
+
+    /**
+     * 0电子发票；1纸质发票
+     */
+    @ApiModelProperty("酒店名称")
+    private String hotelname;
+
+    /**
      * 个人真实姓/或单位抬头
      */
     @ApiModelProperty("个人真实姓/或单位抬头")

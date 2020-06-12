@@ -162,7 +162,7 @@
   <!--  查询发票订单详情-->
   <select id="queryInvoiceOrderdetail" resultType="com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO">
         select
-           InvoiceType,MainBodyType,ElectronicPaperType,Title,
+           InvoiceType,MainBodyType,ElectronicPaperType,Title,HotelID,
            Identifier,Tel,Remark,InvoiceStatus,Bank,BankAccountNumber,
            CompanyTel,CompanyAddress,InvoiceOrderNumber,CreateDate,UpdateDate
         from

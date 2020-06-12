@@ -41,6 +41,33 @@
     from zl_rentcarorder
     where HotelID = #{hotelid} and CarNumber = #{carnamer}
   </select>-->
+  <select id="rentCarOrderDetailVO" resultType="com.zhiliao.hotel.controller.rentcar.vo.RentCarOrderVO">
+    SELECT
+      zo.OrderID,
+      zo.OrderSerialNo,
+      zo.UserName,
+      zg.CoverImgUrl,
+      zo.Tel,
+      zo.OrderStatus,
+      zo.GoodsName,
+      zo.CarNumber,
+      zo.RentBeginDate,
+      zo.RentEndDate,
+      zo.GiveBackDate,
+      zo.RentPrice,
+      zo.RentTotalPrice,
+      zo.Remark,
+      zo.CanCancelOrderMinute,
+      zo.CreateDate,
+      zo.UpdateDate
+    FROM
+      zl_rentcarorder zo
+      LEFT JOIN zl_rentcargoods zg
+        ON zo.CarNumber = zg.CarNumber
+    WHERE zo.OrderID = #{orderid}
+      AND zo.IsDelete = 0
+      AND zo.IsUserDelete = 0
+  </select>
 
   <select id="rentCarOrderDetail" resultType="com.zhiliao.hotel.model.ZlRentCarOrder">
     select

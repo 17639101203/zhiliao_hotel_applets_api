@@ -13,12 +13,18 @@
     </resultMap>
 
     <select id="getHotelHistoryList" resultMap="BaseResultMap">
-        SELECT h.RecID, h.UserID, h.HotelID, h.HotelName, h.RoomID, h.RoomNumber, h.CheckInDate, h.CreateDate FROM
-        (SELECT hh.RecID, hh.UserID, hh.HotelID, hh.HotelName, hh.RoomID, hh.RoomNumber, hh.CheckInDate, hh.CreateDate
-        FROM zl_hoteluserhistory hh
-        WHERE hh.UserID = #{userid, jdbcType=BIGINT}
-        ORDER BY hh.CheckInDate DESC) h
-        GROUP BY h.HotelID
-        ORDER BY h.CheckInDate DESC
+        SELECT
+        hh.RecID,
+        hh.UserID,
+        hh.HotelID,
+        hh.HotelName,
+        hh.RoomID,
+        hh.RoomNumber,
+        hh.CheckInDate,
+        hh.CreateDate
+      FROM
+        zl_hoteluserhistory hh
+      WHERE hh.UserID = #{userid}
+      ORDER BY hh.CheckInDate DESC
     </select>
 </mapper>

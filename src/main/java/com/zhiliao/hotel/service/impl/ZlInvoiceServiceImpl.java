@@ -5,8 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
+import com.zhiliao.hotel.mapper.ZlHotelMapper;
 import com.zhiliao.hotel.mapper.ZlInvoiceMapper;
 import com.zhiliao.hotel.mapper.ZlInvoiceOrderMapper;
+import com.zhiliao.hotel.model.ZlHotel;
 import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.model.ZlInvoiceOrder;
 import com.zhiliao.hotel.service.ZlInvoiceService;
@@ -29,6 +31,8 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     @Autowired
     private ZlInvoiceOrderMapper orderMapper;
 
+    @Autowired
+    private ZlHotelMapper zlHotelMapper;
 
     @Override
     public Map<String, Object> addInvoice(ZlInvoice invoice) {
@@ -82,7 +86,12 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
 
     @Override
     public InvoiceOrderVO findInvoiceOrderdetail(Long userid, String invoiceordernumber) {
-        return orderMapper.queryInvoiceOrderdetail(userid, invoiceordernumber);
+        InvoiceOrderVO invoiceOrderVO = orderMapper.queryInvoiceOrderdetail(userid, invoiceordernumber);
+        if (invoiceOrderVO != null) {
+            ZlHotel zlHotel = zlHotelMapper.getById(invoiceOrderVO.getHotelid());
+            invoiceOrderVO.setHotelname(zlHotel.getHotelName());
+        }
+        return invoiceOrderVO;
     }
 
     @Override

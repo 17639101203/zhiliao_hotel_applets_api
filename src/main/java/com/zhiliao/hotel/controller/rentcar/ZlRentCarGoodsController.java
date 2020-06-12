@@ -5,6 +5,7 @@ import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.rentcar.params.RentCarOrderParam;
+import com.zhiliao.hotel.controller.rentcar.vo.RentCarOrderVO;
 import com.zhiliao.hotel.controller.wake.ZlWakeOrderController;
 import com.zhiliao.hotel.model.ZlHotel;
 import com.zhiliao.hotel.model.ZlHotelroom;
@@ -130,8 +131,8 @@ public class ZlRentCarGoodsController {
     public ReturnString rentCarOrderDetail(@PathVariable long orderid) {
 
         try {
-            ZlRentCarOrder rentCarOrder = rentCarGoodsService.rentCarOrderDetail(orderid);
-            return new ReturnString(rentCarOrder);
+            RentCarOrderVO rentCarOrderVO = rentCarGoodsService.rentCarOrderDetail(orderid);
+            return new ReturnString(rentCarOrderVO);
         } catch (Exception e) {
             return new ReturnString("获取失败");
         }

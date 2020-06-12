@@ -33,6 +33,7 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
 
     /**
      * 获取酒店设施列表
+     *
      * @param hotelId
      * @return
      */
@@ -43,6 +44,7 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
 
     /**
      * 酒店设施预定详情
+     *
      * @param facilityId
      * @return
      */
@@ -53,18 +55,19 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
 
     /**
      * 酒店设施预定
+     *
      * @param zlHotelFacilityOrder
      * @return
      */
     @Override
-    public Map<String,Object> addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder) {
+    public Map<String, Object> addFacilityOrder(ZlHotelFacilityOrder zlHotelFacilityOrder) {
         Integer facilityID = zlHotelFacilityOrder.getFacilityid();
         //定义map集合,用于封装返回信息
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
 
         ZlHotelFacility hotelFacilityDetail = hotelFacilityMapper.getHotelFacilityDetail(facilityID);
         if (hotelFacilityDetail == null) {
-            throw  new RuntimeException("该酒店没有此设施,请询问酒店前台");
+            throw new RuntimeException("该酒店没有此设施,请询问酒店前台");
         }
 
         //开始时间
@@ -75,18 +78,18 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         if (hotelFacilityDetail.getPrice().compareTo(new BigDecimal(0)) == 1) {
             //判断酒店设施数量是否充足
             if (hotelFacilityDetail.getFacilitycount() <= 0) {
-                throw  new RuntimeException("酒店设施数量不足!");
+                throw new RuntimeException("酒店设施数量不足!");
             }
             //判断该时间段是否在营业时间
-            if (hotelFacilityDetail.getServicebegindate() > beginusedate && hotelFacilityDetail.getServiceenddate() < endusedate){
-                throw  new RuntimeException("该时间段不在此设施的服务时间,请重新选择!");
+            if (hotelFacilityDetail.getServicebegindate() > beginusedate && hotelFacilityDetail.getServiceenddate() < endusedate) {
+                throw new RuntimeException("该时间段不在此设施的服务时间,请重新选择!");
             }
         }
         //生成订单编号
         zlHotelFacilityOrder.setSerialnumber(OrderIDUtil.createOrderID("HS"));
         zlHotelFacilityOrder.setComeformid(1);
         ZlHotel zlHotel = hotelMapper.getById(zlHotelFacilityOrder.getHotelid());
-        if (zlHotel != null){
+        if (zlHotel != null) {
             //获取酒店名称
             zlHotelFacilityOrder.setHotelname(zlHotel.getHotelName());
         }
@@ -98,11 +101,11 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         if (hotelFacilityDetail.getPrice().compareTo(new BigDecimal(0)) == 1) {
             if (insert > 0) {
                 hotelFacilityMapper.updateCount(facilityID, Math.toIntExact(System.currentTimeMillis() / 1000));
-            }else {
+            } else {
                 throw new RuntimeException("提交失败");
             }
         }
-        map.put("orderId",zlHotelFacilityOrder.getOrderid());
+        map.put("orderId", zlHotelFacilityOrder.getOrderid());
         return map;
     }
 }

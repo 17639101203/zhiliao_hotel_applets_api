@@ -9,11 +9,11 @@ package com.zhiliao.hotel.controller.myOrder.config;
 public class WxPayConfig {
 
     //小程序appid
-    public static final String appid = "";
+    public static final String appid = "wx440f446a4f7569d4";
     //微信支付的商户id
-    public static final String mch_id = "";
+    public static final String mch_id = "1519878851";
     //微信支付的商户密钥
-    public static final String key = "";
+    public static final String key = "abac3a3507c3e9d1f9d3b863c651d333";
 
     //支付成功后的服务器回调url,此处进行手动回调
     public static final String notify_url = "https://www.zlkj.com/pay/autoPayReturn";

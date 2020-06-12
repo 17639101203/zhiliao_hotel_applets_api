@@ -13,5 +13,5 @@ public interface ZlHotelFacilityMapper extends Mapper<ZlHotelFacility> {
 
     void updateCount(@Param("facilityID") Integer facilityID, @Param("time") Integer time);
 
-    int updateByFacilityId(ZlHotelFacility facilityDetail);
+    int updateByFacilityId(@Param("facilityId") Integer facilityId, @Param("updateDate") Integer updateDate);
 }

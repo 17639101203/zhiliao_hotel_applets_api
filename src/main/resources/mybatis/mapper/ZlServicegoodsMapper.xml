@@ -38,18 +38,19 @@
 
     <select id="findServicegoodsList" resultType="com.zhiliao.hotel.controller.servicegoods.vo.ServicegoodsListVo">
         select
-            zsg.GoodsID,
-            zsg.GoodsName,
-            zsg.Tags,
-            zsg.CoverImgUrl,
-            zsg.ApplyMaxCount,
-            zsg.ApplyLimitCount,
-            zsg.SalePrice,
-            zsg.OriginalPrice,
-            zsg.MarketPrice
+        zsg.GoodsID,
+        zsg.GoodsName,
+        zsg.Tags,
+        zsg.CoverImgUrl,
+        zsg.DayMaxCount,
+        zsg.DayMaxGoodsCount,
+        zsg.SalePrice,
+        zsg.OriginalPrice,
+        zsg.MarketPrice
         from zl_servicegoods zsg
         left join zl_servicegoodscategory zsgc on zsg.GoodsCategoryID=zsgc.GoodsCategoryID
-        where zsg.CheckStatus=2 and zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsgc.CategoryStatus=1 and zsgc.IsDelete=0 and zsgc.CheckStatus=2
+        where zsg.CheckStatus=2 and zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsgc.CategoryStatus=1 and zsgc.IsDelete=0
+        and zsgc.CheckStatus=2
         and zsg.HotelID=#{hotelId} and zsgc.BelongModule=#{belongModule}
         <if test='categoryName!=null and categoryName!="all"'>
             and zsgc.CategoryName=#{categoryName}
@@ -66,8 +67,8 @@
             zsg.GoodsName,
             zsg.Tags,
             zsg.CoverImgUrl,
-            zsg.ApplyMaxCount,
-            zsg.ApplyLimitCount,
+            zsg.DayMaxCount,
+            zsg.DayMaxGoodsCount,
             zsg.SalePrice,
             zsg.OriginalPrice,
             zsg.MarketPrice,

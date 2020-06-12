@@ -171,7 +171,7 @@ public class ZlInvoiceController {
     @ApiOperation(value = "查询发票订单详情")
     @UserLoginToken
     @GetMapping("findInvoiceOrderDetails")
-    public ReturnString<InvoiceOrderVO> findInvoiceOrderDetails(HttpServletRequest request, String invoiceordernumber) {
+    public ReturnString findInvoiceOrderDetails(HttpServletRequest request, String invoiceordernumber) {
         if (invoiceordernumber == null || "".equals(invoiceordernumber)) {
             return new ReturnString<>(-1, "订单编号为空，请重新再试");
         }

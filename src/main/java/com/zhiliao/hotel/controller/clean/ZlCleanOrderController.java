@@ -39,7 +39,7 @@ public class ZlCleanOrderController {
 
         Map<String, Object> map = new HashMap<>();
         Integer nowTime = DateUtils.javaToPhpNowDateTime();
-        if (cleanParm.getBookdate() < nowTime || cleanParm.getBookdate() - nowTime > 60 * 60 * 48) {
+        if (cleanParm.getBookdate() / 1000 < nowTime || cleanParm.getBookdate() / 1000 - nowTime > 60 * 60 * 48) {
             return new ReturnString<>(-1, "预定清扫时间不在规定范围内");
         }
 

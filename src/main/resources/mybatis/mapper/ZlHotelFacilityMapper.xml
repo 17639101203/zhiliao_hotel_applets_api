@@ -80,14 +80,15 @@
     </update>
 
     <update id="updateByFacilityId" parameterType="com.zhiliao.hotel.model.ZlHotelFacility">
-        update
+      UPDATE
           zl_hotelfacility
-        set
-          FacilityCount = #{facilitycount},
-          FacilityRemainCount = #{facilityremaincount},
-          UseCount = #{usecount},
-          UpdateDate = #{updatedate}
-        where
-          FacilityID = #{facilityId} and FacilityStatus = 1 and IsDelete = 0
+        SET
+          FacilityCount = FacilityCount + 1,
+          FacilityRemainCount = FacilityRemainCount + 1,
+          UseCount = UseCount - 1,
+          UpdateDate = #{updateDate}
+        WHERE FacilityID = #{facilityId}
+          AND FacilityStatus = 1
+          AND IsDelete = 0
     </update>
 </mapper>

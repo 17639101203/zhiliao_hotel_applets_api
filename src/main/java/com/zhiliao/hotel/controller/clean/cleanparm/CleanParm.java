@@ -33,7 +33,7 @@ public class CleanParm {
      * 预定清扫时间
      */
     @ApiModelProperty(value = "预定清扫时间", required = true)
-    private Integer bookdate;
+    private Long bookdate;
 
     /**
      * 其它需求备注

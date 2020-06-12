@@ -65,20 +65,19 @@
     ORDER BY CreateDate DESC
   </select>
     <select id="findById" resultType="com.zhiliao.hotel.model.ZlNews">
-    select
-      n.NewsID,
-      n.HotelID,
-      n.Type,
-      n.Author,
-      n.Title,
-      n.Content,
-      n.ImgUrl,
-      n.CreateDate,
-      n.UpdateDate
-    from
-      zl_news n
-    where
-    n.NewsID = #{newsid}
-    and n.IsDelete = 0
+    SELECT
+      NewsID,
+      HotelID,
+      TYPE,
+      Author,
+      Title,
+      Content,
+      ImgUrl,
+      CreateDate,
+      UpdateDate
+    FROM
+      zl_news
+    WHERE NewsID = #{newsid}
+      AND IsDelete = 0
   </select>
 </mapper>

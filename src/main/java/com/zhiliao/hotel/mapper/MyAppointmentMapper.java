@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
+import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
 import com.zhiliao.hotel.controller.myAppointment.result.ZlServiceorderResult;
 import com.zhiliao.hotel.model.*;
 import org.apache.ibatis.annotations.Param;
@@ -22,7 +23,7 @@ public interface MyAppointmentMapper {
      * @param invoicestatus
      * @return
      */
-    List<ZlInvoiceOrder> findAllInvoice(@Param("userId") Long userId, @Param("invoicestatus") Byte invoicestatus);
+    List<InvoiceOrderVO> findAllInvoice(@Param("userId") Long userId, @Param("invoicestatus") Byte invoicestatus);
     //报修订单列表
     List<ZlRepairorder> findAllRepair(@Param("userId") Long userId, @Param("orderstatus") Byte orderstatus);
     //客房服务订单列表

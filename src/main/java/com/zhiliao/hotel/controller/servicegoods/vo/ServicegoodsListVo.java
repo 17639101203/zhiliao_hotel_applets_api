@@ -27,11 +27,11 @@ public class ServicegoodsListVo {
     @ApiModelProperty(value = "客房服务商品封面图片")
     private String coverImgUrl;
 
-    @ApiModelProperty(value = "最多领取次数")
-    private Integer applyMaxCount;
+    @ApiModelProperty(value = "一天可领取次数")
+    private Integer dayMaxCount;
 
-    @ApiModelProperty(value = "每次可领取数量")
-    private Integer applyLimitCount;
+    @ApiModelProperty(value = "一天可领取数量")
+    private Integer dayMaxGoodsCount;
 
     @ApiModelProperty(value = "售价")
     private BigDecimal salePrice;

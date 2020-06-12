@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
+import com.zhiliao.hotel.controller.rentcar.vo.RentCarOrderVO;
 import com.zhiliao.hotel.model.ZlRentCarOrder;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -14,6 +15,8 @@ import java.util.List;
  * @create: 2020-06-06 15:12
  **/
 public interface ZlRentCarOrderMapper extends Mapper<ZlRentCarOrder> {
+
+    RentCarOrderVO rentCarOrderDetailVO(@Param("orderid") Long orderid);
 
     ZlRentCarOrder rentCarOrderDetail(@Param("orderid") Long orderid);
 

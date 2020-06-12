@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.ReturnString;
+import com.zhiliao.hotel.controller.hotelfacility.vo.HotelFacilityOrderParamVO;
 import com.zhiliao.hotel.mapper.ZlHotelFacilityMapper;
 import com.zhiliao.hotel.mapper.ZlHotelFacilityOrderMapper;
 import com.zhiliao.hotel.model.ZlHotelFacility;
@@ -53,8 +54,8 @@ public class ZlHotelFacilityOrderServiceImpl implements ZlHotelFacilityOrderServ
      * @return
      */
     @Override
-    public ZlHotelFacilityOrder findOrder(Long orderID) {
-        return hotelFacilityOrderMapper.findOrderById(orderID);
+    public HotelFacilityOrderParamVO findOrder(Long orderID) {
+        return hotelFacilityOrderMapper.findOrderByIdVO(orderID);
     }
 
     /**
@@ -71,38 +72,27 @@ public class ZlHotelFacilityOrderServiceImpl implements ZlHotelFacilityOrderServ
         ZlHotelFacility hotelFacilityDetail = facilityMapper.getHotelFacilityDetail(facilityOrder.getFacilityid());
         //可取消订单时间
         Integer oneHour = hotelFacilityDetail.getCancancelorderminute() * 60;
+        Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
 
         if (facilityOrder != null) {
-            if (facilityOrder.getUsebegindate() - date <= oneHour) {
-                throw new RuntimeException("很抱歉，需提前" + hotelFacilityDetail.getCancancelorderminute() + "小时取消预约，现在已不能取消！");
+            if (facilityOrder.getUsebegindate() - date > oneHour) {
+                throw new RuntimeException("很抱歉，可取消订单时间已过，现在已不能取消！");
             }
-            facilityOrder.setOrderstatus((byte) -1);
-            facilityOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
-            hotelFacilityOrderMapper.updateById(facilityOrder);
-
+            hotelFacilityOrderMapper.updateById(orderID, updateDate);
             //释放该设施数量
-            ZlHotelFacility facilityDetail = facilityMapper.getHotelFacilityDetail(facilityOrder.getFacilityid());
-            if (facilityDetail != null) {
-                facilityDetail.setFacilitycount(facilityDetail.getFacilitycount() + 1);
-                facilityDetail.setFacilityremaincount(facilityDetail.getFacilityremaincount() + 1);
-                facilityDetail.setUsecount(facilityDetail.getUsecount() - 1);
-                facilityDetail.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
-                int num = facilityMapper.updateByFacilityId(facilityDetail);
-                if (num == 0){
-                    throw new RuntimeException("取消失败");
-                }
-            }
+            facilityMapper.updateByFacilityId(facilityOrder.getFacilityid(), updateDate);
         }
 
     }
 
     /**
      * 用户删除设施订单
+     *
      * @param orderID
      */
     @Override
     public void userDeleteFacilityOrder(Long orderID) {
         Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
-        hotelFacilityOrderMapper.userDeleteFacilityOrder(orderID,updateDate);
+        hotelFacilityOrderMapper.userDeleteFacilityOrder(orderID, updateDate);
     }
 }
