@@ -39,33 +39,33 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
     private final ZlWxuserdetailMapper zlWxuserdetailMapper;
 
     @Override
-    public ServiceorderCommitVo serviceorderSubmit(String token, ServiceorderCommitParams scp) throws RuntimeException{
+    public ServiceorderCommitVo serviceorderSubmit(String token, ServiceorderCommitParams scp) throws RuntimeException {
         ServiceorderCommitVo serviceorderCommitVo = new ServiceorderCommitVo();
         //校验参数
-        if(scp.getHotelid() == null){
+        if (scp.getHotelid() == null) {
             throw new BizException("酒店id不能为空");
         }
-        if(StringUtils.isEmpty(scp.getHotelname())){
+        if (StringUtils.isEmpty(scp.getHotelname())) {
             throw new BizException("酒店名称不能为空");
         }
-        if(StringUtils.isEmpty(scp.getRoomnumber())){
+        if (StringUtils.isEmpty(scp.getRoomnumber())) {
             throw new BizException("房间号不能为空");
         }
-        if(scp.getDeliverydate() == null){
+        if (scp.getDeliverydate() == null) {
             throw new BizException("送达时间不能为空");
         }
-        if(CollectionUtils.isEmpty(scp.getOrderGoods())){
+        if (CollectionUtils.isEmpty(scp.getOrderGoods())) {
             throw new BizException("未选择商品，请确认！");
         }
         //校验房间号是否存在
         ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(scp.getRoomnumber(), scp.getHotelid());
-        if(zlHotelroom == null){
+        if (zlHotelroom == null) {
             throw new BizException("该房间号不存在，请再次确认！");
         }
         //获取订单商品id集合
         String goodIds = scp.getOrderGoods().stream().map(goods -> goods.getGoodsId().toString()).collect(Collectors.joining(","));
         List<ZlServicegoods> zlServicegoodsList = zlServicegoodsMapper.findAllByHotelIdAndGoodsIds(scp.getHotelid(), goodIds);
-        if(CollectionUtils.isEmpty(zlServicegoodsList)){
+        if (CollectionUtils.isEmpty(zlServicegoodsList)) {
             throw new BizException("选择的商品有误，请刷新后重试！");
         }
         //获取PHP当日时间戳
@@ -86,21 +86,21 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         for (ZlServicegoods zlServicegoods : zlServicegoodsList) {
             //判断订单商品是否超过该商品单次购买数量
             Integer buyNum = orderBuyNum.get(zlServicegoods.getGoodsid());
-            if(buyNum.compareTo(0) <= 0){
+            if (buyNum.compareTo(0) <= 0) {
                 throw new BizException(String.format("商品%s未选择购买数量，请重新选择！", zlServicegoods.getGoodsname()));
             }
-            if(buyNum.compareTo(zlServicegoods.getApplylimitcount()) > 0){
+            if (buyNum.compareTo(zlServicegoods.getApplylimitcount()) > 0) {
                 throw new BizException(String.format("商品%s超过单次可购买数量%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getApplylimitcount()));
             }
-            if(zlServicegoods.getApplymaxcount().compareTo(0) == 0){
+            if (zlServicegoods.getApplymaxcount().compareTo(0) == 0) {
                 throw new BizException(String.format("商品%s超过每日可购买次数%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getApplymaxcount()));
             }
-            if(orderHasBuyNum.containsKey(zlServicegoods.getGoodsid())){
-                if(orderHasBuyNum.get(zlServicegoods.getGoodsid()).compareTo(zlServicegoods.getApplymaxcount()) >= 0){
+            if (orderHasBuyNum.containsKey(zlServicegoods.getGoodsid())) {
+                if (orderHasBuyNum.get(zlServicegoods.getGoodsid()).compareTo(zlServicegoods.getApplymaxcount()) >= 0) {
                     throw new BizException(String.format("商品%s超过每日可购买次数%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getApplymaxcount()));
                 }
             }
-            if(isFirst){
+            if (isFirst) {
                 goodscoverurl = zlServicegoods.getCoverimgurl();
                 isFirst = false;
             }
@@ -116,11 +116,12 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         }
         //todo 校验送达时间是否在服务时间内
         //todo 超时时间  暂时按15分钟  送达时间、超时时间要放到redis，key暂定
-        Integer timeoutDate;
-        if(scp.getDeliverydate() == 0){
+        int timeoutDate;
+        if (scp.getDeliverydate() == 0) {
             timeoutDate = DateUtils.javaToPhpNowDateTime() + (15 * 60);
-        }else{
-            timeoutDate = scp.getDeliverydate() + (15 * 60);
+        } else {
+            int date = (int) (scp.getDeliverydate() / 1000);
+            timeoutDate = date + (15 * 60);
         }
         //获取用户信息
         ZlWxuserdetail zlWxuserdetail = Optional.ofNullable(zlWxuserdetailMapper.findByUserId(userId)).orElse(new ZlWxuserdetail());
@@ -137,7 +138,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
                 .floornumber(zlHotelroom.getRoomfloor())
                 .roomnumber(zlHotelroom.getRoomnumber())
                 .comeformid(1)
-                .deliverydate(scp.getDeliverydate())
+                .deliverydate((int) (scp.getDeliverydate() / 1000))
                 .timeoutdate(timeoutDate)
                 .remark(scp.getRemark())
                 .createdate(DateUtils.javaToPhpNowDateTime())
@@ -155,16 +156,16 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
 
     @Override
     @Transactional(readOnly = true)
-    public ServiceorderInfoVo getServiceorderInfo(Long orderId) throws RuntimeException{
+    public ServiceorderInfoVo getServiceorderInfo(Long orderId) throws RuntimeException {
         ServiceorderInfoVo serviceorderInfoVo = new ServiceorderInfoVo();
         //获取客房服务订单详情
         ZlServiceorder order = zlServiceorderMapper.getByOrderId(orderId);
-        if(order == null){
+        if (order == null) {
             throw new BizException("该订单不存在，请刷新页面重试！");
         }
         //获取客房服务订单详情表数据
         List<ZlServiceorderdetail> zlServiceorderdetails = zlServiceorderdetailMapper.findByOrderId(orderId);
-        if(CollectionUtils.isEmpty(zlServiceorderdetails)){
+        if (CollectionUtils.isEmpty(zlServiceorderdetails)) {
             throw new BizException("该订单商品详情不存在，请刷新页面重试！");
         }
         List<ServiceorderInfoVo.goods> orderGoodsList = new ArrayList<>();
@@ -178,9 +179,9 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         BeanUtils.copyProperties(order, serviceorderInfoVo);
         String createdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getCreatedate()).toString());
         serviceorderInfoVo.setCreatedate(createdate);
-        if(order.getDeliverydate() == 0){
+        if (order.getDeliverydate() == 0) {
             serviceorderInfoVo.setDeliverydate("0");
-        }else{
+        } else {
             String bookdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getDeliverydate()).toString());
             serviceorderInfoVo.setDeliverydate(bookdate);
         }
@@ -188,13 +189,13 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
     }
 
     @Override
-    public void serviceorderCancel(Long orderId) throws RuntimeException{
+    public void serviceorderCancel(Long orderId) throws RuntimeException {
         //获取客房服务订单详情
         ZlServiceorder order = zlServiceorderMapper.getByOrderId(orderId);
-        if(order == null){
+        if (order == null) {
             throw new BizException("该订单不存在，请刷新页面重试！");
         }
-        if(order.getOrderstatus() != 0){
+        if (order.getOrderstatus() != 0) {
             throw new BizException("该订单状态已发生改变，请刷新页面重试！");
         }
         //修改订单状态
@@ -204,12 +205,13 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
 
     /**
      * 用户删除客房服务订单
+     *
      * @param orderid
      */
     @Override
     public void userDeleteServiceOrder(Long orderid) {
         Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
-        zlServiceorderMapper.userDeleteServiceOrder(orderid,updateDate);
+        zlServiceorderMapper.userDeleteServiceOrder(orderid, updateDate);
     }
 
 }

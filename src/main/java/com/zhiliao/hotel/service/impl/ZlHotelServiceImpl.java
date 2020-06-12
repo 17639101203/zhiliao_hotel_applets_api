@@ -122,6 +122,10 @@ public class ZlHotelServiceImpl implements ZlHotelService {
             zlHotel.setHotelRoom(zlHotelroom);
 
             ZlHotelIn hotelData = GsonUtils.gsonMaps(GsonUtils.objToJson(zlHotel), ZlHotelIn.class);
+            ZlHotel zlHotelById = zlHotelMapper.getById(hotelId);
+            if (zlHotelById != null && StringUtils.isNoneBlank(zlHotelById.getReceptionTel())) {
+                hotelData.setReceptionTel(zlHotelMapper.getById(hotelId).getReceptionTel());
+            }
 
             return new ReturnString(hotelData);
         }

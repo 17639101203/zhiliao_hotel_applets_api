@@ -13,6 +13,15 @@ import java.util.List;
 
 public class ZlHotelIn implements Serializable {
 
+    private String receptionTel;
+
+    public String getReceptionTel() {
+        return receptionTel;
+    }
+
+    public void setReceptionTel(String receptionTel) {
+        this.receptionTel = receptionTel;
+    }
 
     public ZlHotelIn(){
         super();

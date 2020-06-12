@@ -37,7 +37,6 @@ public class ZlCleanOrderController {
 //    @PassToken
     public ReturnString<Map<String, Object>> addCleanOrder(HttpServletRequest request, @RequestBody CleanParm cleanParm) {
 
-        Map<String, Object> map = new HashMap<>();
         Integer nowTime = DateUtils.javaToPhpNowDateTime();
         if (cleanParm.getBookdate() / 1000 < nowTime || cleanParm.getBookdate() / 1000 - nowTime > 60 * 60 * 48) {
             return new ReturnString<>(-1, "预定清扫时间不在规定范围内");
@@ -47,11 +46,11 @@ public class ZlCleanOrderController {
 //        Long userid = 77L;
 
         try {
-            zlCleanOrderService.addCleanOrder(userid, cleanParm);
-            return new ReturnString<>(0, "下单成功!", map);
+            Map<String, Object> map = zlCleanOrderService.addCleanOrder(userid, cleanParm);
+            return new ReturnString<>(map);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString<>(0, "下单失败!", map);
+            return new ReturnString<>("下单失败!");
         }
 
     }

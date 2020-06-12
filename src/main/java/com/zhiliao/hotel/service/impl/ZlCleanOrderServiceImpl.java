@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,8 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
 
 
     @Override
-    public void addCleanOrder(Long userid, CleanParm cleanParm) {
+    public Map<String, Object> addCleanOrder(Long userid, CleanParm cleanParm) {
+        Map<String, Object> map = new HashMap<>();
         ZlWxuserdetail zlWxuserdetail = zlWxuserdetailMapper.findByUserId(userid);
         String serialnumber = OrderIDUtil.createOrderID("");
         ZlCleanOrder zlCleanOrder = new ZlCleanOrder();
@@ -45,12 +47,14 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
         zlCleanOrder.setRoomid(cleanParm.getRoomid());   //房间ID
         zlCleanOrder.setRoomnumber(cleanParm.getRoomnumber());   //房间号
         zlCleanOrder.setComeformid(1);   //来自1小程序C端，2小程序B端，3公众号, 4民宿，5好评返现，6分时酒店
-        zlCleanOrder.setBookdate((int) (cleanParm.getBookdate()/1000));   //预定时间
+        zlCleanOrder.setBookdate((int) (cleanParm.getBookdate() / 1000));   //预定时间
 //        zlCleanOrder.setBookdate(11212);   //预定时间
         zlCleanOrder.setRemark(cleanParm.getRemark());   //其他需求备注
         zlCleanOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));   //下单时间
         zlCleanOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));   //支付/取消时间
         zlCleanOrderMapper.addCleanOrder(zlCleanOrder);
+        map.put("serialnumber", serialnumber);
+        return map;
     }
 
     @Override

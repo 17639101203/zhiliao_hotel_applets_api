@@ -35,7 +35,8 @@ public class ZlHotelRoomController {
 
     @ApiOperation(value = "查询wifi")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "String", required = true, value = "酒店ID")
+            @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "String", required = true, value = "酒店ID"),
+            @ApiImplicitParam(paramType = "query", name = "hotelID", dataType = "String", required = true, value = "房间")
     })
     @PassToken
     @GetMapping("{hotelID}")

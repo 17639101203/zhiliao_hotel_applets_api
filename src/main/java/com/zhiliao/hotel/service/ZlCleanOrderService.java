@@ -17,7 +17,7 @@ public interface ZlCleanOrderService {
      * @param cleanParm
      * @return
      */
-    void addCleanOrder(Long userid, CleanParm cleanParm);
+    Map<String, Object> addCleanOrder(Long userid, CleanParm cleanParm);
 
     /**
      * 清扫订单详情
