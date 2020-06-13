@@ -310,7 +310,7 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         zlCleanOrder.setOrderid(orderid);
         ZlCleanOrder cleanOrder = cleanOrderMapper.selectOne(zlCleanOrder);
         if (cleanOrder != null) {
-            cleanOrderMapper.removeCleanOrder(cleanOrder.getSerialnumber(), Math.toIntExact(System.currentTimeMillis() / 1000));
+            cleanOrderMapper.removeCleanOrder(orderid, Math.toIntExact(System.currentTimeMillis() / 1000));
         }
     }
 
@@ -324,7 +324,7 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         zlCleanOrder.setOrderid(orderid);
         ZlCleanOrder cleanOrder = cleanOrderMapper.selectOne(zlCleanOrder);
         if (cleanOrder != null) {
-            cleanOrderMapper.removeCleanOrder(cleanOrder.getSerialnumber(), Math.toIntExact(System.currentTimeMillis() / 1000));
+            cleanOrderMapper.removeCleanOrder(orderid, Math.toIntExact(System.currentTimeMillis() / 1000));
         }
     }
 
