@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xiegege on 2020/4/14.
@@ -39,7 +42,32 @@ public class ZlCartServiceImpl implements ZlCartService {
     }
 
     @Override
-    public List<UserCartVo> findUserCart(Integer hotelId, Long userId) {
-        return zlCartMapper.findUserCart(hotelId, userId);
+    public Map<String, List<UserCartVo>> findUserCart(Integer hotelId, Long userId) {
+        List<UserCartVo> userCartVoList = zlCartMapper.findUserCart(hotelId, userId);
+        List<UserCartVo> userCartVoOneList = new LinkedList<>();
+        List<UserCartVo> userCartVoTwoList = new LinkedList<>();
+        List<UserCartVo> userCartVoThreeList = new LinkedList<>();
+        List<UserCartVo> userCartVoFourList = new LinkedList<>();
+        for (UserCartVo userCartVo : userCartVoList) {
+            Integer belongModule = userCartVo.getBelongModule();
+            if (belongModule == 1) {
+                userCartVoOneList.add(userCartVo);
+            }
+            if (belongModule == 2) {
+                userCartVoTwoList.add(userCartVo);
+            }
+            if (belongModule == 3) {
+                userCartVoThreeList.add(userCartVo);
+            }
+            if (belongModule == 4) {
+                userCartVoFourList.add(userCartVo);
+            }
+        }
+        Map<String, List<UserCartVo>> map = new HashMap<>();
+        map.put("1", userCartVoOneList);
+        map.put("2", userCartVoTwoList);
+        map.put("3", userCartVoThreeList);
+        map.put("4", userCartVoFourList);
+        return map;
     }
 }

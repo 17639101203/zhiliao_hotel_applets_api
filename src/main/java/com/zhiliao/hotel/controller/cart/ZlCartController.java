@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xiegege on 2020/4/12.
@@ -73,8 +74,8 @@ public class ZlCartController {
             Long userId = TokenUtil.getUserId(token);
 //            Long userId = 1591601237852L;
             logger.info("开始请求->参数->酒店id：" + hotelId + "|用户id：" + userId);
-            List<UserCartVo> userCartVoList = zlCartService.findUserCart(hotelId, userId);
-            return new ReturnString(userCartVoList);
+            Map<String, List<UserCartVo>> map = zlCartService.findUserCart(hotelId, userId);
+            return new ReturnString(map);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取购物车出错!");

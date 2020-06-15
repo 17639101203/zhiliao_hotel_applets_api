@@ -63,4 +63,16 @@ public class CommentVO {
      */
     @ApiModelProperty("消息状态 0:未读；1已读")
     private Byte replyreadstatus;
+
+    /**
+     * 添加日期
+     */
+    @ApiModelProperty("添加日期")
+    private Integer createdate;
+
+    /**
+     * 更新日期
+     */
+    @ApiModelProperty("更新日期")
+    private Integer updatedate;
 }

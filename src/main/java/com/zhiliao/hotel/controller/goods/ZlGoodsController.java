@@ -6,6 +6,7 @@ import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.goods.vo.EsGoods;
+import com.zhiliao.hotel.controller.goods.vo.EsGoodsVO;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.controller.goods.vo.GoodsSkuListVo;
 import com.zhiliao.hotel.service.ZlGoodsService;
@@ -172,14 +173,14 @@ public class ZlGoodsController {
 //    @UserLoginToken
     @PassToken
     @GetMapping("searchGoods/{hotelId}/{selectParam}/{belongModule}/{pageNo}/{pageSize}")
-    public ReturnString<List<EsGoods>> searchGoods(@PathVariable Integer hotelId,
+    public ReturnString searchGoods(@PathVariable Integer hotelId,
                                                    @PathVariable String selectParam,
                                                    @PathVariable Integer belongModule,
                                                    @PathVariable Integer pageNo,
                                                    @PathVariable Integer pageSize) {
         try {
-            List<EsGoods> esGoodsList = zlGoodsService.searchGoods(hotelId, selectParam, belongModule, pageNo, pageSize);
-            return new ReturnString<>(esGoodsList);
+            List<EsGoodsVO> esGoodsVOList = zlGoodsService.searchGoods(hotelId, selectParam, belongModule, pageNo, pageSize);
+            return new ReturnString<>(esGoodsVOList);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString<>("获取出错");

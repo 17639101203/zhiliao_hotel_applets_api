@@ -44,4 +44,10 @@ public class GoodsListVo {
     @ApiModelProperty(value = "是否多规格")
     private Boolean isManySku;
 
+    @ApiModelProperty(value = "所属模块: 1便利店;2餐饮服务;3情趣用品;4土特产")
+    private Byte belongModule;
+
+    @ApiModelProperty(value = "库存")
+    private Integer stockCount;
+
 }

@@ -57,4 +57,9 @@ public class CommentDetailVO {
      */
     private List<String> tagname;
 
+    /**
+     * 酒店名称
+     */
+    private String hotelname;
+
 }

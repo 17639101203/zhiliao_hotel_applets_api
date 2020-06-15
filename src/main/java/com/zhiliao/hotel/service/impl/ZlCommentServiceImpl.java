@@ -39,20 +39,19 @@ public class ZlCommentServiceImpl implements ZlCommentService {
     }
 
     @Override
-    public List<Map<String,Object>> findTags(Integer hotelid) {
+    public List<Map<String, Object>> findTags(Integer hotelid) {
         return zlTagMapper.getTags(hotelid);
     }
 
-    
-    
+
     @Override
-    public PageInfoResult<List<CommentVO>> findComments(Long userid,Integer pageNo,Integer pageSize) {
+    public PageInfoResult<List<CommentVO>> findComments(Long userid, Integer pageNo, Integer pageSize) {
         // 设定当前页码，以及当前页显示的条数
         PageHelper.startPage(pageNo, pageSize);
         List<CommentVO> comments = zlCommentMapper.getComments(userid);
         for (CommentVO comment : comments) {
             String[] tagids;
-            if (StringUtils.isNoneBlank(comment.getTagids())){
+            if (StringUtils.isNoneBlank(comment.getTagids())) {
                 if (comment.getTagids().contains("|")) {
                     // 拆解标签I
                     tagids = comment.getTagids().split("|");
@@ -72,7 +71,7 @@ public class ZlCommentServiceImpl implements ZlCommentService {
     public CommentDetailVO findComment(Long userid, Integer commentid) {
         CommentDetailVO commentDetailVO = zlCommentMapper.getComment(userid, commentid);
         String[] tagids;
-        if (StringUtils.isNoneBlank(commentDetailVO.getTagids())){
+        if (StringUtils.isNoneBlank(commentDetailVO.getTagids())) {
             if (commentDetailVO.getTagids().contains("|")) {
                 // 拆解标签I
                 tagids = commentDetailVO.getTagids().split("|");
@@ -87,10 +86,10 @@ public class ZlCommentServiceImpl implements ZlCommentService {
         zlCommentMapper.changeReplyReadStatus(userid, commentid);
         return commentDetailVO;
     }
-    
+
     @Override
-    public Long waitAppraiseTotal(Long userid){
+    public Long waitAppraiseTotal(Long userid) {
         return zlCommentMapper.waitAppraiseTotal(userid);
     }
-    
+
 }

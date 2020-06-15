@@ -26,15 +26,10 @@ public class ZlWaqkeOrderParam {
     @ApiModelProperty(value = "房间号", required = true)
     private String roomNumber;
 
-    @ApiModelProperty(value = "叫醒时间,日期时间戳, 秒级别", required = true)
-    private Integer wakeDate;
+    @ApiModelProperty(value = "叫醒时间,日期时间戳, 毫秒级别", required = true)
+    private Long wakeDate;
 
     @ApiModelProperty(value = "备注", required = false)
     private String remark;
 
-    @ApiModelProperty(value = "用户名", required = true)
-    private String userName;
-
-    @ApiModelProperty(value = "手机号", required = true)
-    private String Tel;
 }

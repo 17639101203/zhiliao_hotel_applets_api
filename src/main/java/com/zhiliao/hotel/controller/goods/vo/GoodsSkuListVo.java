@@ -31,4 +31,7 @@ public class GoodsSkuListVo {
 
     @ApiModelProperty(value = "库存")
     private Integer stockCount;
+
+    @ApiModelProperty(value = "所属模块: 1便利店;2餐饮服务;3情趣用品;4土特产")
+    private Byte belongModule;
 }

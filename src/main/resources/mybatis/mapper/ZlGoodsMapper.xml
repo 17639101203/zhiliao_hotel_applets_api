@@ -3,17 +3,17 @@
 <mapper namespace="com.zhiliao.hotel.mapper.ZlGoodsMapper">
 
     <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlHotelgoodssku">
-        <result column="HotelGoodsSkuID" jdbcType="INTEGER" property="hotelgoodsskuid" />
-        <result column="SkuID" jdbcType="INTEGER" property="skuid" />
-        <result column="GoodsID" jdbcType="INTEGER" property="goodsid" />
-        <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
-        <result column="StockCount" jdbcType="INTEGER" property="stockcount" />
-        <result column="SoldCount" jdbcType="INTEGER" property="soldcount" />
-        <result column="VirtualSoldCount" jdbcType="INTEGER" property="virtualsoldcount" />
-        <result column="IsDefault" jdbcType="BIT" property="isdefault" />
-        <result column="IsDelete" jdbcType="BIT" property="isdelete" />
-        <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
-        <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
+        <result column="HotelGoodsSkuID" jdbcType="INTEGER" property="hotelgoodsskuid"/>
+        <result column="SkuID" jdbcType="INTEGER" property="skuid"/>
+        <result column="GoodsID" jdbcType="INTEGER" property="goodsid"/>
+        <result column="HotelID" jdbcType="INTEGER" property="hotelid"/>
+        <result column="StockCount" jdbcType="INTEGER" property="stockcount"/>
+        <result column="SoldCount" jdbcType="INTEGER" property="soldcount"/>
+        <result column="VirtualSoldCount" jdbcType="INTEGER" property="virtualsoldcount"/>
+        <result column="IsDefault" jdbcType="BIT" property="isdefault"/>
+        <result column="IsDelete" jdbcType="BIT" property="isdelete"/>
+        <result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
+        <result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
     </resultMap>
 
     <select id="findGoodsCategory" resultType="java.util.LinkedHashMap">
@@ -30,14 +30,16 @@
 
     <select id="findGoodsList" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
         select
-            zhgs.HotelGoodsSkuID,
-            zhgs.GoodsID,
-            zg.GoodsName,
-            zg.CoverImgUrl,
-            zg.OriginalPrice,
-            zg.CurrentPrice,
-            zhgs.SoldCount,
-            zhgs.VirtualSoldCount
+        zhgs.HotelGoodsSkuID,
+        zhgs.GoodsID,
+        zg.GoodsName,
+        zg.CoverImgUrl,
+        zg.OriginalPrice,
+        zg.CurrentPrice,
+        zhgs.SoldCount,
+        zhgs.VirtualSoldCount,
+        zgc.BelongModule,
+        zgc.StockCount
         from zl_hotelgoodssku zhgs
         left join zl_goods zg on zhgs.GoodsID=zg.GoodsID
         left join zl_goodscategory zgc on zg.GoodsCategoryID=zgc.GoodsCategoryID
@@ -57,19 +59,28 @@
     </select>
 
     <select id="findGoodsSkuList" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsSkuListVo">
-        select
-            zhgs.HotelGoodsSkuID,
-            zgp.PropertyName,
-            zgp.ImgUrl,
-            zgs.OriginalPrice,
-            zgs.CurrentPrice,
-            zhgs.StockCount
-        from zl_hotelgoodssku zhgs
-        left join zl_goodssku zgs on zhgs.SkuID=zgs.SkuID
-        left join zl_goodsproperty zgp on zgs.PropertyID=zgp.PropertyID
-        where zhgs.IsDelete=0 and zgs.IsDelete=0 and zgp.IsDelete=0 and zhgs.HotelID=#{hotelId}
-        and zhgs.GoodsID=#{goodsId}
-        order by zgp.PropertyName desc
+        SELECT
+          zhgs.HotelGoodsSkuID,
+          zgp.PropertyName,
+          zgp.ImgUrl,
+          zgs.OriginalPrice,
+          zgs.CurrentPrice,
+          zhgs.StockCount,
+          zgc.BelongModule
+        FROM
+          zl_hotelgoodssku zhgs
+          LEFT JOIN zl_goodssku zgs
+            ON zhgs.SkuID = zgs.SkuID
+          LEFT JOIN zl_goodsproperty zgp
+            ON zgs.PropertyID = zgp.PropertyID
+          LEFT JOIN zl_goodscategory zgc
+            ON zgp.CategoryID = zgc.GoodsCategoryID
+        WHERE zhgs.IsDelete = 0
+          AND zgs.IsDelete = 0
+          AND zgp.IsDelete = 0
+          AND zhgs.HotelID = #{hotelId}
+          AND zhgs.GoodsID = #{goodsId}
+        ORDER BY zgp.PropertyName DESC
     </select>
 
     <select id="findGoodsDetail" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
@@ -89,20 +100,29 @@
     </update>
 
     <select id="findRecommendGoodsList" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
-        select
-            zhgs.HotelGoodsSkuID,
-            zhgs.GoodsID,
-            zg.CoverImgUrl,
-            zg.GoodsName,
-            zg.OriginalPrice,
-            zg.CurrentPrice,
-            max(zhgs.SoldCount) SoldCount
-        from zl_hotelgoodssku zhgs
-        left join zl_goods zg on zhgs.GoodsID=zg.GoodsID
-        where zhgs.IsDelete=0 and zg.GoodsStatus!='-1' and zg.IsRecommand=1 and zhgs.HotelID=#{hotelId}
-        group by zhgs.GoodsID
-        order by max(zhgs.SoldCount) desc,zg.Sort asc
-        limit 50
+        SELECT
+          zhgs.HotelGoodsSkuID,
+          zhgs.GoodsID,
+          zg.CoverImgUrl,
+          zg.GoodsName,
+          zg.OriginalPrice,
+          zg.CurrentPrice,
+          zgs.BelongModule,
+          MAX(zhgs.SoldCount) SoldCount
+        FROM
+          zl_hotelgoodssku zhgs
+          LEFT JOIN zl_goods zg
+            ON zhgs.GoodsID = zg.GoodsID
+          LEFT JOIN zl_goodscategory zgs
+            ON zg.GoodsCategoryID = zgs.GoodsCategoryID
+        WHERE zhgs.IsDelete = 0
+          AND zg.GoodsStatus != '-1'
+          AND zg.IsRecommand = 1
+          AND zhgs.HotelID = #{hotelId}
+        GROUP BY zhgs.GoodsID
+        ORDER BY MAX(zhgs.SoldCount) DESC,
+          zg.Sort ASC
+        LIMIT 50
     </select>
 
     <update id="updateGoods">

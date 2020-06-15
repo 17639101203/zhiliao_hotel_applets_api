@@ -132,7 +132,7 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
     }
 
     @Override
-    public List<EsGoods> searchGoods(Integer hotelId, String selectParam, Integer belongModule, Integer pageNo, Integer pageSize) {
+    public List<EsGoodsVO> searchGoods(Integer hotelId, String selectParam, Integer belongModule, Integer pageNo, Integer pageSize) {
         NativeSearchQuery query = new NativeSearchQueryBuilder()
                 .withQuery(QueryBuilders.queryStringQuery(selectParam).defaultField("goodsname"))
                 .withPageable(PageRequest.of(pageNo - 1, pageSize))
@@ -156,18 +156,21 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
                 }
             }
         }
+
         List<EsGoodsVO> esGoodsVOList = new LinkedList<>();
-        BeanUtils.copyProperties(esGoodsList, esGoodsVOList);
-        //判断列表商品是否有规格
-        for (EsGoodsVO esGoodsVO : esGoodsVOList) {
-            Integer skuCount = zlGoodsMapper.findSkuCount(esGoodsVO.getGoodsid());
+        //根据字段复制实体并查询商品是否为多规格
+        for (EsGoods esGoods : esGoodsList) {
+            Integer skuCount = zlGoodsMapper.findSkuCount(esGoods.getGoodsid());
+            EsGoodsVO esGoodsVO = new EsGoodsVO();
+            BeanUtils.copyProperties(esGoods, esGoodsVO);
             if (skuCount > 1) {
                 esGoodsVO.setIsManySku(true);
             } else {
                 esGoodsVO.setIsManySku(false);
             }
+            esGoodsVOList.add(esGoodsVO);
         }
 
-        return esGoodsList;
+        return esGoodsVOList;
     }
 }
