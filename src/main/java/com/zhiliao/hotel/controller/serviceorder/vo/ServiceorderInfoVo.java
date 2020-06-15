@@ -31,13 +31,33 @@ public class ServiceorderInfoVo implements Serializable {
     private String remark;
 
     @ApiModelProperty(value = "下单时间")
-    private String createdate;
+    private Integer createdate;
 
     @ApiModelProperty(value = "送达时间，尽快送达值为0")
-    private String deliverydate;
+    private Integer deliverydate;
 
     @ApiModelProperty(value = "订单商品列表")
     private List<goods> orderGoodsList;
+
+    @ApiModelProperty(value = "订单状态 -1:已取消;0待配送;1已完成")
+    private Byte orderstatus;
+
+    /**
+     *  酒店ID
+     */
+    @ApiModelProperty(value = "酒店id")
+    private Integer hotelid;
+
+    /**
+     * 酒店名称
+     */
+    @ApiModelProperty(value = "酒店名称")
+    private String hotelname;
+
+    /**
+     * 修改时间
+     */
+    private Integer updatedate;
 
     @Data
     @NoArgsConstructor

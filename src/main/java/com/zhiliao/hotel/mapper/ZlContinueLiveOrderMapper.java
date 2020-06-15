@@ -20,5 +20,5 @@ public interface ZlContinueLiveOrderMapper extends Mapper<ZlContinueLiveOrder> {
     @Select("select count(*) from zl_continueliveorder where UserID = #{userId} and IsDelete = 0 and IsUserDelete = 0")
     int selectCountLive(Long userId);
 
-    ZlContinueLiveOrder continueLiveOrderDetail(@Param("orderID") Long orderID, @Param("orderStatus") Byte orderStatus);
+    ZlContinueLiveOrder continueLiveOrderDetail(@Param("orderID") Long orderID);
 }

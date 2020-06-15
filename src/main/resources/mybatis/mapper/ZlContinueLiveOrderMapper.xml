@@ -22,7 +22,7 @@
     </update>
 
     <select id="continueLiveOrderDetail" resultType="com.zhiliao.hotel.model.ZlContinueLiveOrder">
-        select
+        SELECT
           OrderID,
           OrderSerialNo,
           UserName,
@@ -32,10 +32,11 @@
           CheckOutDate,
           CreateDate,
           UpdateDate
-        from
+        FROM
           zl_continueliveorder
-        where
-          OrderID = #{orderID} and OrderStatus = #{orderStatus} and IsDelete = 0 and IsUserDelete = 0
+        WHERE OrderID = #{orderID}
+          AND IsDelete = 0
+          AND IsUserDelete = 0
     </select>
 
 </mapper>

@@ -3,15 +3,21 @@ package com.zhiliao.hotel.model;
 import lombok.Data;
 import lombok.ToString;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 
 @Data
 @ToString
+@Table(name="zl_repairorder")
 public class ZlRepairorder implements Serializable {
     /**
      * 订单ID
      */
+    @Id
+    @GeneratedValue(generator="JDBC")
     private Long orderid;
 
     /**

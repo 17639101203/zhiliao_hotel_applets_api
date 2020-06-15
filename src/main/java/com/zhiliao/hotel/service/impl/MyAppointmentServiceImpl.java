@@ -91,15 +91,15 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
      * 获取发票订单
      *
      * @param userId
-     * @param invoicestatus
+     * @param invoiceStatus
      * @param pageNo
      * @param pageSize
      * @return
      */
     @Override
-    public PageInfoResult invoiceFindAll(Long userId, Byte invoicestatus, Integer pageNo, Integer pageSize) {
+    public PageInfoResult invoiceFindAll(Long userId, Byte invoiceStatus, Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo, pageSize);
-        List<InvoiceOrderVO> invoiceOrders = myAppointmentMapper.findAllInvoice(userId, invoicestatus);
+        List<InvoiceOrderVO> invoiceOrders = myAppointmentMapper.findAllInvoice(userId, invoiceStatus);
         for (InvoiceOrderVO invoiceOrderVO : invoiceOrders) {
             ZlHotel zlHotel = zlHotelMapper.getById(invoiceOrderVO.getHotelid());
             invoiceOrderVO.setHotelname(zlHotel.getHotelName());
@@ -296,7 +296,7 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         zlRepairorder.setOrderid(orderid);
         ZlRepairorder repairorder = repairorderMapper.selectOne(zlRepairorder);
         if (repairorder != null) {
-            repairorderMapper.removeRepairOrder(repairorder.getSerialnumber(), Math.toIntExact(System.currentTimeMillis() / 1000));
+            repairorderMapper.removeRepairOrder(orderid, Math.toIntExact(System.currentTimeMillis() / 1000));
         }
     }
 

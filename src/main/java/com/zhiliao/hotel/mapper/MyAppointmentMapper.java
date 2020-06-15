@@ -20,10 +20,10 @@ public interface MyAppointmentMapper {
     /**
      * 获取所有发票服务订单
      * @param userId
-     * @param invoicestatus
+     * @param invoiceStatus
      * @return
      */
-    List<InvoiceOrderVO> findAllInvoice(@Param("userId") Long userId, @Param("invoicestatus") Byte invoicestatus);
+    List<InvoiceOrderVO> findAllInvoice(@Param("userId") Long userId, @Param("invoiceStatus") Byte invoiceStatus);
     //报修订单列表
     List<ZlRepairorder> findAllRepair(@Param("userId") Long userId, @Param("orderstatus") Byte orderstatus);
     //客房服务订单列表

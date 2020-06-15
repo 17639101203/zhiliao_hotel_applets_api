@@ -23,17 +23,16 @@ public interface ZlRepairorderMapper extends Mapper<ZlRepairorder> {
      * @param
      * @return
      */
-    Map<String, Object> queryRepairMsg(@Param("userid") Long userid, @Param("serialnumber") String serialnumber);
+    Map<String, Object> queryRepairMsg(@Param("orderID") Long orderID);
 
 
     /**
      * 取消报修预约
      */
-    void removeRepairOrder(
-            @Param("serialnumber") String serialnumber, @Param("updatedate") Integer updatedate);
+    void removeRepairOrder(@Param("orderID") Long orderID, @Param("updatedate") Integer updatedate);
 
     @Select("select count(*) from zl_repairorder where UserID = #{userId} and IsDelete = 0 and IsUserDelete = 0")
     int selectCountRepair(Long userId);
 
-    void userDeleteRepairOrder(@Param("serialnumber") String serialnumber, @Param("updatedate") Integer updateDate);
+    void userDeleteRepairOrder(@Param("orderID") Long orderID, @Param("updatedate") Integer updateDate);
 }

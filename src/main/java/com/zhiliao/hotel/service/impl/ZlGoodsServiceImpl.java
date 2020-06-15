@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.goods.vo.EsGoods;
+import com.zhiliao.hotel.controller.goods.vo.EsGoodsVO;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.controller.goods.vo.GoodsSkuListVo;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsCouponInfoVO;
@@ -13,6 +14,7 @@ import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.service.ZlGoodsService;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -56,6 +59,17 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
         // 设定当前页码，以及当前页显示的条数
         PageHelper.startPage(pageNo, pageSize);
         List<GoodsListVo> dataList = zlGoodsMapper.findGoodsList(hotelId, belongModule, categoryName);
+
+        //判断列表商品是否有规格
+        for (GoodsListVo goodsListVo : dataList) {
+            Integer skuCount = zlGoodsMapper.findSkuCount(goodsListVo.getGoodsId());
+            if (skuCount > 1) {
+                goodsListVo.setIsManySku(true);
+            } else {
+                goodsListVo.setIsManySku(false);
+            }
+        }
+
         PageInfo<GoodsListVo> pageInfo = new PageInfo<>(dataList);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
@@ -140,6 +154,17 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
                 if (!esGoods.getHotelid().equals(hotelId) || !esGoods.getBelongmodule().equals(belongModule)) {
                     iterator.remove();
                 }
+            }
+        }
+        List<EsGoodsVO> esGoodsVOList = new LinkedList<>();
+        BeanUtils.copyProperties(esGoodsList, esGoodsVOList);
+        //判断列表商品是否有规格
+        for (EsGoodsVO esGoodsVO : esGoodsVOList) {
+            Integer skuCount = zlGoodsMapper.findSkuCount(esGoodsVO.getGoodsid());
+            if (skuCount > 1) {
+                esGoodsVO.setIsManySku(true);
+            } else {
+                esGoodsVO.setIsManySku(false);
             }
         }
 

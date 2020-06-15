@@ -1,4 +1,4 @@
-package com.zhiliao.hotel.controller.comment.commentparm;
+package com.zhiliao.hotel.controller.comment.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -57,4 +57,10 @@ public class CommentVO {
      */
     @ApiModelProperty("标签名")
     private List<String> tagname;
+
+    /**
+     * 消息状态 0:未读；1已读
+     */
+    @ApiModelProperty("消息状态 0:未读；1已读")
+    private Byte replyreadstatus;
 }

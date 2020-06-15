@@ -5,10 +5,10 @@ import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.comment.commentparm.CommentParm;
-import com.zhiliao.hotel.controller.comment.commentparm.CommentVO;
+import com.zhiliao.hotel.controller.comment.vo.CommentDetailVO;
+import com.zhiliao.hotel.controller.comment.vo.CommentVO;
 import com.zhiliao.hotel.controller.file.UploadFileController;
 import com.zhiliao.hotel.model.ZlComment;
-import com.zhiliao.hotel.model.ZlTag;
 import com.zhiliao.hotel.service.ZlCommentService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
@@ -17,15 +17,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,10 +43,10 @@ public class ZlCommentController {
     @ApiOperation(value = "添加点赞吐槽")
     @PostMapping(value = "addComment", consumes = {"multipart/*"}, headers = "content-type=multipart/form-data")
     @UserLoginToken
-    public ReturnString addComment(HttpServletRequest request,  CommentParm commentParm, MultipartFile[] multipartFiles) {
+    public ReturnString addComment(HttpServletRequest request, CommentParm commentParm, MultipartFile[] multipartFiles) {
 
         // 解析token获取userid
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
         ZlComment zlComment = new ZlComment();
         Integer nowtime = DateUtils.javaToPhpNowDateTime();   // 获取当前时间
@@ -74,8 +70,8 @@ public class ZlCommentController {
         log.info("【评论图片地址：】" + Imgurls);
         zlComment.setImageurls(Imgurls.toString());  //图片地址
         zlCommentService.addComment(zlComment);
-        map.put("commentid",zlComment.getCommentid());
-        return new ReturnString<>(0, "评价成功",map);
+        map.put("commentid", zlComment.getCommentid());
+        return new ReturnString<>(0, "评价成功", map);
     }
 
     @ApiOperation(value = "获取点赞吐槽标签")
@@ -85,7 +81,7 @@ public class ZlCommentController {
     })
     @PassToken
     public ReturnString findTags(@PathVariable Integer hotelid) {
-        List<Map<String,Object>> zlTagList = zlCommentService.findTags(hotelid);
+        List<Map<String, Object>> zlTagList = zlCommentService.findTags(hotelid);
         return new ReturnString<>(zlTagList);
     }
 
@@ -97,23 +93,23 @@ public class ZlCommentController {
     })
     @UserLoginToken
     public ReturnString findCommentList(HttpServletRequest request,
-                                                         @PathVariable Integer pageNo,@PathVariable Integer pageSize) {
+                                        @PathVariable Integer pageNo, @PathVariable Integer pageSize) {
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
-        PageInfoResult<List<CommentVO>> list = zlCommentService.findComments(userid,pageNo,pageSize);
+        PageInfoResult<List<CommentVO>> list = zlCommentService.findComments(userid, pageNo, pageSize);
         return new ReturnString<>(list);
     }
 
 
-    @ApiOperation(value = "点赞吐槽详情列表页信息获取")
+    @ApiOperation(value = "点赞吐槽详情页信息获取")
     @GetMapping("findComment/{commentid}")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "commentid", dataType = "int", required = true, value = "评论吐槽id")
     })
     @UserLoginToken
-    public ReturnString findComment(HttpServletRequest request,@PathVariable Integer commentid) {
+    public ReturnString findComment(HttpServletRequest request, @PathVariable Integer commentid) {
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
-        Map<String, Object> comment = zlCommentService.findComment(userid, commentid);
-        return new ReturnString<>(comment);
+        CommentDetailVO commentDetailVO = zlCommentService.findComment(userid, commentid);
+        return new ReturnString<>(commentDetailVO);
     }
 
 }

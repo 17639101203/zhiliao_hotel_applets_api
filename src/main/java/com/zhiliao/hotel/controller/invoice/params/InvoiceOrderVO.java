@@ -12,6 +12,11 @@ public class InvoiceOrderVO {
 
 
     /**
+     * 发票订单ID
+     */
+    private Long invoiceorderid;
+
+    /**
      * 发票类型:1:增值税普通发票;2增值税专用发票
      */
     @ApiModelProperty("发票类型:1:增值税普通发票;2增值税专用发票")

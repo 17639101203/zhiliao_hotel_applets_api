@@ -22,12 +22,12 @@ public interface MyAppointmentService {
     /**
      * 获取发票订单
      * @param userId
-     * @param invoicestatus
+     * @param invoiceStatus
      * @param pageNo
      * @param pageSize
      * @return
      */
-    PageInfoResult invoiceFindAll(Long userId, Byte invoicestatus, Integer pageNo, Integer pageSize);
+    PageInfoResult invoiceFindAll(Long userId, Byte invoiceStatus, Integer pageNo, Integer pageSize);
 
 
     /**

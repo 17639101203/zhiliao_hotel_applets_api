@@ -147,4 +147,12 @@
         SELECT StockCount FROM zl_hotelgoodssku WHERE HotelID = #{hotelID} AND HotelGoodsSkuID = #{hotelGoodsSkuID}
     </select>
 
+    <select id="findSkuCount" resultType="int">
+        SELECT
+          COUNT(HotelGoodsSkuID)
+        FROM
+          zl_hotelgoodssku
+        WHERE GoodsID = #{goodsId}
+    </select>
+
 </mapper>

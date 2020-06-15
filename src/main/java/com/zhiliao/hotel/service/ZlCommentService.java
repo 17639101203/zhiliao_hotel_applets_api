@@ -1,7 +1,8 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.controller.comment.commentparm.CommentVO;
+import com.zhiliao.hotel.controller.comment.vo.CommentDetailVO;
+import com.zhiliao.hotel.controller.comment.vo.CommentVO;
 import com.zhiliao.hotel.model.ZlComment;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public interface ZlCommentService{
     /**
      * 获取点赞吐槽详情页
      */
-    Map<String,Object> findComment(Long userid,Integer commentid);
+    CommentDetailVO findComment(Long userid, Integer commentid);
     
     Long waitAppraiseTotal(Long userid);
     

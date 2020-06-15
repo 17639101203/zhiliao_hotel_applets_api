@@ -20,28 +20,29 @@ public class ZlRepairServiceImpl implements ZlRepairService {
 
     @Override
     public void addRepairMsg(ZlRepairorder repair) {
-        zlRepairorderMapper.insertRepairorder(repair);
+//        zlRepairorderMapper.insertRepairorder(repair);
+        zlRepairorderMapper.insertSelective(repair);
     }
 
 
     @Override
-    public Map<String, Object> findRepairOrder(Long Userid, String serialnumber) {
-        return zlRepairorderMapper.queryRepairMsg(Userid, serialnumber);
+    public Map<String, Object> findRepairOrder(Long orderID) {
+        return zlRepairorderMapper.queryRepairMsg(orderID);
     }
 
     @Override
-    public void cancelRepairOrder(Long Userid, String serialnumber, Integer updatedate) {
-        zlRepairorderMapper.removeRepairOrder(serialnumber, updatedate);
+    public void cancelRepairOrder(Long orderID, Integer updatedate) {
+        zlRepairorderMapper.removeRepairOrder(orderID, updatedate);
     }
 
     /**
      * 用户删除报修订单
      *
-     * @param serialnumber
+     * @param orderID
      */
     @Override
-    public void userDeleteRepairOrder(String serialnumber) {
+    public void userDeleteRepairOrder(Long orderID) {
         Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
-        zlRepairorderMapper.userDeleteRepairOrder(serialnumber, updateDate);
+        zlRepairorderMapper.userDeleteRepairOrder(orderID, updateDate);
     }
 }

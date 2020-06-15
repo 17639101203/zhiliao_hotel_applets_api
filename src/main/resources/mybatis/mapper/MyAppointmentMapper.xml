@@ -3,22 +3,22 @@
 <mapper namespace="com.zhiliao.hotel.mapper.MyAppointmentMapper">
 
 
-<!--清扫服务订单列表-->
-  <select id="findAllClean" resultType="com.zhiliao.hotel.model.ZlCleanOrder">
-    select
-    OrderID,HotelName,UserID,SerialNumber,BookDate,OrderStatus,CreateDate
-    from zl_cleanorder
-    where 1 = 1 and IsDelete = '0'
-    <if test="userId != null">
-      and UserID = #{userId}
-    </if>
-    <if test="orderstatus != null">
-      and OrderStatus = #{orderstatus}
-    </if>
-    order by CreateDate DESC
-  </select>
-  <!--发票服务订单列表-->
-  <!--<select id="findAllInvoice" resultType="com.zhiliao.hotel.model.ZlInvoiceOrder">-->
+    <!--清扫服务订单列表-->
+    <select id="findAllClean" resultType="com.zhiliao.hotel.model.ZlCleanOrder">
+        select
+        OrderID,HotelName,UserID,SerialNumber,BookDate,OrderStatus,CreateDate
+        from zl_cleanorder
+        where 1 = 1 and IsDelete = '0'
+        <if test="userId != null">
+            and UserID = #{userId}
+        </if>
+        <if test="orderstatus != null">
+            and OrderStatus = #{orderstatus}
+        </if>
+        order by CreateDate DESC
+    </select>
+    <!--发票服务订单列表-->
+    <!--<select id="findAllInvoice" resultType="com.zhiliao.hotel.model.ZlInvoiceOrder">-->
     <!--select-->
     <!--InvoiceOrderID,-->
     <!--InvoiceID,-->
@@ -35,196 +35,196 @@
     <!--from zl_invoiceorder-->
     <!--where 1 = 1 and IsDelete = '0'-->
     <!--<if test="userId != null and userId != '' ">-->
-      <!--and UserID = #{userId}-->
+    <!--and UserID = #{userId}-->
     <!--</if>-->
     <!--<if test="invoicestatus != null and invoicestatus != '' ">-->
-      <!--and InvoiceStatus = #{invoicestatus}-->
+    <!--and InvoiceStatus = #{invoicestatus}-->
     <!--</if>-->
-  <!--</select>-->
-  <!--发票服务订单列表-->
-  <select id="findAllInvoice" resultType="com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO">
-    select
-    InvoiceOrderID,
-    InvoiceID,
-    HotelID,
-    InvoiceType,
-    MainBodyType,
-    ElectronicPaperType,
-    Title,
-    Identifier,
-    Tel,
-    Remark,
-    InvoiceStatus,
-    CreateDate
-    from zl_invoiceorder
-    where 1 = 1 and IsDelete = '0'
-    <if test="userId != null and userId != '' ">
-      and UserID = #{userId}
-    </if>
-    <if test="invoicestatus != null and invoicestatus != '' ">
-      and InvoiceStatus = #{invoicestatus}
-    </if>
-  </select>
+    <!--</select>-->
+    <!--发票服务订单列表-->
+    <select id="findAllInvoice" resultType="com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO">
+        SELECT
+        InvoiceOrderID,
+        InvoiceID,
+        HotelID,
+        InvoiceType,
+        MainBodyType,
+        ElectronicPaperType,
+        Title,
+        Identifier,
+        Tel,
+        Remark,
+        InvoiceStatus,
+        CreateDate
+        FROM
+        zl_invoiceorder
+        WHERE 1 = 1
+        AND IsDelete = '0'
+        AND UserID = #{userId}
+        <if test="invoiceStatus != null and invoiceStatus != ''">
+            and InvoiceStatus = #{invoiceStatus}
+        </if>
+    </select>
 
-  <!--报修服务订单列表-->
-  <select id="findAllRepair" resultType="com.zhiliao.hotel.model.ZlRepairorder">
-    select OrderID, UserID, SerialNumber,
-    HotelID, HotelName, RoomID,
-    RoomNumber, ImgUrls, Remark,
-    ComeFormID, IsDelete, OrderStatus,
-    CreateDate, UpdateDate
-    from zl_repairorder
-    where 1 = 1 and IsDelete = '0'
-    <if test="userId != null">
-      and UserID = #{userId}
-    </if>
-    <if test="orderstatus != null">
-      and OrderStatus = #{orderstatus}
-    </if>
-    order by CreateDate DESC
-  </select>
-  <!--客房服务订单列表-->
-  <resultMap id="resultMap" type="com.zhiliao.hotel.controller.myAppointment.result.ZlServiceorderResult">
-    <id column="OrderID" jdbcType="BIGINT" property="orderid" />
-    <result column="SerialNumber" jdbcType="CHAR" property="serialnumber" />
-    <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
-    <result column="HotelName" jdbcType="CHAR" property="hotelname" />
-    <result column="RoomID" jdbcType="INTEGER" property="roomid" />
-    <result column="RoomNumber" jdbcType="CHAR" property="roomnumber" />
-    <result column="Remark" jdbcType="CHAR" property="remark" />
-    <result column="OrderStatus" jdbcType="TINYINT" property="orderstatus" />
-    <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
-    <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
-    <collection property="serviceorderdetails" ofType="com.zhiliao.hotel.model.ZlServiceorderdetail">
-      <id column="OrderDetailID" jdbcType="BIGINT" property="orderdetailid" />
-      <result column="OrderID" jdbcType="BIGINT" property="orderid" />
-      <result column="GoodsID" jdbcType="INTEGER" property="goodsid" />
-      <result column="GoodsName" jdbcType="VARCHAR" property="goodsname" />
-      <result column="GoodsCoverUrl" jdbcType="VARCHAR" property="goodscoverurl" />
-      <result column="Price" jdbcType="DECIMAL" property="price" />
-      <result column="GoodsCount" jdbcType="INTEGER" property="goodscount" />
-    </collection>
-  </resultMap>
-  <select id="serviceFindAll" resultMap="resultMap">
-    select
-    s.OrderID,
-    s.SerialNumber,
-    s.HotelID,
-    s.HotelName,
-    s.RoomID,
-    s.RoomNumber,
-    s.Remark,
-    s.OrderStatus,
-    s.CreateDate,
-    s.UpdateDate,
-    sd.OrderDetailID,
-    sd.OrderID,
-    sd.GoodsID,
-    sd.GoodsName,
-    sd.GoodsCoverUrl,
-    sd.Price,
-    sd.GoodsCount
-    from
-    zl_serviceorder s
-    left join
-    zl_serviceorderdetail sd
-    on s.OrderID = sd.OrderID
-    where 1 = 1 and s.IsDelete = 0 and s.IsUserDelete = 0
-    <if test="userId != null">
-      and s.UserID = #{userId}
-    </if>
-    <if test="orderstatus != null">
-      and s.OrderStatus = #{orderstatus}
-    </if>
-    order by CreateDate DESC
-  </select>
-  <!--叫醒服务列表-->
-  <select id="findAllWakeOrder" resultType="com.zhiliao.hotel.model.ZlWakeOrder">
-    select
-    OrderID,
-    OrderSerialNo,
-    UserName,
-    Tel,
-    OrderStatus,
-    WakeDate,
-    Remark,
-    CreateDate
-    from zl_wakeorder
-    where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
-    <if test="userId != null">
-      and UserID = #{userId}
-    </if>
-    <if test="orderstatus != null">
-      and OrderStatus = #{orderstatus}
-    </if>
-    order by CreateDate DESC
-  </select>
-  <!--租车服务列表-->
-  <select id="findAllRentCarOrder" resultType="com.zhiliao.hotel.model.ZlRentCarOrder">
-    select
-    OrderID,
-    OrderSerialNo,
-    UserName,
-    Tel,
-    OrderStatus,
-    GoodsName,
-    CarNumber,
-    RentBeginDate,
-    RentEndDate,
-    GiveBackDate,
-    RentTotalPrice,
-    Remark,
-    CreateDate
-    from zl_rentcarorder
-    where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
-    <if test="userId != null">
-      and UserID = #{userId}
-    </if>
-    <if test="orderstatus != null">
-      and OrderStatus = #{orderstatus}
-    </if>
-    order by CreateDate DESC
-  </select>
-  <!--续住订单列表-->
-  <select id="findAllContinueLiveOrder" resultType="com.zhiliao.hotel.model.ZlContinueLiveOrder">
-    select
-    OrderID,
-    OrderSerialNo,
-    UserName,
-    Tel,
-    OrderStatus,
-    ContinueLiveDate,
-    CheckOutDate,
-    CreateDate
-    from zl_continueliveorder
-    where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
-    <if test="userId != null">
-      and UserID = #{userId}
-    </if>
-    <if test="orderstatus != null">
-      and OrderStatus = #{orderstatus}
-    </if>
-    order by CreateDate DESC
-  </select>
-  <!--退房订单列表-->
-  <select id="findAllCheckOutOrder" resultType="com.zhiliao.hotel.model.ZlCheckoutOrder">
-    select
-    OrderID,
-    OrderSerialNo,
-    UserName,
-    Tel,
-    OrderStatus,
-    CheckOutDate,
-    Remark,
-    CreateDate
-    from zl_checkoutorder
-    where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
-    <if test="userId != null">
-      and UserID = #{userId}
-    </if>
-    <if test="orderstatus != null">
-      and OrderStatus = #{orderstatus}
-    </if>
-    order by CreateDate DESC
-  </select>
+    <!--报修服务订单列表-->
+    <select id="findAllRepair" resultType="com.zhiliao.hotel.model.ZlRepairorder">
+        select OrderID, UserID, SerialNumber,
+        HotelID, HotelName, RoomID,
+        RoomNumber, ImgUrls, Remark,
+        ComeFormID, IsDelete, OrderStatus,
+        CreateDate, UpdateDate
+        from zl_repairorder
+        where 1 = 1 and IsDelete = '0'
+        <if test="userId != null">
+            and UserID = #{userId}
+        </if>
+        <if test="orderstatus != null">
+            and OrderStatus = #{orderstatus}
+        </if>
+        order by CreateDate DESC
+    </select>
+    <!--客房服务订单列表-->
+    <resultMap id="resultMap" type="com.zhiliao.hotel.controller.myAppointment.result.ZlServiceorderResult">
+        <id column="OrderID" jdbcType="BIGINT" property="orderid"/>
+        <result column="SerialNumber" jdbcType="CHAR" property="serialnumber"/>
+        <result column="HotelID" jdbcType="INTEGER" property="hotelid"/>
+        <result column="HotelName" jdbcType="CHAR" property="hotelname"/>
+        <result column="RoomID" jdbcType="INTEGER" property="roomid"/>
+        <result column="RoomNumber" jdbcType="CHAR" property="roomnumber"/>
+        <result column="Remark" jdbcType="CHAR" property="remark"/>
+        <result column="OrderStatus" jdbcType="TINYINT" property="orderstatus"/>
+        <result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
+        <result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
+        <collection property="serviceorderdetails" ofType="com.zhiliao.hotel.model.ZlServiceorderdetail">
+            <id column="OrderDetailID" jdbcType="BIGINT" property="orderdetailid"/>
+            <result column="OrderID" jdbcType="BIGINT" property="orderid"/>
+            <result column="GoodsID" jdbcType="INTEGER" property="goodsid"/>
+            <result column="GoodsName" jdbcType="VARCHAR" property="goodsname"/>
+            <result column="GoodsCoverUrl" jdbcType="VARCHAR" property="goodscoverurl"/>
+            <result column="Price" jdbcType="DECIMAL" property="price"/>
+            <result column="GoodsCount" jdbcType="INTEGER" property="goodscount"/>
+        </collection>
+    </resultMap>
+    <select id="serviceFindAll" resultMap="resultMap">
+        select
+        s.OrderID,
+        s.SerialNumber,
+        s.HotelID,
+        s.HotelName,
+        s.RoomID,
+        s.RoomNumber,
+        s.Remark,
+        s.OrderStatus,
+        s.CreateDate,
+        s.UpdateDate,
+        sd.OrderDetailID,
+        sd.OrderID,
+        sd.GoodsID,
+        sd.GoodsName,
+        sd.GoodsCoverUrl,
+        sd.Price,
+        sd.GoodsCount
+        from
+        zl_serviceorder s
+        left join
+        zl_serviceorderdetail sd
+        on s.OrderID = sd.OrderID
+        where 1 = 1 and s.IsDelete = 0 and s.IsUserDelete = 0
+        <if test="userId != null">
+            and s.UserID = #{userId}
+        </if>
+        <if test="orderstatus != null">
+            and s.OrderStatus = #{orderstatus}
+        </if>
+        order by CreateDate DESC
+    </select>
+    <!--叫醒服务列表-->
+    <select id="findAllWakeOrder" resultType="com.zhiliao.hotel.model.ZlWakeOrder">
+        select
+        OrderID,
+        OrderSerialNo,
+        UserName,
+        Tel,
+        OrderStatus,
+        WakeDate,
+        Remark,
+        CreateDate
+        from zl_wakeorder
+        where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
+        <if test="userId != null">
+            and UserID = #{userId}
+        </if>
+        <if test="orderstatus != null">
+            and OrderStatus = #{orderstatus}
+        </if>
+        order by CreateDate DESC
+    </select>
+    <!--租车服务列表-->
+    <select id="findAllRentCarOrder" resultType="com.zhiliao.hotel.model.ZlRentCarOrder">
+        select
+        OrderID,
+        OrderSerialNo,
+        UserName,
+        Tel,
+        OrderStatus,
+        GoodsName,
+        CarNumber,
+        RentBeginDate,
+        RentEndDate,
+        GiveBackDate,
+        RentTotalPrice,
+        Remark,
+        CreateDate
+        from zl_rentcarorder
+        where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
+        <if test="userId != null">
+            and UserID = #{userId}
+        </if>
+        <if test="orderstatus != null">
+            and OrderStatus = #{orderstatus}
+        </if>
+        order by CreateDate DESC
+    </select>
+    <!--续住订单列表-->
+    <select id="findAllContinueLiveOrder" resultType="com.zhiliao.hotel.model.ZlContinueLiveOrder">
+        select
+        OrderID,
+        OrderSerialNo,
+        UserName,
+        Tel,
+        OrderStatus,
+        ContinueLiveDate,
+        CheckOutDate,
+        CreateDate
+        from zl_continueliveorder
+        where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
+        <if test="userId != null">
+            and UserID = #{userId}
+        </if>
+        <if test="orderstatus != null">
+            and OrderStatus = #{orderstatus}
+        </if>
+        order by CreateDate DESC
+    </select>
+    <!--退房订单列表-->
+    <select id="findAllCheckOutOrder" resultType="com.zhiliao.hotel.model.ZlCheckoutOrder">
+        select
+        OrderID,
+        OrderSerialNo,
+        UserName,
+        Tel,
+        OrderStatus,
+        CheckOutDate,
+        Remark,
+        CreateDate
+        from zl_checkoutorder
+        where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
+        <if test="userId != null">
+            and UserID = #{userId}
+        </if>
+        <if test="orderstatus != null">
+            and OrderStatus = #{orderstatus}
+        </if>
+        order by CreateDate DESC
+    </select>
 </mapper>

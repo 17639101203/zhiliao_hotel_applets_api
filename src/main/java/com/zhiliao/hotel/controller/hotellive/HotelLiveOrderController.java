@@ -98,16 +98,15 @@ public class HotelLiveOrderController {
 
     @ApiOperation(value = "退房订单详情_姬慧慧")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "退房订单ID"),
-            @ApiImplicitParam(paramType = "path", name = "orderStatus", dataType = "Byte", required = true, value = "订单状态:-1:取消退房;0等待退房;1完成退房")
+            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "退房订单ID")
     })
-    @PostMapping("checkoutOrderDetail/{orderID}/{orderStatus}")
+    @PostMapping("checkoutOrderDetail/{orderID}")
     @UserLoginToken
 //    @PassToken
     @ResponseBody
-    public ReturnString checkoutOrderDetail(@PathVariable("orderID") Long orderID, @PathVariable("orderStatus") Byte orderStatus) {
+    public ReturnString checkoutOrderDetail(@PathVariable("orderID") Long orderID) {
         try {
-            ZlCheckoutOrder checkoutOrder = hotelLiveOrderService.checkoutOrderDetail(orderID, orderStatus);
+            ZlCheckoutOrder checkoutOrder = hotelLiveOrderService.checkoutOrderDetail(orderID);
             return new ReturnString(checkoutOrder);
         } catch (Exception e) {
             e.printStackTrace();
@@ -210,16 +209,15 @@ public class HotelLiveOrderController {
 
     @ApiOperation(value = "续住订单详情_姬慧慧")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "退房订单ID"),
-            @ApiImplicitParam(paramType = "path", name = "orderStatus", dataType = "Byte", required = true, value = "订单状态:-1:已取消;0待处理;1处理完成")
+            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "退房订单ID")
     })
-    @PostMapping("continueLiveOrderDetail/{orderID}/{orderStatus}")
+    @PostMapping("continueLiveOrderDetail/{orderID}")
     @UserLoginToken
     //@PassToken
     @ResponseBody
-    public ReturnString continueLiveOrderDetail(@PathVariable("orderID") Long orderID, @PathVariable("orderStatus") Byte orderStatus) {
+    public ReturnString continueLiveOrderDetail(@PathVariable("orderID") Long orderID) {
         try {
-            ZlContinueLiveOrder continueLiveOrder = hotelLiveOrderService.continueLiveOrderDetail(orderID, orderStatus);
+            ZlContinueLiveOrder continueLiveOrder = hotelLiveOrderService.continueLiveOrderDetail(orderID);
             return new ReturnString(continueLiveOrder);
         } catch (Exception e) {
             e.printStackTrace();

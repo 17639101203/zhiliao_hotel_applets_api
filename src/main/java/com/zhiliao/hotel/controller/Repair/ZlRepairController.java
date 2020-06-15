@@ -40,13 +40,13 @@ public class ZlRepairController {
     @PostMapping(value = "addrepair", consumes = {"multipart/*"}, headers = "content-type=multipart/form-data")
     @UserLoginToken
     public ReturnString addrepair(RepairParam repairParam,
-                                                       @RequestParam("multipartFiles") MultipartFile[] multipartFiles,
-                                                       HttpServletRequest request) {
+                                  @RequestParam("multipartFiles") MultipartFile[] multipartFiles,
+                                  HttpServletRequest request) {
 
         Integer now = DateUtils.javaToPhpNowDateTime();
-        String orderid = OrderIDUtil.createOrderID("");
+        String serialNumber = OrderIDUtil.createOrderID("");
         Map<String, Object> map = new HashMap<>();
-        map.put("serialnumber", orderid);
+        map.put("serialnumber", serialNumber);
         ZlRepairorder zlRepairorder = new ZlRepairorder();
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
         zlRepairorder.setUserid(userid);
@@ -55,7 +55,7 @@ public class ZlRepairController {
         zlRepairorder.setRoomid(repairParam.getRoomid());       // 客房ID
         zlRepairorder.setRoomnumber(repairParam.getRoomnumber());   //客房号
         zlRepairorder.setRemark(repairParam.getRemark());       // 备注信息
-        zlRepairorder.setSerialnumber(orderid);  //订单号
+        zlRepairorder.setSerialnumber(serialNumber);  //订单号
         zlRepairorder.setCreatedate(now);
         zlRepairorder.setUpdatedate(now);
         ReturnString<List<String>> returnString = fileController.uploadFile(multipartFiles);
@@ -66,29 +66,51 @@ public class ZlRepairController {
             log.info("【报修图片地址：】" + Imgurls);
         });
         zlRepairorder.setImgurls(Imgurls.toString());     // 获得图片地址，多个用|隔开
-        service.addRepairMsg(zlRepairorder);
-        return new ReturnString<>(0, "报修已提交", map);
+
+        try {
+            service.addRepairMsg(zlRepairorder);
+            map.put("orderID", zlRepairorder.getOrderid());
+            return new ReturnString<>(0, "报修已提交", map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("添加报修信息失败");
+        }
     }
 
 
     @ApiOperation(value = "查询报修订单详情")
-    @GetMapping("findRepairOrder/{serialnumber}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "报修订单ID")
+    })
+    @GetMapping("findRepairOrder/{orderID}")
     @UserLoginToken
-    public ReturnString<Map<String, Object>> findRepairOrder(HttpServletRequest request, @PathVariable("serialnumber") String serialnumber) {
-        Long userid = TokenUtil.getUserId(request.getHeader("token"));
-        Map<String, Object> map = service.findRepairOrder(userid, serialnumber);
-        return new ReturnString<>(map);
+    public ReturnString<Map<String, Object>> findRepairOrder(@PathVariable("orderID") Long orderID) {
+        try {
+            Map<String, Object> map = service.findRepairOrder(orderID);
+            return new ReturnString(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("查询报修订单详情");
+        }
     }
 
 
     @ApiOperation(value = "取消报修预约")
     @PostMapping("cancelRepairOrder/{serialnumber}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "orderID", dataType = "Long", required = true, value = "报修订单ID")
+    })
     @UserLoginToken
-    public ReturnString cancelRepairOrder(HttpServletRequest request, @PathVariable("serialnumber") String serialnumber) {
+    public ReturnString cancelRepairOrder(@PathVariable("orderID") Long orderID) {
         Integer nowTime = DateUtils.javaToPhpNowDateTime();
-        Long userid = TokenUtil.getUserId(request.getHeader("token"));
-        service.cancelRepairOrder(userid, serialnumber, nowTime);
-        return new ReturnString<>(0, "预约已取消");
+
+        try {
+            service.cancelRepairOrder(orderID, nowTime);
+            return new ReturnString<>(0, "预约已取消");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("预约取消失败");
+        }
     }
 
     @ApiOperation(value = "用户删除报修订单_徐向向")
@@ -99,9 +121,9 @@ public class ZlRepairController {
     @UserLoginToken
 //    @PassToken
     @ResponseBody
-    public ReturnString userDeleteRepairOrder(@PathVariable("serialnumber") String serialnumber) {
+    public ReturnString userDeleteRepairOrder(@PathVariable("orderID") Long orderID) {
         try {
-            service.userDeleteRepairOrder(serialnumber);
+            service.userDeleteRepairOrder(orderID);
             return new ReturnString("用户删除报修成功!");
         } catch (Exception e) {
             e.printStackTrace();

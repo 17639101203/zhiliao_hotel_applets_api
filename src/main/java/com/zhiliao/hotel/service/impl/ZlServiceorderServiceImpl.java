@@ -13,6 +13,7 @@ import com.zhiliao.hotel.utils.TokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -28,15 +29,23 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = Exception.class)
 public class ZlServiceorderServiceImpl implements ZlServiceorderService {
 
+    @Autowired
     private final ZlHotelRoomMapper zlHotelRoomMapper;
 
+    @Autowired
     private final ZlServiceorderMapper zlServiceorderMapper;
 
+    @Autowired
     private final ZlServicegoodsMapper zlServicegoodsMapper;
 
+    @Autowired
     private final ZlServiceorderdetailMapper zlServiceorderdetailMapper;
 
+    @Autowired
     private final ZlWxuserdetailMapper zlWxuserdetailMapper;
+
+    @Autowired
+    private ZlHotelMapper zlHotelMapper;
 
     @Override
     public ServiceorderCommitVo serviceorderSubmit(String token, ServiceorderCommitParams scp) throws RuntimeException {
@@ -91,12 +100,12 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
             if (buyNum.compareTo(0) <= 0) {
                 throw new BizException(String.format("商品%s未选择购买数量，请重新选择！", zlServicegoods.getGoodsname()));
             }
-            if(orderGoodsHasBuyNum.containsKey(zlServicegoods.getGoodsid())){
-                if((buyNum + orderGoodsHasBuyNum.get(zlServicegoods.getGoodsid())) > zlServicegoods.getDaymaxgoodscount()){
+            if (orderGoodsHasBuyNum.containsKey(zlServicegoods.getGoodsid())) {
+                if ((buyNum + orderGoodsHasBuyNum.get(zlServicegoods.getGoodsid())) > zlServicegoods.getDaymaxgoodscount()) {
                     throw new BizException(String.format("商品%s超过每日可购买数量%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getDaymaxgoodscount()));
                 }
-            }else{
-                if(buyNum.compareTo(zlServicegoods.getDaymaxgoodscount()) > 0){
+            } else {
+                if (buyNum.compareTo(zlServicegoods.getDaymaxgoodscount()) > 0) {
                     throw new BizException(String.format("商品%s超过每日可购买数量%s，请重新选择！", zlServicegoods.getGoodsname(), zlServicegoods.getDaymaxgoodscount()));
                 }
             }
@@ -185,14 +194,16 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         serviceorderInfoVo.setOrderGoodsList(orderGoodsList);
         //根据字段复制实体
         BeanUtils.copyProperties(order, serviceorderInfoVo);
-        String createdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getCreatedate()).toString());
-        serviceorderInfoVo.setCreatedate(createdate);
-        if (order.getDeliverydate() == 0) {
-            serviceorderInfoVo.setDeliverydate("0");
-        } else {
-            String bookdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getDeliverydate()).toString());
-            serviceorderInfoVo.setDeliverydate(bookdate);
-        }
+//        String createdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getCreatedate()).toString());
+//        serviceorderInfoVo.setCreatedate(createdate);
+//        if (order.getDeliverydate() == 0) {
+//            serviceorderInfoVo.setDeliverydate("0");
+//        } else {
+//            String bookdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getDeliverydate()).toString());
+//            serviceorderInfoVo.setDeliverydate(bookdate);
+//        }
+        ZlHotel zlHotel = zlHotelMapper.getById(serviceorderInfoVo.getHotelid());
+        serviceorderInfoVo.setHotelname(zlHotel.getHotelName());
         return serviceorderInfoVo;
     }
 

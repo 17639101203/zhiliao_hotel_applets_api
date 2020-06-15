@@ -3,11 +3,13 @@ package com.zhiliao.hotel.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.controller.comment.commentparm.CommentVO;
+import com.zhiliao.hotel.controller.comment.vo.CommentDetailVO;
+import com.zhiliao.hotel.controller.comment.vo.CommentVO;
 import com.zhiliao.hotel.mapper.ZlCommentMapper;
 import com.zhiliao.hotel.mapper.ZlTagMapper;
 import com.zhiliao.hotel.model.ZlComment;
 import com.zhiliao.hotel.service.ZlCommentService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,38 +52,40 @@ public class ZlCommentServiceImpl implements ZlCommentService {
         List<CommentVO> comments = zlCommentMapper.getComments(userid);
         for (CommentVO comment : comments) {
             String[] tagids;
-            if(comment.getTagids().contains("|")){
-                // 拆解标签I
-                tagids = comment.getTagids().split("|");
-            }else{
-                tagids = new String[1];
-                tagids[0] = comment.getTagids();
+            if (StringUtils.isNoneBlank(comment.getTagids())){
+                if (comment.getTagids().contains("|")) {
+                    // 拆解标签I
+                    tagids = comment.getTagids().split("|");
+                } else {
+                    tagids = new String[1];
+                    tagids[0] = comment.getTagids();
+                }
+                // 查询标签名
+                comment.setTagname(zlTagMapper.getTagName(tagids));
             }
-            // 查询标签名
-            comment.setTagname(zlTagMapper.getTagName(tagids));
         }
         PageInfo<CommentVO> pageInfo = new PageInfo<>(comments);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
 
     @Override
-    public Map<String, Object> findComment(Long userid, Integer commentid) {
-        Map<String, Object> comment = zlCommentMapper.getComment(userid, commentid);
+    public CommentDetailVO findComment(Long userid, Integer commentid) {
+        CommentDetailVO commentDetailVO = zlCommentMapper.getComment(userid, commentid);
         String[] tagids;
-        // 获取标签ID
-        String TagIDs = comment.get("TagIDs").toString();
-        if(TagIDs.contains("|")){
-            // 拆解标签I
-            tagids = TagIDs.split("|");
-        }else{
-            tagids = new String[1];
-            tagids[0] = TagIDs;
+        if (StringUtils.isNoneBlank(commentDetailVO.getTagids())){
+            if (commentDetailVO.getTagids().contains("|")) {
+                // 拆解标签I
+                tagids = commentDetailVO.getTagids().split("|");
+            } else {
+                tagids = new String[1];
+                tagids[0] = commentDetailVO.getTagids();
+            }
+            // 查询标签名
+            commentDetailVO.setTagname(zlTagMapper.getTagName(tagids));
         }
-        // 查询标签名
-        comment.put("tagname",zlTagMapper.getTagName(tagids));
         // 修改为已读状态
         zlCommentMapper.changeReplyReadStatus(userid, commentid);
-        return comment;
+        return commentDetailVO;
     }
     
     @Override

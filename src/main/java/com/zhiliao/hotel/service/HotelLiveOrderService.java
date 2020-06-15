@@ -28,7 +28,7 @@ public interface HotelLiveOrderService {
 
     void userDeleteContinueLiveOrder(Long orderID);
 
-    ZlCheckoutOrder checkoutOrderDetail(Long orderID, Byte orderStatus);
+    ZlCheckoutOrder checkoutOrderDetail(Long orderID);
 
-    ZlContinueLiveOrder continueLiveOrderDetail(Long orderID, Byte orderStatus);
+    ZlContinueLiveOrder continueLiveOrderDetail(Long orderID);
 }

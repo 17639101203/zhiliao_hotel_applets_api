@@ -40,4 +40,8 @@ public class GoodsListVo {
 
     @ApiModelProperty(value = "商品详情")
     private String content;
+
+    @ApiModelProperty(value = "是否多规格")
+    private Boolean isManySku;
+
 }

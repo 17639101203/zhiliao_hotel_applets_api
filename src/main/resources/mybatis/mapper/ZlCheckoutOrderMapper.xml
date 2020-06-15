@@ -22,7 +22,7 @@
     </update>
 
     <select id="checkoutOrderDetail" resultType="com.zhiliao.hotel.model.ZlCheckoutOrder">
-        select
+        SELECT
           OrderID,
           OrderSerialNo,
           UserName,
@@ -34,10 +34,11 @@
           Remark,
           CreateDate,
           UpdateDate
-        from
+        FROM
           zl_checkoutorder
-        where
-          OrderID = #{orderID} and OrderStatus = #{orderStatus} and IsUserDelete = 0 and IsDelete = 0
+        WHERE OrderID = #{orderID}
+          AND IsUserDelete = 0
+          AND IsDelete = 0
     </select>
 
 </mapper>

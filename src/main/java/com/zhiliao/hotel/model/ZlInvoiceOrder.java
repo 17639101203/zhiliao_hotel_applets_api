@@ -16,7 +16,7 @@ public class ZlInvoiceOrder implements Serializable {
      * 发票订单ID
      */
     @Id
-    @GeneratedValue(generator="JDBC")
+    @GeneratedValue(generator = "JDBC")
     private Long invoiceorderid;
 
     /**
@@ -118,7 +118,6 @@ public class ZlInvoiceOrder implements Serializable {
      * 修改时间
      */
     private Integer updatedate;
-
 
 
 }

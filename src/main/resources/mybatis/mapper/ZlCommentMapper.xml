@@ -153,9 +153,9 @@
     </insert>
 
     <!--  获取点赞列表-->
-    <select id="getComments" resultType="com.zhiliao.hotel.controller.comment.commentparm.CommentVO">
+    <select id="getComments" resultType="com.zhiliao.hotel.controller.comment.vo.CommentVO">
       select
-          a.CommentID,a.Evaluation,a.TagIDs,a.ImageUrls,a.Content,b.HotelName,a.ReplyReadStatus
+          a.CommentID,a.Evaluation,a.TagIDs,a.ImageUrls,a.Content,b.HotelName,a.ReplyReadStatus,a.CreateDate,a.UpdateDate
       from
           zl_comment a left join zl_hotel b on a.hotelid = b.hotelid
       where
@@ -164,9 +164,9 @@
 
 
     <!-- 点赞详情页 -->
-    <select id="getComment" resultType="java.util.HashMap">
+    <select id="getComment" resultType="com.zhiliao.hotel.controller.comment.vo.CommentDetailVO">
       select
-          a.Evaluation,a.TagIDs,a.ImageUrls,a.Content,a.ReplyContent,a.CreateDate,b.HotelName
+          a.Evaluation,a.TagIDs,a.ImageUrls,a.Content,a.ReplyContent,a.CreateDate,b.HotelName,a.ReplyDate
       from
           zl_comment a left join zl_hotel b on a.hotelid = b.hotelid
       where

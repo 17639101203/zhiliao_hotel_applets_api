@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.mapper;
 
-import com.zhiliao.hotel.controller.comment.commentparm.CommentVO;
+import com.zhiliao.hotel.controller.comment.vo.CommentDetailVO;
+import com.zhiliao.hotel.controller.comment.vo.CommentVO;
 import com.zhiliao.hotel.model.ZlComment;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
@@ -15,7 +16,7 @@ public interface ZlCommentMapper extends Mapper<ZlComment> {
 
     List<CommentVO> getComments(Long userid);
 
-    Map<String,Object> getComment(@Param("userid") Long userid,@Param("commentid") Integer commentid);
+    CommentDetailVO getComment(@Param("userid") Long userid, @Param("commentid") Integer commentid);
 
     void changeReplyReadStatus(@Param("userid") Long userid,@Param("commentid") Integer commentid);
     

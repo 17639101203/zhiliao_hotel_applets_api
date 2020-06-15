@@ -130,8 +130,8 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
      * @return
      */
     @Override
-    public ZlCheckoutOrder checkoutOrderDetail(Long orderID, Byte orderStatus) {
-        return zlCheckoutOrderMapper.checkoutOrderDetail(orderID, orderStatus);
+    public ZlCheckoutOrder checkoutOrderDetail(Long orderID) {
+        return zlCheckoutOrderMapper.checkoutOrderDetail(orderID);
     }
 
     /**
@@ -141,8 +141,8 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
      * @return
      */
     @Override
-    public ZlContinueLiveOrder continueLiveOrderDetail(Long orderID, Byte orderStatus) {
-        return zlContinueLiveOrderMapper.continueLiveOrderDetail(orderID, orderStatus);
+    public ZlContinueLiveOrder continueLiveOrderDetail(Long orderID) {
+        return zlContinueLiveOrderMapper.continueLiveOrderDetail(orderID);
     }
 
 
