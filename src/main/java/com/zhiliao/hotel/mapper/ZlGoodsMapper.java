@@ -36,4 +36,6 @@ public interface ZlGoodsMapper extends Mapper<ZlHotelgoodssku> {
     Integer getStockCount(@Param("hotelID") Integer hotelID, @Param("hotelGoodsSkuID") Integer hotelGoodsSkuID);
 
     Integer findSkuCount(@Param("goodsId") Integer goodsId);
+
+    Integer getByHotelIDAndGoodsID(@Param("hotelid")Integer hotelid, @Param("goodsid")Integer goodsid);
 }

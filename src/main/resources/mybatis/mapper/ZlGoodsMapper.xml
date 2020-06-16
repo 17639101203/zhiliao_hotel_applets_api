@@ -39,7 +39,8 @@
         zhgs.SoldCount,
         zhgs.VirtualSoldCount,
         zgc.BelongModule,
-        zhgs.StockCount
+        zhgs.StockCount,
+        zhgs.HotelID
         from zl_hotelgoodssku zhgs
         left join zl_goods zg on zhgs.GoodsID=zg.GoodsID
         left join zl_goodscategory zgc on zg.GoodsCategoryID=zgc.GoodsCategoryID
@@ -173,6 +174,16 @@
         FROM
           zl_hotelgoodssku
         WHERE GoodsID = #{goodsId}
+    </select>
+
+    <select id="getByHotelIDAndGoodsID" resultType="int">
+        SELECT
+          SUM(SoldCount)
+        FROM
+          zl_hotelgoodssku
+        WHERE GoodsID = #{goodsid}
+          AND HotelID = #{hotelid}
+        LIMIT 1
     </select>
 
 </mapper>

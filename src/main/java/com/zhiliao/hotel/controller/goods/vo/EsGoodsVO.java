@@ -47,4 +47,9 @@ public class EsGoodsVO {
      * 是否多规格
      */
     private Boolean isManySku;
+
+    /**
+     * 库存
+     */
+    private Integer soldcount;
 }

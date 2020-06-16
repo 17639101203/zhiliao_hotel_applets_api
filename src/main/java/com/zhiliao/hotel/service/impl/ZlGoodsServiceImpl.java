@@ -78,6 +78,8 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
             } else {
                 goodsListVo.setIsManySku(false);
             }
+            Integer stockCount = zlGoodsMapper.getByHotelIDAndGoodsID(goodsListVo.getHotelId(), goodsListVo.getGoodsId());
+            goodsListVo.setStockCount(stockCount);
         }
 
         PageInfo<GoodsListVo> pageInfo = new PageInfo<>(dataList);
@@ -178,6 +180,8 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
             } else {
                 esGoodsVO.setIsManySku(false);
             }
+            Integer stockCount = zlGoodsMapper.getByHotelIDAndGoodsID(esGoodsVO.getHotelid(), esGoodsVO.getGoodsid());
+            esGoodsVO.setSoldcount(stockCount);
             esGoodsVOList.add(esGoodsVO);
         }
 

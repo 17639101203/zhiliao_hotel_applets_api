@@ -50,4 +50,7 @@ public class GoodsListVo {
     @ApiModelProperty(value = "库存")
     private Integer stockCount;
 
+    @ApiModelProperty(value = "酒店id")
+    private Integer hotelId;
+
 }
