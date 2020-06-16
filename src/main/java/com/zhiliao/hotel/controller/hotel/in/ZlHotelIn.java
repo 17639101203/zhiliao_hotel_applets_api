@@ -1,7 +1,10 @@
 package com.zhiliao.hotel.controller.hotel.in;
 
+import com.zhiliao.hotel.controller.hotel.vo.ZlXcxmenuVO;
 import com.zhiliao.hotel.model.*;
+import lombok.Data;
 import org.springframework.beans.BeanUtils;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -10,33 +13,20 @@ import java.util.List;
  * @chenrong
  * @created 2020/4/17
  */
-
+@Data
 public class ZlHotelIn implements Serializable {
 
     private String receptionTel;
 
-    public String getReceptionTel() {
-        return receptionTel;
-    }
+    private List<ZlXcxmenuVO> zlXcxmenuVOList;
 
-    public void setReceptionTel(String receptionTel) {
-        this.receptionTel = receptionTel;
-    }
 
-    public ZlHotelIn(){
+    public ZlHotelIn() {
         super();
     }
 
-    public ZlHotelIn(ZlHotel zlHotel){
-        BeanUtils.copyProperties(zlHotel,this);
-    }
-
-    public Integer getHotelID() {
-        return hotelID;
-    }
-
-    public void setHotelID(Integer hotelID) {
-        this.hotelID = hotelID;
+    public ZlHotelIn(ZlHotel zlHotel) {
+        BeanUtils.copyProperties(zlHotel, this);
     }
 
     private Integer hotelID;
@@ -144,197 +134,12 @@ public class ZlHotelIn implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    private List<ZlBanner>zlBannerList;
-
-    public List<ZlBanner> getZlBannerList() {
-        return zlBannerList;
-    }
-
-    public void setZlBannerList(List<ZlBanner> zlBannerList) {
-        this.zlBannerList = zlBannerList;
-    }
-
-    public List<ZlXcxmenu> getZlXcxMenus() {
-        return zlXcxMenus;
-    }
-
-    public void setZlXcxMenus(List<ZlXcxmenu> zlXcxMenus) {
-        this.zlXcxMenus = zlXcxMenus;
-    }
-
-    public ZlHotelroom getHotelRoom() {
-        return hotelRoom;
-    }
-
-    public void setHotelRoom(ZlHotelroom hotelRoom) {
-        this.hotelRoom = hotelRoom;
-    }
-
-    private List<ZlXcxmenu>zlXcxMenus;
-
-    private ZlHotelroom  hotelRoom;
+    private List<ZlBanner> zlBannerList;
 
 
+    private List<ZlXcxmenu> zlXcxMenus;
 
-    public String getHotelName() {
-        return hotelName;
-    }
-
-    public void setHotelName(String hotelName) {
-        this.hotelName = hotelName;
-    }
-
-    public String getCoverUrl() {
-        return coverUrl;
-    }
-
-    public void setCoverUrl(String coverUrl) {
-        this.coverUrl = coverUrl;
-    }
-
-    public String getTel() {
-        return tel;
-    }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
-    public Short getProvinceCode() {
-        return provinceCode;
-    }
-
-    public void setProvinceCode(Short provinceCode) {
-        this.provinceCode = provinceCode;
-    }
-
-    public Short getCityCode() {
-        return cityCode;
-    }
-
-    public void setCityCode(Short cityCode) {
-        this.cityCode = cityCode;
-    }
-
-    public Short getDistrictCode() {
-        return districtCode;
-    }
-
-    public void setDistrictCode(Short districtCode) {
-        this.districtCode = districtCode;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public BigDecimal getMaxCreditCash() {
-        return maxCreditCash;
-    }
-
-    public void setMaxCreditCash(BigDecimal maxCreditCash) {
-        this.maxCreditCash = maxCreditCash;
-    }
-
-    public Byte getHotelType() {
-        return hotelType;
-    }
-
-    public void setHotelType(Byte hotelType) {
-        this.hotelType = hotelType;
-    }
-
-    public Boolean getHotelStatus() {
-        return hotelStatus;
-    }
-
-    public void setHotelStatus(Boolean hotelStatus) {
-        this.hotelStatus = hotelStatus;
-    }
-
-    public BigDecimal getTodayMoney() {
-        return todayMoney;
-    }
-
-    public void setTodayMoney(BigDecimal todayMoney) {
-        this.todayMoney = todayMoney;
-    }
-
-    public BigDecimal getAllMoney() {
-        return allMoney;
-    }
-
-    public void setAllMoney(BigDecimal allMoney) {
-        this.allMoney = allMoney;
-    }
-
-    public BigDecimal getWithdrewMoney() {
-        return withdrewMoney;
-    }
-
-    public void setWithdrewMoney(BigDecimal withdrewMoney) {
-        this.withdrewMoney = withdrewMoney;
-    }
-
-    public BigDecimal getWithdrawingMoney() {
-        return withdrawingMoney;
-    }
-
-    public void setWithdrawingMoney(BigDecimal withdrawingMoney) {
-        this.withdrawingMoney = withdrawingMoney;
-    }
-
-    public Integer getJoinType() {
-        return joinType;
-    }
-
-    public void setJoinType(Integer joinType) {
-        this.joinType = joinType;
-    }
-
-    public Integer getJoinStatus() {
-        return joinStatus;
-    }
-
-    public void setJoinStatus(Integer joinStatus) {
-        this.joinStatus = joinStatus;
-    }
-
-    public Boolean getDelete() {
-        return isDelete;
-    }
-
-    public void setDelete(Boolean delete) {
-        isDelete = delete;
-    }
-
-    public Integer getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Integer updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public Integer getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Integer createDate) {
-        this.createDate = createDate;
-    }
-
-    public List<ZlNews> getZlNews() {
-        return zlNews;
-    }
-
-    public void setZlNews(List<ZlNews> zlNews) {
-        this.zlNews = zlNews;
-    }
+    private ZlHotelroom hotelRoom;
 
     /**
      * 酒店公告信息

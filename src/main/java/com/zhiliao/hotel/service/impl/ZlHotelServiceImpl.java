@@ -5,7 +5,9 @@ import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
+import com.zhiliao.hotel.controller.goods.vo.BusinessHoursVO;
 import com.zhiliao.hotel.controller.hotel.in.ZlHotelIn;
+import com.zhiliao.hotel.controller.hotel.vo.ZlXcxmenuVO;
 import com.zhiliao.hotel.mapper.ZlHotelMapper;
 import com.zhiliao.hotel.mapper.ZlHotelRoomMapper;
 import com.zhiliao.hotel.mapper.ZlHotelUserHistoryMapper;
@@ -15,6 +17,8 @@ import com.zhiliao.hotel.service.*;
 import com.zhiliao.hotel.utils.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,25 +37,38 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ZlHotelServiceImpl implements ZlHotelService {
 
+    @Autowired
     private final ZlHotelMapper zlHotelMapper;
 
+    @Autowired
     private final ZlHotelRoomMapper zlHotelRoomMapper;
 
+    @Autowired
     private final ZlXcxMenuService zlXcxMenuService;
 
+    @Autowired
     private final ZlUserloginlogService zlUserloginlogService;
 
+    @Autowired
     private final HttpServletRequest request;
 
+    @Autowired
     private final ZlWxuserService zlWxuserService;
 
+    @Autowired
     private final ZlNewsMapper zlNewsMapper;
 
+    @Autowired
     private final ZlBannerService zlBannerService;
 
+    @Autowired
     private final RedisCommonUtil redisCommonUtil;
 
+    @Autowired
     private final ZlHotelUserHistoryMapper zlHotelUserHistoryMapper;
+
+    @Autowired
+    private ZlGoodsService zlGoodsService;
 
     @Override
     public ReturnString getById(Integer hotelId, String roomId, String token) {
@@ -96,9 +113,25 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
                 //根据酒店ID获取菜单
                 List<ZlXcxmenu> zlXcxMenuList = zlXcxMenuService.getMenuList(String.valueOf(zlHotel.getHotelID()));
-
-                //设值menus
+                for (ZlXcxmenu zlXcxmenu : zlXcxMenuList) {
+                    Integer menuid = zlXcxmenu.getMenuid();
+                    BusinessHoursVO businessHoursVO = zlGoodsService.getBusinessHours(menuid);
+                    zlXcxmenu.setBusinessHoursVO(businessHoursVO);
+                }
                 zlHotel.setZlXcxMenus(zlXcxMenuList);
+
+//                List<ZlXcxmenuVO> zlXcxMenuVOList = new LinkedList<>();
+//                for (ZlXcxmenu zlXcxmenu : zlXcxMenuList) {
+//                    ZlXcxmenuVO zlXcxmenuVO = new ZlXcxmenuVO();
+//                    BeanUtils.copyProperties(zlXcxmenu, zlXcxmenuVO);
+//                    Integer menuid = zlXcxmenu.getMenuid();
+//                    BusinessHoursVO businessHoursVO = zlGoodsService.getBusinessHours(menuid);
+//                    zlXcxmenuVO.setBusinessHoursVO(businessHoursVO);
+//                    zlXcxMenuVOList.add(zlXcxmenuVO);
+//                }
+//
+//                //设值menus
+//                zlHotel.setZlXcxmenuVOList(zlXcxMenuVOList);
 
                 //根据酒店Id获取公告
                 List<ZlNews> zlNews = zlNewsMapper.getNewsByHotel(String.valueOf(zlHotel.getHotelID()));

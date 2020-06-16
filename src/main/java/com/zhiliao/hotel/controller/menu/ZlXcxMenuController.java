@@ -26,7 +26,7 @@ public class ZlXcxMenuController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
     })
-    public ReturnString getMenuList(String hotelId){
+    public ReturnString getMenuList(String hotelId) {
         return new ReturnString(zlXcxMenuService.getMenuList(hotelId));
     }
 }

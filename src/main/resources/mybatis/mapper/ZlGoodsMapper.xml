@@ -39,7 +39,7 @@
         zhgs.SoldCount,
         zhgs.VirtualSoldCount,
         zgc.BelongModule,
-        zgc.StockCount
+        zhgs.StockCount
         from zl_hotelgoodssku zhgs
         left join zl_goods zg on zhgs.GoodsID=zg.GoodsID
         left join zl_goodscategory zgc on zg.GoodsCategoryID=zgc.GoodsCategoryID

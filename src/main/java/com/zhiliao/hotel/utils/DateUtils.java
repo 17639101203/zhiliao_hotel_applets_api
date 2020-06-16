@@ -365,9 +365,21 @@ public class DateUtils {
     }
 
     /**
+     * 将时间转换为时间戳
+     */
+    public static String dateToStamp2(String s) throws ParseException {
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date = simpleDateFormat.parse(s);
+        long ts = date.getTime();
+        res = String.valueOf(ts);
+        return res;
+    }
+
+    /**
      * 获取当日0时0分0秒的时间戳（php）
      */
-    public static Integer todayFirstDate(){
+    public static Integer todayFirstDate() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -379,7 +391,7 @@ public class DateUtils {
     /**
      * 获取当日23时59分59秒的时间戳（php）
      */
-    public static Integer todayLastDate(){
+    public static Integer todayLastDate() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);

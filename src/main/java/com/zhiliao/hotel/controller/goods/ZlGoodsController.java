@@ -5,10 +5,7 @@ import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
-import com.zhiliao.hotel.controller.goods.vo.EsGoods;
-import com.zhiliao.hotel.controller.goods.vo.EsGoodsVO;
-import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
-import com.zhiliao.hotel.controller.goods.vo.GoodsSkuListVo;
+import com.zhiliao.hotel.controller.goods.vo.*;
 import com.zhiliao.hotel.service.ZlGoodsService;
 import com.zhiliao.hotel.utils.RedisCommonUtil;
 import io.swagger.annotations.Api;
@@ -170,14 +167,14 @@ public class ZlGoodsController {
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "String", required = true, value = "页码"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "String", required = true, value = "每页大小")
     })
-//    @UserLoginToken
-    @PassToken
+    @UserLoginToken
+//    @PassToken
     @GetMapping("searchGoods/{hotelId}/{selectParam}/{belongModule}/{pageNo}/{pageSize}")
     public ReturnString searchGoods(@PathVariable Integer hotelId,
-                                                   @PathVariable String selectParam,
-                                                   @PathVariable Integer belongModule,
-                                                   @PathVariable Integer pageNo,
-                                                   @PathVariable Integer pageSize) {
+                                    @PathVariable String selectParam,
+                                    @PathVariable Integer belongModule,
+                                    @PathVariable Integer pageNo,
+                                    @PathVariable Integer pageSize) {
         try {
             List<EsGoodsVO> esGoodsVOList = zlGoodsService.searchGoods(hotelId, selectParam, belongModule, pageNo, pageSize);
             return new ReturnString<>(esGoodsVOList);
@@ -186,4 +183,22 @@ public class ZlGoodsController {
             return new ReturnString<>("获取出错");
         }
     }
+
+    @ApiOperation(value = "酒店超市_营业时间_姬慧慧")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "menuId", dataType = "int", required = true, value = "菜单id"),
+    })
+    @UserLoginToken
+//    @PassToken
+    @GetMapping("getBusinessHours/{menuId}")
+    public ReturnString getBusinessHours(@PathVariable("menuId") Integer menuId) {
+        try {
+            BusinessHoursVO businessHoursVO = zlGoodsService.getBusinessHours(menuId);
+            return new ReturnString<>(businessHoursVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString<>("获取酒店营业时间出错!");
+        }
+    }
+
 }

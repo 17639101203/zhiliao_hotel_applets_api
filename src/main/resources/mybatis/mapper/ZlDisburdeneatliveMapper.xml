@@ -8,6 +8,9 @@
         FROM
           zl_disburdeneatlive
         WHERE HotelID = #{hotelID}
+          AND EatLiveStatus = 1
+          AND CheckStatus = 2
+          AND IsDelete = 0
         ORDER BY CreateDate DESC
         LIMIT 1
 	</select>

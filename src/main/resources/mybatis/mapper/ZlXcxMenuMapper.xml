@@ -19,4 +19,16 @@
 
     </select>
 
+    <select id="getBusinessHours" resultType="com.zhiliao.hotel.model.ZlXcxmenu">
+        SELECT
+        <include refid="selectColumn"/>
+        FROM
+        zl_xcxmenu
+        WHERE MenuID = #{menuId}
+        AND IsFrontendShow = 1
+        AND IsDelete = 0
+        AND ComeFromID = 1
+        AND MenuStatus = 1
+    </select>
+
 </mapper>

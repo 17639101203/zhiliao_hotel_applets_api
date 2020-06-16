@@ -1,5 +1,8 @@
 package com.zhiliao.hotel.model;
 
+import com.zhiliao.hotel.controller.goods.vo.BusinessHoursVO;
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
@@ -8,9 +11,15 @@ import java.io.Serializable;
  * @author denghanchen
  * @date 2020-04-14
  */
+@Data
 public class ZlXcxmenu implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 营业时间
+     */
+    private BusinessHoursVO businessHoursVO;
 
     /**
      * 菜单栏ID

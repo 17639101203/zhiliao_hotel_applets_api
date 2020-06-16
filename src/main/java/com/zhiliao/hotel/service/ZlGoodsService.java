@@ -1,10 +1,7 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.controller.goods.vo.EsGoods;
-import com.zhiliao.hotel.controller.goods.vo.EsGoodsVO;
-import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
-import com.zhiliao.hotel.controller.goods.vo.GoodsSkuListVo;
+import com.zhiliao.hotel.controller.goods.vo.*;
 
 import java.util.List;
 import java.util.Map;
@@ -28,4 +25,6 @@ public interface ZlGoodsService {
     void updateGoodsCount(String out_trade_no);
 
     List<EsGoodsVO> searchGoods(Integer hotelId, String selectParam, Integer belongModule, Integer pageNo, Integer pageSize);
+
+    BusinessHoursVO getBusinessHours(Integer menuId);
 }

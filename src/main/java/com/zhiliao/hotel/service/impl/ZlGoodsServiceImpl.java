@@ -4,17 +4,17 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
-import com.zhiliao.hotel.controller.goods.vo.EsGoods;
-import com.zhiliao.hotel.controller.goods.vo.EsGoodsVO;
-import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
-import com.zhiliao.hotel.controller.goods.vo.GoodsSkuListVo;
+import com.zhiliao.hotel.controller.goods.vo.*;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsCouponInfoVO;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsShortInfoVO;
 import com.zhiliao.hotel.mapper.*;
+import com.zhiliao.hotel.model.ZlXcxmenu;
 import com.zhiliao.hotel.service.ZlGoodsService;
+import com.zhiliao.hotel.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
@@ -23,6 +23,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,17 +38,26 @@ import java.util.Map;
 @Service
 public class ZlGoodsServiceImpl implements ZlGoodsService {
 
+    @Autowired
     private final ZlGoodsMapper zlGoodsMapper;
 
+    @Autowired
     private final ElasticsearchTemplate elasticsearchTemplate;
 
+    @Autowired
     private final RedisTemplate redisTemplate;
 
+    @Autowired
     private final ZlCouponMapper zlCouponMapper;
 
+    @Autowired
     private final ZlCouponUserMapper zlCouponUserMapper;
 
+    @Autowired
     private final ZlOrderMapper zlOrderMapper;
+
+    @Autowired
+    private ZlXcxMenuMapper zlXcxMenuMapper;
 
     @Override
     public List<Map<String, String>> findGoodsCategory(Integer hotelId, Integer belongModule) {
@@ -172,5 +182,33 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
         }
 
         return esGoodsVOList;
+    }
+
+    @Override
+    public BusinessHoursVO getBusinessHours(Integer menuId) {
+        BusinessHoursVO businessHoursVO = new BusinessHoursVO();
+        ZlXcxmenu zlXcxmenu = zlXcxMenuMapper.getBusinessHours(menuId);
+        String serviceopentime = zlXcxmenu.getServiceopentime();
+        String[] split = serviceopentime.split("-");
+        String dateByString = DateUtils.getDateByString();
+        //拼接营业时间字符串
+        String startBusinessHoursStr = dateByString + " " + split[0];
+        String endBusinessHoursStr = dateByString + " " + split[1];
+        //转化成时间戳
+        Long startBusinessHours;
+        Long endBusinessHours;
+        try {
+            startBusinessHours = Long.valueOf(DateUtils.dateToStamp2(startBusinessHoursStr));
+            businessHoursVO.setStartBusinessHours(startBusinessHours);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            endBusinessHours = Long.valueOf(DateUtils.dateToStamp2(endBusinessHoursStr));
+            businessHoursVO.setEndBusinessHours(endBusinessHours);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return businessHoursVO;
     }
 }
