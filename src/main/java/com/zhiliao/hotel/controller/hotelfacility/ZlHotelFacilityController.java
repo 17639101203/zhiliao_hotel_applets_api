@@ -12,6 +12,7 @@ import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import com.zhiliao.hotel.model.ZlHotelroom;
 import com.zhiliao.hotel.service.ZlHotelFacilityOrderService;
 import com.zhiliao.hotel.service.ZlHotelFacilityService;
+import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -83,6 +84,8 @@ public class ZlHotelFacilityController {
 
         String token = request.getHeader("token");
         Long userId = TokenUtil.getUserId(token);
+//        System.out.println(orderParam.getUsebegindate());
+//        System.out.println(orderParam.getUseenddate());
         //long userId = System.currentTimeMillis();
         ZlHotelFacilityOrder facilityOrder = new ZlHotelFacilityOrder();
         facilityOrder.setUserid(userId);
@@ -94,8 +97,8 @@ public class ZlHotelFacilityController {
         facilityOrder.setRoomnumber(orderParam.getRoomnumber());
         facilityOrder.setFacilityname(orderParam.getFacilityName());
         facilityOrder.setCoverurl(orderParam.getCoverUrl());
-        ;
         facilityOrder.setActuallypay(orderParam.getActuallyPay());
+        facilityOrder.setRemark(orderParam.getRemark());
         facilityOrder.setUsebegindate((int) (orderParam.getUsebegindate() / 1000));
         facilityOrder.setUseenddate((int) (orderParam.getUseenddate() / 1000));
 
@@ -132,10 +135,10 @@ public class ZlHotelFacilityController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", dataType = "long", name = "orderid", value = "订单ID", required = true)
     })
-    @GetMapping("cancelRentCarOrder/{orderid}")
+    @GetMapping("cancelFacilityOrder/{orderid}")
     @UserLoginToken
     //@PassToken
-    public ReturnString cancelRentCarOrder(@PathVariable Long orderid) {
+    public ReturnString cancelFacilityOrder(@PathVariable Long orderid) {
 
         try {
             hotelFacilityOrderService.cancelFacilityOrder(orderid);

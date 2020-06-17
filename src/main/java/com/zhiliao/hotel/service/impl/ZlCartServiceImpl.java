@@ -35,6 +35,14 @@ public class ZlCartServiceImpl implements ZlCartService {
 
     @Override
     public void addUserCartBatch(Integer hotelId, Long userId, List<AddCartParam> addCartParams, Integer date) {
+        List<UserCartVo> userCartVoList = zlCartMapper.findUserCart(hotelId, userId);
+        for (AddCartParam addCartParam : addCartParams) {
+            for (UserCartVo userCartVo : userCartVoList) {
+                if (userCartVo.getHotelGoodsSkuId().equals(addCartParam.getHotelGoodsSkuId())) {
+                    addCartParam.setGoodsCount(userCartVo.getGoodsCount() + addCartParam.getGoodsCount());
+                }
+            }
+        }
         // 先删除用户之前购物车数据
         zlCartMapper.emptyUserCart(hotelId, userId, 0);
         // 添加新的购物车数据

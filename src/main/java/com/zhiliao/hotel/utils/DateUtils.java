@@ -400,4 +400,21 @@ public class DateUtils {
         return Math.toIntExact(calendar.getTimeInMillis() / 1000);
     }
 
+    /**
+     * 时间戳转换成日期格式字符串
+     * @param date 精确到秒的字符串
+     * @param format
+     * @return
+     */
+    public static String timeStamp2Date(String date,String format) {
+        if(date == null || date.isEmpty() || date.equals("null")){
+            return "";
+        }
+        if(format == null || format.isEmpty()){
+            format = "yyyy-MM-dd HH:mm:ss";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(new Date(Long.valueOf(date)));
+    }
+
 }

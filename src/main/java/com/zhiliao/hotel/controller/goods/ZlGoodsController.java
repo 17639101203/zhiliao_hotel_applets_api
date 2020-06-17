@@ -57,6 +57,7 @@ public class ZlGoodsController {
             List<Map<String, String>> goodsCategoryDataList = zlGoodsService.findGoodsCategory(hotelId, belongModule);
             String str = "推荐";
             List<String> goodsCategoryList = new ArrayList<>();
+            goodsCategoryList.add("全部");
             for (Map<String, String> goodsCategoryMap : goodsCategoryDataList) {
                 // 判断是否有推荐
                 if (goodsCategoryMap.get("IsRecommand").equals(str)) {
@@ -67,7 +68,7 @@ public class ZlGoodsController {
             if (goodsCategoryList.size() != 0 && goodsCategoryList.contains(str)) {
                 // 把推荐移到第一位
                 int now = goodsCategoryList.indexOf(str);
-                Collections.swap(goodsCategoryList, now, 0);
+                Collections.swap(goodsCategoryList, now, 1);
             }
             // 有序去重
             Set<String> goodsCategorySet = new LinkedHashSet<>(goodsCategoryList);
@@ -84,7 +85,7 @@ public class ZlGoodsController {
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块: 1便利店;2餐饮服务;3情趣用品;4土特产"),
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "String", required = true, value = "页码"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "String", required = true, value = "每页大小"),
-            @ApiImplicitParam(paramType = "query", name = "categoryName", dataType = "String", required = true, value = "分类名称（all代表全部）")
+            @ApiImplicitParam(paramType = "query", name = "categoryName", dataType = "String", required = true, value = "分类名称")
     })
     @UserLoginToken
     @GetMapping("findGoodsList/{hotelId}/{belongModule}/{pageNo}/{pageSize}")

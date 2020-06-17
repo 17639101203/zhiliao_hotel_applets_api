@@ -7,6 +7,7 @@ import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.goods.vo.BusinessHoursVO;
 import com.zhiliao.hotel.controller.hotel.in.ZlHotelIn;
+import com.zhiliao.hotel.controller.hotel.vo.HotelMoneyVO;
 import com.zhiliao.hotel.controller.hotel.vo.ZlXcxmenuVO;
 import com.zhiliao.hotel.mapper.ZlHotelMapper;
 import com.zhiliao.hotel.mapper.ZlHotelRoomMapper;
@@ -159,6 +160,9 @@ public class ZlHotelServiceImpl implements ZlHotelService {
             if (zlHotelById != null && StringUtils.isNoneBlank(zlHotelById.getReceptionTel())) {
                 hotelData.setReceptionTel(zlHotelMapper.getById(hotelId).getReceptionTel());
             }
+
+            HotelMoneyVO hotelMoneyVO = zlHotelMapper.getHotelMoney(hotelId);
+            hotelData.setHotelMoneyVO(hotelMoneyVO);
 
             return new ReturnString(hotelData);
         }

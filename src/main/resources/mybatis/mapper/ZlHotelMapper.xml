@@ -22,4 +22,13 @@
         where HotelID=#{hotelId} and HotelStatus=1 and IsDelete=0
     </select>
 
+    <select id="getHotelMoney" resultType="com.zhiliao.hotel.controller.hotel.vo.HotelMoneyVO">
+        SELECT
+          MinSendCash,
+          SendCash
+        FROM
+          zl_hoteldetail
+        WHERE HotelID = #{hotelId}
+    </select>
+
 </mapper>

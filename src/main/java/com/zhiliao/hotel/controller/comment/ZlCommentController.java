@@ -80,6 +80,7 @@ public class ZlCommentController {
             @ApiImplicitParam(paramType = "path", name = "hotelid", dataType = "int", required = true, value = "酒店id")
     })
     @PassToken
+    @UserLoginToken
     public ReturnString findTags(@PathVariable Integer hotelid) {
         List<Map<String, Object>> zlTagList = zlCommentService.findTags(hotelid);
         return new ReturnString<>(zlTagList);

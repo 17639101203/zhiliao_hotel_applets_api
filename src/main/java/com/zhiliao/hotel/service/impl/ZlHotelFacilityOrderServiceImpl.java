@@ -80,7 +80,7 @@ public class ZlHotelFacilityOrderServiceImpl implements ZlHotelFacilityOrderServ
         Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
 
         if (facilityOrder != null) {
-            if (facilityOrder.getUsebegindate() - date > oneHour) {
+            if (date - facilityOrder.getCreatedate() > oneHour) {
                 throw new RuntimeException("很抱歉，可取消订单时间已过，现在已不能取消！");
             }
             hotelFacilityOrderMapper.updateById(orderID, updateDate);

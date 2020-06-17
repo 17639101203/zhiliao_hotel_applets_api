@@ -46,7 +46,7 @@
         left join zl_goodscategory zgc on zg.GoodsCategoryID=zgc.GoodsCategoryID
         where zhgs.IsDelete=0 and zhgs.IsDefault=1 and zg.GoodsStatus!='-1' and zgc.IsDelete=0 and zgc.CategoryStatus=1
         and zhgs.HotelID=#{hotelId} and zgc.BelongModule=#{belongModule}
-        <if test='categoryName!="all"'>
+        <if test='categoryName!="全部"'>
             <choose>
                 <when test='categoryName=="推荐"'>
                     and zg.IsRecommand=1
@@ -67,7 +67,9 @@
           zgs.OriginalPrice,
           zgs.CurrentPrice,
           zhgs.StockCount,
-          zgc.BelongModule
+          zgc.BelongModule,
+          zg.CoverImgUrl,
+          zg.GoodsName
         FROM
           zl_hotelgoodssku zhgs
           LEFT JOIN zl_goodssku zgs
@@ -76,6 +78,8 @@
             ON zgs.PropertyID = zgp.PropertyID
           LEFT JOIN zl_goodscategory zgc
             ON zgp.CategoryID = zgc.GoodsCategoryID
+          LEFT JOIN zl_goods zg
+            ON zg.GoodsID = zhgs.GoodsID
         WHERE zhgs.IsDelete = 0
           AND zgs.IsDelete = 0
           AND zgp.IsDelete = 0

@@ -8,12 +8,14 @@ import com.zhiliao.hotel.model.ZlHotel;
 import com.zhiliao.hotel.model.ZlHotelFacility;
 import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import com.zhiliao.hotel.service.ZlHotelFacilityService;
+import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -71,18 +73,40 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         }
 
         //开始时间
-        Integer beginusedate = zlHotelFacilityOrder.getUsebegindate();
+        Long beginusedate = Long.valueOf(zlHotelFacilityOrder.getUsebegindate());
         //结束时间
-        Integer endusedate = zlHotelFacilityOrder.getUseenddate();
+        Long endusedate = Long.valueOf(zlHotelFacilityOrder.getUseenddate());
         //付费项目
-        if (hotelFacilityDetail.getPrice().compareTo(new BigDecimal(0)) == 1) {
+        if (hotelFacilityDetail.getPrice().compareTo(new BigDecimal(0)) >= 0) {
             //判断酒店设施数量是否充足
             if (hotelFacilityDetail.getFacilitycount() <= 0) {
                 throw new RuntimeException("酒店设施数量不足!");
             }
+//            System.out.println(beginusedate * 1000);
+//            System.out.println(endusedate * 1000);
+//            System.out.println(DateUtils.timeStamp2Date(String.valueOf(zlHotelFacilityOrder.getUsebegindate() * 1000), null));
+//            System.out.println(DateUtils.timeStamp2Date(String.valueOf(zlHotelFacilityOrder.getUseenddate() * 1000), null));
+            Long servicebegindate = Long.valueOf(hotelFacilityDetail.getServicebegindate());
+            Long serviceenddate = Long.valueOf(hotelFacilityDetail.getServiceenddate());
             //判断该时间段是否在营业时间
-            if (hotelFacilityDetail.getServicebegindate() > beginusedate && hotelFacilityDetail.getServiceenddate() < endusedate) {
-                throw new RuntimeException("该时间段不在此设施的服务时间,请重新选择!");
+            String beginusedateStr = DateUtils.timeStamp2Date(String.valueOf(beginusedate * 1000), null);
+            String endusedateStr = DateUtils.timeStamp2Date(String.valueOf(endusedate * 1000), null);
+            String servicebegindateStr = DateUtils.timeStamp2Date(String.valueOf(servicebegindate * 1000), null);
+            String serviceenddateStr = DateUtils.timeStamp2Date(String.valueOf(serviceenddate * 1000), null);
+            String[] beginusedateStrArr = beginusedateStr.split(" ");
+            String[] endusedateStrArr = endusedateStr.split(" ");
+            String[] servicebegindateStrArr = servicebegindateStr.split(" ");
+            String[] serviceenddateStrArr = serviceenddateStr.split(" ");
+            String serviceBeginDate = beginusedateStrArr[0] + " " + servicebegindateStrArr[1];
+            String serviceEndDate = endusedateStrArr[0] + " " + serviceenddateStrArr[1];
+            try {
+                Long serviceBeginDateNum = Long.valueOf(DateUtils.dateToStamp(serviceBeginDate));
+                Long serviceEndDateNum = Long.valueOf(DateUtils.dateToStamp(serviceEndDate));
+                if (serviceBeginDateNum > (beginusedate * 1000) || serviceEndDateNum < (endusedate * 1000)) {
+                    throw new RuntimeException("该时间段不在此设施的服务时间,请重新选择!");
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         }
         //生成订单编号
@@ -96,15 +120,16 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         zlHotelFacilityOrder.setOrderstatus((byte) 0);
         zlHotelFacilityOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
-        int insert = facilityOrderMapper.insertSelective(zlHotelFacilityOrder);
+        facilityOrderMapper.insertSelective(zlHotelFacilityOrder);
+//        int insert = facilityOrderMapper.insertSelective(zlHotelFacilityOrder);
         //是否下单成功
-        if (hotelFacilityDetail.getPrice().compareTo(new BigDecimal(0)) == 1) {
-            if (insert > 0) {
-                hotelFacilityMapper.updateCount(facilityID, Math.toIntExact(System.currentTimeMillis() / 1000));
-            } else {
-                throw new RuntimeException("提交失败");
-            }
-        }
+//        if (hotelFacilityDetail.getPrice().compareTo(new BigDecimal(0)) == 1) {
+//            if (insert > 0) {
+//                hotelFacilityMapper.updateCount(facilityID, Math.toIntExact(System.currentTimeMillis() / 1000));
+//            } else {
+//                throw new RuntimeException("提交失败");
+//            }
+//        }
         map.put("orderId", zlHotelFacilityOrder.getOrderid());
         return map;
     }
