@@ -75,6 +75,7 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
             Integer skuCount = zlGoodsMapper.findSkuCount(goodsListVo.getGoodsId());
             if (skuCount > 1) {
                 goodsListVo.setIsManySku(true);
+                goodsListVo.setHotelGoodsSkuId(-1);
             } else {
                 goodsListVo.setIsManySku(false);
             }
@@ -95,7 +96,19 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
     public GoodsListVo findGoodsDetail(Integer goodsId) {
         GoodsListVo goodsListVo = zlGoodsMapper.findGoodsDetail(goodsId);
         if (goodsListVo != null) {
+            //修改该商品的访问量
             zlGoodsMapper.updateGoodsTotalVisitCount(goodsId);
+            //查询该商品是否为多规格
+            Integer skuCount = zlGoodsMapper.findSkuCount(goodsListVo.getGoodsId());
+            if (skuCount > 1) {
+                goodsListVo.setIsManySku(true);
+                goodsListVo.setHotelGoodsSkuId(-1);
+            } else {
+                goodsListVo.setIsManySku(false);
+            }
+            //查询该商品的总库存
+            Integer stockCount = zlGoodsMapper.getByHotelIDAndGoodsID(goodsListVo.getHotelId(), goodsListVo.getGoodsId());
+            goodsListVo.setStockCount(stockCount);
         }
         return goodsListVo;
     }

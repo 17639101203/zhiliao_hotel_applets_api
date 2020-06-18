@@ -12,4 +12,6 @@ public interface ZlHotelUserHistoryMapper extends Mapper<ZlHotelUserHistory> {
      * 获取入住酒店历史列表
      */
     List<ZlHotelUserHistory> getHotelHistoryList(@Param("userid") Long userid);
+
+    void userDeleteHotelHistory(@Param("recId") Long recId);
 }

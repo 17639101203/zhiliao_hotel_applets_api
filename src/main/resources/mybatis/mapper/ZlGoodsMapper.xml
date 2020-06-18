@@ -89,15 +89,26 @@
     </select>
 
     <select id="findGoodsDetail" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsListVo">
-        select
-            GoodsID,
-            CoverImgUrl,
-            GoodsName,
-            OriginalPrice,
-            CurrentPrice,
-            Content
-        from zl_goods
-        where GoodsStatus!='-1' and GoodsID=#{goodsId}
+        SELECT
+          zg.GoodsID,
+          zg.CoverImgUrl,
+          zg.GoodsName,
+          MIN(zgs.OriginalPrice) OriginalPrice,
+          MIN(zgs.CurrentPrice) CurrentPrice,
+          zg.Content,
+          zgc.BelongModule,
+          zhg.HotelID,
+          zhg.HotelGoodsSkuID
+        FROM
+          zl_goods zg
+          LEFT JOIN zl_goodscategory zgc
+            ON zg.GoodsCategoryID = zgc.GoodsCategoryID
+          LEFT JOIN zl_hotelgoodssku zhg
+            ON zg.GoodsID = zhg.GoodsID
+          LEFT JOIN zl_goodssku zgs
+            ON zg.GoodsID = zgs.GoodsID
+        WHERE zg.GoodsStatus != '-1'
+          AND zg.GoodsID = #{goodsId}
     </select>
 
     <update id="updateGoodsTotalVisitCount">

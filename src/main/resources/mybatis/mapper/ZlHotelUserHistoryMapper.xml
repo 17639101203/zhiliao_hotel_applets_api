@@ -2,29 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlHotelUserHistoryMapper">
     <resultMap id="BaseResultMap" type="com.zhiliao.hotel.model.ZlHotelUserHistory">
-        <result column="RecID" jdbcType="BIGINT" property="recid" />
-        <result column="UserID" jdbcType="BIGINT" property="userid" />
-        <result column="HotelID" jdbcType="INTEGER" property="hotelid" />
-        <result column="HotelName" jdbcType="CHAR" property="hotelname" />
-        <result column="RoomID" jdbcType="INTEGER" property="roomid" />
-        <result column="RoomNumber" jdbcType="CHAR" property="roomnumber" />
-        <result column="CheckInDate" jdbcType="INTEGER" property="checkindate" />
-        <result column="CreateDate" jdbcType="INTEGER" property="createdate" />
+        <result column="RecID" jdbcType="BIGINT" property="recid"/>
+        <result column="UserID" jdbcType="BIGINT" property="userid"/>
+        <result column="HotelID" jdbcType="INTEGER" property="hotelid"/>
+        <result column="HotelName" jdbcType="CHAR" property="hotelname"/>
+        <result column="RoomID" jdbcType="INTEGER" property="roomid"/>
+        <result column="RoomNumber" jdbcType="CHAR" property="roomnumber"/>
+        <result column="CheckInDate" jdbcType="INTEGER" property="checkindate"/>
+        <result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
     </resultMap>
 
     <select id="getHotelHistoryList" resultMap="BaseResultMap">
         SELECT
-        hh.RecID,
-        hh.UserID,
-        hh.HotelID,
-        hh.HotelName,
-        hh.RoomID,
-        hh.RoomNumber,
-        hh.CheckInDate,
-        hh.CreateDate
-      FROM
-        zl_hoteluserhistory hh
-      WHERE hh.UserID = #{userid}
-      ORDER BY hh.CheckInDate DESC
+          RecID,
+          UserID,
+          HotelID,
+          HotelName,
+          RoomID,
+          RoomNumber,
+          CheckInDate
+        FROM
+          zl_hoteluserhistory
+        WHERE UserID = #{userid}
+          AND IsUserDelete = 0
+          AND IsDelete = 0
+        ORDER BY CheckInDate DESC
     </select>
+    <update id="userDeleteHotelHistory">
+       UPDATE
+          zl_hoteluserhistory
+        SET
+          IsUserDelete = 1
+        WHERE RecID = #{recId}
+    </update>
 </mapper>

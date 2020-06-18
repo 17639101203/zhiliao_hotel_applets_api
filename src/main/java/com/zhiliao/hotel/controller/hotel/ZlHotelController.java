@@ -4,6 +4,7 @@ import com.zhiliao.hotel.common.*;
 import com.zhiliao.hotel.model.ZlHotelRoomQrcode;
 import com.zhiliao.hotel.service.ZlHotelRoomQrcodeService;
 import com.zhiliao.hotel.service.ZlHotelService;
+import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -58,7 +59,29 @@ public class ZlHotelController {
     @GetMapping("getHotelHistoryList/{pageNo}/{pageSize}")
     public ReturnString<PageInfoResult> getHotelHistoryList(HttpServletRequest request, @PathVariable Integer pageNo, @PathVariable Integer pageSize) {
         String token = request.getHeader("token");
-        PageInfoResult hotelHistoryList = zlHotelService.getHotelHistoryList(token, pageNo, pageSize);
-        return new ReturnString<>(hotelHistoryList);
+        try {
+            PageInfoResult hotelHistoryList = zlHotelService.getHotelHistoryList(token, pageNo, pageSize);
+            return new ReturnString<>(hotelHistoryList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString<>("获取失败!");
+        }
     }
+
+    @ApiOperation(value = "姬慧慧_用户删除入住酒店历史")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "recId", dataType = "Long", required = true, value = "入住酒店历史自增id")
+    })
+    @UserLoginToken
+    @GetMapping("getHotelHistoryList/{recId}")
+    public ReturnString userDeleteHotelHistory(@PathVariable("recId") Long recId) {
+        try {
+            zlHotelService.userDeleteHotelHistory(recId);
+            return new ReturnString(0, "已删除!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString(-1, "删除失败!");
+        }
+    }
+
 }

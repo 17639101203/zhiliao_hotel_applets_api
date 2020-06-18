@@ -25,4 +25,6 @@ public interface ZlHotelService {
     String getReceptionTel(Integer hotelID);
 
     ZlHotel getByHotelID(Integer hotelId);
+
+    void userDeleteHotelHistory(Long recId);
 }

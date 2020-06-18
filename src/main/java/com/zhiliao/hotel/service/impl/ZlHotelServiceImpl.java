@@ -220,4 +220,9 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         return zlHotelMapper.getById(hotelId);
     }
 
+    @Override
+    public void userDeleteHotelHistory(Long recId) {
+        zlHotelUserHistoryMapper.userDeleteHotelHistory(recId);
+    }
+
 }
