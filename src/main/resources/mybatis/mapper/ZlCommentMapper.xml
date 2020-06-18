@@ -188,5 +188,12 @@
           SELECT COUNT(CommentID) FROM zl_comment WHERE IsDelete=0 AND ReplyReadStatus=0 AND UserID=#{userid}
 	</select>
 
+    <update id="updateCommentImg">
+        UPDATE
+          zl_comment
+        SET
+          ImageUrls = #{imageurls}
+        WHERE CommentID = #{commentID}
+    </update>
 
 </mapper>

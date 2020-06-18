@@ -18,7 +18,9 @@ public interface ZlCommentMapper extends Mapper<ZlComment> {
 
     CommentDetailVO getComment(@Param("userid") Long userid, @Param("commentid") Integer commentid);
 
-    void changeReplyReadStatus(@Param("userid") Long userid,@Param("commentid") Integer commentid);
-    
+    void changeReplyReadStatus(@Param("userid") Long userid, @Param("commentid") Integer commentid);
+
     Long waitAppraiseTotal(@Param("userid") Long userid);
+
+    void updateCommentImg(@Param("commentID") Integer commentID, @Param("imageurls") String imageurls);
 }

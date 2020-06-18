@@ -207,4 +207,11 @@
     WHERE OrderID = #{orderID}
       AND IsDelete = '0'
   </update>
+    <update id="updateCommentImg">
+        UPDATE
+          zl_repairorder
+        SET
+          ImgUrls = #{imageurls}
+        WHERE OrderID = #{orderid}
+    </update>
 </mapper>

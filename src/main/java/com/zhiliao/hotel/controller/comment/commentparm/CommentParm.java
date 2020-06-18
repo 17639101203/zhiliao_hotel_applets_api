@@ -10,6 +10,8 @@ import lombok.ToString;
 @ToString
 public class CommentParm {
 
+    @ApiModelProperty(value = "吐槽自增ID", required = true)
+    private Integer commentID;
 
     @ApiModelProperty(value = "酒店ID", required = true)
     private Integer hotelID;

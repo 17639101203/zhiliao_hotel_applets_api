@@ -35,4 +35,6 @@ public interface ZlRepairorderMapper extends Mapper<ZlRepairorder> {
     int selectCountRepair(Long userId);
 
     void userDeleteRepairOrder(@Param("orderID") Long orderID, @Param("updatedate") Integer updateDate);
+
+    void updateCommentImg(@Param("orderid") Long orderid, @Param("imageurls") String imageurls);
 }

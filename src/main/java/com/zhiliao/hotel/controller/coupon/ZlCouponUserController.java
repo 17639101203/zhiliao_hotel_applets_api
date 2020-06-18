@@ -62,7 +62,7 @@ public class ZlCouponUserController {
             @ApiImplicitParam(paramType="query", name="pageSize", dataType="int", required=true, value="每页条数"),
     })
     @UserLoginToken
-    @PostMapping("effective")
+    @GetMapping("effective")
     public ReturnString effective(HttpServletRequest request,Integer pageNo, Integer pageSize){
 
         try{

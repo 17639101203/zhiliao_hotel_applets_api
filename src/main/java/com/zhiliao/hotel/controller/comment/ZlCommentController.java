@@ -11,6 +11,7 @@ import com.zhiliao.hotel.controller.file.UploadFileController;
 import com.zhiliao.hotel.model.ZlComment;
 import com.zhiliao.hotel.service.ZlCommentService;
 import com.zhiliao.hotel.utils.DateUtils;
+import com.zhiliao.hotel.utils.QiniuUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -22,9 +23,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 @Api(tags = "首页_点赞吐槽接口_章英杰")
@@ -43,35 +46,19 @@ public class ZlCommentController {
     @ApiOperation(value = "添加点赞吐槽")
     @PostMapping(value = "addComment", consumes = {"multipart/*"}, headers = "content-type=multipart/form-data")
     @UserLoginToken
-    public ReturnString addComment(HttpServletRequest request, CommentParm commentParm, MultipartFile[] multipartFiles) {
+    public ReturnString addComment(HttpServletRequest request,
+                                   CommentParm commentParm,
+                                   @RequestParam(value = "multipartFile", required = false) MultipartFile multipartFile) {
 
         // 解析token获取userid
-        Map<String, Object> map = new HashMap<>();
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
-        ZlComment zlComment = new ZlComment();
-        Integer nowtime = DateUtils.javaToPhpNowDateTime();   // 获取当前时间
-        zlComment.setHotelid(commentParm.getHotelID());   //酒店ID
-        zlComment.setUserid(userid);   //用户ID  根据token获取userId
-        zlComment.setEvaluation((byte) commentParm.getEvaluation().intValue());   //评论等级 1好评 2中评 3差评
-        zlComment.setTagids(commentParm.getTagIDs());   //评论标签ID 多个用丨隔开
-        zlComment.setContent(commentParm.getContent());   //评论内容
-        zlComment.setRoomid(commentParm.getRoomid());      // 房间id
-        zlComment.setRoomnumber(commentParm.getRoomnumber());  // 房间号
-        zlComment.setCreatedate(nowtime);  //添加时间
-        zlComment.setUpdatedate(nowtime);  //更新时间
-
-        //传入文件分析后，得到文件存放地址  key：filePathBase
-        ReturnString<List<String>> returnString = uploadFileController.uploadFile(multipartFiles);
-        List<String> list = returnString.getData();
-        StringBuffer Imgurls = new StringBuffer();
-        list.forEach(item -> {
-            Imgurls.append(item + "|");   // 遍历集合，生成图片地址，并用 | 隔开
-        });
-        log.info("【评论图片地址：】" + Imgurls);
-        zlComment.setImageurls(Imgurls.toString());  //图片地址
-        zlCommentService.addComment(zlComment);
-        map.put("commentid", zlComment.getCommentid());
-        return new ReturnString<>(0, "评价成功", map);
+        try {
+            Map<String, Object> map = zlCommentService.addComment(userid, commentParm, multipartFile);
+            return new ReturnString(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("添加点赞吐槽失败!");
+        }
     }
 
     @ApiOperation(value = "获取点赞吐槽标签")

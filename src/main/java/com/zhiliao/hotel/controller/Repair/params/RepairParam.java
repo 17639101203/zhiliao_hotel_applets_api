@@ -11,6 +11,12 @@ import lombok.ToString;
 public class RepairParam {
 
     /**
+     * 报修订单id
+     */
+    @ApiModelProperty(value = "报修订单id", required = true)
+    private Long orderid;
+
+    /**
      * 酒店ID
      */
     @ApiModelProperty(value = "酒店ID", required = true)
@@ -42,10 +48,5 @@ public class RepairParam {
      */
     @ApiModelProperty(value = "报修信息", required = true)
     private String remark;
-
-
-
-
-
 
 }

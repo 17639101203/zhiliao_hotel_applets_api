@@ -1,6 +1,8 @@
 package com.zhiliao.hotel.service;
 
+import com.zhiliao.hotel.controller.Repair.params.RepairParam;
 import com.zhiliao.hotel.model.ZlRepairorder;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Map;
@@ -9,19 +11,23 @@ public interface ZlRepairService {
 
     /**
      * 新增报修信息
-     * @param zlRepairorder   报修信息
+     *
+     * @param zlRepairorder 报修信息
      * @return
      * @throws IOException
      */
     void addRepairMsg(ZlRepairorder zlRepairorder);
 
+    Map<String, Object> addRepairMsg(Long userid, RepairParam repairParam, MultipartFile multipartFile);
+
 
     /**
      * 查询报修订单详情
+     *
      * @param
      * @return
      */
-    Map<String,Object> findRepairOrder(Long orderID);
+    Map<String, Object> findRepairOrder(Long orderID);
 
 
     /**
