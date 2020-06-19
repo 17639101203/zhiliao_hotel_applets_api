@@ -168,7 +168,7 @@
 
 
     <!--  查询订单详情-->
-    <select id="queryRepairMsg" resultType="java.util.Map">
+    <select id="queryRepairMsg" resultType="com.zhiliao.hotel.controller.Repair.vo.RepairOrderVO">
         SELECT
           OrderID,
           SerialNumber,

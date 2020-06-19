@@ -21,10 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @Author: zyj
@@ -138,6 +135,19 @@ public class ZlCommentServiceImpl implements ZlCommentService {
             // 查询标签名
             commentDetailVO.setTagname(zlTagMapper.getTagName(tagids));
         }
+        List<String> imageurllist = new LinkedList<>();
+        if (StringUtils.isNoneBlank(commentDetailVO.getImageurls())) {
+            String imageurls = commentDetailVO.getImageurls();
+            if (imageurls.contains("|")) {
+                String[] imageurlArr = imageurls.split("\\|");
+                for (int i = 0; i < imageurlArr.length; i++) {
+                    imageurllist.add(imageurlArr[i]);
+                }
+            } else {
+                imageurllist.add(imageurls);
+            }
+        }
+        commentDetailVO.setImageurllist(imageurllist);
         // 修改为已读状态
         zlCommentMapper.changeReplyReadStatus(userid, commentid);
         return commentDetailVO;

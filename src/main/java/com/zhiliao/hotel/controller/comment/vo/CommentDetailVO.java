@@ -28,6 +28,11 @@ public class CommentDetailVO {
     private String imageurls;
 
     /**
+     * 评论图片列表
+     */
+    private List<String> imageurllist;
+
+    /**
      * 回复时间
      */
     private Integer replydate;

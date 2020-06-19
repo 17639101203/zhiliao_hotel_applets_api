@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.service.impl;
 
 import com.zhiliao.hotel.controller.Repair.params.RepairParam;
+import com.zhiliao.hotel.controller.Repair.vo.RepairOrderVO;
 import com.zhiliao.hotel.mapper.ZlRepairorderMapper;
 import com.zhiliao.hotel.model.ZlRepairorder;
 import com.zhiliao.hotel.service.ZlRepairService;
@@ -8,6 +9,7 @@ import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import com.zhiliao.hotel.utils.TokenUtil;
 import com.zhiliao.hotel.utils.UploadPhotoUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -74,8 +77,22 @@ public class ZlRepairServiceImpl implements ZlRepairService {
 
 
     @Override
-    public Map<String, Object> findRepairOrder(Long orderID) {
-        return zlRepairorderMapper.queryRepairMsg(orderID);
+    public RepairOrderVO findRepairOrder(Long orderID) {
+        RepairOrderVO repairOrderVO = zlRepairorderMapper.queryRepairMsg(orderID);
+        List<String> imageurllist = new LinkedList<>();
+        if (StringUtils.isNoneBlank(repairOrderVO.getImgurls())) {
+            String imageurls = repairOrderVO.getImgurls();
+            if (imageurls.contains("|")) {
+                String[] imageurlArr = imageurls.split("\\|");
+                for (int i = 0; i < imageurlArr.length; i++) {
+                    imageurllist.add(imageurlArr[i]);
+                }
+            } else {
+                imageurllist.add(imageurls);
+            }
+        }
+        repairOrderVO.setImageurllist(imageurllist);
+        return repairOrderVO;
     }
 
     @Override

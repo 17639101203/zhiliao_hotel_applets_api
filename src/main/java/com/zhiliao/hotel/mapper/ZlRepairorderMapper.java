@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
+import com.zhiliao.hotel.controller.Repair.vo.RepairOrderVO;
 import com.zhiliao.hotel.model.ZlRepairorder;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -23,7 +24,7 @@ public interface ZlRepairorderMapper extends Mapper<ZlRepairorder> {
      * @param
      * @return
      */
-    Map<String, Object> queryRepairMsg(@Param("orderID") Long orderID);
+    RepairOrderVO queryRepairMsg(@Param("orderID") Long orderID);
 
 
     /**

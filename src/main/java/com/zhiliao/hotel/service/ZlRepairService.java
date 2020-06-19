@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.controller.Repair.params.RepairParam;
+import com.zhiliao.hotel.controller.Repair.vo.RepairOrderVO;
 import com.zhiliao.hotel.model.ZlRepairorder;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,7 +28,7 @@ public interface ZlRepairService {
      * @param
      * @return
      */
-    Map<String, Object> findRepairOrder(Long orderID);
+    RepairOrderVO findRepairOrder(Long orderID);
 
 
     /**
