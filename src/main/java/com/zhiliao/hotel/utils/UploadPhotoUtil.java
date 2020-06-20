@@ -44,7 +44,7 @@ public class UploadPhotoUtil {
             String fileName = UUID.randomUUID().toString() + extention;
             //将文件上传到阿里云服务器
             boolean bool = AliyunOssUtil.FileUpload(file, fileName);
-            imgurl = AliyunOssUtil.endpoint + fileName;
+            imgurl = AliyunOssUtil.visitendpoint + AliyunOssUtil.zlgjhdFolderName + "/" + fileName;
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -49,6 +49,8 @@ public class ZlOrderServiceIml implements ZlOrderService {
     @Override
     public PageInfoResult findAllOrder(OrderInfoVO vo) {
         //分页插件 pageNo:起始页，pageSize：每页显示条数
+        vo.setIsDelete(0);
+        vo.setIsUserDelete(0);
         PageHelper.startPage(vo.getPageNo(), vo.getPageSize());
         List<OrderList> allOrders = zlOrderMapper.findAllOrder(vo);
         if (allOrders != null && !allOrders.isEmpty()) {

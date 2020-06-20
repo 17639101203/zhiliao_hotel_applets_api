@@ -47,7 +47,7 @@ public class ZlRepairServiceImpl implements ZlRepairService {
             ZlRepairorder zlRepairorderOld = zlRepairorderList.get(0);
             StringBuffer imageurls = new StringBuffer();
             String imageurlOld = zlRepairorderOld.getImgurls();
-            String imgurl = UploadPhotoUtil.uploadPhotoUtil(multipartFile);
+            String imgurl = UploadPhotoUtil.uploadPhotoUtil2(multipartFile);
             imageurls.append(imageurlOld).append("|").append(imgurl);
             zlRepairorderMapper.updateCommentImg(repairParam.getOrderid(), imageurls.toString());
             map.put("orderid", repairParam.getOrderid());
@@ -67,7 +67,7 @@ public class ZlRepairServiceImpl implements ZlRepairService {
         zlRepairorder.setCreatedate(now);
         zlRepairorder.setUpdatedate(now);
         if (multipartFile != null) {
-            String imgurl = UploadPhotoUtil.uploadPhotoUtil(multipartFile);
+            String imgurl = UploadPhotoUtil.uploadPhotoUtil2(multipartFile);
             zlRepairorder.setImgurls(imgurl);  //图片地址
         }
         zlRepairorderMapper.insertSelective(zlRepairorder);

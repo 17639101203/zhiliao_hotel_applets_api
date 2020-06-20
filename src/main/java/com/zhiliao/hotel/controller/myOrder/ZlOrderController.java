@@ -328,7 +328,7 @@ public class ZlOrderController {
     public ReturnString userDeleteOrder(@PathVariable("orderSerialNo") String orderSerialNo, @PathVariable("belongModule") Integer belongModule) {
         try {
             zlOrderService.userDeleteOrder(orderSerialNo, belongModule);
-            return new ReturnString("删除订单成功!");
+            return new ReturnString(0, "删除订单成功!");
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("删除订单失败!");
