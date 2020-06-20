@@ -38,3 +38,22 @@ spring:
 logging:
   level:
     com.zhiliao.hotel.mapper: debug
+tools:
+  aliyun:
+    # 用户key，在阿里云获取
+    access-key: LTAI4FzJPcJeNwJCiUQnc8s5
+    # 用户秘钥，在阿里云获取
+    access-key-secret: tD2gnQKDriTCoJ6iNrrCppeMfrv6Qs
+    oss:
+      # 节点, 前往阿里云查看
+      end-point: http://hzlimgtest.oss-cn-hangzhou.aliyuncs.com/
+      # 默认存储空间, 不存在会创建，也可以在方法调用时单独设置
+      bucket: hzlimgtest
+      # 最大连接数，默认1024
+      max-connections: 1024
+      # 最大空闲时间(毫秒)，默认60000
+      idle-time: 60000
+      # socket超时时间(毫秒)，默认50000
+      socket-timeout: 50000
+      # 连接超时时间(毫秒)，默认50000
+      connection-timeout: 50000

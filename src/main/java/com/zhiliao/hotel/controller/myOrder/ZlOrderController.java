@@ -156,23 +156,25 @@ public class ZlOrderController {
 
     @ApiOperation(value = "微信下单_姬慧慧")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "openid", dataType = "String", required = true, value = "用户标识"),
             @ApiImplicitParam(paramType = "path", name = "body", dataType = "String", required = true, value = "商品描述"),
-            @ApiImplicitParam(paramType = "path", name = "total_fee", dataType = "Integer", required = true, value = "标价金额"),
+            @ApiImplicitParam(paramType = "path", name = "total_fee", dataType = "String", required = true, value = "标价金额"),
             @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号")
     })
-    @PostMapping("wxPay/{openid}/{body}/{total_fee}/{out_trade_no}")
+    @PostMapping("wxPay/{body}/{total_fee}/{out_trade_no}")
     @UserLoginToken
     @ResponseBody
     public ReturnString wxPay(
-            @PathVariable("openid") String openid,
+            HttpServletRequest httpServletRequest,
             @PathVariable("body") String body,
-            @PathVariable("total_fee") Integer total_fee,
+            @PathVariable("total_fee") BigDecimal total_fee,
             @PathVariable("out_trade_no") String out_trade_no,
             HttpServletRequest request) {
+        //获取用户id
+        String token = httpServletRequest.getHeader("token");
+        Long userID = TokenUtil.getUserId(token);
 
         try {
-            Map<String, Object> response = wxPayService.wxPay(openid, body, total_fee, out_trade_no, request);
+            Map<String, Object> response = wxPayService.wxPay(userID, body, total_fee, out_trade_no, request);
             return new ReturnString(response);
         } catch (Exception e) {
             e.printStackTrace();

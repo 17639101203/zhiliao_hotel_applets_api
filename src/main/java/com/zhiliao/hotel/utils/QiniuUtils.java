@@ -17,7 +17,7 @@ public class QiniuUtils {
     public static String accessKey = "QOfwYacRCB6WKCiS7t4O1vhR-l1cvP44RC7h8Uwu";
     public static String secretKey = "g2sbgwn-fJjbscWMMNxiiadk-fhP9FtgqTCNY0x_";
     public static String bucket = "zjiliao";
-    // 七牛默认域名
+    // 七牛云外链
     public static String domain = "http://qc2apih25.bkt.clouddn.com/";
 
     //Zone.zone0:华东

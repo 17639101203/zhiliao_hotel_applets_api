@@ -133,7 +133,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
             Short belongModule = goodsInfoParamList.get(0).getBelongModule();
 
             //如果该模块是土特产,则需要判断是否需要配送
-            if (key.equals("TTC")) {
+            if ("4".equals(key)) {
                 String deliveryAddress = goodsInfoParamList.get(0).getDeliveryAddress();
                 //不为空说明需要配送
                 if (deliveryAddress != null) {
@@ -195,8 +195,8 @@ public class ZlOrderServiceIml implements ZlOrderService {
             zlOrder.setRefundstatus((byte) 1);
             zlOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
             //送达时间
-            Integer deliveryDate = goodsInfoParamList.get(0).getDeliveryDate();
-            zlOrder.setDeliverydate(deliveryDate / 1000);
+            Integer deliveryDate = Math.toIntExact(goodsInfoParamList.get(0).getDeliveryDate() / 1000);
+            zlOrder.setDeliverydate(deliveryDate);
             zlOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
             zlOrder.setRefundcount((byte) 0);
 
@@ -216,7 +216,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 //封装订单详情信息
                 ZlOrderDetail zlOrderDetail = new ZlOrderDetail();
                 //获取用户选择的商品hotelGoodsSkuID和数量
-                Integer hotelGoodsSkuID = goodsInfoParamList.get(i).getHotelGoodsSkuID();
+                Integer hotelGoodsSkuID = goodsInfoParamList.get(i).getHotelGoodsSkuId();
                 Integer goodsCount = goodsInfoParamList.get(i).getGoodsCount();
                 if (redisTemplate.hasKey(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID)) {
                     //如果存在该键,就更新商品数量
@@ -278,7 +278,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
 
             for (int i = 0; i < goodsInfoParamList.size(); i++) {
                 //获取用户选择的商品hotelGoodsSkuID和数量
-                Integer hotelGoodsSkuID = goodsInfoParamList.get(i).getHotelGoodsSkuID();
+                Integer hotelGoodsSkuID = goodsInfoParamList.get(i).getHotelGoodsSkuId();
                 Integer goodsCount = goodsInfoParamList.get(i).getGoodsCount();
                 String goodsName = goodsInfoParamList.get(i).getGoodsName();
                 //判断酒店该商品库存是否足够

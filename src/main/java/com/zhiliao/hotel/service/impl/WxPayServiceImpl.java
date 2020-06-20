@@ -7,6 +7,8 @@ import com.zhiliao.hotel.controller.myOrder.util.PayUtil;
 import com.zhiliao.hotel.controller.myOrder.util.StringUtils;
 import com.zhiliao.hotel.controller.myOrder.config.WxPayConfig;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPayShortInfoVO;
+import com.zhiliao.hotel.mapper.ZlWxuserMapper;
+import com.zhiliao.hotel.model.ZlWxuser;
 import com.zhiliao.hotel.service.WxPayService;
 import com.zhiliao.hotel.service.ZlOrderService;
 import org.apache.http.HttpEntity;
@@ -46,15 +48,25 @@ public class WxPayServiceImpl implements WxPayService {
 
     private static final Logger logger = LoggerFactory.getLogger(ZlOrderController.class);
 
+    @Autowired
+    private ZlWxuserMapper zlWxuserMapper;
 
     @Override
-    public Map<String, Object> wxPay(String openid, String body, Integer total_fee, String out_trade_no, HttpServletRequest request) {
+    public Map<String, Object> wxPay(Long userID, String body, BigDecimal total_fee, String out_trade_no, HttpServletRequest request) {
+
+        ZlWxuser zlWxuser = new ZlWxuser();
+        zlWxuser.setUserid(userID);
+        List<ZlWxuser> userInfoList = zlWxuserMapper.select(zlWxuser);
+        String openid = userInfoList.get(0).getWxopenid();
 
         //生成的随机字符串
         String nonce_str = StringUtils.getRandomStringByLength(32);
 
         //获取本机的IP地址
-        String spbill_create_ip = IpUtils.getIpAddr(request);
+        String spbill_create_ip = "192.168.110.85";
+
+        BigDecimal multiply = total_fee.multiply(BigDecimal.valueOf(100));
+        String total_feeStr = String.valueOf(multiply);
 
         Map<String, String> packageParams = new HashMap<String, String>();
         packageParams.put("appid", WxPayConfig.appid);
@@ -62,7 +74,7 @@ public class WxPayServiceImpl implements WxPayService {
         packageParams.put("nonce_str", nonce_str);
         packageParams.put("body", body);
         packageParams.put("out_trade_no", out_trade_no); //商户订单号
-        packageParams.put("total_fee", String.valueOf(total_fee * 1000)); //支付金额,这边需要转成字符串类型,否则后面的签名会失败
+        packageParams.put("total_fee", total_feeStr); //支付金额,这边需要转成字符串类型,否则后面的签名会失败
         packageParams.put("spbill_create_ip", spbill_create_ip);
         packageParams.put("notify_url", WxPayConfig.notify_url);
         packageParams.put("trade_type", WxPayConfig.TRADETYPE);
@@ -76,7 +88,6 @@ public class WxPayServiceImpl implements WxPayService {
         String mysign = PayUtil.sign(prestr, WxPayConfig.key, "utf-8").toUpperCase();
 
         logger.info("=======================第一次签名：" + mysign + "=====================");
-
         //拼接统一下单接口使用的xml数据，要将上一步生成的签名一起拼接进去
         String xml = "<xml>" + "<appid>" + WxPayConfig.appid + "</appid>"
                 + "<body><![CDATA[" + body + "]]></body>"
@@ -86,7 +97,7 @@ public class WxPayServiceImpl implements WxPayService {
                 + "<openid>" + openid + "</openid>"
                 + "<out_trade_no>" + out_trade_no + "</out_trade_no>"
                 + "<spbill_create_ip>" + spbill_create_ip + "</spbill_create_ip>"
-                + "<total_fee>" + total_fee * 1000 + "</total_fee>"
+                + "<total_fee>" + total_feeStr + "</total_fee>"
                 + "<trade_type>" + WxPayConfig.TRADETYPE + "</trade_type>"
                 + "<sign>" + mysign + "</sign>"
                 + "</xml>";

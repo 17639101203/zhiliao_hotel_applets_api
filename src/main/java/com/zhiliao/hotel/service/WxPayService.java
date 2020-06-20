@@ -3,6 +3,7 @@ package com.zhiliao.hotel.service;
 import com.zhiliao.hotel.controller.myOrder.params.WxPayRefundParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Map;
  **/
 public interface WxPayService {
 
-    Map<String, Object> wxPay(String openid, String body, Integer total_fee, String out_trade_no, HttpServletRequest request);
+    Map<String, Object> wxPay(Long userID, String body, BigDecimal total_fee, String out_trade_no, HttpServletRequest request);
 
     Map<String, Object> wxPayRefund(WxPayRefundParam wxPayRefundParam);
 

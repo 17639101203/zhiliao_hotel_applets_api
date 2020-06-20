@@ -1,7 +1,9 @@
 package com.zhiliao.hotel.utils;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -29,6 +31,24 @@ public class UploadPhotoUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String uploadPhotoUtil2(MultipartFile multipartFile) {
+
+        String imgurl = "";
+        try {
+            File file = MultipartFileUtil.multipartFileToFile(multipartFile);
+            String originalFilename = multipartFile.getOriginalFilename();
+            int index = originalFilename.lastIndexOf(".");
+            String extention = originalFilename.substring(index - 1);
+            String fileName = UUID.randomUUID().toString() + extention;
+            //将文件上传到阿里云服务器
+            boolean bool = AliyunOssUtil.FileUpload(file, fileName);
+            imgurl = AliyunOssUtil.endpoint + fileName;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return imgurl;
     }
 
 }

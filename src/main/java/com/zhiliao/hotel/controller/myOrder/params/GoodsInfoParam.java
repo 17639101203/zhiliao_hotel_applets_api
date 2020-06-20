@@ -66,7 +66,7 @@ public class GoodsInfoParam {
      * 酒店商品表自增id
      */
     @ApiModelProperty(value = "酒店商品表自增id", required = true)
-    private Integer hotelGoodsSkuID;
+    private Integer hotelGoodsSkuId;
 
     /**
      * 配送地址
@@ -78,7 +78,7 @@ public class GoodsInfoParam {
      * 送达时间
      */
     @ApiModelProperty(value = "送达时间", required = true)
-    private Integer deliveryDate;
+    private Long deliveryDate;
 
     /**
      * 订单编号

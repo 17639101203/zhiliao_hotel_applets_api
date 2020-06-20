@@ -16,7 +16,8 @@ public class WxPayConfig {
     public static final String key = "abac3a3507c3e9d1f9d3b863c651d333";
 
     //支付成功后的服务器回调url,此处进行手动回调
-    public static final String notify_url = "https://www.zlkj.com/pay/autoPayReturn";
+//    public static final String notify_url = "https://www.zlkj.com/pay/autoPayReturn";
+    public static final String notify_url = "http://204810v5h2.iok.la/";
 
     //签名方式
     public static final String SIGNTYPE = "MD5";

@@ -56,7 +56,8 @@ public class ZlCommentServiceImpl implements ZlCommentService {
             ZlComment zlCommentOld = zlCommentList.get(0);
             StringBuffer imageurls = new StringBuffer();
             String imageurlOld = zlCommentOld.getImageurls();
-            String imgurl = UploadPhotoUtil.uploadPhotoUtil(multipartFile);
+//            String imgurl = UploadPhotoUtil.uploadPhotoUtil(multipartFile);
+            String imgurl = UploadPhotoUtil.uploadPhotoUtil2(multipartFile);
             imageurls.append(imageurlOld).append("|").append(imgurl);
             zlCommentMapper.updateCommentImg(commentParm.getCommentID(), imageurls.toString());
             map.put("commentid", commentParm.getCommentID());
@@ -83,7 +84,8 @@ public class ZlCommentServiceImpl implements ZlCommentService {
 //            Imgurls.append(item + "|");   // 遍历集合，生成图片地址，并用 | 隔开
 //        });
         if (multipartFile != null) {
-            String imgurl = UploadPhotoUtil.uploadPhotoUtil(multipartFile);
+//            String imgurl = UploadPhotoUtil.uploadPhotoUtil(multipartFile);
+            String imgurl = UploadPhotoUtil.uploadPhotoUtil2(multipartFile);
             zlComment.setImageurls(imgurl);  //图片地址
         }
         zlCommentMapper.insertSelective(zlComment);
