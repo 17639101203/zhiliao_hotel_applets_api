@@ -238,6 +238,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 zlOrderDetail.setGoodscount(goodsInfoParamList.get(i).getGoodsCount());
                 zlOrderDetail.setBelongmodule(goodsInfoParamList.get(i).getBelongModule());
                 zlOrderDetail.setIsdelete(false);
+                zlOrderDetail.setIsuserdelete(false);
                 zlOrderDetail.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
                 zlOrderDetail.setOrderserialno(orderSerialNo);
                 zlOrderDetail.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
