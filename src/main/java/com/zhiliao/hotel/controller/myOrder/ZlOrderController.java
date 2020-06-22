@@ -178,7 +178,7 @@ public class ZlOrderController {
             return new ReturnString(response);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("提交失败");
+            return new ReturnString("下单提交失败");
         }
     }
 

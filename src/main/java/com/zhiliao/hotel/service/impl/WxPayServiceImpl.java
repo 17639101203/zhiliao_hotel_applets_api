@@ -141,6 +141,7 @@ public class WxPayServiceImpl implements WxPayService {
                 logger.info("=======================第二次签名：" + paySign + "=====================");
 
                 response.put("paySign", paySign);
+                response.put("out_trade_no", out_trade_no);
             }
         }
 
