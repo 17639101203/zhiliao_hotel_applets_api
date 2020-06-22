@@ -37,7 +37,7 @@
     <select id="find2Goods"
             resultType="com.zhiliao.hotel.model.ZlOrderDetail">
 
-        SELECT * FROM zl_orderdetail WHERE IsDelete=0 AND UserID=#{userID} AND OrderSerialNo=#{orderSerialNo} AND BelongModule=#{belongModule} ORDER BY CreateDate DESC LIMIT 2
+        SELECT * FROM zl_orderdetail WHERE IsDelete=0 AND UserID=#{userID} AND OrderSerialNo=#{orderSerialNo} AND BelongModule=#{belongModule} ORDER BY CreateDate DESC
 
 	</select>
 
