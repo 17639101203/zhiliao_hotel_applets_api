@@ -29,7 +29,7 @@ public class TokenUtil {
         String userId;
         try {
             // 获取token中的userId
-          userId = JWT.decode(token).getAudience().get(0);
+            userId = JWT.decode(token).getAudience().get(0);
             return Long.parseLong(userId);
         } catch (JWTDecodeException j) {
             throw new RuntimeException("401 错误token，没有访问权限，请重新登录");

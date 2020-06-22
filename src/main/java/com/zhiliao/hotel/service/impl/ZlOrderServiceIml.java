@@ -195,7 +195,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
             zlOrder.setOrderstatus((byte) 0);
             zlOrder.setPaytype((byte) 1);
             zlOrder.setComeformid(1);
-            zlOrder.setRefundstatus((byte) 1);
+//            zlOrder.setRefundstatus((byte) 1);
             zlOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
             //送达时间
             Integer deliveryDate = Math.toIntExact(goodsInfoParamList.get(0).getDeliveryDate() / 1000);
@@ -212,7 +212,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
             zlOrder.setOrderserialno(orderSerialNo);
 
             //将订单数据存入数据库
-            zlOrderMapper.insert(zlOrder);
+            zlOrderMapper.insertSelective(zlOrder);
             zlOrderList.add(zlOrder);
 
             for (int i = 0; i < goodsInfoParamList.size(); i++) {

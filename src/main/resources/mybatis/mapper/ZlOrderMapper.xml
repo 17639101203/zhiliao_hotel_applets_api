@@ -34,9 +34,13 @@
             resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderList"
             parameterType="com.zhiliao.hotel.controller.myOrder.vo.OrderInfoVO">
 
-        SELECT * FROM zl_order WHERE UserID=#{userId}
-
-        AND IsDelete=0
+        SELECT
+        *
+        FROM
+        zl_order
+        WHERE UserID = #{userId}
+        AND IsDelete = 0
+        AND IsUserDelete = 0
 
         <if test="hotelid != null">
             AND HotelID = #{hotelid}
@@ -152,19 +156,24 @@
     <select id="waitForPayTotal"
             resultType="java.lang.Long">
 
-        SELECT COUNT(OrderID) FROM zl_order WHERE IsDelete=0 AND PayStatus=1 AND UserID=#{userid}
+        SELECT COUNT(OrderID) FROM zl_order WHERE IsDelete=0 AND IsUserDelete = 0 AND PayStatus=1 AND UserID=#{userid}
 	</select>
 
     <select id="waitForGoodsTotal"
             resultType="java.lang.Long">
 
-          SELECT COUNT(OrderID) FROM zl_order WHERE IsDelete=0 AND OrderStatus=1 AND UserID=#{userid}
+          SELECT COUNT(OrderID) FROM zl_order WHERE IsDelete=0 AND IsUserDelete = 0 AND OrderStatus=1 AND UserID=#{userid}
 	</select>
 
     <select id="allOrderTotal"
             resultType="java.lang.Long">
-
-          SELECT COUNT(OrderID) FROM zl_order WHERE IsDelete=0 AND UserID=#{userid}
+      SELECT
+          COUNT(OrderID)
+        FROM
+          zl_order
+        WHERE IsDelete = 0
+          AND IsUserDelete = 0
+          AND UserID = #{userid}
 	</select>
 
 </mapper>

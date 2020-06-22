@@ -36,16 +36,30 @@
 
     <select id="find2Goods"
             resultType="com.zhiliao.hotel.model.ZlOrderDetail">
-
-        SELECT * FROM zl_orderdetail WHERE IsDelete=0 AND UserID=#{userID} AND OrderSerialNo=#{orderSerialNo} AND BelongModule=#{belongModule} ORDER BY CreateDate DESC
+        SELECT
+          *
+        FROM
+          zl_orderdetail
+        WHERE IsDelete = 0
+          AND IsUserDelete = 0
+          AND UserID = #{userID}
+          AND OrderSerialNo = #{orderSerialNo}
+          AND BelongModule = #{belongModule}
+        ORDER BY CreateDate DESC
 
 	</select>
 
     <select id="countGoods"
             resultType="java.lang.Long">
-
-        SELECT sum(GoodsCount) FROM zl_orderdetail WHERE IsDelete=0 AND UserID=#{userID} AND OrderSerialNo=#{orderSerialNo} AND BelongModule=#{belongModule}
-
+        SELECT
+          SUM(GoodsCount)
+        FROM
+          zl_orderdetail
+        WHERE IsDelete = 0
+          AND IsUserDelete = 0
+          AND UserID = #{userID}
+          AND OrderSerialNo = #{orderSerialNo}
+          AND BelongModule = #{belongModule}
 	</select>
 
     <update id="updateOrderDetailUpdateDate">
