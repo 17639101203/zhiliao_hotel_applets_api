@@ -32,5 +32,5 @@ public interface ZlOrderService{
     Long waitForGoodsTotal(Long userId);
     
     Long allOrderTotal(Long userId);
-    
+
 }

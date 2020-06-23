@@ -1,5 +1,7 @@
 package com.zhiliao.hotel.model;
 
+import lombok.Data;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -12,6 +14,7 @@ import java.math.BigDecimal;
  * @author null
  * @date 2020-04-15
  */
+@Data
 @Table(name="zl_orderdetail")
 public class ZlOrderDetail implements Serializable{
     
@@ -88,141 +91,5 @@ public class ZlOrderDetail implements Serializable{
     private Integer updatedate;
     
     private static final long serialVersionUID=1L;
-    
-    public Long getOrderdetailid(){
-        return orderdetailid;
-    }
-    
-    public void setOrderdetailid(Long orderdetailid){
-        this.orderdetailid=orderdetailid;
-    }
-    
-    public Long getOrderid(){
-        return orderid;
-    }
-    
-    public void setOrderid(Long orderid){
-        this.orderid=orderid;
-    }
-    
-    public Long getUserid(){
-        return userid;
-    }
-    
-    public void setUserid(Long userid){
-        this.userid=userid;
-    }
-    
-    public Integer getHotelgoodsid(){
-        return hotelgoodsid;
-    }
-    
-    public void setHotelgoodsid(Integer hotelgoodsid){
-        this.hotelgoodsid=hotelgoodsid;
-    }
-    
-    public String getGoodsname(){
-        return goodsname;
-    }
-    
-    public void setGoodsname(String goodsname){
-        this.goodsname=goodsname;
-    }
-    
-    public String getGoodscoverurl(){
-        return goodscoverurl;
-    }
-    
-    public void setGoodscoverurl(String goodscoverurl){
-        this.goodscoverurl=goodscoverurl;
-    }
-    
-    public String getOrderserialno(){
-        return orderserialno;
-    }
-    
-    public void setOrderserialno(String orderserialno){
-        this.orderserialno=orderserialno;
-    }
-    
-    public BigDecimal getPrice(){
-        return price;
-    }
-    
-    public void setPrice(BigDecimal price){
-        this.price=price;
-    }
-    
-    public Integer getGoodscount(){
-        return goodscount;
-    }
-    
-    public void setGoodscount(Integer goodscount){
-        this.goodscount=goodscount;
-    }
-    
-    public Short getBelongmodule(){
-        return belongmodule;
-    }
-    
-    public void setBelongmodule(Short belongmodule){
-        this.belongmodule=belongmodule;
-    }
-    
-    public Boolean getIsdelete(){
-        return isdelete;
-    }
-    
-    public void setIsdelete(Boolean isdelete){
-        this.isdelete=isdelete;
-    }
-    
-    public Boolean getIsuserdelete(){
-        return isuserdelete;
-    }
-    
-    public void setIsuserdelete(Boolean isuserdelete){
-        this.isuserdelete=isuserdelete;
-    }
-    
-    public Integer getCreatedate(){
-        return createdate;
-    }
-    
-    public void setCreatedate(Integer createdate){
-        this.createdate=createdate;
-    }
-    
-    public Integer getUpdatedate(){
-        return updatedate;
-    }
-    
-    public void setUpdatedate(Integer updatedate){
-        this.updatedate=updatedate;
-    }
-    
-    public static long getSerialVersionUID(){
-        return serialVersionUID;
-    }
-    
-    @Override
-    public String toString(){
-        return "ZlOrderDetail{"+
-                "orderdetailid="+orderdetailid+
-                ", orderid="+orderid+
-                ", userid="+userid+
-                ", hotelgoodsid="+hotelgoodsid+
-                ", goodsname='"+goodsname+'\''+
-                ", goodscoverurl='"+goodscoverurl+'\''+
-                ", orderserialno='"+orderserialno+'\''+
-                ", price="+price+
-                ", goodscount="+goodscount+
-                ", belongmodule="+belongmodule+
-                ", isdelete="+isdelete+
-                ", isuserdelete="+isuserdelete+
-                ", createdate="+createdate+
-                ", updatedate="+updatedate+
-                '}';
-    }
-    
+
 }

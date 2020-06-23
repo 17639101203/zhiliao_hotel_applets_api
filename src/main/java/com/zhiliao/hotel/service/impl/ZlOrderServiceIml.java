@@ -266,6 +266,11 @@ public class ZlOrderServiceIml implements ZlOrderService {
 
         userGoodsReturn.setUserGoodsInfoList(zlOrderList);
         userGoodsReturn.setContent("提交订单成功,请进行下单操作!");
+        // 推送消息
+        Map<String, Object> hotelShopMap = new HashMap<>();
+        hotelShopMap.put("orderSerialNo", orderSerialNo);
+        hotelShopMap.put("hotelId", hotelBasicVO.getHotelID());
+        redisTemplate.convertAndSend(RedisKeyConstant.TOPIC_HOTELSHOP, hotelShopMap);
         return userGoodsReturn;
     }
 

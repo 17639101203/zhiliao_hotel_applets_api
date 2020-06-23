@@ -22,4 +22,13 @@ public class RedisKeyConstant {
     //存入redis的用户订单信息的标记的名称,后加OrderSerialNo
     public final static String ORDER_ORDERSERIALNO_FLAG = "order_OrderSerialNo_Flag_";
 
+    /**
+     * 消息订阅酒店超市主题
+     */
+    public static final String TOPIC_HOTELSHOP = "TOPIC_HOTELSHOP_ORDER";
+    /**
+     * 消息订阅客房服务主题
+     */
+    public static final String TOPIC_ROOMSERVICE = "TOPIC_ROOMSERVICE_ORDER";
+
 }

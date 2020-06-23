@@ -19,7 +19,7 @@ import java.util.List;
 
 @Transactional(rollbackFor = Exception.class)
 @Service
-public class ZlOrderDetailIml implements ZlOrderDetailService {
+public class ZlOrderDetailImpl implements ZlOrderDetailService {
 
     @Autowired
     private ZlOrderMapper zlOrderMapper;
@@ -29,17 +29,19 @@ public class ZlOrderDetailIml implements ZlOrderDetailService {
 
     @Override
     public OrderDetailsReturn findOrder(OrderDetailInfoVO vo) {
-        OrderDetailsReturn orderDetailsReturn = null;
         List<ZlOrderDetail> orderDetailsList = zlOrderDetailMapper.findOrderDetails(vo);
         if (orderDetailsList != null && !orderDetailsList.isEmpty()) {
             ZlOrderDetail orderDetail = orderDetailsList.get(0);
-            orderDetailsReturn = zlOrderMapper.find(orderDetail.getUserid(), orderDetail.getOrderserialno(), orderDetail.getBelongmodule());
+            OrderDetailsReturn orderDetailsReturn = zlOrderMapper.find(orderDetail.getUserid(), orderDetail.getOrderserialno(), orderDetail.getBelongmodule());
+            String roomNumber = zlOrderMapper.getRoomNumber(vo.getOrderid());
+            orderDetailsReturn.setRoomNumber(roomNumber);
             if (orderDetailsReturn == null) {
                 orderDetailsReturn = new OrderDetailsReturn();
             }
             orderDetailsReturn.setZlOrderDetailList(orderDetailsList);
+            return orderDetailsReturn;
         }
-        return orderDetailsReturn;
+        return null;
     }
 
 }

@@ -28,6 +28,11 @@ public class OrderDetailsReturn {
     private String remark;
 
     /**
+     * 客房编号
+     */
+    private String RoomNumber;
+
+    /**
      * 总价
      */
     private BigDecimal totalprice;

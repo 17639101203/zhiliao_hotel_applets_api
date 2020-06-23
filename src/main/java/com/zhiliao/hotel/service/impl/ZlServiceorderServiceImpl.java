@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.common.exception.BizException;
 import com.zhiliao.hotel.controller.serviceorder.params.ServiceorderCommitParams;
 import com.zhiliao.hotel.controller.serviceorder.vo.ServiceorderCommitVo;
@@ -14,14 +15,12 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,6 +45,9 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
 
     @Autowired
     private ZlHotelMapper zlHotelMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     public ServiceorderCommitVo serviceorderSubmit(String token, ServiceorderCommitParams scp) throws RuntimeException {
@@ -142,12 +144,14 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         }
         //获取用户信息
         ZlWxuserdetail zlWxuserdetail = Optional.ofNullable(zlWxuserdetailMapper.findByUserId(userId)).orElse(new ZlWxuserdetail());
+        //生成订单编号
+        String orderSerialNo = OrderIDUtil.createOrderID("");
         //生成客房服务订单
         ZlServiceorder order = new ZlServiceorder().builder()
                 .userid(userId)
                 .username(zlWxuserdetail.getRealname() == null ? "" : zlWxuserdetail.getRealname())
                 .tel(zlWxuserdetail.getTel() == null ? "" : zlWxuserdetail.getTel())
-                .serialnumber(OrderIDUtil.createOrderID("fw"))
+                .serialnumber(orderSerialNo)
                 .hotelid(scp.getHotelid())
                 .hotelname(scp.getHotelname())
                 .roomid(zlHotelroom.getRoomid())
@@ -168,6 +172,13 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         serviceorderCommitVo.setOrderid(order.getOrderid());
         //todo 获取商家服务平均时间配置，目前默认15分钟
         serviceorderCommitVo.setDealWithTime(15);
+
+        // 推送消息
+        Map<String, Object> hotelShopMap = new HashMap<>();
+        hotelShopMap.put("orderSerialNo", orderSerialNo);
+        hotelShopMap.put("hotelId", scp.getHotelid());
+        redisTemplate.convertAndSend(RedisKeyConstant.TOPIC_ROOMSERVICE, hotelShopMap);
+
         return serviceorderCommitVo;
     }
 

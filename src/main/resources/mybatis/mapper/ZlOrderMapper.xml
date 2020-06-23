@@ -176,4 +176,12 @@
           AND UserID = #{userid}
 	</select>
 
+    <select id="getRoomNumber" resultType="string">
+        SELECT
+          RoomNumber
+        FROM
+          zl_order
+        WHERE OrderID = #{orderid}
+    </select>
+
 </mapper>

@@ -1,6 +1,5 @@
 package com.zhiliao.hotel.utils;
 
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
