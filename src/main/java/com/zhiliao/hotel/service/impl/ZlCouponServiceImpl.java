@@ -33,7 +33,7 @@ public class ZlCouponServiceImpl implements ZlCouponService {
         //当前时间
         Integer date = Math.toIntExact(System.currentTimeMillis() / 1000);
         List<ZlCoupon> coupons = couponMapper.findAll(date);
-        if (coupons != null && coupons.size() > 0){
+        if (coupons != null && coupons.size() > 0) {
             for (int i = 0; i < coupons.size(); i++) {
                 ZlCouponUser couponUser = new ZlCouponUser();
                 ZlCoupon zlCoupon = coupons.get(i);
@@ -42,19 +42,20 @@ public class ZlCouponServiceImpl implements ZlCouponService {
                 couponUser.setIsused(false);
                 couponUser.setIsdelete(false);
                 couponUser.setCreatedate(date);
-                if (zlCoupon.getLimitdatetype() == 0){
+                couponUser.setUserid(userId);
+                if (zlCoupon.getLimitdatetype() == 0) {
                     couponUser.setExpireddate(date + zlCoupon.getValiddaycount() * 60 * 60);
-                }else if (zlCoupon.getLimitdatetype() == 1){
+                } else if (zlCoupon.getLimitdatetype() == 1) {
                     couponUser.setExpireddate(zlCoupon.getAllowendusedate());
                 }
-                if (zlCoupon.getCouponcount() != -1){
-                    if(zlCoupon.getCouponcount() > 0){
+                if (zlCoupon.getCouponcount() != -1) {
+                    if (zlCoupon.getCouponcount() > 0) {
                         couponUserMapper.insert(couponUser);
-                        couponMapper.updateById(zlCoupon.getCouponid(),date);
-                    }else {
+                        couponMapper.updateById(zlCoupon.getCouponid(), date);
+                    } else {
                         new RuntimeException("该优惠卷已派发完毕");
                     }
-                }else {
+                } else {
                     couponUserMapper.insert(couponUser);
                 }
             }

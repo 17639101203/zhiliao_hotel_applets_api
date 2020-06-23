@@ -166,9 +166,9 @@
     <!-- 点赞详情页 -->
     <select id="getComment" resultType="com.zhiliao.hotel.controller.comment.vo.CommentDetailVO">
       select
-          a.Evaluation,a.TagIDs,a.ImageUrls,a.Content,a.ReplyContent,a.CreateDate,b.HotelName,a.ReplyDate
+          a.Evaluation,a.TagIDs,a.ImageUrls,a.Content,a.ReplyContent,a.CreateDate,b.HotelName,a.ReplyDate,zr.RoomNumber
       from
-          zl_comment a left join zl_hotel b on a.hotelid = b.hotelid
+          zl_comment a left join zl_hotel b on a.hotelid = b.hotelid LEFT JOIN zl_hotelroom zr ON a.RoomID = zr.RoomID
       where
           a.UserID = #{userid} and a.IsDelete = 0 and a.CommentID = #{commentid} and a.Type = 0 and a.CommentStatus = 1
   </select>

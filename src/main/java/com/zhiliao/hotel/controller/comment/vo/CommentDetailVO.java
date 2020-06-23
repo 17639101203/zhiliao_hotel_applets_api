@@ -18,6 +18,11 @@ public class CommentDetailVO {
     private Byte evaluation;
 
     /**
+     * 客房编号
+     */
+    private String roomnumber;
+
+    /**
      * 标签id,多个用 | 隔开
      */
     private String tagids;
