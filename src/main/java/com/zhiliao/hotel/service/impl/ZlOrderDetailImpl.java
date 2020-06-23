@@ -4,7 +4,6 @@ import com.zhiliao.hotel.controller.myOrder.vo.OrderDetailInfoVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderDetailsReturn;
 import com.zhiliao.hotel.mapper.ZlOrderDetailMapper;
 import com.zhiliao.hotel.mapper.ZlOrderMapper;
-import com.zhiliao.hotel.model.ZlOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.service.ZlOrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;

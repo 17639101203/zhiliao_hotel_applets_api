@@ -52,14 +52,16 @@ public class ZlOrderServiceIml implements ZlOrderService {
         vo.setIsDelete(0);
         vo.setIsUserDelete(0);
 
+        if (null != vo.getPaystatus() && vo.getPaystatus() == 1) {
+            vo.setOrderstatus((byte) 0);
+        }
+
         PageHelper.startPage(vo.getPageNo(), vo.getPageSize());
         List<OrderList> allOrders = zlOrderMapper.findAllOrder(vo);
         if (allOrders != null && !allOrders.isEmpty()) {
-            List<ZlOrderDetail> goodsList = null;
-            Long goodsTotal = null;
             for (OrderList order : allOrders) {
-                goodsList = zlOrderDetailMapper.find2Goods(order.getUserid(), order.getOrderserialno(), order.getBelongmodule());
-                goodsTotal = zlOrderDetailMapper.countGoods(order.getUserid(), order.getOrderserialno(), order.getBelongmodule());
+                List<ZlOrderDetail> goodsList = zlOrderDetailMapper.find2Goods(order.getUserid(), order.getOrderserialno(), order.getBelongmodule());
+                Long goodsTotal = zlOrderDetailMapper.countGoods(order.getUserid(), order.getOrderserialno(), order.getBelongmodule());
                 order.setZlOrderDetailList(goodsList);
                 order.setGoodsTotal(goodsTotal);
             }
