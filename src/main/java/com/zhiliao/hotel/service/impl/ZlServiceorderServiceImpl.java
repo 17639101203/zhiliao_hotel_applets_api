@@ -2,6 +2,8 @@ package com.zhiliao.hotel.service.impl;
 
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.common.exception.BizException;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.controller.serviceorder.params.ServiceorderCommitParams;
 import com.zhiliao.hotel.controller.serviceorder.vo.ServiceorderCommitVo;
 import com.zhiliao.hotel.controller.serviceorder.vo.ServiceorderInfoVo;
@@ -174,10 +176,23 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         serviceorderCommitVo.setDealWithTime(15);
 
         // 推送消息
-        Map<String, Object> hotelShopMap = new HashMap<>();
-        hotelShopMap.put("orderSerialNo", orderSerialNo);
-        hotelShopMap.put("hotelId", scp.getHotelid());
-        redisTemplate.convertAndSend(RedisKeyConstant.TOPIC_ROOMSERVICE, hotelShopMap);
+//        Map<String, Object> roomServiceMap = new HashMap<>();
+//        OrderPhpVO orderPhpVO = new OrderPhpVO();
+//        roomServiceMap.put("form", "java");
+//        roomServiceMap.put("channel", RedisKeyConstant.TOPIC_ROOMSERVICE);
+//        orderPhpVO.setOrderSerialNo(orderSerialNo);
+//        orderPhpVO.setGetHotelId(scp.getHotelid());
+//        roomServiceMap.put("message", orderPhpVO);
+//        redisTemplate.convertAndSend(RedisKeyConstant.TOPIC_ROOMSERVICE, roomServiceMap);
+        OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
+        OrderPhpVO orderPhpVO = new OrderPhpVO();
+        orderPhpVO.setOrderSerialNo(orderSerialNo);
+        orderPhpVO.setGetHotelId(scp.getHotelid());
+        orderPhpSendVO.setForm("java");
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_ROOMSERVICE);
+        orderPhpSendVO.setMessage(orderPhpVO);
+        redisTemplate.convertAndSend(RedisKeyConstant.TOPIC_ROOMSERVICE, orderPhpSendVO);
+
 
         return serviceorderCommitVo;
     }
