@@ -30,6 +30,9 @@ public class ServiceorderInfoVo implements Serializable {
     @ApiModelProperty(value = "备注信息")
     private String remark;
 
+    @ApiModelProperty(value = "预约时间")
+    private Integer bookdate;
+
     @ApiModelProperty(value = "下单时间")
     private Integer createdate;
 

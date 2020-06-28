@@ -31,7 +31,7 @@ public class ZlServiceorder implements Serializable {
     private Long userid;
 
     /**
-     * 用户名
+     * 用户
      */
     private String username;
 
@@ -81,9 +81,14 @@ public class ZlServiceorder implements Serializable {
     private String roomnumber;
 
     /**
-     * 来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
+     * 来自:0后台;1小程序C端;2小程序B端;3公众号;4民宿;5好评返现;6分时酒店
      */
     private Integer comeformid;
+
+    /**
+     * 预约时间
+     */
+    private Integer bookdate;
 
     /**
      * 超时时间
@@ -96,7 +101,7 @@ public class ZlServiceorder implements Serializable {
     private String remark;
 
     /**
-     * -1:已取消;0待配送;1已处理
+     * -1:已取消;0待配送;1已完成
      */
     private Byte orderstatus;
 
@@ -121,7 +126,7 @@ public class ZlServiceorder implements Serializable {
     private Integer deliverydate;
 
     /**
-     * 删除状态:0正常;1删除;2用户删除(用户端不显示)
+     * 删除状态:0正常;1删除;
      */
     private Boolean isdelete;
 

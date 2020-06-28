@@ -133,6 +133,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
             orderDetail.setPrice(zlServicegoods.getSaleprice());
             orderDetail.setGoodscount(buyNum);
             orderDetail.setCreatedate(DateUtils.javaToPhpNowDateTime());
+            orderDetail.setUpdatedate(DateUtils.javaToPhpNowDateTime());
             orderDetails.add(orderDetail);
         }
         //todo 校验送达时间是否在服务时间内
@@ -165,6 +166,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
                 .timeoutdate(timeoutDate)
                 .remark(scp.getRemark())
                 .createdate(DateUtils.javaToPhpNowDateTime())
+                .updatedate(DateUtils.javaToPhpNowDateTime())
                 .build();
         zlServiceorderMapper.insert(order);
         //插入客服服务订单商品表数据
