@@ -31,4 +31,6 @@ public interface ZlCleanOrderService {
      * 取消清扫预约
      */
     void removeCleanOrder(Long orderID, Integer updatedate);
+
+    void deleteCleanOrder(Long orderID);
 }

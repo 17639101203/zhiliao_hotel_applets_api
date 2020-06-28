@@ -12,6 +12,7 @@ import com.zhiliao.hotel.model.ZlHotel;
 import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.model.ZlInvoiceOrder;
 import com.zhiliao.hotel.service.ZlInvoiceService;
+import com.zhiliao.hotel.utils.DateUtils;
 import io.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -99,6 +100,12 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     @Override
     public void cancelInvoiceOrder(Long invoiceorderid, Integer updatedate) {
         orderMapper.removeInvoiceOrder(invoiceorderid, updatedate);
+    }
+
+    @Override
+    public void deleteInvoiceOrder(Long invoiceorderid) {
+        Integer nowTime = DateUtils.javaToPhpNowDateTime();
+        orderMapper.deleteInvoiceOrder(invoiceorderid, nowTime);
     }
 
 }

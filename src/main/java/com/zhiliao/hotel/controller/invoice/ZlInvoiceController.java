@@ -213,5 +213,24 @@ public class ZlInvoiceController {
         }
     }
 
+    @ApiOperation(value = "删除开票订单")
+    @PostMapping("deleteInvoiceOrder")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "invoiceorderid", dataType = "Long", required = true, value = "发票订单ID")
+    })
+    @UserLoginToken
+    public ReturnString deleteInvoiceOrder(Long invoiceorderid) {
+        if (invoiceorderid == null || "".equals(invoiceorderid)) {
+            return new ReturnString<>(-1, "订单号为空，请重新再试");
+        }
+
+        try {
+            zlInvoiceService.deleteInvoiceOrder(invoiceorderid);
+            return new ReturnString<>(0, "订单已删除!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString<>("删除订单失败!");
+        }
+    }
 
 }

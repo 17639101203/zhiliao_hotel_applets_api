@@ -79,8 +79,28 @@ public class ZlCleanOrderController {
 //    @PassToken
     public ReturnString cancelCleanOrder(@PathVariable("orderID") Long orderID) {
         Integer nowTime = DateUtils.javaToPhpNowDateTime();
-        zlCleanOrderService.removeCleanOrder(orderID, nowTime);
-        return new ReturnString<>(0, "预约已取消");
+        try {
+            zlCleanOrderService.removeCleanOrder(orderID, nowTime);
+            return new ReturnString<>(0, "预约已取消");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("取消失败!");
+        }
+    }
+
+    @ApiOperation(value = "删除清扫订单")
+    @PostMapping("deleteCleanOrder/{orderID}")
+    @UserLoginToken
+//    @PassToken
+    public ReturnString deleteCleanOrder(@PathVariable("orderID") Long orderID) {
+
+        try {
+            zlCleanOrderService.deleteCleanOrder(orderID);
+            return new ReturnString<>(0, "订单已删除!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("删除清扫订单失败!");
+        }
     }
 
 

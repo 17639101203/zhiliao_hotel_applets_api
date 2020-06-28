@@ -20,4 +20,6 @@ public interface ZlCleanOrderMapper extends Mapper<ZlCleanOrder> {
 
     @Select("select count(*) from zl_cleanorder where UserID = #{userId} and IsDelete = 0 ")
     int selectCountClean(Long userId);
+
+    void deleteCleanOrder(@Param("orderID")Long orderID,@Param("nowTime") Integer nowTime);
 }

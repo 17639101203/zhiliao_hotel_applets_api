@@ -86,6 +86,8 @@ public interface ZlInvoiceService {
      * @param updatedate
      */
     void cancelInvoiceOrder(Long invoiceorderid, Integer updatedate);
+
+    void deleteInvoiceOrder(Long invoiceorderid);
 }
 
 

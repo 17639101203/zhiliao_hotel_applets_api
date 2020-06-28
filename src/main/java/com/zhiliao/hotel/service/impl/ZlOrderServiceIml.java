@@ -154,6 +154,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
             }
             totalPrice = totalPrice.add(sendCash);
             zlOrder.setTotalprice(totalPrice);
+            zlOrder.setSendcash(sendCash);
 
             //获取优惠券自增id
             Integer recID = goodsInfoParamList.get(0).getRecID();
@@ -180,6 +181,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 BigDecimal actuallyPay = totalPrice.subtract(couponUserVO.getDiscountMoney());
                 zlOrder.setActuallypay(actuallyPay);
                 zlOrder.setCouponid(couponUserVO.getCouponID());
+                zlOrder.setCouponcash(couponUserVO.getDiscountMoney());
             } else {
                 //优惠券id为-1说明没有使用优惠券,实际支付金额=总价
                 zlOrder.setActuallypay(totalPrice);

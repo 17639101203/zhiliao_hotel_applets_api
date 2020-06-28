@@ -45,6 +45,10 @@
     SELECT
       zo.OrderID,
       zo.OrderSerialNo,
+      zo.HotelID,
+      zo.HotelName,
+      zo.RoomID,
+      zo.RoomNumber,
       zo.UserName,
       zg.CoverImgUrl,
       zo.Tel,

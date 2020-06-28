@@ -188,4 +188,13 @@
           AND IsDelete = 0
   </update>
 
+    <update id="deleteCleanOrder">
+        UPDATE
+          zl_cleanorder
+        SET
+          IsDelete = 1,
+          UpdateDate = #{nowTime}
+        WHERE OrderID = #{orderID}
+    </update>
+
 </mapper>

@@ -69,5 +69,11 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
         zlCleanOrderMapper.removeCleanOrder(orderID, updatedate);
     }
 
+    @Override
+    public void deleteCleanOrder(Long orderID) {
+        Integer nowTime = DateUtils.javaToPhpNowDateTime();
+        zlCleanOrderMapper.deleteCleanOrder(orderID, nowTime);
+    }
+
 
 }

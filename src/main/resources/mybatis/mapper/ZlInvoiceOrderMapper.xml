@@ -195,4 +195,14 @@
     WHERE invoiceorderid = #{invoiceorderid}
       AND IsDelete = 0
   </update>
+
+    <update id="deleteInvoiceOrder">
+        UPDATE
+          zl_invoiceorder
+        SET
+          IsDelete = 1,
+          UpdateDate = #{nowTime}
+        WHERE invoiceorderid = #{invoiceorderid}
+          AND IsDelete = 0
+    </update>
 </mapper>

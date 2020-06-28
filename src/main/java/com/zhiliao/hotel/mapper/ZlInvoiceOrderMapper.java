@@ -16,4 +16,6 @@ public interface ZlInvoiceOrderMapper extends Mapper<ZlInvoiceOrder> {
 
     @Select("select count(*) from zl_invoiceorder where UserID = #{userId} and IsDelete = 0 ")
     int selectCountInvoice(Long userId);
+
+    void deleteInvoiceOrder(@Param("invoiceorderid")Long invoiceorderid, @Param("nowTime")Integer nowTime);
 }

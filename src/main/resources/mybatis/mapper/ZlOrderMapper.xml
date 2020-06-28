@@ -155,8 +155,15 @@
 
     <select id="waitForPayTotal"
             resultType="java.lang.Long">
-
-        SELECT COUNT(OrderID) FROM zl_order WHERE IsDelete=0 AND IsUserDelete = 0 AND PayStatus=1 AND UserID=#{userid}
+        SELECT
+          COUNT(OrderID)
+        FROM
+          zl_order
+        WHERE IsDelete = 0
+          AND IsUserDelete = 0
+          AND PayStatus = 1
+          AND OrderStatus = 0
+          AND UserID = #{userid}
 	</select>
 
     <select id="waitForGoodsTotal"
