@@ -23,12 +23,44 @@ public class RedisKeyConstant {
     public final static String ORDER_ORDERSERIALNO_FLAG = "order_OrderSerialNo_Flag_";
 
     /**
-     * 消息订阅酒店超市主题
+     * 酒店超市主题
      */
     public static final String TOPIC_HOTELSHOP = "TOPIC_HOTELSHOP_ORDER";
     /**
-     * 消息订阅客房服务主题
+     * 客房服务主题
      */
-    public static final String TOPIC_ROOMSERVICE = "TOPIC_ROOMSERVICE_ORDER";
+    public static final String TOPIC_ROOMSERVICE = "TOPIC_SERVICE_ORDER";
+    /**
+     * 清扫订单主题
+     */
+    public static final String TOPIC_CLEAN = "TOPIC_CLEAN_ORDER";
+    /**
+     * 维修订单主题
+     */
+    public static final String TOPIC_REPAIR = "TOPIC_REPAIR_ORDER";
+    /**
+     * 设施订单主题
+     */
+    public static final String TOPIC_FACILITY = "TOPIC_FACILITY_ORDER";
+    /**
+     * 退房订单主题
+     */
+    public static final String TOPIC_CKECKOUT = "TOPIC_CKECKOUT_ORDER";
+    /**
+     * 续住订单主题
+     */
+    public static final String TOPIC_CONTINUE_LIVE = "TOPIC_CONTINUE_LIVE_ORDER";
+    /**
+     * 租车订单主题
+     */
+    public static final String TOPIC_RENT_CAR = "TOPIC_RENT_CAR_ORDER";
+    /**
+     * 叫醒订单主题
+     */
+    public static final String TOPIC_WAKE = "TOPIC_WAKE_ORDER";
+    /**
+     * 发票订单主题
+     */
+    public static final String TOPIC_SERVICE_GOODS = "TOPIC_SERVICE_GOODS";
 
 }

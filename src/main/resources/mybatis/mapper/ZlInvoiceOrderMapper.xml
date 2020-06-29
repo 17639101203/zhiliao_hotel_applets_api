@@ -167,6 +167,7 @@
         ElectronicPaperType,
         Title,
         HotelID,
+        RoomNumber,
         Identifier,
         Tel,
         Remark,

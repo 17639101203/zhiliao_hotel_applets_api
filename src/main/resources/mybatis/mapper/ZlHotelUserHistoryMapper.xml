@@ -12,21 +12,24 @@
         <result column="CreateDate" jdbcType="INTEGER" property="createdate"/>
     </resultMap>
 
-    <select id="getHotelHistoryList" resultMap="BaseResultMap">
+    <select id="getHotelHistoryList" resultType="com.zhiliao.hotel.model.ZlHotelUserHistory">
         SELECT
-          RecID,
-          UserID,
-          HotelID,
-          HotelName,
-          RoomID,
-          RoomNumber,
-          CheckInDate
+          zhh.RecID,
+          zhh.UserID,
+          zhh.HotelID,
+          zhh.HotelName,
+          zhh.RoomID,
+          zhh.RoomNumber,
+          zhh.CheckInDate,
+          zhq.QrCodeID
         FROM
-          zl_hoteluserhistory
-        WHERE UserID = #{userid}
-          AND IsUserDelete = 0
-          AND IsDelete = 0
-        ORDER BY CheckInDate DESC
+          zl_hoteluserhistory zhh
+          LEFT JOIN zl_hotelroomqrcode zhq
+            ON zhh.RoomID = zhq.RoomID
+        WHERE zhh.UserID = #{userid}
+          AND zhh.IsUserDelete = 0
+          AND zhh.IsDelete = 0
+        ORDER BY zhh.CheckInDate DESC
     </select>
     <update id="userDeleteHotelHistory">
        UPDATE

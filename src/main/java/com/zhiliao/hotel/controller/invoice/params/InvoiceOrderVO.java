@@ -47,6 +47,12 @@ public class InvoiceOrderVO {
     private String hotelname;
 
     /**
+     * 房间号
+     */
+    @ApiModelProperty("房间号")
+    private String roomnumber;
+
+    /**
      * 个人真实姓/或单位抬头
      */
     @ApiModelProperty("个人真实姓/或单位抬头")

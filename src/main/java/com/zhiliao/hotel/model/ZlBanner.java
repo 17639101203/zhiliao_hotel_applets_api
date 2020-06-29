@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @date 2020-04-14
  */
 @Table(name = "zl_banner")
-public class ZlBanner implements Serializable {
+    public class ZlBanner implements Serializable {
 
 
     private static final long serialVersionUID = 1L;
