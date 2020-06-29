@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <name>zhiliao</name>
     <description>Demo project for Spring Boot</description>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -227,6 +227,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                    <mainClass>com.zhiliao.hotel.ZhiliaoHotelAppletsApplication</mainClass>
+                </configuration>
             </plugin>
             <!-- mybatis-generator-maven-plugin -->
             <plugin>
