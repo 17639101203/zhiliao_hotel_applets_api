@@ -14,13 +14,18 @@ import java.io.Serializable;
 public class OrderPhpVO implements Serializable {
 
     /**
+     * 订单ID
+     */
+    private Long OrderID;
+
+    /**
      * 订单编号
      */
-    private String orderSerialNo;
+    private String SerialNumber;
 
     /**
      * 酒店id
      */
-    private Integer getHotelId;
+    private Integer HotelID;
 
 }

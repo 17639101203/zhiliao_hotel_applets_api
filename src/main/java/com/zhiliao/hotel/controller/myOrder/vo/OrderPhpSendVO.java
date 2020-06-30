@@ -1,5 +1,7 @@
 package com.zhiliao.hotel.controller.myOrder.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.zhiliao.hotel.common.exception.JsonObjectSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,16 +18,19 @@ public class OrderPhpSendVO implements Serializable {
     /**
      * 来源
      */
+//    @JsonSerialize(using = JsonObjectSerializer.class)
     private String form;
 
     /**
      * 主题
      */
+//    @JsonSerialize(using = JsonObjectSerializer.class)
     private String channel;
 
     /**
      * 信息
      */
+//    @JsonSerialize(using = JsonObjectSerializer.class)
     private OrderPhpVO message;
 
 }

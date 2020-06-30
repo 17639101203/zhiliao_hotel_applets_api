@@ -41,6 +41,8 @@ public class ZlCouponUserServiceImpl implements ZlCouponUserService {
         Integer date = Math.toIntExact(System.currentTimeMillis() / 1000);
         System.out.println(date);
 
+        PageInfoResult<ZlCouponUserResult> result = new PageInfoResult<>();
+
         //查询有效优惠卷
         List<ZlCouponUserResult> effective = couponUserMapper.effectiveCouponUser(userId, date);
         //已使用的优惠卷
@@ -59,6 +61,12 @@ public class ZlCouponUserServiceImpl implements ZlCouponUserService {
         for (ZlCouponUserResult zlCouponUser : beOverdue) {
             couponUserList.add(zlCouponUser);
         }
+
+        if (couponUserList.size() == 0) {
+            result.setList(couponUserList);
+            return result;
+        }
+
         //集合分页
         List<ZlCouponUserResult> list = new LinkedList<>();
 
@@ -80,7 +88,6 @@ public class ZlCouponUserServiceImpl implements ZlCouponUserService {
             list.add(zlCouponUser);
         }
 
-        PageInfoResult<ZlCouponUserResult> result = new PageInfoResult<>();
         result.setPageNo(pageNo);
         result.setCurrentPageNumber(list.size());
         result.setTotalItem(couponUserList.size());

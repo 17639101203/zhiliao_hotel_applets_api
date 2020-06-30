@@ -1,5 +1,7 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import springfox.documentation.spring.web.json.Json;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -271,22 +274,15 @@ public class ZlOrderServiceIml implements ZlOrderService {
         userGoodsReturn.setUserGoodsInfoList(zlOrderList);
         userGoodsReturn.setContent("提交订单成功,请进行下单操作!");
         // 推送消息
-//        Map<String, Object> hotelShopMap = new HashMap<>();
-//        OrderPhpVO orderPhpVO = new OrderPhpVO();
-//        hotelShopMap.put("form", "java");
-//        hotelShopMap.put("channel", RedisKeyConstant.TOPIC_HOTELSHOP);
-//        orderPhpVO.setOrderSerialNo(orderSerialNo);
-//        orderPhpVO.setGetHotelId(hotelBasicVO.getHotelID());
-//        hotelShopMap.put("message", orderPhpVO);
-//        redisTemplate.convertAndSend(RedisKeyConstant.TOPIC_HOTELSHOP, hotelShopMap);
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
         OrderPhpVO orderPhpVO = new OrderPhpVO();
-        orderPhpVO.setOrderSerialNo(orderSerialNo);
-        orderPhpVO.setGetHotelId(hotelBasicVO.getHotelID());
+        orderPhpVO.setSerialNumber(orderSerialNo);
+        orderPhpVO.setHotelID(hotelBasicVO.getHotelID());
         orderPhpSendVO.setForm("java");
         orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_HOTELSHOP);
         orderPhpSendVO.setMessage(orderPhpVO);
-        redisTemplate.convertAndSend(RedisKeyConstant.TOPIC_HOTELSHOP, orderPhpSendVO);
+        String orderStr = JSON.toJSONString(orderPhpSendVO);
+        redisTemplate.convertAndSend(RedisKeyConstant.TOPIC_HOTELSHOP, orderStr);
 
         return userGoodsReturn;
     }

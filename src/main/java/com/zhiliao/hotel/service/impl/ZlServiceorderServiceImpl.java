@@ -1,5 +1,8 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.common.exception.BizException;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
@@ -14,14 +17,17 @@ import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import com.zhiliao.hotel.utils.TokenUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,6 +56,9 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public ServiceorderCommitVo serviceorderSubmit(String token, ServiceorderCommitParams scp) throws RuntimeException {
@@ -162,39 +171,47 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
                 .floornumber(zlHotelroom.getRoomfloor())
                 .roomnumber(zlHotelroom.getRoomnumber())
                 .comeformid(1)
-                .deliverydate((int) (scp.getDeliverydate() / 1000))
                 .timeoutdate(timeoutDate)
                 .remark(scp.getRemark())
                 .createdate(DateUtils.javaToPhpNowDateTime())
-                .updatedate(DateUtils.javaToPhpNowDateTime())
                 .build();
-        zlServiceorderMapper.insert(order);
+        order.setDeliverydate((int) (scp.getDeliverydate() / 1000));
+        order.setUpdatedate(DateUtils.javaToPhpNowDateTime());
+        zlServiceorderMapper.insertSelective(order);
         //插入客服服务订单商品表数据
         orderDetails.stream().forEach(orderDetail -> orderDetail.setOrderid(order.getOrderid()));
-        zlServiceorderdetailMapper.insertOrderDetailList(orderDetails);
+        for (ZlServiceorderdetail orderDetail : orderDetails) {
+            zlServiceorderdetailMapper.insertSelective(orderDetail);
+        }
+//        zlServiceorderdetailMapper.insertOrderDetailList(orderDetails);
         //返回客房服务订单id
         serviceorderCommitVo.setOrderid(order.getOrderid());
         //todo 获取商家服务平均时间配置，目前默认15分钟
         serviceorderCommitVo.setDealWithTime(15);
 
         // 推送消息
-//        Map<String, Object> roomServiceMap = new HashMap<>();
-//        OrderPhpVO orderPhpVO = new OrderPhpVO();
-//        roomServiceMap.put("form", "java");
-//        roomServiceMap.put("channel", RedisKeyConstant.TOPIC_ROOMSERVICE);
-//        orderPhpVO.setOrderSerialNo(orderSerialNo);
-//        orderPhpVO.setGetHotelId(scp.getHotelid());
-//        roomServiceMap.put("message", orderPhpVO);
-//        redisTemplate.convertAndSend(RedisKeyConstant.TOPIC_ROOMSERVICE, roomServiceMap);
-        OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
+//        OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
         OrderPhpVO orderPhpVO = new OrderPhpVO();
-        orderPhpVO.setOrderSerialNo(orderSerialNo);
-        orderPhpVO.setGetHotelId(scp.getHotelid());
-        orderPhpSendVO.setForm("java");
-        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_ROOMSERVICE);
-        orderPhpSendVO.setMessage(orderPhpVO);
-        redisTemplate.convertAndSend(RedisKeyConstant.TOPIC_ROOMSERVICE, orderPhpSendVO);
+        orderPhpVO.setOrderID(order.getOrderid());
+        orderPhpVO.setSerialNumber(orderSerialNo);
+        orderPhpVO.setHotelID(scp.getHotelid());
+//        orderPhpSendVO.setForm("java");
+//        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_ROOMSERVICE);
+//        orderPhpSendVO.setMessage(orderPhpVO);
+//        String orderStr = JSON.toJSONString(orderPhpSendVO);
+//        System.out.println(orderStr);
+//        String orderJsonStr = StringEscapeUtils.unescapeJava(orderStr);
+//        System.out.println(orderJsonStr);
+        HashMap map = new HashMap();
+        map.put("form", "java");
+        map.put("channel", RedisKeyConstant.TOPIC_ROOMSERVICE);
+        map.put("message", orderPhpVO);
+        String orderStr = JSON.toJSONString(map);
+        Gson gson = new Gson();
+        orderStr = gson.toJson(map);
+        System.out.println(gson.fromJson(orderStr,String.class));
 
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_ROOMSERVICE, gson.fromJson(orderStr,String.class));
 
         return serviceorderCommitVo;
     }

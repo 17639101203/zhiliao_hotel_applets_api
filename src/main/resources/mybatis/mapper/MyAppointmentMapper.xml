@@ -105,7 +105,7 @@
             <result column="GoodsCount" jdbcType="INTEGER" property="goodscount"/>
         </collection>
     </resultMap>
-    <select id="serviceFindAll" resultMap="resultMap">
+    <select id="serviceFindAll" resultType="com.zhiliao.hotel.controller.myAppointment.result.ZlServiceorderResult">
         select
         s.OrderID,
         s.SerialNumber,
@@ -123,7 +123,8 @@
         sd.GoodsName,
         sd.GoodsCoverUrl,
         sd.Price,
-        sd.GoodsCount
+        sd.GoodsCount,
+        s.DeliveryDate
         from
         zl_serviceorder s
         left join

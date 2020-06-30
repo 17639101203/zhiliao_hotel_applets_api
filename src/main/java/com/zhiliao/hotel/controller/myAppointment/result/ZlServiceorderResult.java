@@ -85,6 +85,11 @@ public class ZlServiceorderResult implements Serializable {
     private Integer bookdate;
 
     /**
+     * 送达时间;默认0表示尽快送达
+     */
+    private Integer deliverydate;
+
+    /**
      * 超时时间
      */
     private Integer timeoutdate;

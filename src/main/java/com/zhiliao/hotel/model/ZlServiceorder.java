@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -23,6 +25,8 @@ public class ZlServiceorder implements Serializable {
     /**
      * 订单ID
      */
+    @Id
+    @GeneratedValue(generator="JDBC")
     private Long orderid;
 
     /**

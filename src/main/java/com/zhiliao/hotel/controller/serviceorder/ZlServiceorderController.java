@@ -28,8 +28,8 @@ public class ZlServiceorderController {
      * 客房服务订单提交
      */
     @ApiOperation(value = "高翔_客房服务订单提交")
-    @UserLoginToken
-//    @PassToken
+//    @UserLoginToken
+    @PassToken
     @PostMapping("serviceorderSubmit")
     public ReturnString<ServiceorderCommitVo> serviceorderSubmit(HttpServletRequest request, @RequestBody ServiceorderCommitParams scp){
         String token = request.getHeader("token");
