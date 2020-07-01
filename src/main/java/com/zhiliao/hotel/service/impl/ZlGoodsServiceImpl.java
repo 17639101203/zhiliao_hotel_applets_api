@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.goods.vo.*;
+import com.zhiliao.hotel.controller.hotel.ZlHotelController;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsCouponInfoVO;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsShortInfoVO;
 import com.zhiliao.hotel.mapper.*;
@@ -13,6 +14,8 @@ import com.zhiliao.hotel.service.ZlGoodsService;
 import com.zhiliao.hotel.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -37,7 +40,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Service
 public class ZlGoodsServiceImpl implements ZlGoodsService {
-
     @Autowired
     private final ZlGoodsMapper zlGoodsMapper;
 
@@ -208,6 +210,7 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
         String serviceopentime = zlXcxmenu.getServiceopentime();
         String[] split = serviceopentime.split("-");
         String dateByString = DateUtils.getDateByString();
+
         //拼接营业时间字符串
         String startBusinessHoursStr = dateByString + " " + split[0];
         String endBusinessHoursStr = dateByString + " " + split[1];

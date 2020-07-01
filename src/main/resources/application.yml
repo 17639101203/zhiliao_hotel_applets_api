@@ -1,5 +1,5 @@
 server:
-  port: 8066
+  port: 86
 
 mybatis:
   mapper-locations: classpath:/mybatis/mapper/*.xml
@@ -15,12 +15,21 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
+      #      url: jdbc:mysql://39.108.188.110:3306/company_zhiliao?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
+      #      username: zhiliao_dev
+      #      password: y82F3FybiffN6DrT
+#      url: jdbc:mysql://39.101.223.226:3357/zhiliaodb-dev?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
+#      username: admdbuser
+#      password: dbpw123@ccc
+#      url: jdbc:mysql://127.0.0.1:3306/company_zhiliao?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
+#      username: user
+#      password: 123456
+      url: jdbc:mysql://172.18.0.3:3306/zhiliaodb?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
+      username: zhiliao
+      password: zhiliao_pwd123
 #      url: jdbc:mysql://39.101.213.223:23306/zhiliaodb?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
 #      username: zhiliao
 #      password: zhiliao_pwd123
-      url: jdbc:mysql://127.0.0.1:3306/company_zhiliao?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=CTT
-      username: user
-      password: 123456
       initial-size: 5 #定义初始连接数
       max-active: 20  #定义最大连接数
       min-idle: 10    #定义最小空闲

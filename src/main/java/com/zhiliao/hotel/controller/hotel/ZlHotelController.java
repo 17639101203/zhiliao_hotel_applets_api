@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.controller.hotel;
 
 import com.zhiliao.hotel.common.*;
+import com.zhiliao.hotel.controller.wxuser.ZlWxuserController;
 import com.zhiliao.hotel.model.ZlHotelRoomQrcode;
 import com.zhiliao.hotel.service.ZlHotelRoomQrcodeService;
 import com.zhiliao.hotel.service.ZlHotelService;
@@ -9,6 +10,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/zl/hotel")
 public class ZlHotelController {
-
+    private static final Logger logger = LoggerFactory.getLogger(ZlHotelController.class);
     @Resource
     private ZlHotelService zlHotelService;
 
@@ -48,11 +51,16 @@ public class ZlHotelController {
         if (weiXinUserId == null) {
             return new ReturnString("没有访问权限，用户未登录或登录已过期!");
         }
+        logger.info("二维码ID是：" + codeId);
+
         ZlHotelRoomQrcode roomQrcodeId = zlHotelRoomQrcodeService.getRoomQrcodeId(codeId);
+
+        logger.info("房间ID是：" + roomQrcodeId);
+
         if (roomQrcodeId != null) {
             return zlHotelService.getById(roomQrcodeId.getHotelID(), String.valueOf(roomQrcodeId.getRoomID()), token);
         }
-        return new ReturnString("二维码不存在,请联系管理员");
+        return new ReturnString("房间未启动,请联系管理员");
     }
 
     @ApiOperation(value = "高翔_获取入住酒店历史")

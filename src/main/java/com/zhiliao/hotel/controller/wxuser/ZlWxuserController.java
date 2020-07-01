@@ -75,9 +75,15 @@ public class ZlWxuserController {
             logger.info("开始请求->参数->code：" + wxuserLoginParam.getCode() + "|加密秘钥：" + wxuserLoginParam.getEncryptedData() + "|偏移量：" + wxuserLoginParam.getIv());
             String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + APP_ID + "&secret=" + SECRET + "&js_code=" + wxuserLoginParam.getCode() + "&grant_type=authorization_code";
             JSONObject res = getJsonObject(url);
-            if (res != null && res.get("errcode") != null) {
+            logger.info("res: " + res);
+            if (res == null) {
                 return new ReturnString("解析失败!");
             }
+
+            if(res.get("errcode") != null){
+                return new ReturnString("解析失败! ");
+            }
+            logger.info("res: " + res.get("errcode"));
             String openid = res.getString("openid");
             // 通过openid查找用户信息
             ZlWxuser wxuser = zlWxuserService.findWxuserByWxOpenId(openid);
@@ -85,7 +91,7 @@ public class ZlWxuserController {
                 // 用户不存在，新增注册用户
                 JSONObject res1 = getUserInfo(wxuserLoginParam.getEncryptedData(), String.valueOf(res.get("session_key")), wxuserLoginParam.getIv());
                 if (res1 == null) {
-                    return new ReturnString("解析失败!");
+                    return new ReturnString("解析失败! res1 session_key");
                 }
                 wxuser = new ZlWxuser();
                 wxuser.setWxopenid(openid);
