@@ -1,5 +1,9 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.zhiliao.hotel.common.constant.RedisKeyConstant;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.mapper.ZlWakeOrderMapper;
 import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
 import com.zhiliao.hotel.model.ZlWakeOrder;
@@ -7,6 +11,7 @@ import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.ZlWakeOrderService;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +32,8 @@ public class ZlWakeOrderServiceImpl implements ZlWakeOrderService {
     private ZlWakeOrderMapper wakeOrderMapper;
     @Autowired
     private ZlWxuserdetailMapper wxuserdetailMapper;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 提交叫醒订单
@@ -43,15 +50,29 @@ public class ZlWakeOrderServiceImpl implements ZlWakeOrderService {
         if (zlWxuserdetail == null) {
             new RuntimeException("没有该用户信息");
         }
+        String orderSerialNo = OrderIDUtil.createOrderID("");
         wakeOrder.setUsername(zlWxuserdetail.getRealname());
         wakeOrder.setTel(zlWxuserdetail.getTel());
         wakeOrder.setUserid(userId);
-        wakeOrder.setOrderserialno(OrderIDUtil.createOrderID("JX"));
+        wakeOrder.setOrderserialno(orderSerialNo);
         wakeOrder.setOrderstatus((byte) 0);
         wakeOrder.setIsdelete(false);
         wakeOrder.setIsuserdelete(false);
         wakeOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         wakeOrderMapper.insertSelective(wakeOrder);
+
+        // 推送消息
+        OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
+        OrderPhpVO orderPhpVO = new OrderPhpVO();
+        orderPhpVO.setOrderID(wakeOrder.getOrderid());
+        orderPhpVO.setSerialNumber(orderSerialNo);
+        orderPhpVO.setHotelID(wakeOrder.getHotelid());
+        orderPhpSendVO.setForm("java");
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_WAKE);
+        orderPhpSendVO.setMessage(orderPhpVO);
+        String orderStr = JSON.toJSONString(orderPhpSendVO);
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_WAKE, orderStr);
+
         Map<String, Object> map = new HashMap<>();
         map.put("orderID", wakeOrder.getOrderid());
         return map;

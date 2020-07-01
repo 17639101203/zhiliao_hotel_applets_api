@@ -1,12 +1,16 @@
 package com.zhiliao.hotel.controller.invoice;
 
+import com.alibaba.fastjson.JSON;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderParam;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceParam;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.model.ZlInvoiceOrder;
 import com.zhiliao.hotel.service.ZlInvoiceService;
@@ -22,6 +26,7 @@ import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +43,8 @@ public class ZlInvoiceController {
     @Autowired
     private ZlInvoiceService zlInvoiceService;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     // 允许最大的pageSize
     private final static int MAX_PAGE_SIZE = 20;
@@ -114,6 +121,19 @@ public class ZlInvoiceController {
         zlInvoiceOrder.setUpdatedate(nowTime);     //修改时间
         if (invoiceOrderParam.getInvoicetype() == 1) {      //个人开票
             zlInvoiceService.addinvoiceOrder(zlInvoiceOrder);
+
+            // 推送消息
+            OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
+            OrderPhpVO orderPhpVO = new OrderPhpVO();
+            orderPhpVO.setOrderID(zlInvoiceOrder.getInvoiceorderid());
+            orderPhpVO.setSerialNumber(invoiceOrderNumber);
+            orderPhpVO.setHotelID(zlInvoiceOrder.getHotelid());
+            orderPhpSendVO.setForm("java");
+            orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_SERVICE_GOODS);
+            orderPhpSendVO.setMessage(orderPhpVO);
+            String orderStr = JSON.toJSONString(orderPhpSendVO);
+            stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_SERVICE_GOODS, orderStr);
+
             map.put("invoiceorderid", zlInvoiceOrder.getInvoiceorderid());
             return new ReturnString<>(0, "增值税普通发票抬头保存成功", map);
         } else if (invoiceOrderParam.getInvoicetype() == 2) {  //企业开票
@@ -123,6 +143,19 @@ public class ZlInvoiceController {
             zlInvoiceOrder.setCompanytel(invoiceOrderParam.getCompanytel());    //单位电话
             zlInvoiceOrder.setCompanyaddress(invoiceOrderParam.getCompanyaddress());  //  单位地址
             zlInvoiceService.addinvoiceOrder(zlInvoiceOrder);
+
+            // 推送消息
+            OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
+            OrderPhpVO orderPhpVO = new OrderPhpVO();
+            orderPhpVO.setOrderID(zlInvoiceOrder.getInvoiceorderid());
+            orderPhpVO.setSerialNumber(invoiceOrderNumber);
+            orderPhpVO.setHotelID(zlInvoiceOrder.getHotelid());
+            orderPhpSendVO.setForm("java");
+            orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_SERVICE_GOODS);
+            orderPhpSendVO.setMessage(orderPhpVO);
+            String orderStr = JSON.toJSONString(orderPhpSendVO);
+            stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_SERVICE_GOODS, orderStr);
+
             map.put("invoiceorderid", zlInvoiceOrder.getInvoiceorderid());
             return new ReturnString<>(0, "增值税专用发票抬头保存成功", map);
         }

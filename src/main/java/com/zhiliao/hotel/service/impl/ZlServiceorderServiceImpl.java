@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
@@ -190,28 +191,16 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         serviceorderCommitVo.setDealWithTime(15);
 
         // 推送消息
-//        OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
+        OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
         OrderPhpVO orderPhpVO = new OrderPhpVO();
         orderPhpVO.setOrderID(order.getOrderid());
         orderPhpVO.setSerialNumber(orderSerialNo);
         orderPhpVO.setHotelID(scp.getHotelid());
-//        orderPhpSendVO.setForm("java");
-//        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_ROOMSERVICE);
-//        orderPhpSendVO.setMessage(orderPhpVO);
-//        String orderStr = JSON.toJSONString(orderPhpSendVO);
-//        System.out.println(orderStr);
-//        String orderJsonStr = StringEscapeUtils.unescapeJava(orderStr);
-//        System.out.println(orderJsonStr);
-        HashMap map = new HashMap();
-        map.put("form", "java");
-        map.put("channel", RedisKeyConstant.TOPIC_ROOMSERVICE);
-        map.put("message", orderPhpVO);
-        String orderStr = JSON.toJSONString(map);
-        Gson gson = new Gson();
-        orderStr = gson.toJson(map);
-        System.out.println(gson.fromJson(orderStr,String.class));
-
-        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_ROOMSERVICE, gson.fromJson(orderStr,String.class));
+        orderPhpSendVO.setForm("java");
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_ROOMSERVICE);
+        orderPhpSendVO.setMessage(orderPhpVO);
+        String orderStr = JSON.toJSONString(orderPhpSendVO);
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_ROOMSERVICE, orderStr);
 
         return serviceorderCommitVo;
     }

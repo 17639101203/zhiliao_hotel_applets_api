@@ -1,10 +1,14 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.ReturnString;
+import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.clean.cleanparm.CleanParm;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.mapper.ZlCleanOrderMapper;
 import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
 import com.zhiliao.hotel.model.ZlCleanOrder;
@@ -13,6 +17,7 @@ import com.zhiliao.hotel.service.ZlCleanOrderService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +35,9 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
 
     @Autowired
     ZlWxuserdetailMapper zlWxuserdetailMapper;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
 
     @Override
@@ -54,6 +62,19 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
         zlCleanOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));   //支付/取消时间
 //        zlCleanOrderMapper.addCleanOrder(zlCleanOrder);
         zlCleanOrderMapper.insertSelective(zlCleanOrder);
+
+        // 推送消息
+        OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
+        OrderPhpVO orderPhpVO = new OrderPhpVO();
+        orderPhpVO.setOrderID(zlCleanOrder.getOrderid());
+        orderPhpVO.setSerialNumber(serialnumber);
+        orderPhpVO.setHotelID(cleanParm.getHotelid());
+        orderPhpSendVO.setForm("java");
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_CLEAN);
+        orderPhpSendVO.setMessage(orderPhpVO);
+        String orderStr = JSON.toJSONString(orderPhpSendVO);
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CLEAN, orderStr);
+
         map.put("serialnumber", serialnumber);
         map.put("orderid", zlCleanOrder.getOrderid());
         return map;

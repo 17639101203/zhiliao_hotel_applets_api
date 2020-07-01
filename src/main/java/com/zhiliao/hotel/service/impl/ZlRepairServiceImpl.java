@@ -1,7 +1,11 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.Repair.params.RepairParam;
 import com.zhiliao.hotel.controller.Repair.vo.RepairOrderVO;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.mapper.ZlRepairorderMapper;
 import com.zhiliao.hotel.model.ZlRepairorder;
 import com.zhiliao.hotel.service.ZlRepairService;
@@ -11,6 +15,7 @@ import com.zhiliao.hotel.utils.TokenUtil;
 import com.zhiliao.hotel.utils.UploadPhotoUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +33,8 @@ public class ZlRepairServiceImpl implements ZlRepairService {
     @Autowired
     private ZlRepairorderMapper zlRepairorderMapper;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public void addRepairMsg(ZlRepairorder repair) {
@@ -71,6 +78,19 @@ public class ZlRepairServiceImpl implements ZlRepairService {
             zlRepairorder.setImgurls(imgurl);  //图片地址
         }
         zlRepairorderMapper.insertSelective(zlRepairorder);
+
+        // 推送消息
+        OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
+        OrderPhpVO orderPhpVO = new OrderPhpVO();
+        orderPhpVO.setOrderID(zlRepairorder.getOrderid());
+        orderPhpVO.setSerialNumber(serialNumber);
+        orderPhpVO.setHotelID(repairParam.getHotelid());
+        orderPhpSendVO.setForm("java");
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_FACILITY);
+        orderPhpSendVO.setMessage(orderPhpVO);
+        String orderStr = JSON.toJSONString(orderPhpSendVO);
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_FACILITY, orderStr);
+
         map.put("orderid", zlRepairorder.getOrderid());
         return map;
     }

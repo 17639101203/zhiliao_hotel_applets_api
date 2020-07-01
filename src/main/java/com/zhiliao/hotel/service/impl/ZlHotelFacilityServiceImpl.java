@@ -1,6 +1,10 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.zhiliao.hotel.common.ReturnString;
+import com.zhiliao.hotel.common.constant.RedisKeyConstant;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.mapper.ZlHotelFacilityMapper;
 import com.zhiliao.hotel.mapper.ZlHotelFacilityOrderMapper;
 import com.zhiliao.hotel.mapper.ZlHotelMapper;
@@ -11,6 +15,7 @@ import com.zhiliao.hotel.service.ZlHotelFacilityService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +37,9 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
 
     @Autowired
     private ZlHotelFacilityOrderMapper facilityOrderMapper;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 获取酒店设施列表
@@ -110,6 +118,7 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
             }
         }
         //生成订单编号
+        String serialNumber = OrderIDUtil.createOrderID("");
         zlHotelFacilityOrder.setSerialnumber(OrderIDUtil.createOrderID("HS"));
         zlHotelFacilityOrder.setComeformid(1);
         ZlHotel zlHotel = hotelMapper.getById(zlHotelFacilityOrder.getHotelid());
@@ -121,15 +130,19 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         zlHotelFacilityOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
         facilityOrderMapper.insertSelective(zlHotelFacilityOrder);
-//        int insert = facilityOrderMapper.insertSelective(zlHotelFacilityOrder);
-        //是否下单成功
-//        if (hotelFacilityDetail.getPrice().compareTo(new BigDecimal(0)) == 1) {
-//            if (insert > 0) {
-//                hotelFacilityMapper.updateCount(facilityID, Math.toIntExact(System.currentTimeMillis() / 1000));
-//            } else {
-//                throw new RuntimeException("提交失败");
-//            }
-//        }
+
+        // 推送消息
+        OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
+        OrderPhpVO orderPhpVO = new OrderPhpVO();
+        orderPhpVO.setOrderID(zlHotelFacilityOrder.getOrderid());
+        orderPhpVO.setSerialNumber(serialNumber);
+        orderPhpVO.setHotelID(zlHotelFacilityOrder.getHotelid());
+        orderPhpSendVO.setForm("java");
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_CKECKOUT);
+        orderPhpSendVO.setMessage(orderPhpVO);
+        String orderStr = JSON.toJSONString(orderPhpSendVO);
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CKECKOUT, orderStr);
+
         map.put("orderId", zlHotelFacilityOrder.getOrderid());
         return map;
     }

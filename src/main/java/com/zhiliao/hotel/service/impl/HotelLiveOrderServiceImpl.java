@@ -1,8 +1,12 @@
 package com.zhiliao.hotel.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.hotellive.param.ZlCheckoutOrderParam;
 import com.zhiliao.hotel.controller.hotellive.param.ZlContinueLiveOrderParam;
 import com.zhiliao.hotel.controller.myOrder.vo.HotelBasicVO;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.mapper.ZlCheckoutOrderMapper;
 import com.zhiliao.hotel.mapper.ZlContinueLiveOrderMapper;
 import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
@@ -12,6 +16,7 @@ import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.HotelLiveOrderService;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,11 +42,14 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
     @Autowired
     private ZlContinueLiveOrderMapper zlContinueLiveOrderMapper;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     @Override
     public Map<String, Object> checkoutOrder(Long userID, HotelBasicVO hotelBasicVO, ZlCheckoutOrderParam zlCheckoutOrderParam) {
 
         //调用工具类生成订单编号
-        String orderSerialNo = OrderIDUtil.createOrderID("TF");
+        String orderSerialNo = OrderIDUtil.createOrderID("");
 
         ZlWxuserdetail zlWxuserdetail = zlWxuserdetailMapper.findByUserId(userID);
         ZlCheckoutOrder zlCheckoutOrder = new ZlCheckoutOrder();
@@ -63,6 +71,18 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
 
         zlCheckoutOrderMapper.insert(zlCheckoutOrder);
 
+        // 推送消息
+        OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
+        OrderPhpVO orderPhpVO = new OrderPhpVO();
+        orderPhpVO.setOrderID(zlCheckoutOrder.getOrderid());
+        orderPhpVO.setSerialNumber(orderSerialNo);
+        orderPhpVO.setHotelID(zlCheckoutOrder.getHotelid());
+        orderPhpSendVO.setForm("java");
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_FACILITY);
+        orderPhpSendVO.setMessage(orderPhpVO);
+        String orderStr = JSON.toJSONString(orderPhpSendVO);
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_FACILITY, orderStr);
+
         Map<String, Object> map = new HashMap<>();
         map.put("orderid", zlCheckoutOrder.getOrderid());
         return map;
@@ -71,7 +91,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
     @Override
     public Map<String, Object> continueLiveOrder(Long userID, HotelBasicVO hotelBasicVO, ZlContinueLiveOrderParam zlContinueLiveOrderParam) {
         //调用工具类生成订单编号
-        String orderSerialNo = OrderIDUtil.createOrderID("TF");
+        String orderSerialNo = OrderIDUtil.createOrderID("");
 
         ZlWxuserdetail zlWxuserdetail = zlWxuserdetailMapper.findByUserId(userID);
         ZlContinueLiveOrder zlContinueLiveOrder = new ZlContinueLiveOrder();
@@ -93,6 +113,18 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         zlContinueLiveOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
         zlContinueLiveOrderMapper.insert(zlContinueLiveOrder);
+
+        // 推送消息
+        OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
+        OrderPhpVO orderPhpVO = new OrderPhpVO();
+        orderPhpVO.setOrderID(zlContinueLiveOrder.getOrderid());
+        orderPhpVO.setSerialNumber(orderSerialNo);
+        orderPhpVO.setHotelID(zlContinueLiveOrder.getHotelid());
+        orderPhpSendVO.setForm("java");
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_CONTINUE_LIVE);
+        orderPhpSendVO.setMessage(orderPhpVO);
+        String orderStr = JSON.toJSONString(orderPhpSendVO);
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CONTINUE_LIVE, orderStr);
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderid", zlContinueLiveOrder.getOrderid());
