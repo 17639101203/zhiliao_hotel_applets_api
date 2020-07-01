@@ -88,7 +88,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 //                        Long weiXinUserId = 4L;
                         if (weiXinUserId != null) {
                             //客房扫描率录入
-                            addZlUserLoginLog(weiXinUserId, Integer.valueOf(roomId), zlHotelroom.getRoomnumber());
+                            addZlUserLoginLog(weiXinUserId, hotelId, Integer.valueOf(roomId), zlHotelroom.getRoomnumber());
                         }
                     }
                 }
@@ -120,19 +120,6 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                     zlXcxmenu.setBusinessHoursVO(businessHoursVO);
                 }
                 zlHotel.setZlXcxMenus(zlXcxMenuList);
-
-//                List<ZlXcxmenuVO> zlXcxMenuVOList = new LinkedList<>();
-//                for (ZlXcxmenu zlXcxmenu : zlXcxMenuList) {
-//                    ZlXcxmenuVO zlXcxmenuVO = new ZlXcxmenuVO();
-//                    BeanUtils.copyProperties(zlXcxmenu, zlXcxmenuVO);
-//                    Integer menuid = zlXcxmenu.getMenuid();
-//                    BusinessHoursVO businessHoursVO = zlGoodsService.getBusinessHours(menuid);
-//                    zlXcxmenuVO.setBusinessHoursVO(businessHoursVO);
-//                    zlXcxMenuVOList.add(zlXcxmenuVO);
-//                }
-//
-//                //设值menus
-//                zlHotel.setZlXcxmenuVOList(zlXcxMenuVOList);
 
                 //根据酒店Id获取公告
                 List<ZlNews> zlNews = zlNewsMapper.getNewsByHotel(String.valueOf(zlHotel.getHotelID()));
@@ -169,7 +156,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         return new ReturnString("数据加载失败");
     }
 
-    private void addZlUserLoginLog(Long userId, Integer roomId, String roomNumBer) {
+    private void addZlUserLoginLog(Long userId, Integer hotelId, Integer roomId, String roomNumBer) {
         ZlUserloginlog zlUserloginlog = new ZlUserloginlog();
         ZlWxuser zlWxuser = zlWxuserService.findWxuserByUserId(userId);
         if (zlWxuser != null) {
@@ -178,7 +165,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
             //微信用户昵称
             zlUserloginlog.setNickname(zlWxuser.getNickname());
             //根据用户所属酒店Id
-            ZlHotel zlHotel = zlHotelMapper.getById(zlWxuser.getHotelid());
+            ZlHotel zlHotel = zlHotelMapper.getById(hotelId);
             //酒店名称
             zlUserloginlog.setHotelname(zlHotel.getHotelName());
             //酒店id

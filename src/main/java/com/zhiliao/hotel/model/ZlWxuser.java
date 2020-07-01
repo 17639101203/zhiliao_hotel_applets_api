@@ -3,6 +3,7 @@ package com.zhiliao.hotel.model;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.GeneratedValue;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
  * @author xiehuiui
  * @date 2020-04-14
  */
+@Table(name="zl_wxuser")
 public class ZlWxuser implements Serializable {
 
     private static final long serialVersionUID = 1L;
