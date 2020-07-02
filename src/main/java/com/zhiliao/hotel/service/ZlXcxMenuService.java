@@ -13,6 +13,6 @@ public interface ZlXcxMenuService {
     /**
      * 根据menuName做数据去重 默认根据酒店id下的菜单
      */
-    public List<ZlXcxmenu> getMenuList(String hotelId);
+    public List<ZlXcxmenu> getMenuList(String hotelId, Integer roomId);
 
 }

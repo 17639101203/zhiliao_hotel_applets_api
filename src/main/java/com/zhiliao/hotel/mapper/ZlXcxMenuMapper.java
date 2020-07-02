@@ -24,5 +24,7 @@ public interface ZlXcxMenuMapper extends Mapper<ZlXcxmenu> {
      */
     List<ZlXcxmenu> getMenuList(@Param("hotelId") String hotelId);
 
+    List<ZlXcxmenu> getMenuList2(@Param("hotelId") String hotelId);
+
     ZlXcxmenu getBusinessHours(@Param("menuId") Integer menuId);
 }

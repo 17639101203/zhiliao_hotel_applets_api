@@ -79,7 +79,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         //固定 小程序渠道 1为C端
         String state = "1";
         if (StringUtils.equals(state, "1")) {
-            if (!StringUtils.isEmpty(roomId)) {
+            if (!StringUtils.isEmpty(roomId) && Integer.valueOf(roomId) != 0) {
                 //根据酒店id，客房id
                 zlHotelroom = zlHotelRoomMapper.getById(roomId, hotelId);
                 if (zlHotelroom != null) {
@@ -115,13 +115,15 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                 zlHotel.setZlBannerList(zlBanners);
 
                 //根据酒店ID获取菜单
-                List<ZlXcxmenu> zlXcxMenuList = zlXcxMenuService.getMenuList(String.valueOf(zlHotel.getHotelID()));
-                for (ZlXcxmenu zlXcxmenu : zlXcxMenuList) {
-                    Integer menuid = zlXcxmenu.getMenuid();
-                    BusinessHoursVO businessHoursVO = zlGoodsService.getBusinessHours(menuid);
-                    zlXcxmenu.setBusinessHoursVO(businessHoursVO);
+                if (!StringUtils.isEmpty(roomId)) {
+                    List<ZlXcxmenu> zlXcxMenuList = zlXcxMenuService.getMenuList(String.valueOf(zlHotel.getHotelID()), Integer.valueOf(roomId));
+                    for (ZlXcxmenu zlXcxmenu : zlXcxMenuList) {
+                        Integer menuid = zlXcxmenu.getMenuid();
+                        BusinessHoursVO businessHoursVO = zlGoodsService.getBusinessHours(menuid);
+                        zlXcxmenu.setBusinessHoursVO(businessHoursVO);
+                    }
+                    zlHotel.setZlXcxMenus(zlXcxMenuList);
                 }
-                zlHotel.setZlXcxMenus(zlXcxMenuList);
 
                 //根据酒店Id获取公告
                 List<ZlNews> zlNews = zlNewsMapper.getNewsByHotel(String.valueOf(zlHotel.getHotelID()));

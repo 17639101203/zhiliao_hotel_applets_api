@@ -28,8 +28,13 @@ public class ZlXcxMenuServiceImpl implements ZlXcxMenuService {
     private ZlXcxMenuMapper zlXcxMenuMapper;
 
     @Override
-    public List<ZlXcxmenu> getMenuList(String hotelId) {
-        List<ZlXcxmenu> menuList = zlXcxMenuMapper.getMenuList(hotelId);
+    public List<ZlXcxmenu> getMenuList(String hotelId, Integer roomId) {
+        List<ZlXcxmenu> menuList = null;
+        if (roomId == 0) {
+            menuList = zlXcxMenuMapper.getMenuList(hotelId);
+        } else {
+            menuList = zlXcxMenuMapper.getMenuList2(hotelId);
+        }
         if (!CollectionUtils.isEmpty(menuList)) {
             List<ZlXcxmenu> zlXcxMenuArrayList = menuList.stream().collect(
                     Collectors.collectingAndThen(
