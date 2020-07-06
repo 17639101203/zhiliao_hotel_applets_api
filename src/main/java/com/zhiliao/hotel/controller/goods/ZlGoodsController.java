@@ -148,7 +148,8 @@ public class ZlGoodsController {
 
     @ApiOperation(value = "获取推荐商品_谢辉益")
     @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id")
-    @UserLoginToken
+//    @UserLoginToken
+    @PassToken
     @GetMapping("findRecommendGoodsList/{hotelId}")
     public ReturnString<List<GoodsListVo>> findRecommendGoodsList(@PathVariable Integer hotelId) {
         try {

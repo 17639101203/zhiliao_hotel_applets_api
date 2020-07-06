@@ -25,6 +25,24 @@ public class TokenUtil {
                 .sign(Algorithm.HMAC256(WX_USER_SECRET)); // 使用HMAC256生成token
     }
 
+    public static String getFlashToken(ZlWxuser wxuser) {
+        return JWT.create()
+                .withClaim("flashToken", "flashToken")
+                .withAudience(String.valueOf(wxuser.getUserid())) // 存入需要保存在token的信息
+                .sign(Algorithm.HMAC256(WX_USER_SECRET)); // 使用HMAC256生成token
+    }
+
+    public static Long getFlashUserId(String token) {
+        String userId;
+        try {
+            // 获取token中的userId
+            userId = JWT.decode(token).getAudience().get(0);
+            return Long.parseLong(userId);
+        } catch (JWTDecodeException j) {
+            throw new RuntimeException("401 错误token，没有访问权限，请重新登录");
+        }
+    }
+
     public static Long getUserId(String token) {
         String userId;
         try {

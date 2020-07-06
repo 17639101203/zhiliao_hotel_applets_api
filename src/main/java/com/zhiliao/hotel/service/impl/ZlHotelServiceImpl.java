@@ -79,7 +79,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         //固定 小程序渠道 1为C端
         String state = "1";
         if (StringUtils.equals(state, "1")) {
-            if (!StringUtils.isEmpty(roomId) && Integer.valueOf(roomId) != 0) {
+            /*if (!StringUtils.isEmpty(roomId) && Integer.valueOf(roomId) != 0) {
                 //根据酒店id，客房id
                 zlHotelroom = zlHotelRoomMapper.getById(roomId, hotelId);
                 if (zlHotelroom != null) {
@@ -87,14 +87,13 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                     if (!StringUtils.isEmpty(token)) {
                         //获取 token得到微信用户Id
                         Long weiXinUserId = TokenUtil.getUserId(token);
-//                        Long weiXinUserId = 4L;
                         if (weiXinUserId != null) {
                             //客房扫描率录入
                             addZlUserLoginLog(weiXinUserId, hotelId, Integer.valueOf(roomId), zlHotelroom.getRoomnumber());
                         }
                     }
                 }
-            }
+            }*/
             ZlHotel byId = zlHotelMapper.getById(hotelId);
             ZlHotelIn zlHotel = new ZlHotelIn(byId);
             if (zlHotel != null) {

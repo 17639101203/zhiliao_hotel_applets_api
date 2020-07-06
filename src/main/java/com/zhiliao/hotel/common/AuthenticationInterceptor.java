@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 
 /**
  * 接口拦截器
+ *
  * @PassToken 无需登录权限，直接放行
  * @NoLoginRequiredToken 无需登录权限，但需要接口保护。例如：发短信接口
  * @UserLoginToken 需要用户登录后访问的接口权限
@@ -88,6 +89,44 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     }
                 } catch (Exception e) {
                     setHttpServletResponseMessage(httpServletResponse, 403, "错误token（NoLoginRequiredToken），没有访问权限!");
+                    e.printStackTrace();
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        // 检查是否有FlashToken注释，有则进行校验
+        if (method.isAnnotationPresent(FlashToken.class)) {
+            FlashToken userLoginToken = method.getAnnotation(FlashToken.class);
+            if (userLoginToken.required()) {
+                String userId;
+                try {
+                    // 获取token中的userId
+                    userId = JWT.decode(token).getAudience().get(0);
+                } catch (JWTDecodeException e) {
+                    setHttpServletResponseMessage(httpServletResponse, 405, "错误token，没有访问权限，请重新登录!");
+                    e.printStackTrace();
+                    return false;
+                }
+                // 查询用户是否存在
+                ZlWxuser wxuser = zlWxuserService.findWxuserByUserId(Long.parseLong(userId));
+                if (wxuser == null) {
+                    setHttpServletResponseMessage(httpServletResponse, 405, "没有访问权限，用户不存在!");
+                    return false;
+                }
+                // 对比redis缓存与用户传的token是否一致、是否过期
+                String redisToken = (String) redisCommonUtil.getCache(wxuser.getWxopenid() + "flash");
+                if (redisToken == null || !token.equals(redisToken)) {
+                    setHttpServletResponseMessage(httpServletResponse, 405, "没有访问权限，用户未登录或登录已过期!");
+                    return false;
+                }
+                // 验证 token
+                JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(WX_USER_SECRET)).build();
+                try {
+                    jwtVerifier.verify(token);
+                } catch (JWTVerificationException e) {
+                    setHttpServletResponseMessage(httpServletResponse, 405, "错误token，没有访问权限，请重新登录!");
                     e.printStackTrace();
                     return false;
                 }

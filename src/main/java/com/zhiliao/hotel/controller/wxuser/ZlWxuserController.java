@@ -80,7 +80,7 @@ public class ZlWxuserController {
                 return new ReturnString("解析失败!");
             }
 
-            if(res.get("errcode") != null){
+            if (res.get("errcode") != null) {
                 return new ReturnString("解析失败! ");
             }
             logger.info("res: " + res.get("errcode"));
@@ -116,14 +116,21 @@ public class ZlWxuserController {
 
     private ReturnString returnUserInfoData(ZlWxuser wxuser) {
         Map<String, Object> dataMap = new HashMap<>();
+        //获取登录Token
         String token = TokenUtil.getToken(wxuser);
+        //获取刷新Token
+        String flashToken = TokenUtil.getFlashToken(wxuser);
         dataMap.put("token", token);
+        dataMap.put("flashToken", flashToken);
         // 头像
         dataMap.put("headImgUrl", wxuser.getHeadimgurl());
         // 微信昵称
         dataMap.put("nickName", wxuser.getNickname());
         // 登录成功设置token过期时间 存7天
         redisCommonUtil.setCache(wxuser.getWxopenid(), token, 60 * 60 * 24 * 7);
+//        redisCommonUtil.setCache(wxuser.getWxopenid(), token, 60 * 2);
+        redisCommonUtil.setCache(wxuser.getWxopenid() + "flash", flashToken, 60 * 60 * 24 * 30);
+//        redisCommonUtil.setCache(wxuser.getWxopenid() + "flash", flashToken, 60 * 4);
         return new ReturnString(dataMap);
     }
 
