@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zhiliao.hotel.common.NoLoginRequiredToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.wxuser.params.WxuserLoginParam;
 import com.zhiliao.hotel.model.ZlWxuser;
 import com.zhiliao.hotel.service.ZlWxuserService;
@@ -126,11 +127,9 @@ public class ZlWxuserController {
         dataMap.put("headImgUrl", wxuser.getHeadimgurl());
         // 微信昵称
         dataMap.put("nickName", wxuser.getNickname());
-        // 登录成功设置token过期时间 存7天
-        redisCommonUtil.setCache(wxuser.getWxopenid(), token, 60 * 60 * 24 * 7);
-//        redisCommonUtil.setCache(wxuser.getWxopenid(), token, 60 * 2);
-        redisCommonUtil.setCache(wxuser.getWxopenid() + "flash", flashToken, 60 * 60 * 24 * 30);
-//        redisCommonUtil.setCache(wxuser.getWxopenid() + "flash", flashToken, 60 * 4);
+        // 登录成功设置token过期时间
+        redisCommonUtil.setCache(wxuser.getWxopenid(), token, RedisKeyConstant.USERTOKENTIME);
+        redisCommonUtil.setCache(wxuser.getWxopenid() + "flash", flashToken, RedisKeyConstant.USERFLASHTIME);
         return new ReturnString(dataMap);
     }
 

@@ -43,11 +43,13 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
     public void onMessage(Message message, byte[] pattern) {
         // 业务处理 , 注意message.toString()可以获取失效的key
         String expiredKey = message.toString();
-        //通过字符串切割,获取到订单号
-        String[] arrayStr = expiredKey.split("_");
-        String out_trade_no = arrayStr[arrayStr.length - 1];
-        //更改redis相关数据
-        zlOrderService.autoCancelOrder(out_trade_no);
+        if (expiredKey.startsWith(RedisKeyConstant.ORDER_ORDERSERIALNO_FLAG)) {
+            //通过字符串切割,获取到订单号
+            String[] arrayStr = expiredKey.split("_");
+            String out_trade_no = arrayStr[arrayStr.length - 1];
+            //更改redis相关数据
+            zlOrderService.autoCancelOrder(out_trade_no);
+        }
     }
 
     /**********************************以上是redis过期key配置,以下是redis发布订阅配置*******************************************/
@@ -71,7 +73,7 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
 
     @Bean
     ChannelTopic topic() {
-        return new ChannelTopic(RedisKeyConstant.TOPIC_ROOMSERVICE);
+        return new ChannelTopic("");
     }
 
 }

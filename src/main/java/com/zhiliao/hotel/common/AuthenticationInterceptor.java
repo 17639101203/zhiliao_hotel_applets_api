@@ -6,10 +6,12 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.google.gson.JsonObject;
+import com.zhiliao.hotel.controller.myOrder.util.StringUtils;
 import com.zhiliao.hotel.model.ZlWxuser;
 import com.zhiliao.hotel.service.ZlWxuserService;
 import com.zhiliao.hotel.utils.AESUtil;
 import com.zhiliao.hotel.utils.RedisCommonUtil;
+import org.apache.commons.lang.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -98,8 +100,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         // 检查是否有FlashToken注释，有则进行校验
         if (method.isAnnotationPresent(FlashToken.class)) {
-            FlashToken userLoginToken = method.getAnnotation(FlashToken.class);
-            if (userLoginToken.required()) {
+            FlashToken flashToken = method.getAnnotation(FlashToken.class);
+            if (flashToken.required()) {
                 String userId;
                 try {
                     // 获取token中的userId
@@ -117,6 +119,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 }
                 // 对比redis缓存与用户传的token是否一致、是否过期
                 String redisToken = (String) redisCommonUtil.getCache(wxuser.getWxopenid() + "flash");
+//                System.err.println(redisToken);
+//                System.err.println(token);
                 if (redisToken == null || !token.equals(redisToken)) {
                     setHttpServletResponseMessage(httpServletResponse, 405, "没有访问权限，用户未登录或登录已过期!");
                     return false;

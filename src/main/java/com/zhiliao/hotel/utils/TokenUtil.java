@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.zhiliao.hotel.model.ZlWxuser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
@@ -20,14 +21,18 @@ public class TokenUtil {
     public static final String WX_USER_SECRET = "5E8DE3C1B420ACDBC1149F4819E7CF27";
 
     public static String getToken(ZlWxuser wxuser) {
+        IdWorker idWorker = new IdWorker();
         return JWT.create()
+                .withClaim("ranStr", idWorker.nextId() + "")
                 .withAudience(String.valueOf(wxuser.getUserid())) // 存入需要保存在token的信息
                 .sign(Algorithm.HMAC256(WX_USER_SECRET)); // 使用HMAC256生成token
     }
 
     public static String getFlashToken(ZlWxuser wxuser) {
+        IdWorker idWorker = new IdWorker();
         return JWT.create()
                 .withClaim("flashToken", "flashToken")
+                .withClaim("ranNumber", idWorker.nextId() + "")
                 .withAudience(String.valueOf(wxuser.getUserid())) // 存入需要保存在token的信息
                 .sign(Algorithm.HMAC256(WX_USER_SECRET)); // 使用HMAC256生成token
     }

@@ -6,6 +6,12 @@ package com.zhiliao.hotel.common.constant;
  */
 public class RedisKeyConstant {
 
+    //用户登录Token存活时间(单位:秒)
+    public final static Integer USERTOKENTIME = 60 * 60 * 2;
+
+    //用户刷新Token存活时间(单位:秒)
+    public final static Integer USERFLASHTIME = 60 * 60 * 24 * 30;
+
     //banner key
     public final static String BANNER_KEY = "banner";
 
