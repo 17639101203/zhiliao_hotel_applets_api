@@ -79,7 +79,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         //固定 小程序渠道 1为C端
         String state = "1";
         if (StringUtils.equals(state, "1")) {
-            /*if (!StringUtils.isEmpty(roomId) && Integer.valueOf(roomId) != 0) {
+            if (!StringUtils.isEmpty(roomId) && Integer.valueOf(roomId) != 0) {
                 //根据酒店id，客房id
                 zlHotelroom = zlHotelRoomMapper.getById(roomId, hotelId);
                 if (zlHotelroom != null) {
@@ -93,7 +93,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                         }
                     }
                 }
-            }*/
+            }
             ZlHotel byId = zlHotelMapper.getById(hotelId);
             ZlHotelIn zlHotel = new ZlHotelIn(byId);
             if (zlHotel != null) {
