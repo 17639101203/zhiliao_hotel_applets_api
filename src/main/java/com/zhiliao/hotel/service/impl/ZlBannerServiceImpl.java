@@ -44,9 +44,9 @@ public class ZlBannerServiceImpl implements ZlBannerService {
 
         //判断是否有数据
         //数量等于0返回0
-        if (size == numberZero) {
-            return Lists.newArrayList();
-        }
+//        if (size == numberZero) {
+//            return Lists.newArrayList();
+//        }
 
         //数量>=5则直接返回
         if (size == numberFive) {
