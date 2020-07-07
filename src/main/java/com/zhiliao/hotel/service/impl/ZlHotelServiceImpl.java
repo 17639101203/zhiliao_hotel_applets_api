@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +74,9 @@ public class ZlHotelServiceImpl implements ZlHotelService {
     @Autowired
     private ZlGoodsService zlGoodsService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Override
     public ReturnString getById(Integer hotelId, String roomId, String token) {
         ZlHotelroom zlHotelroom = null;
@@ -98,20 +102,28 @@ public class ZlHotelServiceImpl implements ZlHotelService {
             ZlHotelIn zlHotel = new ZlHotelIn(byId);
             if (zlHotel != null) {
                 //获取缓存value
-                String bannerValue = (String) redisCommonUtil.getCache(RedisKeyConstant.BANNER_KEY + ":" + hotelId);
+//                String bannerValue = (String) redisCommonUtil.getCache(RedisKeyConstant.BANNER_KEY + ":" + hotelId);
 
                 //判断缓存中是否有数据，没数据直接往数据库查
-                List<ZlBanner> zlBanners = Optional.ofNullable(bannerValue).map((val) -> GsonUtils.jsonToList(val,
+/*                List<ZlBanner> zlBanners = Optional.ofNullable(bannerValue).map((val) -> GsonUtils.jsonToList(val,
                         ZlBanner.class
                 )).
-                        orElse(zlBannerService.findBanner(Integer.valueOf(hotelId), 0));
+                        orElse(zlBannerService.findBanner(Integer.valueOf(hotelId), 0));*/
+
+                List<ZlBanner> bannerList = null;
+                if (redisTemplate.hasKey(RedisKeyConstant.BANNER_KEY + hotelId)) {
+                    bannerList = (List<ZlBanner>) redisTemplate.opsForValue().get(RedisKeyConstant.BANNER_KEY + hotelId);
+                } else {
+                    bannerList = zlBannerService.findBanner(Integer.valueOf(hotelId), 0);
+                    redisTemplate.opsForValue().set(RedisKeyConstant.BANNER_KEY + hotelId, bannerList);
+                }
 
                 //判断缓存没数据情况则添加
-                if (!Optional.ofNullable(bannerValue).isPresent()) {
+/*                if (!Optional.ofNullable(bannerValue).isPresent()) {
                     redisCommonUtil.setCache(RedisKeyConstant.BANNER_KEY + ":" + hotelId, GsonUtils.objToJson(zlBanners));
-                }
+                }*/
                 //获取轮播图数据
-                zlHotel.setZlBannerList(zlBanners);
+                zlHotel.setZlBannerList(bannerList);
 
                 //根据酒店ID获取菜单
                 if (!StringUtils.isEmpty(roomId)) {
