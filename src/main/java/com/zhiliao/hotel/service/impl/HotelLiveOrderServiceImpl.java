@@ -51,7 +51,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         //调用工具类生成订单编号
         String orderSerialNo = OrderIDUtil.createOrderID("");
 
-        ZlWxuserdetail zlWxuserdetail = zlWxuserdetailMapper.findByUserId(userID);
+//        ZlWxuserdetail zlWxuserdetail = zlWxuserdetailMapper.findByUserId(userID);
         ZlCheckoutOrder zlCheckoutOrder = new ZlCheckoutOrder();
         zlCheckoutOrder.setUserid(userID);
         zlCheckoutOrder.setOrderserialno(orderSerialNo);
@@ -59,7 +59,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         zlCheckoutOrder.setHotelname(hotelBasicVO.getHotelName());
         zlCheckoutOrder.setRoomid(hotelBasicVO.getRoomID());
         zlCheckoutOrder.setRoomnumber(hotelBasicVO.getRoomNumber());
-        zlCheckoutOrder.setUsername(zlWxuserdetail.getRealname());
+//        zlCheckoutOrder.setUsername(zlWxuserdetail.getRealname());
         zlCheckoutOrder.setRemark(zlCheckoutOrderParam.getRemark());
         zlCheckoutOrder.setTel(zlCheckoutOrder.getTel());
         zlCheckoutOrder.setOrderstatus((byte) 0);
@@ -69,7 +69,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         zlCheckoutOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         zlCheckoutOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
-        zlCheckoutOrderMapper.insert(zlCheckoutOrder);
+        zlCheckoutOrderMapper.insertSelective(zlCheckoutOrder);
 
         // 推送消息
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();

@@ -156,14 +156,14 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
             timeoutDate = date + (15 * 60);
         }
         //获取用户信息
-        ZlWxuserdetail zlWxuserdetail = Optional.ofNullable(zlWxuserdetailMapper.findByUserId(userId)).orElse(new ZlWxuserdetail());
+//        ZlWxuserdetail zlWxuserdetail = Optional.ofNullable(zlWxuserdetailMapper.findByUserId(userId)).orElse(new ZlWxuserdetail());
         //生成订单编号
         String orderSerialNo = OrderIDUtil.createOrderID("");
         //生成客房服务订单
         ZlServiceorder order = new ZlServiceorder().builder()
                 .userid(userId)
-                .username(zlWxuserdetail.getRealname() == null ? "" : zlWxuserdetail.getRealname())
-                .tel(zlWxuserdetail.getTel() == null ? "" : zlWxuserdetail.getTel())
+//                .username(zlWxuserdetail.getRealname() == null ? "" : zlWxuserdetail.getRealname())
+//                .tel(zlWxuserdetail.getTel() == null ? "" : zlWxuserdetail.getTel())
                 .serialnumber(orderSerialNo)
                 .hotelid(scp.getHotelid())
                 .hotelname(scp.getHotelname())

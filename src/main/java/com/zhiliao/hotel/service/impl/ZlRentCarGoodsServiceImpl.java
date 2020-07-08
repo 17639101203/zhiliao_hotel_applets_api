@@ -10,10 +10,8 @@ import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.controller.rentcar.vo.RentCarOrderVO;
 import com.zhiliao.hotel.mapper.ZlRentCarGoodsMapper;
 import com.zhiliao.hotel.mapper.ZlRentCarOrderMapper;
-import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
 import com.zhiliao.hotel.model.ZlRentCarGoods;
 import com.zhiliao.hotel.model.ZlRentCarOrder;
-import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.ZlRentCarGoodsService;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +36,6 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
 
     @Autowired
     private ZlRentCarGoodsMapper rentCarGoodsMapper;
-
-    @Autowired
-    private ZlWxuserdetailMapper wxuserdetailMapper;
 
     @Autowired
     private ZlRentCarOrderMapper rentCarOrderMapper;

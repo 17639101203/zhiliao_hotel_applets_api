@@ -1,10 +1,6 @@
 package com.zhiliao.hotel.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.clean.cleanparm.CleanParm;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
@@ -43,13 +39,13 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
     @Override
     public Map<String, Object> addCleanOrder(Long userid, CleanParm cleanParm) {
         Map<String, Object> map = new HashMap<>();
-        ZlWxuserdetail zlWxuserdetail = zlWxuserdetailMapper.findByUserId(userid);
+//        ZlWxuserdetail zlWxuserdetail = zlWxuserdetailMapper.findByUserId(userid);
         String serialnumber = OrderIDUtil.createOrderID("");
         ZlCleanOrder zlCleanOrder = new ZlCleanOrder();
         zlCleanOrder.setUserid(userid);   //用户ID  根据token获取userId
         zlCleanOrder.setSerialnumber(serialnumber);   //订单编号
-        zlCleanOrder.setUsername(zlWxuserdetail.getRealname());//用户姓名
-        zlCleanOrder.setTel(zlWxuserdetail.getTel());//用户手机号
+//        zlCleanOrder.setUsername(zlWxuserdetail.getRealname());//用户姓名
+//        zlCleanOrder.setTel(zlWxuserdetail.getTel());//用户手机号
         zlCleanOrder.setHotelid(cleanParm.getHotelid());   //酒店ID
         zlCleanOrder.setHotelname(cleanParm.getHotelname());   //酒店名
         zlCleanOrder.setRoomid(cleanParm.getRoomid());   //房间ID

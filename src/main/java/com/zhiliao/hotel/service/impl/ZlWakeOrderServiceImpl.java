@@ -44,15 +44,15 @@ public class ZlWakeOrderServiceImpl implements ZlWakeOrderService {
     @Override
     public Map<String, Object> addWakeOrder(Long userId, ZlWakeOrder wakeOrder) {
         //获取用户真实姓名和手机号
-        ZlWxuserdetail wxuserdetail = new ZlWxuserdetail();
-        wxuserdetail.setUserid(userId);
-        ZlWxuserdetail zlWxuserdetail = wxuserdetailMapper.selectOne(wxuserdetail);
-        if (zlWxuserdetail == null) {
-            new RuntimeException("没有该用户信息");
-        }
+//        ZlWxuserdetail wxuserdetail = new ZlWxuserdetail();
+//        wxuserdetail.setUserid(userId);
+//        ZlWxuserdetail zlWxuserdetail = wxuserdetailMapper.selectOne(wxuserdetail);
+//        if (zlWxuserdetail == null) {
+//            new RuntimeException("没有该用户信息");
+//        }
         String orderSerialNo = OrderIDUtil.createOrderID("");
-        wakeOrder.setUsername(zlWxuserdetail.getRealname());
-        wakeOrder.setTel(zlWxuserdetail.getTel());
+//        wakeOrder.setUsername(zlWxuserdetail.getRealname());
+//        wakeOrder.setTel(zlWxuserdetail.getTel());
         wakeOrder.setUserid(userId);
         wakeOrder.setOrderserialno(orderSerialNo);
         wakeOrder.setOrderstatus((byte) 0);
