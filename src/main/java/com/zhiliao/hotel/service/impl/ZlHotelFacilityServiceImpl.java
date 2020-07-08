@@ -14,6 +14,8 @@ import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import com.zhiliao.hotel.service.ZlHotelFacilityService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,8 @@ import java.util.Map;
 @Transactional(rollbackFor = Exception.class)
 @Service
 public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ZlHotelFacilityServiceImpl.class);
 
     @Autowired
     private ZlHotelFacilityMapper hotelFacilityMapper;
@@ -130,6 +134,7 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         zlHotelFacilityOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
         facilityOrderMapper.insertSelective(zlHotelFacilityOrder);
+        logger.info("酒店设施订单插入数据库完成,订单id:" + zlHotelFacilityOrder.getOrderid());
 
         // 推送消息
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
@@ -142,6 +147,7 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         orderPhpSendVO.setMessage(orderPhpVO);
         String orderStr = JSON.toJSONString(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CKECKOUT, orderStr);
+        logger.info("推送酒店设施订单到redis通知php后台人员完成,订单信息:" + orderStr);
 
         map.put("orderId", zlHotelFacilityOrder.getOrderid());
         return map;

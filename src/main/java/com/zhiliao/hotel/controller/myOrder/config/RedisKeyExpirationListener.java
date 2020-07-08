@@ -54,7 +54,7 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
 
     /**********************************以上是redis过期key配置,以下是redis发布订阅配置*******************************************/
 
-    @Bean
+    /*@Bean
     MessageListenerAdapter messageListener() {
         //abstract methods overwrite
         return new MessageListenerAdapter((MessageListener) (message, pattern) -> {
@@ -74,6 +74,6 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
     @Bean
     ChannelTopic topic() {
         return new ChannelTopic("");
-    }
+    }*/
 
 }

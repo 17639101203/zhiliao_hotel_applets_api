@@ -40,6 +40,8 @@ import java.util.Map;
 @Slf4j
 public class ZlInvoiceController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ZlInvoiceController.class);
+
     @Autowired
     private ZlInvoiceService zlInvoiceService;
 
@@ -121,6 +123,7 @@ public class ZlInvoiceController {
         zlInvoiceOrder.setUpdatedate(nowTime);     //修改时间
         if (invoiceOrderParam.getInvoicetype() == 1) {      //个人开票
             zlInvoiceService.addinvoiceOrder(zlInvoiceOrder);
+            logger.info("开票订单插入数据库完成,订单id:" + zlInvoiceOrder.getInvoiceid());
 
             // 推送消息
             OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
@@ -133,6 +136,7 @@ public class ZlInvoiceController {
             orderPhpSendVO.setMessage(orderPhpVO);
             String orderStr = JSON.toJSONString(orderPhpSendVO);
             stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_SERVICE_GOODS, orderStr);
+            logger.info("推送开票订单到redis通知php后台人员完成,订单信息:" + orderStr);
 
             map.put("invoiceorderid", zlInvoiceOrder.getInvoiceorderid());
             return new ReturnString<>(0, "增值税普通发票抬头保存成功", map);
@@ -143,6 +147,7 @@ public class ZlInvoiceController {
             zlInvoiceOrder.setCompanytel(invoiceOrderParam.getCompanytel());    //单位电话
             zlInvoiceOrder.setCompanyaddress(invoiceOrderParam.getCompanyaddress());  //  单位地址
             zlInvoiceService.addinvoiceOrder(zlInvoiceOrder);
+            logger.info("开票订单插入数据库完成,订单id:" + zlInvoiceOrder.getInvoiceid());
 
             // 推送消息
             OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
@@ -155,6 +160,7 @@ public class ZlInvoiceController {
             orderPhpSendVO.setMessage(orderPhpVO);
             String orderStr = JSON.toJSONString(orderPhpSendVO);
             stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_SERVICE_GOODS, orderStr);
+            logger.info("推送开票订单到redis通知php后台人员完成,订单信息:" + orderStr);
 
             map.put("invoiceorderid", zlInvoiceOrder.getInvoiceorderid());
             return new ReturnString<>(0, "增值税专用发票抬头保存成功", map);

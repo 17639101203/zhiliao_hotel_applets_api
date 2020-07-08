@@ -12,6 +12,8 @@ import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.ZlCleanOrderService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,8 @@ import java.util.Map;
 @Transactional(rollbackFor = Exception.class)
 @Service
 public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ZlCleanOrderServiceImpl.class);
 
     @Autowired
     private ZlCleanOrderMapper zlCleanOrderMapper;
@@ -59,6 +63,8 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
 //        zlCleanOrderMapper.addCleanOrder(zlCleanOrder);
         zlCleanOrderMapper.insertSelective(zlCleanOrder);
 
+        logger.info("清扫订单插入数据库完成,订单id:" + zlCleanOrder.getOrderid());
+
         // 推送消息
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
         OrderPhpVO orderPhpVO = new OrderPhpVO();
@@ -70,6 +76,7 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
         orderPhpSendVO.setMessage(orderPhpVO);
         String orderStr = JSON.toJSONString(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CLEAN, orderStr);
+        logger.info("推送清扫订单到redis通知php后台人员完成,订单信息:" + orderStr);
 
         map.put("serialnumber", serialnumber);
         map.put("orderid", zlCleanOrder.getOrderid());

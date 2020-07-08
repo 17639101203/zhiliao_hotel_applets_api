@@ -14,6 +14,8 @@ import com.zhiliao.hotel.utils.OrderIDUtil;
 import com.zhiliao.hotel.utils.TokenUtil;
 import com.zhiliao.hotel.utils.UploadPhotoUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,8 @@ import java.util.Map;
 @Transactional(rollbackFor = Exception.class)
 @Service
 public class ZlRepairServiceImpl implements ZlRepairService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ZlRepairServiceImpl.class);
 
     @Autowired
     private ZlRepairorderMapper zlRepairorderMapper;
@@ -79,6 +83,8 @@ public class ZlRepairServiceImpl implements ZlRepairService {
         }
         zlRepairorderMapper.insertSelective(zlRepairorder);
 
+        logger.info("报修订单插入数据库完成,订单id:" + zlRepairorder.getOrderid());
+
         // 推送消息
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
         OrderPhpVO orderPhpVO = new OrderPhpVO();
@@ -90,6 +96,7 @@ public class ZlRepairServiceImpl implements ZlRepairService {
         orderPhpSendVO.setMessage(orderPhpVO);
         String orderStr = JSON.toJSONString(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_FACILITY, orderStr);
+        logger.info("推送报修订单到redis通知php后台人员完成,订单信息:" + orderStr);
 
         map.put("orderid", zlRepairorder.getOrderid());
         return map;

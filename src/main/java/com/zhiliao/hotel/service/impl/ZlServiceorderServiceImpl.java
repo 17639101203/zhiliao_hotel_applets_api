@@ -20,6 +20,8 @@ import com.zhiliao.hotel.utils.TokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -36,6 +38,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class ZlServiceorderServiceImpl implements ZlServiceorderService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ZlServiceorderServiceImpl.class);
 
     @Autowired
     private final ZlHotelRoomMapper zlHotelRoomMapper;
@@ -184,6 +188,9 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         for (ZlServiceorderdetail orderDetail : orderDetails) {
             zlServiceorderdetailMapper.insertSelective(orderDetail);
         }
+
+        logger.info("客房服务订单插入数据库完成,订单id:" + order.getOrderid());
+
 //        zlServiceorderdetailMapper.insertOrderDetailList(orderDetails);
         //返回客房服务订单id
         serviceorderCommitVo.setOrderid(order.getOrderid());
@@ -201,6 +208,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         orderPhpSendVO.setMessage(orderPhpVO);
         String orderStr = JSON.toJSONString(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_ROOMSERVICE, orderStr);
+        logger.info("推送客房服务订单到redis通知php后台人员完成,订单信息:" + orderStr);
 
         return serviceorderCommitVo;
     }

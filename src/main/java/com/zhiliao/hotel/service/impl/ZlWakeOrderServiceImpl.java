@@ -10,6 +10,8 @@ import com.zhiliao.hotel.model.ZlWakeOrder;
 import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.ZlWakeOrderService;
 import com.zhiliao.hotel.utils.OrderIDUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,8 @@ import java.util.Map;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class ZlWakeOrderServiceImpl implements ZlWakeOrderService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ZlWakeOrderServiceImpl.class);
 
     @Autowired
     private ZlWakeOrderMapper wakeOrderMapper;
@@ -60,6 +64,7 @@ public class ZlWakeOrderServiceImpl implements ZlWakeOrderService {
         wakeOrder.setIsuserdelete(false);
         wakeOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         wakeOrderMapper.insertSelective(wakeOrder);
+        logger.info("叫醒订单插入数据库完成,订单id:" + wakeOrder.getOrderid());
 
         // 推送消息
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
@@ -72,6 +77,7 @@ public class ZlWakeOrderServiceImpl implements ZlWakeOrderService {
         orderPhpSendVO.setMessage(orderPhpVO);
         String orderStr = JSON.toJSONString(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_WAKE, orderStr);
+        logger.info("推送叫醒订单到redis通知php后台人员完成,订单信息:" + orderStr);
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderID", wakeOrder.getOrderid());
