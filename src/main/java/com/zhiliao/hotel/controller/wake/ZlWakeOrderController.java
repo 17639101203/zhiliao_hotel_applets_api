@@ -3,7 +3,7 @@ package com.zhiliao.hotel.controller.wake;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
-import com.zhiliao.hotel.controller.wake.params.ZlWaqkeOrderParam;
+import com.zhiliao.hotel.controller.wake.params.ZlWakeOrderParam;
 import com.zhiliao.hotel.model.ZlWakeOrder;
 import com.zhiliao.hotel.service.ZlWakeOrderService;
 import com.zhiliao.hotel.utils.TokenUtil;
@@ -39,7 +39,7 @@ public class ZlWakeOrderController {
     //@PassToken
     @ApiOperation(value = "提交叫醒订单")
     @PostMapping("addWakeOrder")
-    public ReturnString addWakeOrder(HttpServletRequest request, @RequestBody ZlWaqkeOrderParam wakeOrderParm) {
+    public ReturnString addWakeOrder(HttpServletRequest request, @RequestBody ZlWakeOrderParam wakeOrderParm) {
         String token = request.getHeader("token");
         Long userId = TokenUtil.getUserId(token);
         //long userId = System.currentTimeMillis();

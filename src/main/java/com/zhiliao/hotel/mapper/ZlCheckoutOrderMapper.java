@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
+import com.zhiliao.hotel.controller.hotellive.vo.ZlCheckoutOrderToPhpVO;
 import com.zhiliao.hotel.model.ZlCheckoutOrder;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -20,4 +21,6 @@ public interface ZlCheckoutOrderMapper extends Mapper<ZlCheckoutOrder> {
     int selectCountCheckOut(Long userId);
 
     ZlCheckoutOrder checkoutOrderDetail(@Param("orderID") Long orderID);
+
+    ZlCheckoutOrderToPhpVO selectToPhp(@Param("orderid") Long orderid);
 }

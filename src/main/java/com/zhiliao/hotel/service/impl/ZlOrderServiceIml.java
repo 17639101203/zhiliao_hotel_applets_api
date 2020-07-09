@@ -280,7 +280,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
         orderPhpVO.setHotelID(hotelBasicVO.getHotelID());
         orderPhpSendVO.setForm("java");
         orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_HOTELSHOP);
-        orderPhpSendVO.setMessage(orderPhpVO);
+//        orderPhpSendVO.setMessage(orderPhpVO);
         String orderStr = JSON.toJSONString(orderPhpSendVO);
         redisTemplate.convertAndSend(RedisKeyConstant.TOPIC_HOTELSHOP, orderStr);
 

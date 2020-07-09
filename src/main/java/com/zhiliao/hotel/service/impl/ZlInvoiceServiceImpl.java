@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
+import com.zhiliao.hotel.controller.invoice.vo.InvoiceOrderToPhpVO;
 import com.zhiliao.hotel.mapper.ZlHotelMapper;
 import com.zhiliao.hotel.mapper.ZlInvoiceMapper;
 import com.zhiliao.hotel.mapper.ZlInvoiceOrderMapper;
@@ -106,6 +107,11 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     public void deleteInvoiceOrder(Long invoiceorderid) {
         Integer nowTime = DateUtils.javaToPhpNowDateTime();
         orderMapper.deleteInvoiceOrder(invoiceorderid, nowTime);
+    }
+
+    @Override
+    public InvoiceOrderToPhpVO selectToPhp(Long invoiceorderid) {
+        return orderMapper.selectToPhp(invoiceorderid);
     }
 
 }

@@ -40,5 +40,8 @@
           AND IsUserDelete = 0
           AND IsDelete = 0
     </select>
+    <select id="selectToPhp" resultType="com.zhiliao.hotel.controller.hotellive.vo.ZlCheckoutOrderToPhpVO">
+        select * from zl_checkoutorder where OrderID = #{orderid}
+    </select>
 
 </mapper>

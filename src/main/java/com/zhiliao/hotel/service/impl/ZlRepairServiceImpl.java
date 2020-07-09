@@ -3,16 +3,14 @@ package com.zhiliao.hotel.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.Repair.params.RepairParam;
+import com.zhiliao.hotel.controller.Repair.vo.RepairOrderToPhpVO;
 import com.zhiliao.hotel.controller.Repair.vo.RepairOrderVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.mapper.ZlRepairorderMapper;
 import com.zhiliao.hotel.model.ZlRepairorder;
 import com.zhiliao.hotel.service.ZlRepairService;
-import com.zhiliao.hotel.utils.DateUtils;
-import com.zhiliao.hotel.utils.OrderIDUtil;
-import com.zhiliao.hotel.utils.TokenUtil;
-import com.zhiliao.hotel.utils.UploadPhotoUtil;
+import com.zhiliao.hotel.utils.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,19 +82,16 @@ public class ZlRepairServiceImpl implements ZlRepairService {
         zlRepairorderMapper.insertSelective(zlRepairorder);
 
         logger.info("报修订单插入数据库完成,订单id:" + zlRepairorder.getOrderid());
-
         // 推送消息
+        RepairOrderToPhpVO repairOrderToPhpVO = zlRepairorderMapper.selectToPhp(zlRepairorder.getOrderid());
+//        PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_FACILITY, repairOrderToPhpVO);
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
-        OrderPhpVO orderPhpVO = new OrderPhpVO();
-        orderPhpVO.setOrderID(zlRepairorder.getOrderid());
-        orderPhpVO.setSerialNumber(serialNumber);
-        orderPhpVO.setHotelID(repairParam.getHotelid());
         orderPhpSendVO.setForm("java");
         orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_FACILITY);
-        orderPhpSendVO.setMessage(orderPhpVO);
+        orderPhpSendVO.setMessage(repairOrderToPhpVO);
         String orderStr = JSON.toJSONString(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_FACILITY, orderStr);
-        logger.info("推送报修订单到redis通知php后台人员完成,订单信息:" + orderStr);
+        logger.info("推送报修订单到redis通知php后台人员完成,订单信息:" + repairOrderToPhpVO);
 
         map.put("orderid", zlRepairorder.getOrderid());
         return map;

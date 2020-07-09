@@ -197,4 +197,8 @@
         WHERE OrderID = #{orderID}
     </update>
 
+    <select id="selectToPhp" resultType="com.zhiliao.hotel.controller.clean.vo.CleanOrderToPhpVO">
+        SELECT * FROM zl_cleanorder WHERE OrderID = #{orderid}
+    </select>
+
 </mapper>

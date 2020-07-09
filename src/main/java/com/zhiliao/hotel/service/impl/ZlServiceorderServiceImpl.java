@@ -1,24 +1,21 @@
 package com.zhiliao.hotel.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.common.exception.BizException;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
-import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.controller.serviceorder.params.ServiceorderCommitParams;
 import com.zhiliao.hotel.controller.serviceorder.vo.ServiceorderCommitVo;
 import com.zhiliao.hotel.controller.serviceorder.vo.ServiceorderInfoVo;
+import com.zhiliao.hotel.controller.serviceorder.vo.ServiceorderToPhpVO;
 import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.model.*;
 import com.zhiliao.hotel.service.ZlServiceorderService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
+import com.zhiliao.hotel.utils.PushInfoToPhpUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -162,7 +158,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         //获取用户信息
 //        ZlWxuserdetail zlWxuserdetail = Optional.ofNullable(zlWxuserdetailMapper.findByUserId(userId)).orElse(new ZlWxuserdetail());
         //生成订单编号
-        String orderSerialNo = OrderIDUtil.createOrderID("");
+        String orderSerialNo = OrderIDUtil.createOrderID("KF");
         //生成客房服务订单
         ZlServiceorder order = new ZlServiceorder().builder()
                 .userid(userId)
@@ -198,17 +194,15 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         serviceorderCommitVo.setDealWithTime(15);
 
         // 推送消息
+        ServiceorderToPhpVO serviceorderToPhpVO = zlServiceorderMapper.selectToPhp(order.getOrderid());
+//        PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_ROOMSERVICE, serviceorderToPhpVO);
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
-        OrderPhpVO orderPhpVO = new OrderPhpVO();
-        orderPhpVO.setOrderID(order.getOrderid());
-        orderPhpVO.setSerialNumber(orderSerialNo);
-        orderPhpVO.setHotelID(scp.getHotelid());
         orderPhpSendVO.setForm("java");
         orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_ROOMSERVICE);
-        orderPhpSendVO.setMessage(orderPhpVO);
+        orderPhpSendVO.setMessage(serviceorderToPhpVO);
         String orderStr = JSON.toJSONString(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_ROOMSERVICE, orderStr);
-        logger.info("推送客房服务订单到redis通知php后台人员完成,订单信息:" + orderStr);
+        logger.info("推送客房服务订单到redis通知php后台人员完成,订单信息:" + serviceorderToPhpVO);
 
         return serviceorderCommitVo;
     }

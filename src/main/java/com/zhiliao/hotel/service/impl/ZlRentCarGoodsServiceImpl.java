@@ -7,6 +7,7 @@ import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
+import com.zhiliao.hotel.controller.rentcar.vo.RentCarOrderToPhpVO;
 import com.zhiliao.hotel.controller.rentcar.vo.RentCarOrderVO;
 import com.zhiliao.hotel.mapper.ZlRentCarGoodsMapper;
 import com.zhiliao.hotel.mapper.ZlRentCarOrderMapper;
@@ -14,6 +15,9 @@ import com.zhiliao.hotel.model.ZlRentCarGoods;
 import com.zhiliao.hotel.model.ZlRentCarOrder;
 import com.zhiliao.hotel.service.ZlRentCarGoodsService;
 import com.zhiliao.hotel.utils.OrderIDUtil;
+import com.zhiliao.hotel.utils.PushInfoToPhpUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -33,6 +37,7 @@ import java.util.Map;
 @Transactional(rollbackFor = Exception.class)
 public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
 
+    private static final Logger logger = LoggerFactory.getLogger(ZlRentCarGoodsServiceImpl.class);
 
     @Autowired
     private ZlRentCarGoodsMapper rentCarGoodsMapper;
@@ -92,7 +97,7 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
         /*ZlRentCarOrder order = rentCarOrderMapper.findAllByCarNumber(rentCarOrder.getHotelid(),rentCarOrder.getCarnumber());
         if (order != null){
         }*/
-        String orderSerialNo = OrderIDUtil.createOrderID("");
+        String orderSerialNo = OrderIDUtil.createOrderID("ZC");
         rentCarOrder.setOrderserialno(orderSerialNo);
         rentCarOrder.setOrderstatus((byte) 0);
         rentCarOrder.setGivebackdate(rentCarOrder.getRentenddate());
@@ -102,22 +107,21 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
         rentCarOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         rentCarOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         int num = rentCarOrderMapper.insertSelective(rentCarOrder);
-
-        // 推送消息
-        OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
-        OrderPhpVO orderPhpVO = new OrderPhpVO();
-        orderPhpVO.setOrderID(rentCarOrder.getOrderid());
-        orderPhpVO.setSerialNumber(orderSerialNo);
-        orderPhpVO.setHotelID(rentCarOrder.getHotelid());
-        orderPhpSendVO.setForm("java");
-        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_RENT_CAR);
-        orderPhpSendVO.setMessage(orderPhpVO);
-        String orderStr = JSON.toJSONString(orderPhpSendVO);
-        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_RENT_CAR, orderStr);
-
         if (num > 0) {
             Map<String, Object> map = new HashMap<>();
             map.put("orderId", rentCarOrder.getOrderid());
+            logger.info("租车服务订单插入数据库完成,订单id:" + rentCarOrder.getOrderid());
+
+            // 推送消息
+            RentCarOrderToPhpVO rentCarOrderToPhpVO = rentCarOrderMapper.selectToPhp(rentCarOrder.getOrderid());
+//            PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_RENT_CAR, rentCarOrderToPhpVO);
+            OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
+            orderPhpSendVO.setForm("java");
+            orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_RENT_CAR);
+            orderPhpSendVO.setMessage(rentCarOrderToPhpVO);
+            String orderStr = JSON.toJSONString(orderPhpSendVO);
+            stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_RENT_CAR, orderStr);
+            logger.info("推送租车服务订单到redis通知php后台人员完成,订单信息:" + rentCarOrderToPhpVO);
             return map;
         } else {
             throw new RuntimeException("提交失败");

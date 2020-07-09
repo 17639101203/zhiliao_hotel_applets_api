@@ -12,7 +12,7 @@ import lombok.Data;
  **/
 @Data
 @ApiModel("叫醒下单接口传参")
-public class ZlWaqkeOrderParam {
+public class ZlWakeOrderParam {
 
     @ApiModelProperty(value = "酒店ID", required = true)
     private Integer hotelId;

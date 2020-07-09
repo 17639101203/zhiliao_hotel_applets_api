@@ -10,7 +10,6 @@ import java.io.Serializable;
 
 
 @Data
-@ToString
 @Table(name = "zl_cleanorder")
 public class ZlCleanOrder implements Serializable {
     /**

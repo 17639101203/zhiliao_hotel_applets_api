@@ -214,4 +214,7 @@
           ImgUrls = #{imageurls}
         WHERE OrderID = #{orderid}
     </update>
+    <select id="selectToPhp" resultType="com.zhiliao.hotel.controller.Repair.vo.RepairOrderToPhpVO">
+        select * from zl_repairorder where OrderID = #{orderid}
+    </select>
 </mapper>

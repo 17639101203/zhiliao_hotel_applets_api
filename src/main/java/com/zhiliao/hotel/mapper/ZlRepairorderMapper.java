@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
+import com.zhiliao.hotel.controller.Repair.vo.RepairOrderToPhpVO;
 import com.zhiliao.hotel.controller.Repair.vo.RepairOrderVO;
 import com.zhiliao.hotel.model.ZlRepairorder;
 import org.apache.ibatis.annotations.Param;
@@ -38,4 +39,6 @@ public interface ZlRepairorderMapper extends Mapper<ZlRepairorder> {
     void userDeleteRepairOrder(@Param("orderID") Long orderID, @Param("updatedate") Integer updateDate);
 
     void updateCommentImg(@Param("orderid") Long orderid, @Param("imageurls") String imageurls);
+
+    RepairOrderToPhpVO selectToPhp(@Param("orderid") Long orderid);
 }

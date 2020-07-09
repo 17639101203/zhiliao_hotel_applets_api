@@ -206,4 +206,7 @@
         WHERE invoiceorderid = #{invoiceorderid}
           AND IsDelete = 0
     </update>
+    <select id="selectToPhp" resultType="com.zhiliao.hotel.controller.invoice.vo.InvoiceOrderToPhpVO">
+        select * from zl_invoiceorder where invoiceorderid = #{invoiceorderid}
+    </select>
 </mapper>

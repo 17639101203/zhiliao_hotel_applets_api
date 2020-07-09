@@ -2,6 +2,7 @@ package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
+import com.zhiliao.hotel.controller.invoice.vo.InvoiceOrderToPhpVO;
 import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.model.ZlInvoiceOrder;
 import org.apache.ibatis.annotations.Param;
@@ -88,6 +89,8 @@ public interface ZlInvoiceService {
     void cancelInvoiceOrder(Long invoiceorderid, Integer updatedate);
 
     void deleteInvoiceOrder(Long invoiceorderid);
+
+    InvoiceOrderToPhpVO selectToPhp(Long invoiceorderid);
 }
 
 

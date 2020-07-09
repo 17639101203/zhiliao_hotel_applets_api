@@ -3,15 +3,15 @@ package com.zhiliao.hotel.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.clean.cleanparm.CleanParm;
+import com.zhiliao.hotel.controller.clean.vo.CleanOrderToPhpVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
-import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.mapper.ZlCleanOrderMapper;
 import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
 import com.zhiliao.hotel.model.ZlCleanOrder;
-import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.ZlCleanOrderService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
+import com.zhiliao.hotel.utils.PushInfoToPhpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -44,7 +43,7 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
     public Map<String, Object> addCleanOrder(Long userid, CleanParm cleanParm) {
         Map<String, Object> map = new HashMap<>();
 //        ZlWxuserdetail zlWxuserdetail = zlWxuserdetailMapper.findByUserId(userid);
-        String serialnumber = OrderIDUtil.createOrderID("");
+        String serialnumber = OrderIDUtil.createOrderID("QS");
         ZlCleanOrder zlCleanOrder = new ZlCleanOrder();
         zlCleanOrder.setUserid(userid);   //用户ID  根据token获取userId
         zlCleanOrder.setSerialnumber(serialnumber);   //订单编号
@@ -66,17 +65,15 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
         logger.info("清扫订单插入数据库完成,订单id:" + zlCleanOrder.getOrderid());
 
         // 推送消息
+        CleanOrderToPhpVO cleanOrderVO = zlCleanOrderMapper.selectToPhp(zlCleanOrder.getOrderid());
+//        PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_CLEAN, cleanOrderVO);
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
-        OrderPhpVO orderPhpVO = new OrderPhpVO();
-        orderPhpVO.setOrderID(zlCleanOrder.getOrderid());
-        orderPhpVO.setSerialNumber(serialnumber);
-        orderPhpVO.setHotelID(cleanParm.getHotelid());
         orderPhpSendVO.setForm("java");
         orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_CLEAN);
-        orderPhpSendVO.setMessage(orderPhpVO);
+        orderPhpSendVO.setMessage(cleanOrderVO);
         String orderStr = JSON.toJSONString(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CLEAN, orderStr);
-        logger.info("推送清扫订单到redis通知php后台人员完成,订单信息:" + orderStr);
+        logger.info("推送清扫订单到redis通知php后台人员完成,订单信息:" + cleanOrderVO);
 
         map.put("serialnumber", serialnumber);
         map.put("orderid", zlCleanOrder.getOrderid());

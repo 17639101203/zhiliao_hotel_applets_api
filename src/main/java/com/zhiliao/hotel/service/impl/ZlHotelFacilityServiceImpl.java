@@ -3,6 +3,7 @@ package com.zhiliao.hotel.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
+import com.zhiliao.hotel.controller.hotelfacility.vo.ZlHotelFacilityOrderToPhpVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.mapper.ZlHotelFacilityMapper;
@@ -14,6 +15,7 @@ import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import com.zhiliao.hotel.service.ZlHotelFacilityService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
+import com.zhiliao.hotel.utils.PushInfoToPhpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,8 +124,8 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
             }
         }
         //生成订单编号
-        String serialNumber = OrderIDUtil.createOrderID("");
-        zlHotelFacilityOrder.setSerialnumber(OrderIDUtil.createOrderID("HS"));
+//        String serialNumber = OrderIDUtil.createOrderID("SS");
+        zlHotelFacilityOrder.setSerialnumber(OrderIDUtil.createOrderID("SS"));
         zlHotelFacilityOrder.setComeformid(1);
         ZlHotel zlHotel = hotelMapper.getById(zlHotelFacilityOrder.getHotelid());
         if (zlHotel != null) {
@@ -137,17 +139,15 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         logger.info("酒店设施订单插入数据库完成,订单id:" + zlHotelFacilityOrder.getOrderid());
 
         // 推送消息
+        ZlHotelFacilityOrderToPhpVO zlHotelFacilityOrderToPhpVO = facilityOrderMapper.selectToPhp(zlHotelFacilityOrder.getOrderid());
+//        PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_CKECKOUT, zlHotelFacilityOrderToPhpVO);
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
-        OrderPhpVO orderPhpVO = new OrderPhpVO();
-        orderPhpVO.setOrderID(zlHotelFacilityOrder.getOrderid());
-        orderPhpVO.setSerialNumber(serialNumber);
-        orderPhpVO.setHotelID(zlHotelFacilityOrder.getHotelid());
         orderPhpSendVO.setForm("java");
         orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_CKECKOUT);
-        orderPhpSendVO.setMessage(orderPhpVO);
+        orderPhpSendVO.setMessage(zlHotelFacilityOrderToPhpVO);
         String orderStr = JSON.toJSONString(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CKECKOUT, orderStr);
-        logger.info("推送酒店设施订单到redis通知php后台人员完成,订单信息:" + orderStr);
+        logger.info("推送酒店设施订单到redis通知php后台人员完成,订单信息:" + zlHotelFacilityOrderToPhpVO);
 
         map.put("orderId", zlHotelFacilityOrder.getOrderid());
         return map;

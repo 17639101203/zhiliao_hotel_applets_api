@@ -9,6 +9,7 @@ import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderParam;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceParam;
+import com.zhiliao.hotel.controller.invoice.vo.InvoiceOrderToPhpVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.model.ZlInvoice;
@@ -16,6 +17,7 @@ import com.zhiliao.hotel.model.ZlInvoiceOrder;
 import com.zhiliao.hotel.service.ZlInvoiceService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
+import com.zhiliao.hotel.utils.PushInfoToPhpUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -105,7 +107,7 @@ public class ZlInvoiceController {
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
 //        Long userid = System.currentTimeMillis();
         // 生成订单ID
-        String invoiceOrderNumber = OrderIDUtil.createOrderID("");
+        String invoiceOrderNumber = OrderIDUtil.createOrderID("FP");
         map.put("invoiceordernumber", invoiceOrderNumber);
         Integer nowTime = DateUtils.javaToPhpNowDateTime();
         zlInvoiceOrder.setInvoiceordernumber(invoiceOrderNumber);    // 订单ID
@@ -123,23 +125,21 @@ public class ZlInvoiceController {
         zlInvoiceOrder.setUpdatedate(nowTime);     //修改时间
         if (invoiceOrderParam.getInvoicetype() == 1) {      //个人开票
             zlInvoiceService.addinvoiceOrder(zlInvoiceOrder);
-            logger.info("开票订单插入数据库完成,订单id:" + zlInvoiceOrder.getInvoiceid());
+            logger.info("开票订单插入数据库完成,订单id:" + zlInvoiceOrder.getInvoiceorderid());
 
             // 推送消息
+            InvoiceOrderToPhpVO invoiceOrderToPhpVO = zlInvoiceService.selectToPhp(zlInvoiceOrder.getInvoiceorderid());
+//            PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_SERVICE_GOODS, invoiceOrderToPhpVO);
             OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
-            OrderPhpVO orderPhpVO = new OrderPhpVO();
-            orderPhpVO.setOrderID(zlInvoiceOrder.getInvoiceorderid());
-            orderPhpVO.setSerialNumber(invoiceOrderNumber);
-            orderPhpVO.setHotelID(zlInvoiceOrder.getHotelid());
             orderPhpSendVO.setForm("java");
             orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_SERVICE_GOODS);
-            orderPhpSendVO.setMessage(orderPhpVO);
+            orderPhpSendVO.setMessage(invoiceOrderToPhpVO);
             String orderStr = JSON.toJSONString(orderPhpSendVO);
             stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_SERVICE_GOODS, orderStr);
-            logger.info("推送开票订单到redis通知php后台人员完成,订单信息:" + orderStr);
+            logger.info("推送开票订单到redis通知php后台人员完成,订单信息:" + invoiceOrderToPhpVO);
 
             map.put("invoiceorderid", zlInvoiceOrder.getInvoiceorderid());
-            return new ReturnString<>(0, "增值税普通发票抬头保存成功", map);
+            return new ReturnString<>(0, "增值税普通发票开票成功", map);
         } else if (invoiceOrderParam.getInvoicetype() == 2) {  //企业开票
             zlInvoiceOrder.setIdentifier(invoiceOrderParam.getIdentifier());  //单位的纳税人识别号:15/18或20位
             zlInvoiceOrder.setBank(invoiceOrderParam.getBank());   //开户银行
@@ -147,23 +147,21 @@ public class ZlInvoiceController {
             zlInvoiceOrder.setCompanytel(invoiceOrderParam.getCompanytel());    //单位电话
             zlInvoiceOrder.setCompanyaddress(invoiceOrderParam.getCompanyaddress());  //  单位地址
             zlInvoiceService.addinvoiceOrder(zlInvoiceOrder);
-            logger.info("开票订单插入数据库完成,订单id:" + zlInvoiceOrder.getInvoiceid());
+            logger.info("开票订单插入数据库完成,订单id:" + zlInvoiceOrder.getInvoiceorderid());
 
             // 推送消息
+            InvoiceOrderToPhpVO invoiceOrderToPhpVO = zlInvoiceService.selectToPhp(zlInvoiceOrder.getInvoiceorderid());
+//            PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_SERVICE_GOODS, invoiceOrderToPhpVO);
             OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
-            OrderPhpVO orderPhpVO = new OrderPhpVO();
-            orderPhpVO.setOrderID(zlInvoiceOrder.getInvoiceorderid());
-            orderPhpVO.setSerialNumber(invoiceOrderNumber);
-            orderPhpVO.setHotelID(zlInvoiceOrder.getHotelid());
             orderPhpSendVO.setForm("java");
             orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_SERVICE_GOODS);
-            orderPhpSendVO.setMessage(orderPhpVO);
+            orderPhpSendVO.setMessage(invoiceOrderToPhpVO);
             String orderStr = JSON.toJSONString(orderPhpSendVO);
             stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_SERVICE_GOODS, orderStr);
-            logger.info("推送开票订单到redis通知php后台人员完成,订单信息:" + orderStr);
+            logger.info("推送开票订单到redis通知php后台人员完成,订单信息:" + invoiceOrderToPhpVO);
 
             map.put("invoiceorderid", zlInvoiceOrder.getInvoiceorderid());
-            return new ReturnString<>(0, "增值税专用发票抬头保存成功", map);
+            return new ReturnString<>(0, "增值税专用发票开票成功", map);
         }
         return new ReturnString<>(-1, "开票类型错误，请重新再试!");
     }

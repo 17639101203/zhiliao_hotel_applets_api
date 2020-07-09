@@ -31,6 +31,6 @@ public class OrderPhpSendVO implements Serializable {
      * 信息
      */
 //    @JsonSerialize(using = JsonObjectSerializer.class)
-    private OrderPhpVO message;
+    private Object message;
 
 }

@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.controller.hotelfacility.vo.HotelFacilityOrderParamVO;
+import com.zhiliao.hotel.controller.hotelfacility.vo.ZlHotelFacilityOrderToPhpVO;
 import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import org.apache.ibatis.annotations.Param;
@@ -34,4 +35,6 @@ public interface ZlHotelFacilityOrderMapper extends Mapper<ZlHotelFacilityOrder>
     void updateById(@Param("orderID") Long orderID, @Param("updateDate") Integer updateDate);
 
     void userDeleteFacilityOrder(@Param("orderID") Long orderID, @Param("updateDate") Integer updateDate);
+
+    ZlHotelFacilityOrderToPhpVO selectToPhp(@Param("orderid") Long orderid);
 }

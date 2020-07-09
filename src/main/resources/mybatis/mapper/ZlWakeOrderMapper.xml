@@ -60,4 +60,7 @@
     </if>
      where OrderID = #{orderid}
   </update>
+  <select id="selectToPhp" resultType="com.zhiliao.hotel.controller.wake.vo.ZlWakeOrderToPhpVO">
+    select * from zl_wakeorder where OrderID = #{orderid}
+  </select>
 </mapper>

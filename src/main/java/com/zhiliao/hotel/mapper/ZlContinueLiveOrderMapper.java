@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
+import com.zhiliao.hotel.controller.hotellive.vo.ZlContinueLiveOrderToPhpVO;
 import com.zhiliao.hotel.model.ZlContinueLiveOrder;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -21,4 +22,6 @@ public interface ZlContinueLiveOrderMapper extends Mapper<ZlContinueLiveOrder> {
     int selectCountLive(Long userId);
 
     ZlContinueLiveOrder continueLiveOrderDetail(@Param("orderID") Long orderID);
+
+    ZlContinueLiveOrderToPhpVO selectToPhp(@Param("orderid") Long orderid);
 }

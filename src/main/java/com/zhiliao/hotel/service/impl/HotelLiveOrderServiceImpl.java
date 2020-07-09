@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.hotellive.param.ZlCheckoutOrderParam;
 import com.zhiliao.hotel.controller.hotellive.param.ZlContinueLiveOrderParam;
+import com.zhiliao.hotel.controller.hotellive.vo.ZlCheckoutOrderToPhpVO;
+import com.zhiliao.hotel.controller.hotellive.vo.ZlContinueLiveOrderToPhpVO;
 import com.zhiliao.hotel.controller.myOrder.vo.HotelBasicVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
@@ -15,6 +17,7 @@ import com.zhiliao.hotel.model.ZlContinueLiveOrder;
 import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.HotelLiveOrderService;
 import com.zhiliao.hotel.utils.OrderIDUtil;
+import com.zhiliao.hotel.utils.PushInfoToPhpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +56,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
     public Map<String, Object> checkoutOrder(Long userID, HotelBasicVO hotelBasicVO, ZlCheckoutOrderParam zlCheckoutOrderParam) {
 
         //调用工具类生成订单编号
-        String orderSerialNo = OrderIDUtil.createOrderID("");
+        String orderSerialNo = OrderIDUtil.createOrderID("TF");
 
 //        ZlWxuserdetail zlWxuserdetail = zlWxuserdetailMapper.findByUserId(userID);
         ZlCheckoutOrder zlCheckoutOrder = new ZlCheckoutOrder();
@@ -77,17 +80,15 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         logger.info("退房订单插入数据库完成,订单id:" + zlCheckoutOrder.getOrderid());
 
         // 推送消息
+        ZlCheckoutOrderToPhpVO zlCheckoutOrderToPhpVO = zlCheckoutOrderMapper.selectToPhp(zlCheckoutOrder.getOrderid());
+//        PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_FACILITY, zlCheckoutOrderToPhpVO);
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
-        OrderPhpVO orderPhpVO = new OrderPhpVO();
-        orderPhpVO.setOrderID(zlCheckoutOrder.getOrderid());
-        orderPhpVO.setSerialNumber(orderSerialNo);
-        orderPhpVO.setHotelID(zlCheckoutOrder.getHotelid());
         orderPhpSendVO.setForm("java");
         orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_FACILITY);
-        orderPhpSendVO.setMessage(orderPhpVO);
+        orderPhpSendVO.setMessage(zlCheckoutOrderToPhpVO);
         String orderStr = JSON.toJSONString(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_FACILITY, orderStr);
-        logger.info("推送退房订单到redis通知php后台人员完成,订单信息:" + orderStr);
+        logger.info("推送退房订单到redis通知php后台人员完成,订单信息:" + zlCheckoutOrderToPhpVO);
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderid", zlCheckoutOrder.getOrderid());
@@ -97,7 +98,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
     @Override
     public Map<String, Object> continueLiveOrder(Long userID, HotelBasicVO hotelBasicVO, ZlContinueLiveOrderParam zlContinueLiveOrderParam) {
         //调用工具类生成订单编号
-        String orderSerialNo = OrderIDUtil.createOrderID("");
+        String orderSerialNo = OrderIDUtil.createOrderID("XZ");
 
         ZlWxuserdetail zlWxuserdetail = zlWxuserdetailMapper.findByUserId(userID);
         ZlContinueLiveOrder zlContinueLiveOrder = new ZlContinueLiveOrder();
@@ -122,17 +123,15 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         logger.info("续住订单插入数据库完成,订单id:" + zlContinueLiveOrder.getOrderid());
 
         // 推送消息
+        ZlContinueLiveOrderToPhpVO zlContinueLiveOrderToPhpVO = zlContinueLiveOrderMapper.selectToPhp(zlContinueLiveOrder.getOrderid());
+//        PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_CONTINUE_LIVE, zlContinueLiveOrderToPhpVO);
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
-        OrderPhpVO orderPhpVO = new OrderPhpVO();
-        orderPhpVO.setOrderID(zlContinueLiveOrder.getOrderid());
-        orderPhpVO.setSerialNumber(orderSerialNo);
-        orderPhpVO.setHotelID(zlContinueLiveOrder.getHotelid());
         orderPhpSendVO.setForm("java");
         orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_CONTINUE_LIVE);
-        orderPhpSendVO.setMessage(orderPhpVO);
+        orderPhpSendVO.setMessage(zlContinueLiveOrderToPhpVO);
         String orderStr = JSON.toJSONString(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CONTINUE_LIVE, orderStr);
-        logger.info("推送续住订单到redis通知php后台人员完成,订单信息:" + orderStr);
+        logger.info("推送续住订单到redis通知php后台人员完成,订单信息:" + zlContinueLiveOrderToPhpVO);
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderid", zlContinueLiveOrder.getOrderid());

@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
+import com.zhiliao.hotel.controller.invoice.vo.InvoiceOrderToPhpVO;
 import com.zhiliao.hotel.model.ZlInvoiceOrder;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -17,5 +18,7 @@ public interface ZlInvoiceOrderMapper extends Mapper<ZlInvoiceOrder> {
     @Select("select count(*) from zl_invoiceorder where UserID = #{userId} and IsDelete = 0 ")
     int selectCountInvoice(Long userId);
 
-    void deleteInvoiceOrder(@Param("invoiceorderid")Long invoiceorderid, @Param("nowTime")Integer nowTime);
+    void deleteInvoiceOrder(@Param("invoiceorderid") Long invoiceorderid, @Param("nowTime") Integer nowTime);
+
+    InvoiceOrderToPhpVO selectToPhp(@Param("invoiceorderid") Long invoiceorderid);
 }

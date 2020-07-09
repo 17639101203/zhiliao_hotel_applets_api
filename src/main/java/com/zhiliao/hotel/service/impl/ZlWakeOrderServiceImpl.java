@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
+import com.zhiliao.hotel.controller.wake.vo.ZlWakeOrderToPhpVO;
 import com.zhiliao.hotel.mapper.ZlWakeOrderMapper;
 import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
 import com.zhiliao.hotel.model.ZlWakeOrder;
 import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.ZlWakeOrderService;
 import com.zhiliao.hotel.utils.OrderIDUtil;
+import com.zhiliao.hotel.utils.PushInfoToPhpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +56,7 @@ public class ZlWakeOrderServiceImpl implements ZlWakeOrderService {
 //        if (zlWxuserdetail == null) {
 //            new RuntimeException("没有该用户信息");
 //        }
-        String orderSerialNo = OrderIDUtil.createOrderID("");
+        String orderSerialNo = OrderIDUtil.createOrderID("JX");
 //        wakeOrder.setUsername(zlWxuserdetail.getRealname());
 //        wakeOrder.setTel(zlWxuserdetail.getTel());
         wakeOrder.setUserid(userId);
@@ -67,17 +69,15 @@ public class ZlWakeOrderServiceImpl implements ZlWakeOrderService {
         logger.info("叫醒订单插入数据库完成,订单id:" + wakeOrder.getOrderid());
 
         // 推送消息
+        ZlWakeOrderToPhpVO zlWakeOrderToPhpVO = wakeOrderMapper.selectToPhp(wakeOrder.getOrderid());
+//        PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_WAKE, zlWakeOrderToPhpVO);
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
-        OrderPhpVO orderPhpVO = new OrderPhpVO();
-        orderPhpVO.setOrderID(wakeOrder.getOrderid());
-        orderPhpVO.setSerialNumber(orderSerialNo);
-        orderPhpVO.setHotelID(wakeOrder.getHotelid());
         orderPhpSendVO.setForm("java");
         orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_WAKE);
-        orderPhpSendVO.setMessage(orderPhpVO);
+        orderPhpSendVO.setMessage(zlWakeOrderToPhpVO);
         String orderStr = JSON.toJSONString(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_WAKE, orderStr);
-        logger.info("推送叫醒订单到redis通知php后台人员完成,订单信息:" + orderStr);
+        logger.info("推送叫醒订单到redis通知php后台人员完成,订单信息:" + zlWakeOrderToPhpVO);
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderID", wakeOrder.getOrderid());

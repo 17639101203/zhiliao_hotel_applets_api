@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
+import com.zhiliao.hotel.controller.serviceorder.vo.ServiceorderToPhpVO;
 import com.zhiliao.hotel.model.ZlServiceorder;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -30,4 +31,6 @@ public interface ZlServiceorderMapper extends Mapper<ZlServiceorder> {
     int selectCountService(Long userId);
 
     void userDeleteServiceOrder(@Param("orderid") Long orderid, @Param("updateDate") Integer updateDate);
+
+    ServiceorderToPhpVO selectToPhp(@Param("orderid") Long orderid);
 }
