@@ -13,16 +13,10 @@ public class OrderIDUtil {
      * @return
      */
     public static String createOrderID(String type) {
-        // 获取当前日期年月日时分yyyyMMddHHmm
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-        Date date = new Date();
-        String currentDate = format.format(date);
-        /*// 截取后五位时间戳
-        String time = String.valueOf(date.getTime());
-        time = time.substring(time.length() - 4);*/
-        // 生成五位随机数
-        int random = (int) ((Math.random() * 9 + 1) * 100000);
-        return type + currentDate + random;
+
+        IdWorker idWorker = new IdWorker();
+        String s = idWorker.nextId() + "";
+        return type + s;
     }
 
     public static void main(String[] args) {
