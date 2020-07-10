@@ -62,6 +62,9 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private ZlWxuserMapper zlWxuserMapper;
+
     @Override
     public ServiceorderCommitVo serviceorderSubmit(String token, ServiceorderCommitParams scp) throws RuntimeException {
         ServiceorderCommitVo serviceorderCommitVo = new ServiceorderCommitVo();
@@ -160,12 +163,17 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
 //        ZlWxuserdetail zlWxuserdetail = Optional.ofNullable(zlWxuserdetailMapper.findByUserId(userId)).orElse(new ZlWxuserdetail());
         //生成订单编号
         String orderSerialNo = OrderIDUtil.createOrderID("KF");
+
+        ZlWxuser zlWxuser = new ZlWxuser();
+        zlWxuser.setUserid(userId);
+        ZlWxuser wxuser = zlWxuserMapper.selectOne(zlWxuser);
         //生成客房服务订单
         ZlServiceorder order = new ZlServiceorder().builder()
                 .userid(userId)
 //                .username(zlWxuserdetail.getRealname() == null ? "" : zlWxuserdetail.getRealname())
 //                .tel(zlWxuserdetail.getTel() == null ? "" : zlWxuserdetail.getTel())
                 .serialnumber(orderSerialNo)
+                .username(wxuser.getWxopenid())
                 .hotelid(scp.getHotelid())
                 .hotelname(scp.getHotelname())
                 .roomid(zlHotelroom.getRoomid())

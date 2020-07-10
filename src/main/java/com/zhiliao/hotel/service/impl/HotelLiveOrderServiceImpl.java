@@ -12,9 +12,11 @@ import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.mapper.ZlCheckoutOrderMapper;
 import com.zhiliao.hotel.mapper.ZlContinueLiveOrderMapper;
+import com.zhiliao.hotel.mapper.ZlHotelRoomMapper;
 import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
 import com.zhiliao.hotel.model.ZlCheckoutOrder;
 import com.zhiliao.hotel.model.ZlContinueLiveOrder;
+import com.zhiliao.hotel.model.ZlHotelroom;
 import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.HotelLiveOrderService;
 import com.zhiliao.hotel.utils.OrderIDUtil;
@@ -53,6 +55,9 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private ZlHotelRoomMapper zlHotelRoomMapper;
+
     @Override
     public Map<String, Object> checkoutOrder(Long userID, HotelBasicVO hotelBasicVO, ZlCheckoutOrderParam zlCheckoutOrderParam) {
 
@@ -76,6 +81,8 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         zlCheckoutOrder.setCheckoutdate((int) (zlCheckoutOrderParam.getCheckOutDate() / 1000));
         zlCheckoutOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         zlCheckoutOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+        ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(hotelBasicVO.getRoomNumber(), hotelBasicVO.getHotelID());
+        zlCheckoutOrder.setFloornumber(zlHotelroom.getRoomfloor());
 
         zlCheckoutOrderMapper.insertSelective(zlCheckoutOrder);
         logger.info("退房订单插入数据库完成,订单id:" + zlCheckoutOrder.getOrderid());
@@ -120,6 +127,8 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         zlContinueLiveOrder.setCheckoutdate((int) (zlContinueLiveOrderParam.getCheckOutDate() / 1000));
         zlContinueLiveOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         zlContinueLiveOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+        ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(hotelBasicVO.getRoomNumber(), hotelBasicVO.getHotelID());
+        zlContinueLiveOrder.setFloornumber(zlHotelroom.getRoomfloor());
 
         zlContinueLiveOrderMapper.insert(zlContinueLiveOrder);
         logger.info("续住订单插入数据库完成,订单id:" + zlContinueLiveOrder.getOrderid());

@@ -45,6 +45,11 @@ public class ZlRentCarOrder implements Serializable {
     private String hotelname;
 
     /**
+     * 楼层数
+     */
+    private String floornumber;
+
+    /**
      * 房间ID
      */
     private Integer roomid;

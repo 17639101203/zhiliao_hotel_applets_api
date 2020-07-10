@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.wake.vo.ZlWakeOrderToPhpVO;
+import com.zhiliao.hotel.mapper.ZlHotelRoomMapper;
 import com.zhiliao.hotel.mapper.ZlWakeOrderMapper;
 import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
+import com.zhiliao.hotel.model.ZlHotelroom;
 import com.zhiliao.hotel.model.ZlWakeOrder;
 import com.zhiliao.hotel.service.ZlWakeOrderService;
 import com.zhiliao.hotel.utils.OrderIDUtil;
@@ -33,10 +35,15 @@ public class ZlWakeOrderServiceImpl implements ZlWakeOrderService {
 
     @Autowired
     private ZlWakeOrderMapper wakeOrderMapper;
+
     @Autowired
     private ZlWxuserdetailMapper wxuserdetailMapper;
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private ZlHotelRoomMapper zlHotelRoomMapper;
 
     /**
      * 提交叫醒订单
@@ -62,6 +69,8 @@ public class ZlWakeOrderServiceImpl implements ZlWakeOrderService {
         wakeOrder.setIsdelete(false);
         wakeOrder.setIsuserdelete(false);
         wakeOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+        ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(wakeOrder.getRoomnumber(), wakeOrder.getHotelid());
+        wakeOrder.setFloornumber(zlHotelroom.getRoomfloor());
         wakeOrderMapper.insertSelective(wakeOrder);
         logger.info("叫醒订单插入数据库完成,订单id:" + wakeOrder.getOrderid());
 

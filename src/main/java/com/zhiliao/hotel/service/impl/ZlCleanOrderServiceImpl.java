@@ -7,8 +7,12 @@ import com.zhiliao.hotel.controller.clean.cleanparm.CleanParm;
 import com.zhiliao.hotel.controller.clean.vo.CleanOrderToPhpVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.mapper.ZlCleanOrderMapper;
+import com.zhiliao.hotel.mapper.ZlHotelRoomMapper;
+import com.zhiliao.hotel.mapper.ZlWxuserMapper;
 import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
 import com.zhiliao.hotel.model.ZlCleanOrder;
+import com.zhiliao.hotel.model.ZlHotelroom;
+import com.zhiliao.hotel.model.ZlWxuser;
 import com.zhiliao.hotel.service.ZlCleanOrderService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
@@ -39,6 +43,11 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
     @Autowired
     StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private ZlHotelRoomMapper zlHotelRoomMapper;
+
+    @Autowired
+    private ZlWxuserMapper zlWxuserMapper;
 
     @Override
     public Map<String, Object> addCleanOrder(Long userid, CleanParm cleanParm) {
@@ -61,6 +70,12 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
         zlCleanOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));   //下单时间
         zlCleanOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));   //支付/取消时间
 //        zlCleanOrderMapper.addCleanOrder(zlCleanOrder);
+        ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(cleanParm.getRoomnumber(), cleanParm.getHotelid());
+        zlCleanOrder.setFloornumber(zlHotelroom.getRoomfloor());
+        ZlWxuser zlWxuser = new ZlWxuser();
+        zlWxuser.setUserid(userid);
+        ZlWxuser wxuser = zlWxuserMapper.selectOne(zlWxuser);
+        zlCleanOrder.setUsername(wxuser.getNickname());
         zlCleanOrderMapper.insertSelective(zlCleanOrder);
 
         logger.info("清扫订单插入数据库完成,订单id:" + zlCleanOrder.getOrderid());

@@ -30,9 +30,19 @@ public class ZlInvoiceOrder implements Serializable {
     private Long userid;
 
     /**
+     * 用户名
+     */
+    private String username;
+
+    /**
      * 酒店ID
      */
     private Integer hotelid;
+
+    /**
+     * 酒店名
+     */
+    private String hotelname;
 
     /**
      * 发票类型:1:增值税普通发票;2增值税专用发票
@@ -47,7 +57,7 @@ public class ZlInvoiceOrder implements Serializable {
     /**
      * 0电子发票；1纸质发票
      */
-    private Byte electronicpapertype;
+    private Boolean electronicpapertype;
 
     /**
      * 个人真实姓/或单位抬头
@@ -63,6 +73,11 @@ public class ZlInvoiceOrder implements Serializable {
      * 个人或单位电话号码
      */
     private String tel;
+
+    /**
+     * 个人或单位邮箱
+     */
+    private String email;
 
     /**
      * 备注信息
@@ -105,6 +120,16 @@ public class ZlInvoiceOrder implements Serializable {
     private String invoiceordernumber;
 
     /**
+     * 操作人员
+     */
+    private String operatorname;
+
+    /**
+     * 操作人员IP
+     */
+    private String operatorip;
+
+    /**
      * 删除状态:0正常;1删除;
      */
     private Boolean isdelete;
@@ -118,6 +143,5 @@ public class ZlInvoiceOrder implements Serializable {
      * 修改时间
      */
     private Integer updatedate;
-
 
 }

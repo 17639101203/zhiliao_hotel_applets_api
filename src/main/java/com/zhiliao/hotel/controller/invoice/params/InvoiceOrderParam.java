@@ -53,7 +53,7 @@ public class InvoiceOrderParam {
      * 0电子发票；1纸质发票
      */
     @ApiModelProperty(value = "0电子发票；1纸质发票", required = true)
-    private Byte electronicpapertype;
+    private Boolean electronicpapertype;
 
 
     /**

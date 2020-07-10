@@ -10,8 +10,10 @@ import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.controller.rentcar.vo.RentCarOrderToPhpVO;
 import com.zhiliao.hotel.controller.rentcar.vo.RentCarOrderVO;
+import com.zhiliao.hotel.mapper.ZlHotelRoomMapper;
 import com.zhiliao.hotel.mapper.ZlRentCarGoodsMapper;
 import com.zhiliao.hotel.mapper.ZlRentCarOrderMapper;
+import com.zhiliao.hotel.model.ZlHotelroom;
 import com.zhiliao.hotel.model.ZlRentCarGoods;
 import com.zhiliao.hotel.model.ZlRentCarOrder;
 import com.zhiliao.hotel.service.ZlRentCarGoodsService;
@@ -49,8 +51,12 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private ZlHotelRoomMapper zlHotelRoomMapper;
+
     /**
      * 获取车型列表
+     *
      * @param hotelid
      * @param pageNo
      * @param pageSize
@@ -108,6 +114,8 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
         rentCarOrder.setIsuserdelete(false);
         rentCarOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         rentCarOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
+        ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(rentCarOrder.getRoomnumber(), rentCarOrder.getHotelid());
+        rentCarOrder.setFloornumber(zlHotelroom.getRoomfloor());
         int num = rentCarOrderMapper.insertSelective(rentCarOrder);
         if (num > 0) {
             Map<String, Object> map = new HashMap<>();

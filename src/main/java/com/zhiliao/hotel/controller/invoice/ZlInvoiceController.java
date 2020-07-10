@@ -13,8 +13,12 @@ import com.zhiliao.hotel.controller.invoice.params.InvoiceParam;
 import com.zhiliao.hotel.controller.invoice.vo.InvoiceOrderToPhpVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
+import com.zhiliao.hotel.mapper.ZlHotelMapper;
+import com.zhiliao.hotel.mapper.ZlWxuserMapper;
+import com.zhiliao.hotel.model.ZlHotel;
 import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.model.ZlInvoiceOrder;
+import com.zhiliao.hotel.model.ZlWxuser;
 import com.zhiliao.hotel.service.ZlInvoiceService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
@@ -50,6 +54,12 @@ public class ZlInvoiceController {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private ZlWxuserMapper zlWxuserMapper;
+
+    @Autowired
+    private ZlHotelMapper zlHotelMapper;
 
     // 允许最大的pageSize
     private final static int MAX_PAGE_SIZE = 20;
@@ -106,6 +116,9 @@ public class ZlInvoiceController {
         Map<String, Object> map = new HashMap<>();
         // 解析token获取userid
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
+        ZlWxuser zlWxuser = new ZlWxuser();
+        zlWxuser.setUserid(userid);
+        ZlWxuser wxuser = zlWxuserMapper.selectOne(zlWxuser);
 //        Long userid = System.currentTimeMillis();
         // 生成订单ID
         String invoiceOrderNumber = OrderIDUtil.createOrderID("FP");
@@ -124,6 +137,9 @@ public class ZlInvoiceController {
         zlInvoiceOrder.setRemark(invoiceOrderParam.getRemark());  //备注信息
         zlInvoiceOrder.setCreatedate(nowTime);     //添加时间
         zlInvoiceOrder.setUpdatedate(nowTime);     //修改时间
+        zlInvoiceOrder.setUsername(wxuser.getNickname());
+        ZlHotel zlHotel = zlHotelMapper.getById(invoiceOrderParam.getHotelid());
+        zlInvoiceOrder.setHotelname(zlHotel.getHotelName());
         if (invoiceOrderParam.getInvoicetype() == 1) {      //个人开票
             zlInvoiceService.addinvoiceOrder(zlInvoiceOrder);
             logger.info("开票订单插入数据库完成,订单id:" + zlInvoiceOrder.getInvoiceorderid());

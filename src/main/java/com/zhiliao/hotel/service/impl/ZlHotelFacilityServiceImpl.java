@@ -7,12 +7,8 @@ import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.hotelfacility.vo.ZlHotelFacilityOrderToPhpVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
-import com.zhiliao.hotel.mapper.ZlHotelFacilityMapper;
-import com.zhiliao.hotel.mapper.ZlHotelFacilityOrderMapper;
-import com.zhiliao.hotel.mapper.ZlHotelMapper;
-import com.zhiliao.hotel.model.ZlHotel;
-import com.zhiliao.hotel.model.ZlHotelFacility;
-import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
+import com.zhiliao.hotel.mapper.*;
+import com.zhiliao.hotel.model.*;
 import com.zhiliao.hotel.service.ZlHotelFacilityService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
@@ -39,6 +35,7 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
 
     @Autowired
     private ZlHotelFacilityMapper hotelFacilityMapper;
+
     @Autowired
     private ZlHotelMapper hotelMapper;
 
@@ -47,6 +44,12 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private ZlHotelRoomMapper zlHotelRoomMapper;
+
+    @Autowired
+    private ZlWxuserMapper zlWxuserMapper;
 
     /**
      * 获取酒店设施列表
@@ -136,6 +139,12 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         zlHotelFacilityOrder.setOrderstatus((byte) 0);
         zlHotelFacilityOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
+        ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(zlHotelFacilityOrder.getRoomnumber(), zlHotelFacilityOrder.getHotelid());
+        zlHotelFacilityOrder.setFloornumber(zlHotelroom.getRoomfloor());
+        ZlWxuser zlWxuser = new ZlWxuser();
+        zlWxuser.setUserid(zlHotelFacilityOrder.getUserid());
+        ZlWxuser wxuser = zlWxuserMapper.selectOne(zlWxuser);
+        zlHotelFacilityOrder.setUsername(wxuser.getNickname());
         facilityOrderMapper.insertSelective(zlHotelFacilityOrder);
         logger.info("酒店设施订单插入数据库完成,订单id:" + zlHotelFacilityOrder.getOrderid());
 

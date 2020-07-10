@@ -8,8 +8,12 @@ import com.zhiliao.hotel.controller.Repair.vo.RepairOrderToPhpVO;
 import com.zhiliao.hotel.controller.Repair.vo.RepairOrderVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
+import com.zhiliao.hotel.mapper.ZlHotelRoomMapper;
 import com.zhiliao.hotel.mapper.ZlRepairorderMapper;
+import com.zhiliao.hotel.mapper.ZlWxuserMapper;
+import com.zhiliao.hotel.model.ZlHotelroom;
 import com.zhiliao.hotel.model.ZlRepairorder;
+import com.zhiliao.hotel.model.ZlWxuser;
 import com.zhiliao.hotel.service.ZlRepairService;
 import com.zhiliao.hotel.utils.*;
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +42,12 @@ public class ZlRepairServiceImpl implements ZlRepairService {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private ZlHotelRoomMapper zlHotelRoomMapper;
+
+    @Autowired
+    private ZlWxuserMapper zlWxuserMapper;
 
     @Override
     public void addRepairMsg(ZlRepairorder repair) {
@@ -76,6 +86,14 @@ public class ZlRepairServiceImpl implements ZlRepairService {
         zlRepairorder.setSerialnumber(serialNumber);  //订单号
         zlRepairorder.setCreatedate(now);
         zlRepairorder.setUpdatedate(now);
+
+        ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(repairParam.getRoomnumber(), repairParam.getHotelid());
+        zlRepairorder.setFloornumber(zlHotelroom.getRoomfloor());
+        ZlWxuser zlWxuser = new ZlWxuser();
+        zlWxuser.setUserid(userid);
+        ZlWxuser wxuser = zlWxuserMapper.selectOne(zlWxuser);
+        zlRepairorder.setUsername(wxuser.getNickname());
+
         if (multipartFile != null) {
             String imgurl = UploadPhotoUtil.uploadPhotoUtil2(multipartFile);
             zlRepairorder.setImgurls(imgurl);  //图片地址

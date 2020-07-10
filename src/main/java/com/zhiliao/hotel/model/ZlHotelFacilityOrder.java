@@ -9,14 +9,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * 
- *
  * @author null
  * @date 2020-04-28
  */
 @Table(name = "zl_hotelfacilityorder")
 @Data
-public class  ZlHotelFacilityOrder implements Serializable {
+public class ZlHotelFacilityOrder implements Serializable {
     /**
      * 订单ID
      */
@@ -35,6 +33,16 @@ public class  ZlHotelFacilityOrder implements Serializable {
     private Long userid;
 
     /**
+     * 用户名
+     */
+    private String username;
+
+    /**
+     * 用户电话
+     */
+    private String tel;
+
+    /**
      * 订单编号
      */
     private String serialnumber;
@@ -48,6 +56,11 @@ public class  ZlHotelFacilityOrder implements Serializable {
      * 酒店名
      */
     private String hotelname;
+
+    /**
+     * 楼称号
+     */
+    private String floornumber;
 
     /**
      * 房间ID
