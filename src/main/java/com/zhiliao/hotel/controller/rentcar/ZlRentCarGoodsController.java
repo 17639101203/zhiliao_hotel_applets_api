@@ -70,7 +70,7 @@ public class ZlRentCarGoodsController {
 
     @ApiOperation(value = "租车车型商品详情")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "int", name = "goodsid", value = "酒店ID", required = true)
+            @ApiImplicitParam(paramType = "path", dataType = "int", name = "goodsid", value = "车子ID", required = true)
     })
     @GetMapping("rentCarDetail/{goodsid}")
     @UserLoginToken

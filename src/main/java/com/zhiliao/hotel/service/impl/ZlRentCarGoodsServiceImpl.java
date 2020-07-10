@@ -101,6 +101,7 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
         String orderSerialNo = OrderIDUtil.createOrderID("ZC");
         rentCarOrder.setOrderserialno(orderSerialNo);
         rentCarOrder.setOrderstatus((byte) 0);
+        rentCarOrder.setGoodsid(goodsid);
         rentCarOrder.setGivebackdate(rentCarOrder.getRentenddate());
         rentCarOrder.setCancancelorderminute(rentCarGoods.getCancancelorderminute());
         rentCarOrder.setIsdelete(false);
