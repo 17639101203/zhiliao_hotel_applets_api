@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.common.exception.BizException;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
@@ -200,7 +201,8 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         orderPhpSendVO.setForm("java");
         orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_ROOMSERVICE);
         orderPhpSendVO.setMessage(serviceorderToPhpVO);
-        String orderStr = JSON.toJSONString(orderPhpSendVO);
+        Gson gson = new Gson();
+        String orderStr = gson.toJson(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_ROOMSERVICE, orderStr);
         logger.info("推送客房服务订单到redis通知php后台人员完成,订单信息:" + serviceorderToPhpVO);
 

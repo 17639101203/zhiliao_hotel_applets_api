@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.hotelfacility.vo.ZlHotelFacilityOrderToPhpVO;
@@ -145,7 +146,8 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         orderPhpSendVO.setForm("java");
         orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_CKECKOUT);
         orderPhpSendVO.setMessage(zlHotelFacilityOrderToPhpVO);
-        String orderStr = JSON.toJSONString(orderPhpSendVO);
+        Gson gson = new Gson();
+        String orderStr = gson.toJson(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CKECKOUT, orderStr);
         logger.info("推送酒店设施订单到redis通知php后台人员完成,订单信息:" + zlHotelFacilityOrderToPhpVO);
 

@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.clean.cleanparm.CleanParm;
 import com.zhiliao.hotel.controller.clean.vo.CleanOrderToPhpVO;
@@ -71,7 +72,8 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
         orderPhpSendVO.setForm("java");
         orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_CLEAN);
         orderPhpSendVO.setMessage(cleanOrderVO);
-        String orderStr = JSON.toJSONString(orderPhpSendVO);
+        Gson gson = new Gson();
+        String orderStr = gson.toJson(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CLEAN, orderStr);
         logger.info("推送清扫订单到redis通知php后台人员完成,订单信息:" + cleanOrderVO);
 

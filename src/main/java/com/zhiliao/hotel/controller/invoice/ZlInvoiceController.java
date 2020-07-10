@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.controller.invoice;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
@@ -134,7 +135,8 @@ public class ZlInvoiceController {
             orderPhpSendVO.setForm("java");
             orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_SERVICE_GOODS);
             orderPhpSendVO.setMessage(invoiceOrderToPhpVO);
-            String orderStr = JSON.toJSONString(orderPhpSendVO);
+            Gson gson = new Gson();
+            String orderStr = gson.toJson(orderPhpSendVO);
             stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_SERVICE_GOODS, orderStr);
             logger.info("推送开票订单到redis通知php后台人员完成,订单信息:" + invoiceOrderToPhpVO);
 
@@ -156,7 +158,8 @@ public class ZlInvoiceController {
             orderPhpSendVO.setForm("java");
             orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_SERVICE_GOODS);
             orderPhpSendVO.setMessage(invoiceOrderToPhpVO);
-            String orderStr = JSON.toJSONString(orderPhpSendVO);
+            Gson gson = new Gson();
+            String orderStr = gson.toJson(orderPhpSendVO);
             stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_SERVICE_GOODS, orderStr);
             logger.info("推送开票订单到redis通知php后台人员完成,订单信息:" + invoiceOrderToPhpVO);
 

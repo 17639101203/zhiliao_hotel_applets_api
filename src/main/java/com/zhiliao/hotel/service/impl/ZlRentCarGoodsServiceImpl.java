@@ -3,6 +3,7 @@ package com.zhiliao.hotel.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
@@ -119,7 +120,8 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
             orderPhpSendVO.setForm("java");
             orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_RENT_CAR);
             orderPhpSendVO.setMessage(rentCarOrderToPhpVO);
-            String orderStr = JSON.toJSONString(orderPhpSendVO);
+            Gson gson = new Gson();
+            String orderStr = gson.toJson(orderPhpSendVO);
             stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_RENT_CAR, orderStr);
             logger.info("推送租车服务订单到redis通知php后台人员完成,订单信息:" + rentCarOrderToPhpVO);
             return map;

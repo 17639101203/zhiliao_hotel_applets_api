@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.Repair.params.RepairParam;
 import com.zhiliao.hotel.controller.Repair.vo.RepairOrderToPhpVO;
@@ -89,7 +90,8 @@ public class ZlRepairServiceImpl implements ZlRepairService {
         orderPhpSendVO.setForm("java");
         orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_FACILITY);
         orderPhpSendVO.setMessage(repairOrderToPhpVO);
-        String orderStr = JSON.toJSONString(orderPhpSendVO);
+        Gson gson = new Gson();
+        String orderStr = gson.toJson(orderPhpSendVO);
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_FACILITY, orderStr);
         logger.info("推送报修订单到redis通知php后台人员完成,订单信息:" + repairOrderToPhpVO);
 
