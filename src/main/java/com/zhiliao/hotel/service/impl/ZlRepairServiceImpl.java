@@ -106,11 +106,11 @@ public class ZlRepairServiceImpl implements ZlRepairService {
 //        PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_FACILITY, repairOrderToPhpVO);
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
         orderPhpSendVO.setForm("java");
-        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_FACILITY);
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_REPAIR_ORDER);
         orderPhpSendVO.setMessage(repairOrderToPhpVO);
         Gson gson = new Gson();
         String orderStr = gson.toJson(orderPhpSendVO);
-        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_FACILITY, orderStr);
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_REPAIR_ORDER, orderStr);
         logger.info("推送报修订单到redis通知php后台人员完成,订单信息:" + repairOrderToPhpVO);
 
         map.put("orderid", zlRepairorder.getOrderid());

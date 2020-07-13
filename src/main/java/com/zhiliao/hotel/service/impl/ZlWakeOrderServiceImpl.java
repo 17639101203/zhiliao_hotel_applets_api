@@ -79,11 +79,11 @@ public class ZlWakeOrderServiceImpl implements ZlWakeOrderService {
 //        PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_WAKE, zlWakeOrderToPhpVO);
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
         orderPhpSendVO.setForm("java");
-        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_WAKE);
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_WAKE_ORDER);
         orderPhpSendVO.setMessage(zlWakeOrderToPhpVO);
         Gson gson = new Gson();
         String orderStr = gson.toJson(orderPhpSendVO);
-        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_WAKE, orderStr);
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_WAKE_ORDER, orderStr);
         logger.info("推送叫醒订单到redis通知php后台人员完成,订单信息:" + zlWakeOrderToPhpVO);
 
         Map<String, Object> map = new HashMap<>();

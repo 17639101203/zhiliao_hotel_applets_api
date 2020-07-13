@@ -151,11 +151,11 @@ public class ZlInvoiceController {
 //            PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_SERVICE_GOODS, invoiceOrderToPhpVO);
             OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
             orderPhpSendVO.setForm("java");
-            orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_SERVICE_GOODS);
+            orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_INVOICE_ORDER);
             orderPhpSendVO.setMessage(invoiceOrderToPhpVO);
             Gson gson = new Gson();
             String orderStr = gson.toJson(orderPhpSendVO);
-            stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_SERVICE_GOODS, orderStr);
+            stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_INVOICE_ORDER, orderStr);
             logger.info("推送开票订单到redis通知php后台人员完成,订单信息:" + invoiceOrderToPhpVO);
 
             map.put("invoiceorderid", zlInvoiceOrder.getInvoiceorderid());
@@ -174,11 +174,11 @@ public class ZlInvoiceController {
 //            PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_SERVICE_GOODS, invoiceOrderToPhpVO);
             OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
             orderPhpSendVO.setForm("java");
-            orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_SERVICE_GOODS);
+            orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_INVOICE_ORDER);
             orderPhpSendVO.setMessage(invoiceOrderToPhpVO);
             Gson gson = new Gson();
             String orderStr = gson.toJson(orderPhpSendVO);
-            stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_SERVICE_GOODS, orderStr);
+            stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_INVOICE_ORDER, orderStr);
             logger.info("推送开票订单到redis通知php后台人员完成,订单信息:" + invoiceOrderToPhpVO);
 
             map.put("invoiceorderid", zlInvoiceOrder.getInvoiceorderid());
@@ -197,11 +197,7 @@ public class ZlInvoiceController {
         // 判断是否有商家自带的开票二维码
         String invoiceQrCodeUrl = zlInvoiceService.findInvoiceQrCodeUrl(hotelid);
         if (StringUtils.isNoneBlank(invoiceQrCodeUrl)) {
-            PageInfoResult pageInfoResult = new PageInfoResult();
-            List<String> list = new LinkedList();
-            list.add(invoiceQrCodeUrl);
-            pageInfoResult.setList(list);
-            return new ReturnString<>(0, "酒店已有开票二维码", pageInfoResult);
+            return new ReturnString<>(0, "酒店已有开票二维码", invoiceQrCodeUrl);
         }
         // 解析token获取userid
         Long userid = TokenUtil.getUserId(request.getHeader("token"));

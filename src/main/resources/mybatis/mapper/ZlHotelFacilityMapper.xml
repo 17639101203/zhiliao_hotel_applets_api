@@ -46,7 +46,8 @@
         Price,
         BookMoney,
         ChargeMethod,
-        CreateDate
+        CreateDate,
+        OnceUseMinute
     from zl_hotelfacility
     where HotelID = #{hotelId} and FacilityStatus = 1 and IsDelete = 0 AND CheckStatus = 2
     order by CreateDate DESC
@@ -70,7 +71,8 @@
         Price,
         ChargeMethod,
         BookMoney,
-        CreateDate
+        CreateDate,
+        OnceUseMinute
     from
         zl_hotelfacility
     where

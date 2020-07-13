@@ -76,7 +76,9 @@
           zo.UpdateDate,
           zf.CanCancelOrderMinute,
           zo.SerialNumber,
-          zf.ChargeMethod
+          zf.ChargeMethod,
+          zf.OnceUseMinute,
+          zf.BookMoney
         FROM
           zl_hotelfacilityorder zo
           LEFT JOIN zl_hotelfacility zf

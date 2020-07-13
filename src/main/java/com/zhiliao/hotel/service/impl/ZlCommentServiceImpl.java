@@ -2,11 +2,15 @@ package com.zhiliao.hotel.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.ReturnString;
+import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.comment.commentparm.CommentParm;
 import com.zhiliao.hotel.controller.comment.vo.CommentDetailVO;
+import com.zhiliao.hotel.controller.comment.vo.CommentToPhpVO;
 import com.zhiliao.hotel.controller.comment.vo.CommentVO;
+import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.mapper.ZlCommentMapper;
 import com.zhiliao.hotel.mapper.ZlTagMapper;
 import com.zhiliao.hotel.model.ZlComment;
@@ -15,7 +19,10 @@ import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.QiniuUtils;
 import com.zhiliao.hotel.utils.UploadPhotoUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,12 +39,16 @@ import java.util.*;
 @Service
 public class ZlCommentServiceImpl implements ZlCommentService {
 
+    private static final Logger logger = LoggerFactory.getLogger(ZlCommentServiceImpl.class);
 
     @Autowired
     private ZlCommentMapper zlCommentMapper;
 
     @Autowired
     private ZlTagMapper zlTagMapper;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
     @Override
     public Integer addComment(ZlComment zlComment) {
@@ -89,6 +100,20 @@ public class ZlCommentServiceImpl implements ZlCommentService {
             zlComment.setImageurls(imgurl);  //图片地址
         }
         zlCommentMapper.insertSelective(zlComment);
+
+        logger.info("点赞吐槽数据信息插入数据库完成,id:" + zlComment.getCommentid());
+        // 推送消息
+        CommentToPhpVO commentToPhpVO = zlCommentMapper.selectToPhp(zlComment.getCommentid());
+//        PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_CLEAN, cleanOrderVO);
+        OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
+        orderPhpSendVO.setForm("java");
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_COMMENT);
+        orderPhpSendVO.setMessage(commentToPhpVO);
+        Gson gson = new Gson();
+        String orderStr = gson.toJson(orderPhpSendVO);
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_COMMENT, orderStr);
+        logger.info("推送点赞吐槽数据信息到redis通知php后台人员完成,订单信息:" + commentToPhpVO);
+
         map.put("commentid", zlComment.getCommentid());
         return map;
     }

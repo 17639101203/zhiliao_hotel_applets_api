@@ -153,11 +153,11 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
 //        PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_CKECKOUT, zlHotelFacilityOrderToPhpVO);
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
         orderPhpSendVO.setForm("java");
-        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_CKECKOUT);
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_FACILITY_ORDER);
         orderPhpSendVO.setMessage(zlHotelFacilityOrderToPhpVO);
         Gson gson = new Gson();
         String orderStr = gson.toJson(orderPhpSendVO);
-        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CKECKOUT, orderStr);
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_FACILITY_ORDER, orderStr);
         logger.info("推送酒店设施订单到redis通知php后台人员完成,订单信息:" + zlHotelFacilityOrderToPhpVO);
 
         map.put("orderId", zlHotelFacilityOrder.getOrderid());

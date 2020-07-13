@@ -39,34 +39,37 @@ public class RedisKeyConstant {
     /**
      * 清扫订单主题
      */
-    public static final String TOPIC_CLEAN = "TOPIC_CLEAN_ORDER";
+    public static final String TOPIC_CLEAN_ORDER = "TOPIC_CLEAN_ORDER";
     /**
      * 维修订单主题
      */
-    public static final String TOPIC_REPAIR = "TOPIC_REPAIR_ORDER";
+    public static final String TOPIC_REPAIR_ORDER = "TOPIC_REPAIR_ORDER";
     /**
      * 设施订单主题
      */
-    public static final String TOPIC_FACILITY = "TOPIC_FACILITY_ORDER";
+    public static final String TOPIC_FACILITY_ORDER = "TOPIC_FACILITY_ORDER";
     /**
      * 退房订单主题
      */
-    public static final String TOPIC_CKECKOUT = "TOPIC_CKECKOUT_ORDER";
+    public static final String TOPIC_CKECKOUT_ORDER = "TOPIC_CKECKOUT_ORDER";
     /**
      * 续住订单主题
      */
-    public static final String TOPIC_CONTINUE_LIVE = "TOPIC_CONTINUE_LIVE_ORDER";
+    public static final String TOPIC_CONTINUE_LIVE_ORDER = "TOPIC_CONTINUE_LIVE_ORDER";
     /**
      * 租车订单主题
      */
-    public static final String TOPIC_RENT_CAR = "TOPIC_RENT_CAR_ORDER";
+    public static final String TOPIC_RENT_CAR_ORDER = "TOPIC_RENT_CAR_ORDER";
     /**
      * 叫醒订单主题
      */
-    public static final String TOPIC_WAKE = "TOPIC_WAKE_ORDER";
+    public static final String TOPIC_WAKE_ORDER = "TOPIC_WAKE_ORDER";
     /**
      * 发票订单主题
      */
-    public static final String TOPIC_SERVICE_GOODS = "TOPIC_SERVICE_GOODS";
-
+    public static final String TOPIC_INVOICE_ORDER = "TOPIC_INVOICE_ORDER";
+    /**
+     * 点赞吐槽主题
+     */
+    public static final String TOPIC_COMMENT = "TOPIC_COMMENT";
 }

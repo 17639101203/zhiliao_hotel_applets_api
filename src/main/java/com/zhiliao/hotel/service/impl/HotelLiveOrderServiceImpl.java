@@ -92,11 +92,11 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
 //        PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_FACILITY, zlCheckoutOrderToPhpVO);
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
         orderPhpSendVO.setForm("java");
-        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_FACILITY);
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_CKECKOUT_ORDER);
         orderPhpSendVO.setMessage(zlCheckoutOrderToPhpVO);
         Gson gson = new Gson();
         String orderStr = gson.toJson(orderPhpSendVO);
-        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_FACILITY, orderStr);
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CKECKOUT_ORDER, orderStr);
         logger.info("推送退房订单到redis通知php后台人员完成,订单信息:" + zlCheckoutOrderToPhpVO);
 
         Map<String, Object> map = new HashMap<>();
@@ -138,11 +138,11 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
 //        PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_CONTINUE_LIVE, zlContinueLiveOrderToPhpVO);
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
         orderPhpSendVO.setForm("java");
-        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_CONTINUE_LIVE);
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_CONTINUE_LIVE_ORDER);
         orderPhpSendVO.setMessage(zlContinueLiveOrderToPhpVO);
         Gson gson = new Gson();
         String orderStr = gson.toJson(orderPhpSendVO);
-        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CONTINUE_LIVE, orderStr);
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CONTINUE_LIVE_ORDER, orderStr);
         logger.info("推送续住订单到redis通知php后台人员完成,订单信息:" + zlContinueLiveOrderToPhpVO);
 
         Map<String, Object> map = new HashMap<>();

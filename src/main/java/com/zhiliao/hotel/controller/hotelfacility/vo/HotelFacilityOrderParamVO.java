@@ -129,6 +129,11 @@ public class HotelFacilityOrderParamVO {
     private String operatorname;
 
     /**
+     * 每次使用分钟数
+     */
+    private Integer onceuseminute;
+
+    /**
      * 操作人IP
      */
     private String operatorip;
@@ -157,5 +162,10 @@ public class HotelFacilityOrderParamVO {
      * 修改时间
      */
     private Integer updatedate;
+
+    /**
+     * 预定金额
+     */
+    private BigDecimal bookmoney;
 
 }

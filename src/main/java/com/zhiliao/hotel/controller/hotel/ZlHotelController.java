@@ -5,11 +5,13 @@ import com.zhiliao.hotel.controller.wxuser.ZlWxuserController;
 import com.zhiliao.hotel.model.ZlHotelRoomQrcode;
 import com.zhiliao.hotel.service.ZlHotelRoomQrcodeService;
 import com.zhiliao.hotel.service.ZlHotelService;
+import com.zhiliao.hotel.utils.PhpCodeUtils;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,9 +53,19 @@ public class ZlHotelController {
         if (weiXinUserId == null) {
             return new ReturnString("没有访问权限，用户未登录或登录已过期!");
         }*/
-        logger.info("二维码ID是：" + codeId);
+        String realCodeId = "";
+        try {
+            realCodeId = PhpCodeUtils.decodeStr(codeId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString("codeId参数有误,请联系管理员");
+        }
+        if (!StringUtils.isNoneBlank(realCodeId)) {
+            return new ReturnString("codeId参数有误,请联系管理员");
+        }
+        logger.info("二维码ID是：" + realCodeId);
 
-        ZlHotelRoomQrcode roomQrcodeId = zlHotelRoomQrcodeService.getRoomQrcodeId(codeId);
+        ZlHotelRoomQrcode roomQrcodeId = zlHotelRoomQrcodeService.getRoomQrcodeId(realCodeId);
 
         logger.info("房间ID是：" + roomQrcodeId);
 

@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.controller.comment.vo.CommentDetailVO;
+import com.zhiliao.hotel.controller.comment.vo.CommentToPhpVO;
 import com.zhiliao.hotel.controller.comment.vo.CommentVO;
 import com.zhiliao.hotel.model.ZlComment;
 import org.apache.ibatis.annotations.Param;
@@ -23,4 +24,6 @@ public interface ZlCommentMapper extends Mapper<ZlComment> {
     Long waitAppraiseTotal(@Param("userid") Long userid);
 
     void updateCommentImg(@Param("commentID") Integer commentID, @Param("imageurls") String imageurls);
+
+    CommentToPhpVO selectToPhp(@Param("commentid") Integer commentid);
 }

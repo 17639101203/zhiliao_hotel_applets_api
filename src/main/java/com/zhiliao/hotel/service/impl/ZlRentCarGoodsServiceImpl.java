@@ -127,11 +127,11 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
 //            PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_RENT_CAR, rentCarOrderToPhpVO);
             OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
             orderPhpSendVO.setForm("java");
-            orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_RENT_CAR);
+            orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_RENT_CAR_ORDER);
             orderPhpSendVO.setMessage(rentCarOrderToPhpVO);
             Gson gson = new Gson();
             String orderStr = gson.toJson(orderPhpSendVO);
-            stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_RENT_CAR, orderStr);
+            stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_RENT_CAR_ORDER, orderStr);
             logger.info("推送租车服务订单到redis通知php后台人员完成,订单信息:" + rentCarOrderToPhpVO);
             return map;
         } else {

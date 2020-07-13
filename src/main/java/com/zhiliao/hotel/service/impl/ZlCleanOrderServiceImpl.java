@@ -85,11 +85,11 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
 //        PushInfoToPhpUtils.pushInfoToPhp(RedisKeyConstant.TOPIC_CLEAN, cleanOrderVO);
         OrderPhpSendVO orderPhpSendVO = new OrderPhpSendVO();
         orderPhpSendVO.setForm("java");
-        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_CLEAN);
+        orderPhpSendVO.setChannel(RedisKeyConstant.TOPIC_CLEAN_ORDER);
         orderPhpSendVO.setMessage(cleanOrderVO);
         Gson gson = new Gson();
         String orderStr = gson.toJson(orderPhpSendVO);
-        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CLEAN, orderStr);
+        stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CLEAN_ORDER, orderStr);
         logger.info("推送清扫订单到redis通知php后台人员完成,订单信息:" + cleanOrderVO);
 
         map.put("serialnumber", serialnumber);

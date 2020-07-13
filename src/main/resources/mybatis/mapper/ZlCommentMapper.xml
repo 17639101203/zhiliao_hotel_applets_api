@@ -196,4 +196,8 @@
         WHERE CommentID = #{commentID}
     </update>
 
+    <select id="selectToPhp" resultType="com.zhiliao.hotel.controller.comment.vo.CommentToPhpVO">
+        select * from zl_comment where CommentID = #{commentid}
+    </select>
+
 </mapper>
