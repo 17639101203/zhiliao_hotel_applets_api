@@ -27,13 +27,26 @@
         <result column="UpdateDate" jdbcType="INTEGER" property="updatedate"/>
     </resultMap>
 
+    <!--<select id="findServicegoodsCategory" resultType="java.lang.String">-->
+        <!--select zsgc.CategoryName from zl_servicegoods zsg-->
+        <!--left join zl_servicegoodscategory zsgc on zsg.GoodsCategoryID=zsgc.GoodsCategoryID-->
+        <!--where zsg.CheckStatus=2 and zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsgc.CategoryStatus=1 and zsgc.IsDelete=0 and zsgc.CheckStatus=2-->
+        <!--and zsg.HotelID=#{hotelId} and zsgc.BelongModule=#{belongModule}-->
+        <!--group by zsgc.CategoryName-->
+        <!--order by zsgc.Sort asc,zsgc.UpdateDate desc-->
+    <!--</select>-->
+
     <select id="findServicegoodsCategory" resultType="java.lang.String">
-        select zsgc.CategoryName from zl_servicegoods zsg
-        left join zl_servicegoodscategory zsgc on zsg.GoodsCategoryID=zsgc.GoodsCategoryID
-        where zsg.CheckStatus=2 and zsg.GoodsStatus=1 and zsg.IsDelete=0 and zsgc.CategoryStatus=1 and zsgc.IsDelete=0 and zsgc.CheckStatus=2
-        and zsg.HotelID=#{hotelId} and zsgc.BelongModule=#{belongModule}
-        group by zsgc.CategoryName
-        order by zsgc.Sort asc,zsgc.UpdateDate desc
+        SELECT
+          CategoryName
+        FROM
+          zl_servicegoodscategory
+        WHERE HotelID = #{hotelId}
+          AND BelongModule = #{belongModule}
+          AND CategoryStatus = 1
+          AND CheckStatus = 2
+          AND IsDelete = 0
+        ORDER BY Sort
     </select>
 
     <select id="findServicegoodsList" resultType="com.zhiliao.hotel.controller.servicegoods.vo.ServicegoodsListVo">
@@ -87,6 +100,26 @@
         FROM zl_servicegoods zsg
         WHERE zsg.HotelID = #{hotelId} AND zsg.GoodsID IN (${goodsIds})
         AND zsg.IsDelete = 0 AND zsg.GoodsStatus = 1 AND zsg.CheckStatus = 2
+    </select>
+
+    <select id="searchAllServicegoods" resultType="com.zhiliao.hotel.controller.servicegoods.vo.ServicegoodsListVo">
+        SELECT
+           GoodsID,
+           GoodsName,
+           Tags,
+           CoverImgUrl,
+           DayMaxCount,
+           DayMaxGoodsCount,
+           SalePrice,
+           OriginalPrice,
+           MarketPrice,
+           Content
+        FROM
+          zl_servicegoods
+        WHERE HotelID = #{hotelId}
+          AND GoodsStatus = 1
+          AND CheckStatus = 2
+          AND IsDelete = 0
     </select>
 
 </mapper>

@@ -29,6 +29,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -193,9 +195,13 @@ public class ZlInvoiceController {
     public ReturnString findInvoiceHeads(HttpServletRequest request, @PathVariable Integer hotelid,
                                          @PathVariable Integer pageNo, @PathVariable Integer pageSize) {
         // 判断是否有商家自带的开票二维码
-        Map<String, Object> invoiceQrCodeUrlmap = zlInvoiceService.findInvoiceQrCodeUrl(hotelid);
-        if (!invoiceQrCodeUrlmap.get("InvoiceQrCodeUrl").equals("")) {
-            return new ReturnString<>(0, "酒店已有开票二维码", invoiceQrCodeUrlmap);
+        String invoiceQrCodeUrl = zlInvoiceService.findInvoiceQrCodeUrl(hotelid);
+        if (StringUtils.isNoneBlank(invoiceQrCodeUrl)) {
+            PageInfoResult pageInfoResult = new PageInfoResult();
+            List<String> list = new LinkedList();
+            list.add(invoiceQrCodeUrl);
+            pageInfoResult.setList(list);
+            return new ReturnString<>(0, "酒店已有开票二维码", pageInfoResult);
         }
         // 解析token获取userid
         Long userid = TokenUtil.getUserId(request.getHeader("token"));

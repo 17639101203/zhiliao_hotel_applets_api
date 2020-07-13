@@ -22,4 +22,6 @@ public interface ZlServicegoodsMapper extends Mapper<ZlServicegoods> {
     void updateServicegoodsVisitCount(@Param("goodsId") Integer goodsId);
 
     List<ZlServicegoods> findAllByHotelIdAndGoodsIds(@Param("hotelId") Integer hotelId, @Param("goodsIds") String goodsIds);
+
+    List<ServicegoodsListVo> searchAllServicegoods(@Param("hotelId") Integer hotelId);
 }

@@ -170,7 +170,7 @@
 
 
   <!--  根据酒店ID查询开票二维码-->
-  <select id="queryInvoiceQrCodeUrl" resultType="java.util.HashMap">
+  <select id="queryInvoiceQrCodeUrl" resultType="string">
         select
             InvoiceQrCodeUrl
         from

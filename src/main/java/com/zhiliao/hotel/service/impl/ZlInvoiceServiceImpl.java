@@ -72,7 +72,7 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
 
 
     @Override
-    public Map<String, Object> findInvoiceQrCodeUrl(Integer hotelid) {
+    public String findInvoiceQrCodeUrl(Integer hotelid) {
         return mapper.queryInvoiceQrCodeUrl(hotelid);
     }
 

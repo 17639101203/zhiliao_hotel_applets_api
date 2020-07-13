@@ -23,7 +23,7 @@ public interface ZlInvoiceMapper extends Mapper<ZlInvoice> {
      * @param userid 用户ID
      * @return 发票对象
      */
-    List<Map<String, Object>> queryInvoiceByUserID(Long userid);
+    List<Map<String, Object>> queryInvoiceByUserID(@Param("userid") Long userid);
 
 
     /**
@@ -51,7 +51,7 @@ public interface ZlInvoiceMapper extends Mapper<ZlInvoice> {
      * @param hotelid
      * @return
      */
-    Map<String, Object> queryInvoiceQrCodeUrl(Integer hotelid);
+    String queryInvoiceQrCodeUrl(@Param("hotelid") Integer hotelid);
 
     /**
      * 修改开票信息

@@ -52,7 +52,7 @@ public interface ZlInvoiceService {
      * @param hotelid
      * @return
      */
-    Map<String, Object> findInvoiceQrCodeUrl(Integer hotelid);
+    String findInvoiceQrCodeUrl(Integer hotelid);
 
 
     /**

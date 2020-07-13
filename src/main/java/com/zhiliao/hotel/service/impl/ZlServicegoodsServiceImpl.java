@@ -50,4 +50,13 @@ public class ZlServicegoodsServiceImpl implements ZlServicegoodsService {
         }
         return servicegoodsDetail;
     }
+
+    @Override
+    public PageInfoResult searchAllServicegoods(Integer hotelId, Integer pageNo, Integer pageSize) {
+        // 设定当前页码，以及当前页显示的条数
+        PageHelper.startPage(pageNo, pageSize);
+        List<ServicegoodsListVo> dataList = zlServicegoodsMapper.searchAllServicegoods(hotelId);
+        PageInfo<ServicegoodsListVo> pageInfo = new PageInfo<>(dataList);
+        return PageInfoResult.getPageInfoResult(pageInfo);
+    }
 }

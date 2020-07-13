@@ -16,4 +16,6 @@ public interface ZlServicegoodsService {
     PageInfoResult findServicegoodsList(Integer hotelId, Integer belongModule, Integer pageNo, Integer pageSize, String categoryName, String keyword);
 
     ServicegoodsListVo findServicegoodsDetail(Integer goodsId);
+
+    PageInfoResult searchAllServicegoods(Integer hotelId, Integer pageNo, Integer pageSize);
 }

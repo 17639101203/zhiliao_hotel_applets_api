@@ -119,4 +119,27 @@ public class ZlServicegoodsController {
             return new ReturnString(-1, "获取客房服务商品搜索数据出错!");
         }
     }
+
+    @ApiOperation(value = "查询客房服务全部商品")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
+            @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "String", required = true, value = "页码"),
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "String", required = true, value = "每页大小")
+    })
+    @UserLoginToken
+    @GetMapping("searchAllServicegoods/{hotelId}/{belongModule}/{pageNo}/{pageSize}")
+    public ReturnString<PageInfoResult<ServicegoodsListVo>> searchAllServicegoods(@PathVariable Integer hotelId,
+                                                                                  @PathVariable Integer pageNo,
+                                                                                  @PathVariable Integer pageSize) {
+        try {
+            logger.info("开始请求->参数->酒店id：" + hotelId + "|页码：" + pageNo + "|每页大小：" + pageSize);
+            pageSize = pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize;
+            PageInfoResult searchServicegoodsList = zlServicegoodsService.searchAllServicegoods(hotelId, pageNo, pageSize);
+            return new ReturnString(searchServicegoodsList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString(-1, "获取客房服务商品搜索数据出错!");
+        }
+    }
+
 }
