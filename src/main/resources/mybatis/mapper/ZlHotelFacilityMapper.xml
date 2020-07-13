@@ -48,7 +48,7 @@
         ChargeMethod,
         CreateDate
     from zl_hotelfacility
-    where HotelID = #{hotelId} and FacilityStatus = 1 and IsDelete = 0
+    where HotelID = #{hotelId} and FacilityStatus = 1 and IsDelete = 0 AND CheckStatus = 2
     order by CreateDate DESC
   </select>
 
@@ -68,12 +68,16 @@
         UseCount,
         CanCancelOrderMinute,
         Price,
+        ChargeMethod,
         BookMoney,
         CreateDate
     from
         zl_hotelfacility
     where
-        FacilityID = #{facilityId} and FacilityStatus = 1 and IsDelete = 0
+        FacilityID = #{facilityId}
+        AND FacilityStatus = 1
+        AND IsDelete = 0
+        AND CheckStatus = 2
   </select>
 
     <update id="updateCount">

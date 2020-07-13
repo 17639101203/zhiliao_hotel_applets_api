@@ -69,6 +69,11 @@ public class HotelFacilityOrderParamVO {
     private String remark;
 
     /**
+     * 收费方式:1-按次,2-按小时
+     */
+    private Byte chargemethod;
+
+    /**
      * 价格
      */
     private BigDecimal price;

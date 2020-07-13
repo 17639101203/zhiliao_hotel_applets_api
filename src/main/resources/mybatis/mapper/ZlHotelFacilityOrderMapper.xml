@@ -75,13 +75,15 @@
           zo.CreateDate,
           zo.UpdateDate,
           zf.CanCancelOrderMinute,
-          zo.SerialNumber
+          zo.SerialNumber,
+          zf.ChargeMethod
         FROM
           zl_hotelfacilityorder zo
           LEFT JOIN zl_hotelfacility zf
             ON zo.FacilityID = zf.FacilityID
         WHERE zo.OrderID = #{orderID}
           AND zo.IsDelete = 0
+          AND zo.IsUserDelete = 0
   </select>
 
     <update id="byOrderId" parameterType="com.zhiliao.hotel.model.ZlHotelFacilityOrder">
