@@ -43,8 +43,8 @@ public class HotelFacilityOrderParam {
     @ApiModelProperty(value = "备注信息", required = false)
     private String remark;
 
-    @ApiModelProperty(value = "实际支付金额", required = true)
-    private BigDecimal actuallyPay;
+    @ApiModelProperty(value = "总价", required = true)
+    private BigDecimal totalPrice;
 
     @ApiModelProperty(value = "开始时间", required = true)
     private Long usebegindate;

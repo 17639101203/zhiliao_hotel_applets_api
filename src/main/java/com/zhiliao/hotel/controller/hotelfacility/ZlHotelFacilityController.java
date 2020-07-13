@@ -97,7 +97,7 @@ public class ZlHotelFacilityController {
         facilityOrder.setRoomnumber(orderParam.getRoomnumber());
         facilityOrder.setFacilityname(orderParam.getFacilityName());
         facilityOrder.setCoverurl(orderParam.getCoverUrl());
-        facilityOrder.setActuallypay(orderParam.getActuallyPay());
+        facilityOrder.setTotalprice(orderParam.getTotalPrice());
         facilityOrder.setRemark(orderParam.getRemark());
         facilityOrder.setUsebegindate((int) (orderParam.getUsebegindate() / 1000));
         facilityOrder.setUseenddate((int) (orderParam.getUseenddate() / 1000));
