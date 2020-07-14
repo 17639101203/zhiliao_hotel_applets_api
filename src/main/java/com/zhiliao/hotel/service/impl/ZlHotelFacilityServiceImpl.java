@@ -146,6 +146,11 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         ZlWxuser wxuser = zlWxuserMapper.selectOne(zlWxuser);
         zlHotelFacilityOrder.setUsername(wxuser.getNickname());
         facilityOrderMapper.insertSelective(zlHotelFacilityOrder);
+        if (zlHotelFacilityOrder.getTotalprice().intValue() == 0) {
+            zlHotelFacilityOrder.setPaystatus((byte) 0);
+        } else {
+            zlHotelFacilityOrder.setPaystatus((byte) 1);
+        }
         logger.info("酒店设施订单插入数据库完成,订单id:" + zlHotelFacilityOrder.getOrderid());
 
         // 推送消息

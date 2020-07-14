@@ -101,7 +101,6 @@ public class ZlHotelFacilityController {
         facilityOrder.setRemark(orderParam.getRemark());
         facilityOrder.setUsebegindate((int) (orderParam.getUsebegindate() / 1000));
         facilityOrder.setUseenddate((int) (orderParam.getUseenddate() / 1000));
-        facilityOrder.setPaystatus(orderParam.getPaystatus());
 
         try {
             Map<String, Object> map = hotelFacilityService.addFacilityOrder(facilityOrder);

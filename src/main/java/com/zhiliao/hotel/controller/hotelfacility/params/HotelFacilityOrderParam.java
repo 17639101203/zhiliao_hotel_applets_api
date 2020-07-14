@@ -34,9 +34,6 @@ public class HotelFacilityOrderParam {
     @ApiModelProperty(value = "手机号", required = true)
     private String Tel;
 
-    @ApiModelProperty(value = "支付状态(0无须支付;1:待支付)", required = true)
-    private Byte paystatus;
-
     @ApiModelProperty(value = "设施名称", required = true)
     private String facilityName;
 
