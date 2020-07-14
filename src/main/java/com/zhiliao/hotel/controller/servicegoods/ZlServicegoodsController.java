@@ -62,7 +62,7 @@ public class ZlServicegoodsController {
             @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1:客房服务"),
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "String", required = true, value = "页码"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "String", required = true, value = "每页大小"),
-            @ApiImplicitParam(paramType = "query", name = "categoryName", dataType = "String", required = true, value = "分类名称（all代表全部）")
+            @ApiImplicitParam(paramType = "query", name = "categoryName", dataType = "String", required = true, value = "分类名称")
 
     })
     @UserLoginToken
@@ -72,6 +72,9 @@ public class ZlServicegoodsController {
         try {
             logger.info("开始请求->参数->酒店id：" + hotelId + "|所属模块：" + belongModule + "|页码：" + pageNo + "|每页大小：" + pageSize + "|分类名称：" + categoryName);
             pageSize = pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize;
+            if (categoryName.equals("全部")) {
+                categoryName = "all";
+            }
             PageInfoResult servicegoodsList = zlServicegoodsService.findServicegoodsList(hotelId, belongModule, pageNo, pageSize, categoryName, null);
             return new ReturnString(servicegoodsList);
         } catch (Exception e) {
