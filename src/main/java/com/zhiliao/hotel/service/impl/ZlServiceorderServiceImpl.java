@@ -173,7 +173,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
 //                .username(zlWxuserdetail.getRealname() == null ? "" : zlWxuserdetail.getRealname())
 //                .tel(zlWxuserdetail.getTel() == null ? "" : zlWxuserdetail.getTel())
                 .serialnumber(orderSerialNo)
-                .username(wxuser.getWxopenid())
+                .username(wxuser.getNickname())
                 .hotelid(scp.getHotelid())
                 .hotelname(scp.getHotelname())
                 .roomid(zlHotelroom.getRoomid())
