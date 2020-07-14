@@ -43,6 +43,7 @@ public class UploadPhotoController {
             String fileName = uploadPhotoParam.getSpecialName() + UUID.randomUUID().toString() + extention;
             //将文件上传到阿里云服务器
             boolean bool = AliyunOssUtil.qdFileUpload(file, fileName);
+            file.delete();
             imgurl = AliyunOssUtil.visitendpoint + AliyunOssUtil.zlgjqdFolderName + "/" + fileName;
         } catch (Exception e) {
             e.printStackTrace();

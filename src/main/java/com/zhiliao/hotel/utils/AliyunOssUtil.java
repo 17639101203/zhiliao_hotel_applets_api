@@ -52,6 +52,7 @@ public class AliyunOssUtil {
                     ObjectMetadata objectMetadata = new ObjectMetadata();
                     objectMetadata.setContentType("image/jpg");
                     ossClient.putObject(bucketName, zlgjhdFolderName + "/" + fileName, file, objectMetadata);
+//                    file.delete();
                     // 关闭OSSClient。
                     ossClient.shutdown();
                 } catch (Exception e) {
