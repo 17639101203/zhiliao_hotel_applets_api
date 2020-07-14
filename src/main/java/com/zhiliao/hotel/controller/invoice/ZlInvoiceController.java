@@ -197,7 +197,9 @@ public class ZlInvoiceController {
         // 判断是否有商家自带的开票二维码
         String invoiceQrCodeUrl = zlInvoiceService.findInvoiceQrCodeUrl(hotelid);
         if (StringUtils.isNoneBlank(invoiceQrCodeUrl)) {
-            return new ReturnString<>(0, "酒店已有开票二维码", invoiceQrCodeUrl);
+            HashMap hashMap = new HashMap();
+            hashMap.put("InvoiceQrCodeUrl", invoiceQrCodeUrl);
+            return new ReturnString<>(0, "酒店已有开票二维码", hashMap);
         }
         // 解析token获取userid
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
