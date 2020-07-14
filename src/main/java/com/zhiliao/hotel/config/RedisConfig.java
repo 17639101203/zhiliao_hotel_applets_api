@@ -49,8 +49,26 @@ public class RedisConfig {
         StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
         stringRedisTemplate.setConnectionFactory(factory);
         stringRedisTemplate.setValueSerializer(jackson2JsonRedisSerializer());
+        // 设置hash key 和value序列化模式
+        stringRedisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        stringRedisTemplate.afterPropertiesSet();
         return stringRedisTemplate;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * json序列化
@@ -62,6 +80,7 @@ public class RedisConfig {
         Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<Object>(Object.class);
 
         ObjectMapper mapper = new ObjectMapper();
+        // 指定要序列化的域，field,get和set,以及修饰符范围，ANY是都有包括private和public
         mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
         serializer.setObjectMapper(mapper);

@@ -40,7 +40,7 @@ public class ZlHotelController {
     private ZlHotelRoomQrcodeService zlHotelRoomQrcodeService;
 
     @ApiOperation(value = "陈荣_首页")
-//    @UserLoginToken
+    @UserLoginToken
     @PassToken
     @GetMapping("getHotelList")
     @ApiImplicitParams({

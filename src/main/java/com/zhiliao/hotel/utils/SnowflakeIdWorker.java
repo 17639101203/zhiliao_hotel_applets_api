@@ -25,7 +25,7 @@ public class SnowflakeIdWorker {
     private final long maxDatacenterId = -1L ^ (-1L << datacenterIdBits);
 
     /** 序列在id中占的位数 */
-    private final long sequenceBits = 12L;
+    private final long sequenceBits = 4L;
 
     /** 机器ID向左移12位 */
     private final long workerIdShift = sequenceBits;
