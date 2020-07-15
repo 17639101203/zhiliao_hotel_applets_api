@@ -79,9 +79,9 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
      * @return
      */
     @Override
-    public PageInfoResult cleanFindAll(Long userId, Byte orderstatus, Integer pageNo, Integer pageSize) {
+    public PageInfoResult cleanFindAll(Long userId, Byte orderstatus, Integer pageNo, Integer pageSize, Integer hotelId) {
         PageHelper.startPage(pageNo, pageSize);
-        List<ZlCleanOrder> cleanorders = myAppointmentMapper.findAllClean(userId, orderstatus);
+        List<ZlCleanOrder> cleanorders = myAppointmentMapper.findAllClean(userId, orderstatus, hotelId);
         PageInfo<ZlCleanOrder> pageInfo = new PageInfo<>(cleanorders);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
@@ -97,11 +97,11 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
      * @return
      */
     @Override
-    public PageInfoResult invoiceFindAll(Long userId, Byte invoiceStatus, Integer pageNo, Integer pageSize) {
+    public PageInfoResult invoiceFindAll(Long userId, Byte invoiceStatus, Integer pageNo, Integer pageSize, Integer hotelId) {
         PageHelper.startPage(pageNo, pageSize);
-        List<InvoiceOrderVO> invoiceOrders = myAppointmentMapper.findAllInvoice(userId, invoiceStatus);
+        List<InvoiceOrderVO> invoiceOrders = myAppointmentMapper.findAllInvoice(userId, invoiceStatus, hotelId);
         for (InvoiceOrderVO invoiceOrderVO : invoiceOrders) {
-            ZlHotel zlHotel = zlHotelMapper.getById(invoiceOrderVO.getHotelid());
+            ZlHotel zlHotel = zlHotelMapper.getById(hotelId);
             invoiceOrderVO.setHotelname(zlHotel.getHotelName());
         }
         PageInfo<InvoiceOrderVO> pageInfo = new PageInfo<>(invoiceOrders);
@@ -119,9 +119,9 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
      * @return
      */
     @Override
-    public PageInfoResult repairFindAll(Long userId, Byte orderstatus, Integer pageNo, Integer pageSize) {
+    public PageInfoResult repairFindAll(Long userId, Byte orderstatus, Integer pageNo, Integer pageSize, Integer hotelId) {
         PageHelper.startPage(pageNo, pageSize);
-        List<ZlRepairorder> repairOrders = myAppointmentMapper.findAllRepair(userId, orderstatus);
+        List<ZlRepairorder> repairOrders = myAppointmentMapper.findAllRepair(userId, orderstatus, hotelId);
         PageInfo<ZlRepairorder> pageInfo = new PageInfo<>(repairOrders);
 
         return PageInfoResult.getPageInfoResult(pageInfo);
@@ -137,9 +137,9 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
      * @return
      */
     @Override
-    public PageInfoResult serviceFindAll(Long userId, Byte orderstatus, Integer pageNo, Integer pageSize) {
+    public PageInfoResult serviceFindAll(Long userId, Byte orderstatus, Integer pageNo, Integer pageSize, Integer hotelId) {
         PageHelper.startPage(pageNo, pageSize);
-        List<ZlServiceorderResult> results = myAppointmentMapper.serviceFindAll(userId, orderstatus);
+        List<ZlServiceorderResult> results = myAppointmentMapper.serviceFindAll(userId, orderstatus, hotelId);
         PageInfo<ZlServiceorderResult> pageInfo = new PageInfo<>(results);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
@@ -154,9 +154,9 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
      * @return
      */
     @Override
-    public PageInfoResult findAllWakeOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize) {
+    public PageInfoResult findAllWakeOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize, Integer hotelId) {
         PageHelper.startPage(pageNo, pageSize);
-        List<ZlWakeOrder> wakeOrders = myAppointmentMapper.findAllWakeOrder(userId, orderStatus);
+        List<ZlWakeOrder> wakeOrders = myAppointmentMapper.findAllWakeOrder(userId, orderStatus, hotelId);
         PageInfo<ZlWakeOrder> pageInfo = new PageInfo<>(wakeOrders);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
@@ -171,9 +171,9 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
      * @return
      */
     @Override
-    public PageInfoResult findAllRentCarOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize) {
+    public PageInfoResult findAllRentCarOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize, Integer hotelId) {
         PageHelper.startPage(pageNo, pageSize);
-        List<ZlRentCarOrder> rentCarOrders = myAppointmentMapper.findAllRentCarOrder(userId, orderStatus);
+        List<ZlRentCarOrder> rentCarOrders = myAppointmentMapper.findAllRentCarOrder(userId, orderStatus, hotelId);
         PageInfo<ZlRentCarOrder> pageInfo = new PageInfo<>(rentCarOrders);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
@@ -188,9 +188,9 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
      * @return
      */
     @Override
-    public PageInfoResult findAllCheckOutOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize) {
+    public PageInfoResult findAllCheckOutOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize, Integer hotelId) {
         PageHelper.startPage(pageNo, pageSize);
-        List<ZlCheckoutOrder> checkoutOrders = myAppointmentMapper.findAllCheckOutOrder(userId, orderStatus);
+        List<ZlCheckoutOrder> checkoutOrders = myAppointmentMapper.findAllCheckOutOrder(userId, orderStatus, hotelId);
         PageInfo<ZlCheckoutOrder> pageInfo = new PageInfo<>(checkoutOrders);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }
@@ -205,9 +205,9 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
      * @return
      */
     @Override
-    public PageInfoResult findAllContinueLiveOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize) {
+    public PageInfoResult findAllContinueLiveOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize, Integer hotelId) {
         PageHelper.startPage(pageNo, pageSize);
-        List<ZlContinueLiveOrder> checkoutOrders = myAppointmentMapper.findAllContinueLiveOrder(userId, orderStatus);
+        List<ZlContinueLiveOrder> checkoutOrders = myAppointmentMapper.findAllContinueLiveOrder(userId, orderStatus, hotelId);
         PageInfo<ZlContinueLiveOrder> pageInfo = new PageInfo<>(checkoutOrders);
         return PageInfoResult.getPageInfoResult(pageInfo);
     }

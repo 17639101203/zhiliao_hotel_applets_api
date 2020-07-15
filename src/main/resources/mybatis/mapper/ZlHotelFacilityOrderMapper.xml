@@ -40,9 +40,8 @@
         select *
         from zl_hotelfacilityorder
         where 1 = 1 and IsDelete = 0
-        <if test="userId != null">
-            and UserID = #{userId}
-        </if>
+        and UserID = #{userId}
+        and HotelID = #{hotelId}
         <if test="orderStatus != null">
             and OrderStatus = #{orderStatus}
         </if>

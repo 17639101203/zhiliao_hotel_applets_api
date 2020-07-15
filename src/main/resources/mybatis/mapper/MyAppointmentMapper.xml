@@ -8,10 +8,10 @@
         select
         OrderID,HotelName,UserID,SerialNumber,BookDate,OrderStatus,CreateDate
         from zl_cleanorder
-        where 1 = 1 and IsDelete = '0'
-        <if test="userId != null">
-            and UserID = #{userId}
-        </if>
+        where 1 = 1
+        and IsDelete = '0'
+        and HotelID = #{hotelId}
+        and UserID = #{userId}
         <if test="orderstatus != null">
             and OrderStatus = #{orderstatus}
         </if>
@@ -61,6 +61,7 @@
         WHERE 1 = 1
         AND IsDelete = '0'
         AND UserID = #{userId}
+        and HotelID = #{hotelId}
         <if test="invoiceStatus != null">
             and InvoiceStatus = #{invoiceStatus}
         </if>
@@ -107,35 +108,24 @@
     </resultMap>
     <select id="serviceFindAll" resultType="com.zhiliao.hotel.controller.myAppointment.result.ZlServiceorderResult">
         select
-        s.OrderID,
-        s.SerialNumber,
-        s.HotelID,
-        s.HotelName,
-        s.RoomID,
-        s.RoomNumber,
-        s.Remark,
-        s.OrderStatus,
-        s.CreateDate,
-        s.UpdateDate,
-        sd.OrderDetailID,
-        sd.OrderID,
-        sd.GoodsID,
-        sd.GoodsName,
-        sd.GoodsCoverUrl,
-        sd.Price,
-        sd.GoodsCount,
-        s.DeliveryDate
+        OrderID,
+        SerialNumber,
+        HotelID,
+        HotelName,
+        RoomID,
+        RoomNumber,
+        Remark,
+        OrderStatus,
+        CreateDate,
+        UpdateDate,
+        DeliveryDate
         from
-        zl_serviceorder s
-        left join
-        zl_serviceorderdetail sd
-        on s.OrderID = sd.OrderID
-        where 1 = 1 and s.IsDelete = 0 and s.IsUserDelete = 0
-        <if test="userId != null">
-            and s.UserID = #{userId}
-        </if>
+        zl_serviceorder
+        where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
+        and UserID = #{userId}
+        and HotelID = #{hotelId}
         <if test="orderstatus != null">
-            and s.OrderStatus = #{orderstatus}
+            and OrderStatus = #{orderstatus}
         </if>
         order by CreateDate DESC
     </select>
@@ -152,9 +142,8 @@
         CreateDate
         from zl_wakeorder
         where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
-        <if test="userId != null">
-            and UserID = #{userId}
-        </if>
+        and UserID = #{userId}
+        and HotelID = #{hotelId}
         <if test="orderstatus != null">
             and OrderStatus = #{orderstatus}
         </if>
@@ -178,9 +167,8 @@
         CreateDate
         from zl_rentcarorder
         where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
-        <if test="userId != null">
-            and UserID = #{userId}
-        </if>
+        and UserID = #{userId}
+        and HotelID = #{hotelId}
         <if test="orderstatus != null">
             and OrderStatus = #{orderstatus}
         </if>
@@ -199,9 +187,8 @@
         CreateDate
         from zl_continueliveorder
         where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
-        <if test="userId != null">
-            and UserID = #{userId}
-        </if>
+        and UserID = #{userId}
+        and HotelID = #{hotelId}
         <if test="orderstatus != null">
             and OrderStatus = #{orderstatus}
         </if>
@@ -220,9 +207,8 @@
         CreateDate
         from zl_checkoutorder
         where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
-        <if test="userId != null">
-            and UserID = #{userId}
-        </if>
+        and UserID = #{userId}
+        and HotelID = #{hotelId}
         <if test="orderstatus != null">
             and OrderStatus = #{orderstatus}
         </if>

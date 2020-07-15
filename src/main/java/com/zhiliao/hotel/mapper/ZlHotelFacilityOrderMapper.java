@@ -13,7 +13,8 @@ import java.util.Map;
 
 public interface ZlHotelFacilityOrderMapper extends Mapper<ZlHotelFacilityOrder> {
     List<ZlHotelFacilityOrder> findAllOrder(@Param("userId") Long userId,
-                                            @Param("orderStatus") Byte orderStatus
+                                            @Param("orderStatus") Byte orderStatus,
+                                            @Param("hotelId") Integer hotelId
     );
 
     ZlHotelFacilityOrder findOrderById(@Param("orderID") Long orderID);

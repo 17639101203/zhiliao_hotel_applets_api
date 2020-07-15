@@ -43,7 +43,8 @@ public class MyAppointmentController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码值"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
-            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：取消，0：待清扫，1：已完成")
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：取消，0：待清扫，1：已完成"),
+            @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "int", required = true, value = "酒店id")
     })
     @GetMapping("cleanFindAll/{pageNo}/{pageSize}")
     @ResponseBody
@@ -52,7 +53,8 @@ public class MyAppointmentController {
     public ReturnString cleanFindAll(HttpServletRequest request,
                                      @PathVariable("pageNo") Integer pageNo,
                                      @PathVariable("pageSize") Integer pageSize,
-                                     Byte orderStatus) {
+                                     Byte orderStatus,
+                                     Integer hotelId) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
@@ -61,7 +63,7 @@ public class MyAppointmentController {
             if (userId == null) {
                 return new ReturnString("用户不存在");
             }
-            PageInfoResult cleanorders = myAppointmentService.cleanFindAll(userId, orderStatus, pageNo, pageSize);
+            PageInfoResult cleanorders = myAppointmentService.cleanFindAll(userId, orderStatus, pageNo, pageSize, hotelId);
             return new ReturnString(cleanorders);
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,7 +76,8 @@ public class MyAppointmentController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码值"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
-            @ApiImplicitParam(paramType = "query", name = "invoiceStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：已取消，0：未开票，1：开票中，2：已开票")
+            @ApiImplicitParam(paramType = "query", name = "invoiceStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：已取消，0：未开票，1：开票中，2：已开票"),
+            @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "int", required = true, value = "酒店id")
     })
     @GetMapping("invoiceFindAll/{pageNo}/{pageSize}")
     @UserLoginToken
@@ -82,12 +85,13 @@ public class MyAppointmentController {
     public ReturnString invoiceFindAll(HttpServletRequest request,
                                        @PathVariable("pageNo") Integer pageNo,
                                        @PathVariable("pageSize") Integer pageSize,
-                                       Byte invoiceStatus) {
+                                       Byte invoiceStatus,
+                                       Integer hotelId) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("用户id" + userId);
-            PageInfoResult invoices = myAppointmentService.invoiceFindAll(userId, invoiceStatus, pageNo, pageSize);
+            PageInfoResult invoices = myAppointmentService.invoiceFindAll(userId, invoiceStatus, pageNo, pageSize, hotelId);
             return new ReturnString(invoices);
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,7 +104,8 @@ public class MyAppointmentController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码值"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
-            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：已取消，0：待维修, 1: 已完成")
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：已取消，0：待维修, 1: 已完成"),
+            @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "int", required = true, value = "酒店id")
     })
     @UserLoginToken
     @GetMapping("repairFindAll/{pageNo}/{pageSize}")
@@ -108,12 +113,13 @@ public class MyAppointmentController {
     public ReturnString repairFindAll(HttpServletRequest request,
                                       @PathVariable("pageNo") Integer pageNo,
                                       @PathVariable("pageSize") Integer pageSize,
-                                      Byte orderStatus) {
+                                      Byte orderStatus,
+                                      Integer hotelId) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("用户id" + userId);
-            PageInfoResult repairOrders = myAppointmentService.repairFindAll(userId, orderStatus, pageNo, pageSize);
+            PageInfoResult repairOrders = myAppointmentService.repairFindAll(userId, orderStatus, pageNo, pageSize, hotelId);
             return new ReturnString(repairOrders);
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,7 +131,8 @@ public class MyAppointmentController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码值"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
-            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：取消，0：待配送, 1: 已完成")
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：取消，0：待配送, 1: 已完成"),
+            @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "int", required = true, value = "酒店id")
     })
     @UserLoginToken
     @GetMapping("serviceFindAll/{pageNo}/{pageSize}")
@@ -133,12 +140,13 @@ public class MyAppointmentController {
     public ReturnString serviceFindAll(HttpServletRequest request,
                                        @PathVariable("pageNo") Integer pageNo,
                                        @PathVariable("pageSize") Integer pageSize,
-                                       Byte orderStatus) {
+                                       Byte orderStatus,
+                                       Integer hotelId) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("用户id" + userId);
-            PageInfoResult serviceOrders = myAppointmentService.serviceFindAll(userId, orderStatus, pageNo, pageSize);
+            PageInfoResult serviceOrders = myAppointmentService.serviceFindAll(userId, orderStatus, pageNo, pageSize, hotelId);
             return new ReturnString(serviceOrders);
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,20 +159,22 @@ public class MyAppointmentController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
-            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.已取消；0.待确认；1.已确认")
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.已取消；0.待确认；1.已确认"),
+            @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "int", required = true, value = "酒店id")
     })
     @UserLoginToken
     @GetMapping("facilityOrderFindall/{pageNo}/{pageSize}")
     public ReturnString findAllOrder(HttpServletRequest request,
                                      @PathVariable("pageNo") Integer pageNo,
                                      @PathVariable("pageSize") Integer pageSize,
-                                     Byte orderStatus) {
+                                     Byte orderStatus,
+                                     Integer hotelId) {
 
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("我的订单，用户ID：" + userId);
-            PageInfoResult allOrder = hotelFacilityOrderService.findAllOrder(userId, orderStatus, pageNo, pageSize);
+            PageInfoResult allOrder = hotelFacilityOrderService.findAllOrder(userId, orderStatus, pageNo, pageSize, hotelId);
             return new ReturnString(allOrder);
         } catch (Exception e) {
             e.printStackTrace();
@@ -176,7 +186,8 @@ public class MyAppointmentController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
-            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.已取消；0.待处理；1.已完成")
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.已取消；0.待处理；1.已完成"),
+            @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "int", required = true, value = "酒店id")
     })
     @UserLoginToken
     //@PassToken
@@ -184,14 +195,15 @@ public class MyAppointmentController {
     public ReturnString findAllWakeOrder(HttpServletRequest request,
                                          @PathVariable("pageNo") Integer pageNo,
                                          @PathVariable("pageSize") Integer pageSize,
-                                         Byte orderStatus) {
+                                         Byte orderStatus,
+                                         Integer hotelId) {
 
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             //Long userId = (long)150;
             logger.info("我的订单，用户ID：" + userId);
-            PageInfoResult allOrder = myAppointmentService.findAllWakeOrder(userId, orderStatus, pageNo, pageSize);
+            PageInfoResult allOrder = myAppointmentService.findAllWakeOrder(userId, orderStatus, pageNo, pageSize, hotelId);
             return new ReturnString(allOrder);
         } catch (Exception e) {
             e.printStackTrace();
@@ -204,19 +216,21 @@ public class MyAppointmentController {
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
             @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.已取消；0.待处理；1.已完成"),
+            @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "int", required = true, value = "酒店id")
     })
     @UserLoginToken
     @GetMapping("rentCarOrderFindall/{pageNo}/{pageSize}")
     public ReturnString findAllRentCarOrder(HttpServletRequest request,
                                             @PathVariable("pageNo") Integer pageNo,
                                             @PathVariable("pageSize") Integer pageSize,
-                                            Byte orderStatus) {
+                                            Byte orderStatus,
+                                            Integer hotelId) {
 
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("我的订单，用户ID：" + userId);
-            PageInfoResult allOrder = myAppointmentService.findAllRentCarOrder(userId, orderStatus, pageNo, pageSize);
+            PageInfoResult allOrder = myAppointmentService.findAllRentCarOrder(userId, orderStatus, pageNo, pageSize, hotelId);
             return new ReturnString(allOrder);
         } catch (Exception e) {
             e.printStackTrace();
@@ -228,20 +242,22 @@ public class MyAppointmentController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
-            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.取消退房；0.等待退房；1.退房完成")
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.取消退房；0.等待退房；1.退房完成"),
+            @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "int", required = true, value = "酒店id")
     })
     @UserLoginToken
     @GetMapping("checkOutOrderFindall/{pageNo}/{pageSize}")
     public ReturnString findAllCheckOutOrder(HttpServletRequest request,
                                              @PathVariable("pageNo") Integer pageNo,
                                              @PathVariable("pageSize") Integer pageSize,
-                                             Byte orderStatus) {
+                                             Byte orderStatus,
+                                             Integer hotelId) {
 
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("我的订单，用户ID：" + userId);
-            PageInfoResult allOrder = myAppointmentService.findAllCheckOutOrder(userId, orderStatus, pageNo, pageSize);
+            PageInfoResult allOrder = myAppointmentService.findAllCheckOutOrder(userId, orderStatus, pageNo, pageSize, hotelId);
             return new ReturnString(allOrder);
         } catch (Exception e) {
             e.printStackTrace();
@@ -253,20 +269,22 @@ public class MyAppointmentController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
-            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.已取消；0.待处理；1.已完成")
+            @ApiImplicitParam(paramType = "query", name = "orderStatus", dataType = "Byte", required = false, value = "订单状态：不传: 查询全部 ,-1.已取消；0.待处理；1.已完成"),
+            @ApiImplicitParam(paramType = "query", name = "hotelId", dataType = "int", required = true, value = "酒店id")
     })
     @UserLoginToken
     @GetMapping("continueLiveOrderFindall/{pageNo}/{pageSize}")
     public ReturnString findAllContinueLiveOrder(HttpServletRequest request,
                                                  @PathVariable("pageNo") Integer pageNo,
                                                  @PathVariable("pageSize") Integer pageSize,
-                                                 Byte orderStatus) {
+                                                 Byte orderStatus,
+                                                 Integer hotelId) {
 
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
             logger.info("我的订单，用户ID：" + userId);
-            PageInfoResult allOrder = myAppointmentService.findAllContinueLiveOrder(userId, orderStatus, pageNo, pageSize);
+            PageInfoResult allOrder = myAppointmentService.findAllContinueLiveOrder(userId, orderStatus, pageNo, pageSize,hotelId);
             return new ReturnString(allOrder);
         } catch (Exception e) {
             e.printStackTrace();
