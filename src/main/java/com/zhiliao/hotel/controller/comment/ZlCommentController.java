@@ -74,16 +74,19 @@ public class ZlCommentController {
     }
 
     @ApiOperation(value = "点赞吐槽详情列表获取")
-    @GetMapping("findCommentList/{pageNo}/{pageSize}")
+    @GetMapping("findCommentList/{pageNo}/{pageSize}/{hotelId}")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "当前页码"),
-            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页个数")
+            @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页个数"),
+            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "int", required = true, value = "酒店id")
     })
     @UserLoginToken
     public ReturnString findCommentList(HttpServletRequest request,
-                                        @PathVariable Integer pageNo, @PathVariable Integer pageSize) {
+                                        @PathVariable Integer pageNo,
+                                        @PathVariable Integer pageSize,
+                                        @PathVariable("hotelId") Integer hotelId) {
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
-        PageInfoResult<List<CommentVO>> list = zlCommentService.findComments(userid, pageNo, pageSize);
+        PageInfoResult<List<CommentVO>> list = zlCommentService.findComments(userid, pageNo, pageSize, hotelId);
         return new ReturnString<>(list);
     }
 

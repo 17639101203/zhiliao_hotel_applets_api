@@ -86,7 +86,7 @@ public class MyAppointmentController {
                                        @PathVariable("pageNo") Integer pageNo,
                                        @PathVariable("pageSize") Integer pageSize,
                                        Byte invoiceStatus,
-                                       @PathVariable("hotelId")Integer hotelId) {
+                                       @PathVariable("hotelId") Integer hotelId) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
@@ -114,7 +114,7 @@ public class MyAppointmentController {
                                       @PathVariable("pageNo") Integer pageNo,
                                       @PathVariable("pageSize") Integer pageSize,
                                       Byte orderStatus,
-                                      @PathVariable("hotelId")Integer hotelId) {
+                                      @PathVariable("hotelId") Integer hotelId) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
@@ -141,7 +141,7 @@ public class MyAppointmentController {
                                        @PathVariable("pageNo") Integer pageNo,
                                        @PathVariable("pageSize") Integer pageSize,
                                        Byte orderStatus,
-                                       @PathVariable("hotelId")Integer hotelId) {
+                                       @PathVariable("hotelId") Integer hotelId) {
         try {
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
@@ -168,7 +168,7 @@ public class MyAppointmentController {
                                      @PathVariable("pageNo") Integer pageNo,
                                      @PathVariable("pageSize") Integer pageSize,
                                      Byte orderStatus,
-                                     @PathVariable("hotelId")Integer hotelId) {
+                                     @PathVariable("hotelId") Integer hotelId) {
 
         try {
             String token = request.getHeader("token");
@@ -196,7 +196,7 @@ public class MyAppointmentController {
                                          @PathVariable("pageNo") Integer pageNo,
                                          @PathVariable("pageSize") Integer pageSize,
                                          Byte orderStatus,
-                                         @PathVariable("hotelId")Integer hotelId) {
+                                         @PathVariable("hotelId") Integer hotelId) {
 
         try {
             String token = request.getHeader("token");
@@ -224,7 +224,7 @@ public class MyAppointmentController {
                                             @PathVariable("pageNo") Integer pageNo,
                                             @PathVariable("pageSize") Integer pageSize,
                                             Byte orderStatus,
-                                            @PathVariable("hotelId")Integer hotelId) {
+                                            @PathVariable("hotelId") Integer hotelId) {
 
         try {
             String token = request.getHeader("token");
@@ -251,7 +251,7 @@ public class MyAppointmentController {
                                              @PathVariable("pageNo") Integer pageNo,
                                              @PathVariable("pageSize") Integer pageSize,
                                              Byte orderStatus,
-                                             @PathVariable("hotelId")Integer hotelId) {
+                                             @PathVariable("hotelId") Integer hotelId) {
 
         try {
             String token = request.getHeader("token");
@@ -278,7 +278,7 @@ public class MyAppointmentController {
                                                  @PathVariable("pageNo") Integer pageNo,
                                                  @PathVariable("pageSize") Integer pageSize,
                                                  Byte orderStatus,
-                                                 @PathVariable("hotelId")Integer hotelId) {
+                                                 @PathVariable("hotelId") Integer hotelId) {
 
         try {
             String token = request.getHeader("token");
@@ -321,7 +321,7 @@ public class MyAppointmentController {
     @UserLoginToken
     //@PassToken
     public ReturnString myAppointementCount(HttpServletRequest request,
-                                            @PathVariable("hotelId")Integer hotelId) {
+                                            @PathVariable("hotelId") Integer hotelId) {
         String token = request.getHeader("token");
         Long userId = TokenUtil.getUserId(token);
         //Long userId = (long)150;

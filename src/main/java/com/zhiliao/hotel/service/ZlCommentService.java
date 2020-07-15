@@ -32,7 +32,7 @@ public interface ZlCommentService {
     /**
      * 获取点赞吐槽列表
      */
-    PageInfoResult<List<CommentVO>> findComments(Long userid, Integer pageNo, Integer pageSize);
+    PageInfoResult<List<CommentVO>> findComments(Long userid, Integer pageNo, Integer pageSize, Integer hotelId);
 
     /**
      * 获取点赞吐槽详情页

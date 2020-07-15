@@ -135,6 +135,7 @@
         OrderSerialNo,
         UserName,
         HotelID,
+        HotelName,
         Tel,
         OrderStatus,
         WakeDate,
@@ -159,6 +160,7 @@
         Tel,
         OrderStatus,
         GoodsName,
+        HotelName,
         CarNumber,
         RentBeginDate,
         RentEndDate,
@@ -183,6 +185,7 @@
         UserName,
         Tel,
         HotelID,
+        HotelName,
         OrderStatus,
         ContinueLiveDate,
         CheckOutDate,
@@ -207,6 +210,7 @@
         CheckOutDate,
         Remark,
         HotelID,
+        HotelName,
         CreateDate
         from zl_checkoutorder
         where 1 = 1 and IsDelete = 0 and IsUserDelete = 0

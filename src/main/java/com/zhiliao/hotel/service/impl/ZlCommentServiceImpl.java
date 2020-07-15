@@ -125,10 +125,10 @@ public class ZlCommentServiceImpl implements ZlCommentService {
 
 
     @Override
-    public PageInfoResult<List<CommentVO>> findComments(Long userid, Integer pageNo, Integer pageSize) {
+    public PageInfoResult<List<CommentVO>> findComments(Long userid, Integer pageNo, Integer pageSize, Integer hotelId) {
         // 设定当前页码，以及当前页显示的条数
         PageHelper.startPage(pageNo, pageSize);
-        List<CommentVO> comments = zlCommentMapper.getComments(userid);
+        List<CommentVO> comments = zlCommentMapper.getComments(userid, hotelId);
         for (CommentVO comment : comments) {
             String[] tagids;
             if (StringUtils.isNoneBlank(comment.getTagids())) {

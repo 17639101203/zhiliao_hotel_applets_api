@@ -159,7 +159,7 @@
       from
           zl_comment a left join zl_hotel b on a.hotelid = b.hotelid
       where
-          a.UserID = #{userid} and a.IsDelete = 0 and a.Type = 0 and a.CommentStatus = 1 Order by a.UpdateDate desc
+          a.UserID = #{userid} and a.IsDelete = 0 and a.Type = 0 and a.CommentStatus = 1 and a.HotelID = #{hotelId} Order by a.UpdateDate desc
   </select>
 
 

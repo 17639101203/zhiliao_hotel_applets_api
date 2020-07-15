@@ -15,7 +15,7 @@ public interface ZlCommentMapper extends Mapper<ZlComment> {
 
     int addComment(ZlComment zlComment);
 
-    List<CommentVO> getComments(Long userid);
+    List<CommentVO> getComments(@Param("userid") Long userid, @Param("hotelId") Integer hotelId);
 
     CommentDetailVO getComment(@Param("userid") Long userid, @Param("commentid") Integer commentid);
 
