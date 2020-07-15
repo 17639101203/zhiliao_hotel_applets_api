@@ -27,8 +27,8 @@ public interface ZlServiceorderMapper extends Mapper<ZlServiceorder> {
 
     int updateOrderStatusById(@Param("orderId") Long orderId, @Param("updateDate") Integer updateDate);
 
-    @Select("select count(*) from zl_serviceorder where UserID = #{userId} and IsDelete = 0 and IsUserDelete = 0")
-    int selectCountService(Long userId);
+    @Select("select count(*) from zl_serviceorder where UserID = #{userId} and HotelID = #{hotelId} and IsDelete = 0 and IsUserDelete = 0")
+    int selectCountService(@Param("userId")Long userId, @Param("hotelId")Integer hotelId);
 
     void userDeleteServiceOrder(@Param("orderid") Long orderid, @Param("updateDate") Integer updateDate);
 

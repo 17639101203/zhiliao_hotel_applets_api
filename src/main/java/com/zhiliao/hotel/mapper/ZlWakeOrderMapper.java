@@ -17,8 +17,8 @@ public interface ZlWakeOrderMapper extends Mapper<ZlWakeOrder> {
 
     int updateById(ZlWakeOrder wakeOrder);
 
-    @Select("select count(*) from zl_wakeorder where UserID = #{userId} and IsDelete = 0 and IsUserDelete = 0")
-    int selectCountWake(Long userId);
+    @Select("select count(*) from zl_wakeorder where UserID = #{userId} and HotelID = #{hotelId} and IsDelete = 0 and IsUserDelete = 0")
+    int selectCountWake(@Param("userId")Long userId, @Param("hotelId")Integer hotelId);
 
     ZlWakeOrderToPhpVO selectToPhp(@Param("orderid") Long orderid);
 }

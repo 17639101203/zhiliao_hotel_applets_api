@@ -18,8 +18,8 @@ public interface ZlContinueLiveOrderMapper extends Mapper<ZlContinueLiveOrder> {
 
     void userDeleteContinueLiveOrder(@Param("orderID") Long orderID, @Param("updateDate") Integer updateDate);
 
-    @Select("select count(*) from zl_continueliveorder where UserID = #{userId} and IsDelete = 0 and IsUserDelete = 0")
-    int selectCountLive(Long userId);
+    @Select("select count(*) from zl_continueliveorder where UserID = #{userId} and HotelID = #{hotelId} and IsDelete = 0 and IsUserDelete = 0")
+    int selectCountLive(@Param("userId")Long userId, @Param("hotelId")Integer hotelId);
 
     ZlContinueLiveOrder continueLiveOrderDetail(@Param("orderID") Long orderID);
 

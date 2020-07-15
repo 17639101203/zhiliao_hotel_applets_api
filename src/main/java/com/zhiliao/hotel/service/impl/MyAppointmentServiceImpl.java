@@ -219,26 +219,26 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
      * @return
      */
     @Override
-    public Map<String, Integer> myAppointementCount(Long userId) {
+    public Map<String, Integer> myAppointementCount(Long userId, Integer hotelId) {
 
         //清扫订单数量
-        int cleanOrderCount = cleanOrderMapper.selectCountClean(userId);
+        int cleanOrderCount = cleanOrderMapper.selectCountClean(userId, hotelId);
         //发票订单数量
-        int invoiceOrderCount = invoiceOrderMapper.selectCountInvoice(userId);
+        int invoiceOrderCount = invoiceOrderMapper.selectCountInvoice(userId, hotelId);
         //报修订单数量
-        int repairOrderCount = repairorderMapper.selectCountRepair(userId);
+        int repairOrderCount = repairorderMapper.selectCountRepair(userId, hotelId);
         //客房服务订单数量
-        int serviceOrderCount = serviceorderMapper.selectCountService(userId);
+        int serviceOrderCount = serviceorderMapper.selectCountService(userId, hotelId);
         //设施订单数量
-        int facilityOrderCount = facilityOrderMapper.selectCountFacility(userId);
+        int facilityOrderCount = facilityOrderMapper.selectCountFacility(userId, hotelId);
         //叫醒服务订单数量
-        int wakeOrderCount = wakeOrderMapper.selectCountWake(userId);
+        int wakeOrderCount = wakeOrderMapper.selectCountWake(userId, hotelId);
         //租车订单数量
-        int rentCarOrderCount = rentCarOrderMapper.selectCountRentCar(userId);
+        int rentCarOrderCount = rentCarOrderMapper.selectCountRentCar(userId, hotelId);
         //退房服务订单数量
-        int checkoutOrderCount = checkoutOrderMapper.selectCountCheckOut(userId);
+        int checkoutOrderCount = checkoutOrderMapper.selectCountCheckOut(userId, hotelId);
         //续住服务订单
-        int continueLiveOrderCount = continueLiveOrderMapper.selectCountLive(userId);
+        int continueLiveOrderCount = continueLiveOrderMapper.selectCountLive(userId, hotelId);
 
         Map<String, Integer> map = new HashMap<>();
         map.put("cleanOrderCount", cleanOrderCount);

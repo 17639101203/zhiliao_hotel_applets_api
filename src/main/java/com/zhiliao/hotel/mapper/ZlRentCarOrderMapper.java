@@ -23,8 +23,8 @@ public interface ZlRentCarOrderMapper extends Mapper<ZlRentCarOrder> {
 
     int updateById(ZlRentCarOrder rentCarOrder);
 
-    @Select("select count(*) from zl_rentcarorder where UserID = #{userId} and IsDelete = 0 and IsUserDelete = 0")
-    int selectCountRentCar(Long userId);
+    @Select("select count(*) from zl_rentcarorder where UserID = #{userId} and HotelID = #{hotelId} and IsDelete = 0 and IsUserDelete = 0")
+    int selectCountRentCar(@Param("userId")Long userId, @Param("hotelId")Integer hotelId);
 
     int dlRentCarOrder(ZlRentCarOrder rentCarOrder);
 

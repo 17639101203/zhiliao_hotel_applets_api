@@ -47,13 +47,13 @@ public interface MyAppointmentService {
 
     PageInfoResult serviceFindAll(Long userId, Byte orderstatus, Integer pageNo, Integer pageSize, Integer hotelId);
 
-    Map<String, Integer> myAppointementCount(Long userId);
+    Map<String, Integer> myAppointementCount(Long userId, Integer hotelId);
 
-    PageInfoResult findAllWakeOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize,Integer hotelId);
+    PageInfoResult findAllWakeOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize, Integer hotelId);
 
-    PageInfoResult findAllRentCarOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize,Integer hotelId);
+    PageInfoResult findAllRentCarOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize, Integer hotelId);
 
-    PageInfoResult findAllCheckOutOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize,Integer hotelId);
+    PageInfoResult findAllCheckOutOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize, Integer hotelId);
 
-    PageInfoResult findAllContinueLiveOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize,Integer hotelId);
+    PageInfoResult findAllContinueLiveOrder(Long userId, Byte orderStatus, Integer pageNo, Integer pageSize, Integer hotelId);
 }

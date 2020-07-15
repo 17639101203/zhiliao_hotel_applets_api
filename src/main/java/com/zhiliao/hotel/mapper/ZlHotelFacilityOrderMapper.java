@@ -30,8 +30,8 @@ public interface ZlHotelFacilityOrderMapper extends Mapper<ZlHotelFacilityOrder>
                                                @Param("hotelid") Integer hotelid,
                                                @Param("facilityid") Integer facilityid);
 
-    @Select("select count(*) from zl_hotelfacilityorder where UserID = #{userId} and IsDelete = 0 and IsUserDelete = 0")
-    int selectCountFacility(Long userId);
+    @Select("select count(*) from zl_hotelfacilityorder where UserID = #{userId} and HotelID = #{hotelId} and IsDelete = 0 and IsUserDelete = 0")
+    int selectCountFacility(@Param("userId")Long userId, @Param("hotelId")Integer hotelId);
 
     void updateById(@Param("orderID") Long orderID, @Param("updateDate") Integer updateDate);
 
