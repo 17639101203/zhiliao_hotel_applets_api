@@ -146,7 +146,7 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         ZlWxuser wxuser = zlWxuserMapper.selectOne(zlWxuser);
         zlHotelFacilityOrder.setUsername(wxuser.getNickname());
         if (zlHotelFacilityOrder.getTotalprice().intValue() == 0) {
-            zlHotelFacilityOrder.setPaystatus((byte) 0);
+            zlHotelFacilityOrder.setPaystatus((byte) 2);
         } else {
             zlHotelFacilityOrder.setPaystatus((byte) 1);
         }

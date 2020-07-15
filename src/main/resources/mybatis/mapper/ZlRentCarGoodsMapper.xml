@@ -44,23 +44,34 @@
   </select>
 
   <select id="rentCarDetail" resultType="com.zhiliao.hotel.model.ZlRentCarGoods">
-      select
-      GoodsID,
-      HotelID,
-      CoverImgUrl,
-      GoodsName,
-      CarNumber,
-      Tags,
-      RentPrice,
-      StockCount,
-      CanCancelOrderMinute,
-      CheckStatus,
-      Sort,
-      Content,
-      CreateDate,
-      UpdateDate
-      from
-      zl_rentcargoods
-      where GoodsStatus = 1 and IsDelete = 0 and GoodsID = #{goodsid}
+      SELECT
+          zg.GoodsID,
+          zg.HotelID,
+          zg.CoverImgUrl,
+          zg.GoodsName,
+          zg.CarNumber,
+          zg.Tags,
+          zg.RentPrice,
+          zg.StockCount,
+          zg.CanCancelOrderMinute,
+          zg.CheckStatus,
+          zg.Sort,
+          zg.Content,
+          zg.CreateDate,
+          zg.UpdateDate,
+          zt.Url
+        FROM
+          zl_treaty zty
+          LEFT JOIN zl_hoteltreaty zt
+            ON zt.TreatyType = zty.TreatyTypeID
+          LEFT JOIN zl_rentcargoods zg
+            ON zt.HotelID = zg.HotelID
+        WHERE zty.TreatyTypeID = 1
+          AND zt.Status = 1
+          AND zt.IsDelete = 0
+          AND zty.IsDelete = 0
+          AND zg.GoodsID = #{goodsid}
+          AND zg.GoodsStatus = 1
+          AND zg.IsDelete = 0
   </select>
 </mapper>

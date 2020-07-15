@@ -61,7 +61,7 @@
         WHERE 1 = 1
         AND IsDelete = '0'
         AND UserID = #{userId}
-        <if test="invoiceStatus != null and invoiceStatus != ''">
+        <if test="invoiceStatus != null">
             and InvoiceStatus = #{invoiceStatus}
         </if>
     </select>
