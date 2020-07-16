@@ -111,6 +111,10 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         List<ZlServiceorderdetail> orderDetails = new ArrayList<>();
         //根据 token得到微信用户Id
         Long userId = TokenUtil.getUserId(token);
+
+        //拼接服务项目字符串
+        StringBuilder serviceItemBuilder = new StringBuilder();
+
         //校验订单物品数量是否大于当日可提交数量
         for (ZlServicegoods zlServicegoods : zlServicegoodsList) {
             //判断订单商品是否超过该商品单次购买数量
@@ -149,7 +153,10 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
             orderDetail.setCreatedate(DateUtils.javaToPhpNowDateTime());
             orderDetail.setUpdatedate(DateUtils.javaToPhpNowDateTime());
             orderDetails.add(orderDetail);
+            serviceItemBuilder.append(",").append(zlServicegoods.getGoodsname()).append("x").append(buyNum);
         }
+        String serviceItemStr = serviceItemBuilder.toString();
+        String serviceItem = serviceItemStr.substring(1);
         //todo 校验送达时间是否在服务时间内
         //todo 超时时间  暂时按15分钟  送达时间、超时时间要放到redis，key暂定
         int timeoutDate;
@@ -187,6 +194,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
                 .build();
         order.setDeliverydate((int) (scp.getDeliverydate() / 1000));
         order.setUpdatedate(DateUtils.javaToPhpNowDateTime());
+        order.setServiceitem(serviceItem);
         zlServiceorderMapper.insertSelective(order);
         //插入客服服务订单商品表数据
         orderDetails.stream().forEach(orderDetail -> orderDetail.setOrderid(order.getOrderid()));
