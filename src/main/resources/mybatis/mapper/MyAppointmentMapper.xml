@@ -47,6 +47,7 @@
         InvoiceOrderID,
         InvoiceID,
         HotelID,
+        HotelName,
         InvoiceType,
         MainBodyType,
         ElectronicPaperType,
@@ -65,6 +66,7 @@
         <if test="invoiceStatus != null">
             and InvoiceStatus = #{invoiceStatus}
         </if>
+        order by CreateDate DESC
     </select>
 
     <!--报修服务订单列表-->
