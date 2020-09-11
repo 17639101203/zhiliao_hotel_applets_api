@@ -37,7 +37,7 @@ public class RedisKeyConstant {
     /**
      * 酒店超市主题
      */
-    public static final String TOPIC_SUPERMARKET_ORDER = "TOPIC_SUPERMARKET_ORDER";
+//    public static final String TOPIC_SUPERMARKET_ORDER = "TOPIC_SUPERMARKET_ORDER";
 
     /**
      * 便利店主题
