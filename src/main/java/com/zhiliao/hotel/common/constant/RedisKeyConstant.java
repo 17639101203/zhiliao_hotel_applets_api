@@ -40,6 +40,11 @@ public class RedisKeyConstant {
     public static final String TOPIC_STORE_ORDER = "TOPIC_STORE_ORDER";
 
     /**
+     * 便利店主题
+     */
+//    public static final String TOPIC_STORE_ORDER = "TOPIC_STORE_ORDER";
+
+    /**
      * 餐饮服务主题
      */
     public static final String TOPIC_CATERING_ORDER = "TOPIC_CATERING_ORDER";
