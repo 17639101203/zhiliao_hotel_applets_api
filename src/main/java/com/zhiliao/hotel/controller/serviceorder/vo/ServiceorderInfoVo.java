@@ -52,6 +52,12 @@ public class ServiceorderInfoVo implements Serializable {
     private Integer hotelid;
 
     /**
+     * 状态信息
+     */
+    @ApiModelProperty(value = "状态信息")
+    private String statusmessage;
+
+    /**
      * 酒店名称
      */
     @ApiModelProperty(value = "酒店名称")

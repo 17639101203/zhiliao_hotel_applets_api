@@ -40,7 +40,7 @@
     <if test="hotelid != null">
       and HotelID = #{hotelid}
     </if>
-    order by CreateDate DESC
+    order by Sort ASC
   </select>
 
   <select id="rentCarDetail" resultType="com.zhiliao.hotel.model.ZlRentCarGoods">
@@ -74,4 +74,18 @@
           AND zg.GoodsStatus = 1
           AND zg.IsDelete = 0
   </select>
+    <update id="updateStockCountDecrease">
+        UPDATE
+          zl_rentcargoods
+        SET
+          StockCount = StockCount - 1
+        WHERE GoodsID = #{goodsid}
+    </update>
+    <update id="updateStockCountAdd">
+        UPDATE
+          zl_rentcargoods
+        SET
+          StockCount = StockCount + 1
+        WHERE GoodsID = #{goodsid}
+    </update>
 </mapper>

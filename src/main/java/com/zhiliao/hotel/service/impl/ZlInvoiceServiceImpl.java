@@ -3,15 +3,18 @@ package com.zhiliao.hotel.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.common.exception.BizException;
 import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
 import com.zhiliao.hotel.controller.invoice.vo.InvoiceOrderToPhpVO;
+import com.zhiliao.hotel.controller.myAppointment.dto.InvoiceOrderDTO;
 import com.zhiliao.hotel.mapper.ZlHotelMapper;
 import com.zhiliao.hotel.mapper.ZlInvoiceMapper;
 import com.zhiliao.hotel.mapper.ZlInvoiceOrderMapper;
 import com.zhiliao.hotel.model.ZlHotel;
 import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.model.ZlInvoiceOrder;
+import com.zhiliao.hotel.service.OrderLogService;
 import com.zhiliao.hotel.service.ZlInvoiceService;
 import com.zhiliao.hotel.utils.DateUtils;
 import io.swagger.annotations.ApiModel;
@@ -35,6 +38,9 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
 
     @Autowired
     private ZlHotelMapper zlHotelMapper;
+
+    @Autowired
+    private OrderLogService orderLogService;
 
     @Override
     public Map<String, Object> addInvoice(ZlInvoice invoice) {
@@ -89,17 +95,28 @@ public class ZlInvoiceServiceImpl implements ZlInvoiceService {
     }
 
     @Override
-    public InvoiceOrderVO findInvoiceOrderdetail(Long invoiceorderid) {
-        InvoiceOrderVO invoiceOrderVO = orderMapper.queryInvoiceOrderdetail(invoiceorderid);
-        if (invoiceOrderVO != null) {
-            ZlHotel zlHotel = zlHotelMapper.getById(invoiceOrderVO.getHotelid());
-            invoiceOrderVO.setHotelname(zlHotel.getHotelName());
+    public InvoiceOrderDTO findInvoiceOrderdetail(Long invoiceorderid) {
+        InvoiceOrderDTO invoiceOrderDTO = orderMapper.queryInvoiceOrderdetail(invoiceorderid);
+        if (invoiceOrderDTO != null) {
+            ZlHotel zlHotel = zlHotelMapper.getById(invoiceOrderDTO.getHotelid());
+            invoiceOrderDTO.setHotelname(zlHotel.getHotelName());
         }
-        return invoiceOrderVO;
+        return invoiceOrderDTO;
     }
 
     @Override
-    public void cancelInvoiceOrder(Long invoiceorderid, Integer updatedate) {
+    public void cancelInvoiceOrder(Long invoiceorderid) {
+        Integer updatedate = Math.toIntExact(System.currentTimeMillis() / 1000);
+
+        ZlInvoiceOrder zlInvoiceOrder = new ZlInvoiceOrder();
+        zlInvoiceOrder.setInvoiceorderid(invoiceorderid);
+        zlInvoiceOrder = orderMapper.selectOne(zlInvoiceOrder);
+        if (zlInvoiceOrder == null) {
+            throw new BizException("参数有误!");
+        }
+
+        //将订单取消操作写到记录表中
+        orderLogService.cancelOrderLog(zlInvoiceOrder.getInvoiceorderid(), zlInvoiceOrder.getHotelid(), zlInvoiceOrder.getCreatedate(), zlInvoiceOrder.getMoldtype());
         orderMapper.removeInvoiceOrder(invoiceorderid, updatedate);
     }
 

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "zl_goods")
 public class ZlGoods implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -26,6 +28,11 @@ public class ZlGoods implements Serializable {
      * 商品ID
      */
     private Integer goodsid;
+
+    /**
+     * 商品编号
+     */
+    private String goodsnumber;
 
     /**
      * 所属分类ID
@@ -48,9 +55,9 @@ public class ZlGoods implements Serializable {
     private String goodsname;
 
     /**
-     * 0:不需要配送;1需要配送(土特产)
+     * 标题
      */
-    private Boolean needdelivery;
+    private String title;
 
     /**
      * 是否推荐:0:否;1:是
@@ -58,7 +65,7 @@ public class ZlGoods implements Serializable {
     private Boolean isrecommand;
 
     /**
-     * -1:紧急下架;0:安全下架;1上架
+     * -1:紧急下架;0:安全下架;1上架;2导入待编辑
      */
     private Byte goodsstatus;
 
@@ -118,7 +125,58 @@ public class ZlGoods implements Serializable {
     private Integer updatedate;
 
     /**
+     * 审核状态:-1驳回;0待审核;1审核中;2审核通过
+     */
+    private Byte checkstatus;
+
+    /**
+     * 操作备注
+     */
+    private String operatorremark;
+
+    /**
+     * 所属模块: 1便利店;2餐饮服务;3情趣用品;4土特产
+     */
+    private Short belongmodule;
+
+    /**
+     * 操作人员
+     */
+    private String operatorusername;
+
+    /**
+     * 操作人员IP
+     */
+    private String operatorip;
+
+    /**
+     * 品牌
+     */
+    private String brand;
+
+    /**
+     * 生产商
+     */
+    private String producer;
+
+    /**
+     * 由谁配送：1酒店配送，2供应商配送
+     */
+    private Byte sendtype;
+
+    /**
      * 商品详情
      */
     private String content;
+
+    /**
+     * 商品上架时间
+     */
+    private Integer update;
+
+    /**
+     * 商品下架时间
+     */
+    private Integer downdate;
+
 }

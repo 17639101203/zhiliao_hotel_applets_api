@@ -5,6 +5,7 @@ import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.Repair.params.RepairParam;
 import com.zhiliao.hotel.controller.Repair.vo.RepairOrderVO;
 import com.zhiliao.hotel.controller.file.UploadFileController;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlRepairorderDTO;
 import com.zhiliao.hotel.model.ZlRepairorder;
 import com.zhiliao.hotel.service.ZlRepairService;
 import com.zhiliao.hotel.utils.DateUtils;
@@ -16,6 +17,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,20 +40,18 @@ public class ZlRepairController {
 
 
     @ApiOperation(value = "添加报修信息")
-    @PostMapping(value = "addrepair", consumes = {"multipart/*"}, headers = "content-type=multipart/form-data")
+    @PostMapping(value = "addrepair")
     @UserLoginToken
-    public ReturnString addrepair(RepairParam repairParam,
-                                  @RequestParam(value = "multipartFile", required = false) MultipartFile multipartFile,
-                                  HttpServletRequest request) {
+    public ReturnString addrepair(@Validated @RequestBody RepairParam repairParam, HttpServletRequest request) {
 
         // 解析token获取userid
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
         try {
-            Map<String, Object> map = service.addRepairMsg(userid, repairParam, multipartFile);
+            Map<String, Object> map = service.addRepairMsg(userid, repairParam);
             return new ReturnString(map);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ReturnString("添加报修信息失败!");
+            return new ReturnString(e.getMessage());
         }
     }
 
@@ -64,11 +64,11 @@ public class ZlRepairController {
     @UserLoginToken
     public ReturnString<Map<String, Object>> findRepairOrder(@PathVariable("orderID") Long orderID) {
         try {
-            RepairOrderVO repairOrderVO = service.findRepairOrder(orderID);
-            return new ReturnString(repairOrderVO);
+            ZlRepairorderDTO zlRepairorderDTO = service.findRepairOrder(orderID);
+            return new ReturnString(zlRepairorderDTO);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("查询报修订单详情");
+            return new ReturnString("查询报修订单详情出错!");
         }
     }
 
@@ -80,14 +80,13 @@ public class ZlRepairController {
     })
     @UserLoginToken
     public ReturnString cancelRepairOrder(@PathVariable("orderID") Long orderID) {
-        Integer nowTime = DateUtils.javaToPhpNowDateTime();
 
         try {
-            service.cancelRepairOrder(orderID, nowTime);
+            service.cancelRepairOrder(orderID);
             return new ReturnString<>(0, "预约已取消");
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ReturnString("预约取消失败");
+            return new ReturnString(e.getMessage());
         }
     }
 

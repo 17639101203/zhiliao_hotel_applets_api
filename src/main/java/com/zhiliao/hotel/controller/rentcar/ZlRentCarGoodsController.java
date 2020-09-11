@@ -4,6 +4,8 @@ import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.common.exception.BizException;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlRentCarOrderDTO;
 import com.zhiliao.hotel.controller.rentcar.params.RentCarOrderParam;
 import com.zhiliao.hotel.controller.rentcar.vo.RentCarOrderVO;
 import com.zhiliao.hotel.controller.wake.ZlWakeOrderController;
@@ -89,8 +91,8 @@ public class ZlRentCarGoodsController {
             @ApiImplicitParam(paramType = "path", dataType = "int", name = "goodsid", value = "车型ID", required = true),
     })
     @PostMapping("addRentCar/{goodsid}")
-//    @UserLoginToken
-    @PassToken
+    @UserLoginToken
+//    @PassToken
     public ReturnString addRentCar(HttpServletRequest request, @RequestBody RentCarOrderParam carOrderParam, @PathVariable Integer goodsid) {
         String token = request.getHeader("token");
         Long userId = TokenUtil.getUserId(token);
@@ -100,6 +102,9 @@ public class ZlRentCarGoodsController {
         ZlHotel zlHotel = zlHotelService.getByHotelID(carOrderParam.getHotelId());
         rentCarOrder.setHotelname(zlHotel.getHotelName());
         ZlHotelroom zlHotelroom = zlHotelRoomService.getByRoomNumber(carOrderParam.getRoomNumber(), carOrderParam.getHotelId());
+        if(zlHotelroom==null){
+            throw new BizException("您的码是前台码，不提供该服务");
+        }
         rentCarOrder.setRoomid(zlHotelroom.getRoomid());
         rentCarOrder.setRoomnumber(carOrderParam.getRoomNumber());
         rentCarOrder.setGoodsname(carOrderParam.getGoodsName());
@@ -131,8 +136,8 @@ public class ZlRentCarGoodsController {
     public ReturnString rentCarOrderDetail(@PathVariable long orderid) {
 
         try {
-            RentCarOrderVO rentCarOrderVO = rentCarGoodsService.rentCarOrderDetail(orderid);
-            return new ReturnString(rentCarOrderVO);
+            ZlRentCarOrderDTO zlRentCarOrderDTO = rentCarGoodsService.rentCarOrderDetail(orderid);
+            return new ReturnString(zlRentCarOrderDTO);
         } catch (Exception e) {
             return new ReturnString("获取失败");
         }

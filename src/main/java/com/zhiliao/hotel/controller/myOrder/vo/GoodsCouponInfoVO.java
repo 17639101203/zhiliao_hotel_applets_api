@@ -1,17 +1,20 @@
 package com.zhiliao.hotel.controller.myOrder.vo;
 
+import lombok.Data;
+
 /**
  * @program: zhiliao_hotel_applets_api
  * @description
  * @author: 姬慧慧
  * @create: 2020-05-23 15:31
  **/
+@Data
 public class GoodsCouponInfoVO {
 
     /**
      * 用户优惠券绑定唯一id
      */
-    private Integer recID;
+    private Long couponUserId;
 
     /**
      * 优惠券ID
@@ -28,35 +31,4 @@ public class GoodsCouponInfoVO {
      */
     private Short belongModule;
 
-    public Short getBelongModule() {
-        return belongModule;
-    }
-
-    public void setBelongModule(Short belongModule) {
-        this.belongModule = belongModule;
-    }
-
-    public Integer getRecID() {
-        return recID;
-    }
-
-    public void setRecID(Integer recID) {
-        this.recID = recID;
-    }
-
-    public Integer getCouponID() {
-        return couponID;
-    }
-
-    public void setCouponID(Integer couponID) {
-        this.couponID = couponID;
-    }
-
-    public Long getUserID() {
-        return userID;
-    }
-
-    public void setUserID(Long userID) {
-        this.userID = userID;
-    }
 }

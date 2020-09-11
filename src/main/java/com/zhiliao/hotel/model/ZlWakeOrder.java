@@ -34,6 +34,16 @@ public class ZlWakeOrder implements Serializable {
     private String orderserialno;
 
     /**
+     * zl_ordertype表ID
+     */
+    private Byte moldtype;
+
+    /**
+     * 来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
+     */
+    private Integer comeformid;
+
+    /**
      * 酒店ID
      */
     private Integer hotelid;
@@ -72,6 +82,16 @@ public class ZlWakeOrder implements Serializable {
      * 订单状态:-1:已取消;0待处理;1处理完成
      */
     private Byte orderstatus;
+
+    /**
+     * 取消用户类型:1-用户,2-平台
+     */
+    private Byte cancelusertype;
+
+    /**
+     * 取消原因
+     */
+    private String cancelremark;
 
     /**
      * 操作员

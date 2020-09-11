@@ -76,7 +76,7 @@ public class MyAppointmentController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "pageNo", dataType = "int", required = true, value = "页码值"),
             @ApiImplicitParam(paramType = "path", name = "pageSize", dataType = "int", required = true, value = "每页条数"),
-            @ApiImplicitParam(paramType = "query", name = "invoiceStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：已取消，0：未开票，1：开票中，2：已开票"),
+            @ApiImplicitParam(paramType = "query", name = "invoiceStatus", dataType = "Byte", required = false, value = "不传：查询全部，-1：已取消，0待服务，1：已开票"),
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "int", required = true, value = "酒店id")
     })
     @GetMapping("invoiceFindAll/{pageNo}/{pageSize}/{hotelId}")
@@ -307,7 +307,7 @@ public class MyAppointmentController {
             myAppointmentService.cancelOrder(orderid, orderServiceType);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("取消失败");
+            return new ReturnString(e.getMessage());
         }
         return new ReturnString(0, "已取消");
     }

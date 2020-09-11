@@ -5,7 +5,7 @@
 <mapper namespace="com.zhiliao.hotel.mapper.ZlXcxMenuMapper">
 
     <sql id="selectColumn">
-      MenuID,HotelID,ParentID,MenuName,IconUrl,HaveBanner,ServiceOpenTime,MenuStatus,ComeFromID,ServiceTime,LinkUrl,IsFrontendShow,IsDelete,`Position`
+      MenuID,HotelID,ParentID,MenuName,IconUrl,HaveBanner,ServiceOpenTime,MenuStatus,ComeFromID,ServiceTime,LinkUrl,IsFrontendShow,IsDelete,`Position`,Sort
     </sql>
 
     <select id="getMenuList" resultType="com.zhiliao.hotel.model.ZlXcxmenu">
@@ -17,7 +17,7 @@
         and IsFrontendShow = 1)
         or (HotelID=0 and ParentID=0 AND MenuStatus = 1 AND ComeFromID = 1
         and IsFrontendShow = 1)
-        and IsDelete=0 order by CreateDate desc
+        and IsDelete=0 order by Sort desc
 
     </select>
 
@@ -28,7 +28,7 @@
         from zl_xcxmenu zl where (zl.HotelID=#{hotelId} and MenuStatus=1
         and ComeFromID=1)
         or (HotelID=0 and ParentID=0 AND MenuStatus = 1 AND ComeFromID = 1)
-        and IsDelete=0 order by CreateDate desc
+        and IsDelete=0 order by Sort desc
 
     </select>
 

@@ -16,7 +16,7 @@ public interface ZlGoodsService {
 
     PageInfoResult findGoodsList(Integer hotelId, Integer belongModule, Integer pageNo, Integer pageSize, String categoryName);
 
-    List<GoodsSkuListVo> findGoodsSkuList(Integer hotelId, Integer goodsId);
+    GoodsSkuListVo2 findGoodsSkuList(Integer hotelId, Integer goodsId);
 
     GoodsListVo findGoodsDetail(Integer goodsId);
 
@@ -27,4 +27,10 @@ public interface ZlGoodsService {
     List<EsGoodsVO> searchGoods(Integer hotelId, String selectParam, Integer belongModule, Integer pageNo, Integer pageSize);
 
     BusinessHoursVO getBusinessHours(Integer menuId);
+
+    GoodsPropertysVO findGoodsPropertyIdInfo(Integer hotelId, Integer goodsId, List<Integer> goodsPropertyIdList);
+
+    void updateGoodsCountReturn(Long orderid);
+
+    GoodsPropertysVO findSelectedGoodsProperty(Integer hotelGoodsSkuId);
 }

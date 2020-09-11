@@ -24,8 +24,8 @@
         </commentGenerator>
         <!-- 数据库的相关配置 -->
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://39.108.188.110:3306/company_zhiliao?serverTimezone=UTC"
-                        userId="zhiliao_dev" password="y82F3FybiffN6DrT"/>
+                        connectionURL="jdbc:mysql://39.101.213.223:23306/zhiliaodb?serverTimezone=UTC"
+                        userId="zhiliao" password="zhiliao_pwd123"/>
 <!--        <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@远程ip地址或localhost:1521:orcl" userId="用户名" password="密码">-->
 <!--            &lt;!&ndash; 针对oracle数据库 &ndash;&gt;-->
 <!--            <property name="remarksReporting" value="true"></property>-->
@@ -49,7 +49,7 @@
 <!--        </javaClientGenerator>-->
 
         <!--将example类型设为false，否则实体类里面会多一个example的类exampleStudent -->
-        <table tableName="zl_invoiceorder" domainObjectName="aaa_zl_invoiceorder" enableCountByExample="false"
+        <table tableName="zl_supplieraddress" domainObjectName="ZlSupplierAddress" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false"
 

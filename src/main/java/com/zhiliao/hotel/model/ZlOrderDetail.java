@@ -89,7 +89,5 @@ public class ZlOrderDetail implements Serializable{
      * 支付/取消时间
      */
     private Integer updatedate;
-    
-    private static final long serialVersionUID=1L;
 
 }

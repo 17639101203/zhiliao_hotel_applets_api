@@ -41,8 +41,8 @@ public class GoodsInfoParam {
     /**
      * 用户优惠券自增ID
      */
-    @ApiModelProperty(value = "用户优惠券自增ID", required = true)
-    private Integer recID;
+    @ApiModelProperty(value = "用户优惠券自增ID,不使用优惠券填-1", required = true)
+    private Long couponUserId;
 
     /**
      * 备注信息
@@ -69,6 +69,24 @@ public class GoodsInfoParam {
     private Integer hotelGoodsSkuId;
 
     /**
+     * 配送方式0:快递,1自提
+     */
+    @ApiModelProperty(value = "配送方式0:快递,1自提,2酒店配送", required = true)
+    private Byte deliverytype;
+
+    /**
+     * 收货人
+     */
+    @ApiModelProperty(value = "收货人")
+    private String consignee;
+
+    /**
+     * 收货人联系电话
+     */
+    @ApiModelProperty(value = "收货人联系电话")
+    private String tel;
+
+    /**
      * 配送地址
      */
     @ApiModelProperty(value = "配送地址")
@@ -77,7 +95,7 @@ public class GoodsInfoParam {
     /**
      * 送达时间
      */
-    @ApiModelProperty(value = "送达时间", required = true)
+    @ApiModelProperty(value = "送达时间;默认0表示尽快送达", required = true)
     private Long deliveryDate;
 
     /**
@@ -85,5 +103,11 @@ public class GoodsInfoParam {
      */
     @ApiModelProperty(value = "订单编号")
     private String orderSerialNo;
+
+    /**
+     * 父订单编号
+     */
+    @ApiModelProperty(value = "父订单编号")
+    private String parentOrderSerialNo;
 
 }

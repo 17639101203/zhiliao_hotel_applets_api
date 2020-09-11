@@ -8,7 +8,9 @@
           zl_checkoutorder
         SET
           OrderStatus = -1,
-          UpdateDate = #{updateDate}
+          UpdateDate = #{updateDate},
+          CancelUserType = 1,
+          CancelRemark = '用户取消'
         WHERE OrderID = #{orderID}
     </update>
 
@@ -21,7 +23,7 @@
         WHERE OrderID = #{orderID}
     </update>
 
-    <select id="checkoutOrderDetail" resultType="com.zhiliao.hotel.model.ZlCheckoutOrder">
+    <select id="checkoutOrderDetail" resultType="com.zhiliao.hotel.controller.myAppointment.dto.ZlCheckoutOrderDTO">
         SELECT
           OrderID,
           OrderSerialNo,
@@ -30,6 +32,17 @@
           HotelName,
           RoomNumber,
           OrderStatus,
+          CASE
+              OrderStatus
+              WHEN - 1
+              THEN '取消退房'
+              WHEN 0
+              THEN '等待退房'
+              WHEN 1
+              THEN '完成退房'
+              WHEN 2
+              THEN '已接单'
+            END StatusMessage,
           CheckOutDate,
           Remark,
           CreateDate,

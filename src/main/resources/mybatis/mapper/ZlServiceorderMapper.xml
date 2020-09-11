@@ -171,6 +171,49 @@
     <!--</trim>-->
     <!--</insert>-->
 
+    <select id="getByOrderIdDetil" resultType="com.zhiliao.hotel.controller.myAppointment.dto.ZlServiceorderDTO2">
+        SELECT
+        OrderID,
+        UserID,
+        UserName,
+        Tel,
+        SerialNumber,
+        ServiceItem,
+        HotelID,
+        HotelName,
+        RoomID,
+        GoodsCoverUrl,
+        FloorNumber,
+        BookDate,
+        RoomNumber,
+        ComeFormID,
+        DeliveryDate,
+        TimeoutDate,
+        Remark,
+        OrderStatus,
+        CASE
+          OrderStatus
+          WHEN - 1
+          THEN '已取消'
+          WHEN 0
+          THEN '待维修'
+          WHEN 1
+          THEN '已完成'
+          WHEN 2
+          THEN '已接单'
+        END StatusMessage,
+        OperatorName,
+        OperatorIP,
+        OperatorRemark,
+        CreateDate,
+        UpdateDate
+        FROM
+        zl_serviceorder
+        WHERE OrderID = #{orderId}
+        AND IsDelete = 0
+        AND IsUserDelete = 0
+    </select>
+
     <select id="getByOrderId" resultType="com.zhiliao.hotel.model.ZlServiceorder">
         SELECT
         OrderID,
@@ -204,7 +247,7 @@
     </select>
 
     <update id="updateOrderStatusById">
-    UPDATE zl_serviceorder so SET so.OrderStatus = -1, so.UpdateDate = #{updateDate} WHERE so.OrderID = #{orderId} AND so.IsDelete = 0 AND so.IsUserDelete = 0
+    UPDATE zl_serviceorder so SET so.OrderStatus = -1, so.UpdateDate = #{updateDate}, CancelUserType = 1, CancelRemark = '用户取消' WHERE so.OrderID = #{orderId} AND so.IsDelete = 0 AND so.IsUserDelete = 0
   </update>
 
 

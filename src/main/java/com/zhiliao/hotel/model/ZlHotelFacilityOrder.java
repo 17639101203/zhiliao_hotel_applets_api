@@ -33,6 +33,11 @@ public class ZlHotelFacilityOrder implements Serializable {
     private Long userid;
 
     /**
+     * zl_ordertype表ID
+     */
+    private Byte moldtype;
+
+    /**
      * 用户名
      */
     private String username;
@@ -123,9 +128,19 @@ public class ZlHotelFacilityOrder implements Serializable {
     private Byte paystatus;
 
     /**
-     * -1:已取消;0等待确认;1已确认
+     * -1:已取消;0等待确认;1已确认;2已接单
      */
     private Byte orderstatus;
+
+    /**
+     * 取消用户类型:1-用户,2-平台
+     */
+    private Byte cancelusertype;
+
+    /**
+     * 取消原因
+     */
+    private String cancelremark;
 
     /**
      * 后台操作人

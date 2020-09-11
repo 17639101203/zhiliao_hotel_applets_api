@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
+import com.zhiliao.hotel.common.exception.BizException;
 import com.zhiliao.hotel.controller.comment.commentparm.CommentParm;
 import com.zhiliao.hotel.controller.comment.vo.CommentDetailVO;
 import com.zhiliao.hotel.controller.comment.vo.CommentToPhpVO;
@@ -13,7 +14,11 @@ import com.zhiliao.hotel.controller.comment.vo.CommentVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.mapper.ZlCommentMapper;
 import com.zhiliao.hotel.mapper.ZlTagMapper;
+import com.zhiliao.hotel.mapper.ZlWxuserMapper;
+import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
 import com.zhiliao.hotel.model.ZlComment;
+import com.zhiliao.hotel.model.ZlWxuser;
+import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.ZlCommentService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.QiniuUtils;
@@ -48,57 +53,39 @@ public class ZlCommentServiceImpl implements ZlCommentService {
     private ZlTagMapper zlTagMapper;
 
     @Autowired
-    StringRedisTemplate stringRedisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private ZlWxuserMapper zlWxuserMapper;
+
+    @Autowired
+    private ZlWxuserdetailMapper zlWxuserdetailMapper;
 
     @Override
-    public Integer addComment(ZlComment zlComment) {
-        return zlCommentMapper.addComment(zlComment);
-    }
+    public Map<String, Object> addComment(Long userid, CommentParm commentParm) {
 
-    @Override
-    public Map<String, Object> addComment(Long userid, CommentParm commentParm, MultipartFile multipartFile) {
+        ZlWxuserdetail zlWxuserdetail = new ZlWxuserdetail();
+        zlWxuserdetail.setUserid(userid);
+        zlWxuserdetail = zlWxuserdetailMapper.selectOne(zlWxuserdetail);
 
         Map<String, Object> map = new HashMap<>();
-
-        if (commentParm.getCommentID() != -1) {
-            ZlComment zlComment = new ZlComment();
-            zlComment.setCommentid(commentParm.getCommentID());
-            List<ZlComment> zlCommentList = zlCommentMapper.select(zlComment);
-            ZlComment zlCommentOld = zlCommentList.get(0);
-            StringBuffer imageurls = new StringBuffer();
-            String imageurlOld = zlCommentOld.getImageurls();
-//            String imgurl = UploadPhotoUtil.uploadPhotoUtil(multipartFile);
-            String imgurl = UploadPhotoUtil.uploadPhotoUtil2(multipartFile);
-            imageurls.append(imageurlOld).append("|").append(imgurl);
-            zlCommentMapper.updateCommentImg(commentParm.getCommentID(), imageurls.toString());
-            map.put("commentid", commentParm.getCommentID());
-            return map;
-        }
 
         ZlComment zlComment = new ZlComment();
         Integer nowtime = DateUtils.javaToPhpNowDateTime();   // 获取当前时间
         zlComment.setHotelid(commentParm.getHotelID());   //酒店ID
         zlComment.setUserid(userid);   //用户ID  根据token获取userId
+        zlComment.setUsername(zlWxuserdetail.getRealname());
+        if (StringUtils.isNoneBlank(zlWxuserdetail.getTel())) {
+            zlComment.setTel(zlWxuserdetail.getTel());
+        }
         zlComment.setEvaluation((byte) commentParm.getEvaluation().intValue());   //评论等级 1好评 2中评 3差评
         zlComment.setTagids(commentParm.getTagIDs());   //评论标签ID 多个用丨隔开
+        zlComment.setImageurls(commentParm.getImageurls());
         zlComment.setContent(commentParm.getContent());   //评论内容
         zlComment.setRoomid(commentParm.getRoomid());      // 房间id
         zlComment.setRoomnumber(commentParm.getRoomnumber());  // 房间号
         zlComment.setCreatedate(nowtime);  //添加时间
         zlComment.setUpdatedate(nowtime);  //更新时间
-
-        //传入文件分析后，得到文件存放地址  key：filePathBase
-//        ReturnString<List<String>> returnString = uploadFileController.uploadFile(multipartFiles);
-//        List<String> list = returnString.getData();
-//        StringBuffer Imgurls = new StringBuffer();
-//        list.forEach(item -> {
-//            Imgurls.append(item + "|");   // 遍历集合，生成图片地址，并用 | 隔开
-//        });
-        if (multipartFile != null) {
-//            String imgurl = UploadPhotoUtil.uploadPhotoUtil(multipartFile);
-            String imgurl = UploadPhotoUtil.uploadPhotoUtil2(multipartFile);
-            zlComment.setImageurls(imgurl);  //图片地址
-        }
         zlCommentMapper.insertSelective(zlComment);
 
         logger.info("点赞吐槽数据信息插入数据库完成,id:" + zlComment.getCommentid());
@@ -114,8 +101,9 @@ public class ZlCommentServiceImpl implements ZlCommentService {
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_COMMENT, orderStr);
         logger.info("推送点赞吐槽数据信息到redis通知php后台人员完成,订单信息:" + commentToPhpVO);
 
-        map.put("commentid", zlComment.getCommentid());
+        map.put("orderid", zlComment.getCommentid());
         return map;
+
     }
 
     @Override

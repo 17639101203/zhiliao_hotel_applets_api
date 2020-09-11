@@ -36,6 +36,8 @@
         zg.CoverImgUrl,
         zg.OriginalPrice,
         zg.CurrentPrice,
+        zg.GoodsStatus,
+        zg.SupplierID,
         zhgs.SoldCount,
         zhgs.VirtualSoldCount,
         zgc.BelongModule,
@@ -44,8 +46,9 @@
         from zl_hotelgoodssku zhgs
         left join zl_goods zg on zhgs.GoodsID=zg.GoodsID
         left join zl_goodscategory zgc on zg.GoodsCategoryID=zgc.GoodsCategoryID
-        where zhgs.IsDelete=0 and zhgs.IsDefault=1 and zg.GoodsStatus!='-1' and zgc.IsDelete=0 and zgc.CategoryStatus=1
-        and zhgs.HotelID=#{hotelId} and zgc.BelongModule=#{belongModule}
+        where zhgs.IsDelete=0 and zhgs.IsDefault=1 and zgc.IsDelete=0 and zgc.CategoryStatus=1
+        and zhgs.HotelID=#{hotelId} and zgc.BelongModule=#{belongModule} and (zg.GoodsStatus = 0 or zg.GoodsStatus = 1)
+        and zg.CheckStatus = 2 and zg.IsDelete = 0
         <if test='categoryName!="全部"'>
             <choose>
                 <when test='categoryName=="推荐"'>
@@ -62,12 +65,8 @@
 
     <select id="findGoodsSkuList" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsSkuListVo">
         SELECT
-          zhgs.HotelGoodsSkuID,
-          zgp.PropertyName,
-          zgp.ImgUrl,
-          zgs.OriginalPrice,
-          zgs.CurrentPrice,
-          zhgs.StockCount,
+          zg.GoodsID,
+          zgs.PropertyID,
           zgc.BelongModule,
           zg.CoverImgUrl,
           zg.GoodsName
@@ -84,6 +83,7 @@
         WHERE zhgs.IsDelete = 0
           AND zgs.IsDelete = 0
           AND zgp.IsDelete = 0
+          AND zhgs.IsDefault = 1
           AND zhgs.HotelID = #{hotelId}
           AND zhgs.GoodsID = #{goodsId}
         ORDER BY zgp.PropertyName DESC
@@ -122,6 +122,7 @@
           zhgs.GoodsID,
           zg.CoverImgUrl,
           zg.GoodsName,
+          zg.GoodsStatus,
           zg.OriginalPrice,
           zg.CurrentPrice,
           zgs.BelongModule,
@@ -134,6 +135,8 @@
             ON zg.GoodsCategoryID = zgs.GoodsCategoryID
         WHERE zhgs.IsDelete = 0
           AND zg.GoodsStatus != '-1'
+          and (zg.GoodsStatus = 0 or zg.GoodsStatus = 1)
+          and zg.CheckStatus = 2 and zg.IsDelete = 0
           AND zg.IsRecommand = 1
           AND zhgs.HotelID = #{hotelId}
         GROUP BY zhgs.GoodsID
@@ -148,7 +151,8 @@
         SET
           TotalStockCount = TotalStockCount - #{goodsCount},
           TotalSoldCount = TotalSoldCount + #{goodsCount},
-          RealtimeStockCount = RealtimeStockCount - #{goodsCount}
+          RealtimeStockCount = RealtimeStockCount - #{goodsCount},
+          UpdateDate = #{currertTime}
         WHERE GoodsID =
         (SELECT
             GoodsID
@@ -162,7 +166,8 @@
           zl_goodssku
         SET
           StockCount = StockCount - #{goodsCount},
-          SoldCount = SoldCount + #{goodsCount}
+          SoldCount = SoldCount + #{goodsCount},
+          UpdateDate = #{currertTime}
         WHERE SkuID =
         (SELECT
             SkuID
@@ -176,7 +181,8 @@
           zl_hotelgoodssku
         SET
           StockCount = StockCount - #{goodsCount},
-          SoldCount = SoldCount + #{goodsCount}
+          SoldCount = SoldCount + #{goodsCount},
+          UpdateDate = #{currertTime}
         WHERE HotelGoodsSkuID = #{hotelGoodsSkuID}
     </update>
 
@@ -194,12 +200,104 @@
 
     <select id="getByHotelIDAndGoodsID" resultType="int">
         SELECT
-          SUM(SoldCount)
+          SUM(StockCount)
         FROM
           zl_hotelgoodssku
         WHERE GoodsID = #{goodsid}
           AND HotelID = #{hotelid}
-        LIMIT 1
+    </select>
+
+    <select id="findGoodsSku" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsSkuVO">
+        SELECT
+          PropertyID,
+          PropertyName,
+          ImgUrl,
+          CategoryID
+        FROM
+          zl_goodsproperty
+        WHERE PropertyID = #{propertyId}
+          AND IsDelete = 0
+          LIMIT 1
+    </select>
+
+    <select id="findGoodsPropertyIdInfo" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsPropertyInfoVO">
+        SELECT
+          zhgs.HotelGoodsSkuID,
+          zhgs.StockCount,
+          zhgs.SoldCount,
+          zhgs.VirtualSoldCount,
+          zgs.OriginalPrice,
+          zgs.CurrentPrice,
+          zgs.PropertyID
+        FROM
+          zl_hotelgoodssku zhgs
+          LEFT JOIN zl_goodssku zgs
+            ON zhgs.SkuID = zgs.SkuID
+        WHERE zhgs.GoodsID = #{goodsId}
+          AND zhgs.HotelID = #{hotelId}
+          AND zhgs.IsDefault = 1
+          AND zhgs.IsDelete = 0
+          AND zgs.IsDelete = 0
+    </select>
+
+    <update id="updateGoodsReturn">
+        UPDATE
+          zl_goods
+        SET
+          TotalStockCount = TotalStockCount + #{goodsCount},
+          TotalSoldCount = TotalSoldCount - #{goodsCount},
+          RealtimeStockCount = RealtimeStockCount + #{goodsCount},
+          UpdateDate = #{currertTime}
+        WHERE GoodsID =
+        (SELECT
+            GoodsID
+          FROM
+            zl_hotelgoodssku
+          WHERE HotelGoodsSkuID = #{hotelGoodsSkuID})
+    </update>
+
+    <update id="updateGoodsSkuReturn">
+        UPDATE
+          zl_goodssku
+        SET
+          StockCount = StockCount + #{goodsCount},
+          SoldCount = SoldCount - #{goodsCount},
+          UpdateDate = #{currertTime}
+        WHERE SkuID =
+        (SELECT
+            SkuID
+          FROM
+            zl_hotelgoodssku
+          WHERE HotelGoodsSkuID = #{hotelGoodsSkuID})
+    </update>
+
+    <update id="updateHotelGoodsSkuReturn">
+         UPDATE
+          zl_hotelgoodssku
+        SET
+          StockCount = StockCount + #{goodsCount},
+          SoldCount = SoldCount - #{goodsCount},
+          UpdateDate = #{currertTime}
+        WHERE HotelGoodsSkuID = #{hotelGoodsSkuID}
+    </update>
+
+    <select id="findSelectedGoodsProperty" resultType="com.zhiliao.hotel.controller.goods.vo.GoodsPropertyInfoVO">
+        SELECT
+          zhgs.HotelGoodsSkuID,
+          zhgs.StockCount,
+          zhgs.SoldCount,
+          zhgs.VirtualSoldCount,
+          zgs.OriginalPrice,
+          zgs.CurrentPrice,
+          zgs.PropertyID
+        FROM
+          zl_hotelgoodssku zhgs
+          LEFT JOIN zl_goodssku zgs
+            ON zhgs.SkuID = zgs.SkuID
+        WHERE zhgs.HotelGoodsSkuID = #{hotelGoodsSkuId}
+          AND zhgs.IsDefault = 1
+          AND zhgs.IsDelete = 0
+          AND zgs.IsDelete = 0
     </select>
 
 </mapper>

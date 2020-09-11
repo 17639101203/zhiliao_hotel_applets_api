@@ -40,11 +40,11 @@ public class DeleteOrderController {
 
         try {
             deleteOrderService.deleteOrder(orderid, orderServiceType);
+            return new ReturnString(0, "删除订单成功!");
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("取消失败");
+            return new ReturnString("删除订单失败!");
         }
-        return new ReturnString(0, "已取消");
     }
 
 }

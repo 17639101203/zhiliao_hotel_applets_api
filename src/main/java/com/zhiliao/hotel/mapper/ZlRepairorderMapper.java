@@ -2,6 +2,7 @@ package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.controller.Repair.vo.RepairOrderToPhpVO;
 import com.zhiliao.hotel.controller.Repair.vo.RepairOrderVO;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlRepairorderDTO;
 import com.zhiliao.hotel.model.ZlRepairorder;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -25,7 +26,7 @@ public interface ZlRepairorderMapper extends Mapper<ZlRepairorder> {
      * @param
      * @return
      */
-    RepairOrderVO queryRepairMsg(@Param("orderID") Long orderID);
+    ZlRepairorderDTO queryRepairMsg(@Param("orderID") Long orderID);
 
 
     /**
@@ -34,7 +35,7 @@ public interface ZlRepairorderMapper extends Mapper<ZlRepairorder> {
     void removeRepairOrder(@Param("orderID") Long orderID, @Param("updatedate") Integer updatedate);
 
     @Select("select count(*) from zl_repairorder where UserID = #{userId} and HotelID = #{hotelId} and IsDelete = 0 and IsUserDelete = 0")
-    int selectCountRepair(@Param("userId")Long userId, @Param("hotelId")Integer hotelId);
+    int selectCountRepair(@Param("userId") Long userId, @Param("hotelId") Integer hotelId);
 
     void userDeleteRepairOrder(@Param("orderID") Long orderID, @Param("updatedate") Integer updateDate);
 

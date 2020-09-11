@@ -12,8 +12,14 @@
         and IsDelete = '0'
         and HotelID = #{hotelId}
         and UserID = #{userId}
-        <if test="orderstatus != null">
-            and OrderStatus = #{orderstatus}
+        <if test='orderstatus!=null and orderstatus==-1'>
+            and OrderStatus = -1
+        </if>
+        <if test='orderstatus!=null and orderstatus==0'>
+            and (OrderStatus = 0 or OrderStatus = 2)
+        </if>
+        <if test='orderstatus!=null and orderstatus==1'>
+            and OrderStatus = 1
         </if>
         order by CreateDate DESC
     </select>
@@ -63,8 +69,18 @@
         AND IsDelete = '0'
         AND UserID = #{userId}
         and HotelID = #{hotelId}
-        <if test="invoiceStatus != null">
-            and InvoiceStatus = #{invoiceStatus}
+        <if test='invoicestatus!=null'>
+            <choose>
+                <when test='invoicestatus==-1'>
+                    and InvoiceStatus = -1
+                </when>
+                <when test='invoicestatus==0'>
+                    and (InvoiceStatus = 0 or InvoiceStatus = 1 or InvoiceStatus = 3)
+                </when>
+                <when test='invoicestatus==1'>
+                    and InvoiceStatus = 2
+                </when>
+            </choose>
         </if>
         order by CreateDate DESC
     </select>
@@ -77,11 +93,22 @@
         ComeFormID, IsDelete, OrderStatus,
         CreateDate, UpdateDate
         from zl_repairorder
-        where 1 = 1 and IsDelete = '0'
+        where 1 = 1 and IsDelete = 0
+        and IsUserDelete = 0
         and UserID = #{userId}
         and HotelID = #{hotelId}
-        <if test="orderstatus != null">
-            and OrderStatus = #{orderstatus}
+        <if test='orderstatus!=null'>
+            <choose>
+                <when test='orderstatus==-1'>
+                    and OrderStatus = -1
+                </when>
+                <when test='orderstatus==0'>
+                    and (OrderStatus = 0 or OrderStatus = 2)
+                </when>
+                <when test='orderstatus==1'>
+                    and OrderStatus = 1
+                </when>
+            </choose>
         </if>
         order by CreateDate DESC
     </select>
@@ -125,8 +152,18 @@
         where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
         and UserID = #{userId}
         and HotelID = #{hotelId}
-        <if test="orderstatus != null">
-            and OrderStatus = #{orderstatus}
+        <if test='orderstatus!=null'>
+            <choose>
+                <when test='orderstatus==-1'>
+                    and OrderStatus = -1
+                </when>
+                <when test='orderstatus==0'>
+                    and (OrderStatus = 0 or OrderStatus = 2)
+                </when>
+                <when test='orderstatus==1'>
+                    and OrderStatus = 1
+                </when>
+            </choose>
         </if>
         order by CreateDate DESC
     </select>
@@ -147,8 +184,18 @@
         where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
         and UserID = #{userId}
         and HotelID = #{hotelId}
-        <if test="orderstatus != null">
-            and OrderStatus = #{orderstatus}
+        <if test='orderstatus!=null'>
+            <choose>
+                <when test='orderstatus==-1'>
+                    and OrderStatus = -1
+                </when>
+                <when test='orderstatus==0'>
+                    and (OrderStatus = 0 or OrderStatus = 2)
+                </when>
+                <when test='orderstatus==1'>
+                    and OrderStatus = 1
+                </when>
+            </choose>
         </if>
         order by CreateDate DESC
     </select>
@@ -174,8 +221,18 @@
         where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
         and UserID = #{userId}
         and HotelID = #{hotelId}
-        <if test="orderstatus != null">
-            and OrderStatus = #{orderstatus}
+        <if test='orderstatus!=null'>
+            <choose>
+                <when test='orderstatus==-1'>
+                    and OrderStatus = -1
+                </when>
+                <when test='orderstatus==0'>
+                    and (OrderStatus = 0 or OrderStatus = 1 or OrderStatus = 3)
+                </when>
+                <when test='orderstatus==1'>
+                    and OrderStatus = 2
+                </when>
+            </choose>
         </if>
         order by CreateDate DESC
     </select>
@@ -196,8 +253,18 @@
         where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
         and UserID = #{userId}
         and HotelID = #{hotelId}
-        <if test="orderstatus != null">
-            and OrderStatus = #{orderstatus}
+        <if test='orderstatus!=null'>
+            <choose>
+                <when test='orderstatus==-1'>
+                    and OrderStatus = -1
+                </when>
+                <when test='orderstatus==0'>
+                    and (OrderStatus = 0 or OrderStatus = 2)
+                </when>
+                <when test='orderstatus==1'>
+                    and OrderStatus = 1
+                </when>
+            </choose>
         </if>
         order by CreateDate DESC
     </select>
@@ -218,8 +285,18 @@
         where 1 = 1 and IsDelete = 0 and IsUserDelete = 0
         and UserID = #{userId}
         and HotelID = #{hotelId}
-        <if test="orderstatus != null">
-            and OrderStatus = #{orderstatus}
+        <if test='orderstatus!=null'>
+            <choose>
+                <when test='orderstatus==-1'>
+                    and OrderStatus = -1
+                </when>
+                <when test='orderstatus==0'>
+                    and (OrderStatus = 0 or OrderStatus = 2)
+                </when>
+                <when test='orderstatus==1'>
+                    and OrderStatus = 1
+                </when>
+            </choose>
         </if>
         order by CreateDate DESC
     </select>

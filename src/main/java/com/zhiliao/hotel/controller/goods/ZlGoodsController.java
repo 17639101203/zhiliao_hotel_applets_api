@@ -4,7 +4,6 @@ import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
-import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.goods.vo.*;
 import com.zhiliao.hotel.service.ZlGoodsService;
 import com.zhiliao.hotel.utils.RedisCommonUtil;
@@ -17,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -102,32 +102,57 @@ public class ZlGoodsController {
         }
     }
 
-    @ApiOperation(value = "获取商品规格_谢辉益")
+    @ApiOperation(value = "获取商品规格_姬慧慧")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
             @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id")
     })
     @UserLoginToken
-    @GetMapping("findGoodsSkuList/{hotelId}/{goodsId}")
-    public ReturnString findGoodsSkuList(@PathVariable Integer hotelId, @PathVariable Integer goodsId) {
+    @GetMapping("findGoodsSkuInfo/{hotelId}/{goodsId}")
+    public ReturnString findGoodsSkuInfo(@PathVariable Integer hotelId, @PathVariable Integer goodsId) {
         try {
             logger.info("开始请求->参数->酒店id：" + hotelId + "|商品id：" + goodsId);
-            List<GoodsSkuListVo> goodsSkuList = zlGoodsService.findGoodsSkuList(hotelId, goodsId);
-            List<String> propertyNameList = new ArrayList<>();
-            for (GoodsSkuListVo goodsSkuListVo : goodsSkuList) {
-                propertyNameList.add(goodsSkuListVo.getPropertyName());
-                // 获取酒店商品sku锁定库存
-                Integer lockingStock = (Integer) redisCommonUtil.getCache(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + goodsSkuListVo.getHotelGoodsSkuId());
-                lockingStock = lockingStock == null ? 0 : lockingStock;
-                goodsSkuListVo.setStockCount(goodsSkuListVo.getStockCount() - lockingStock);
-            }
-            Map<String, Object> dataMap = new HashMap<>(2);
-            dataMap.put("propertyNameList", propertyNameList);
-            dataMap.put("goodsSkuList", goodsSkuList);
-            return new ReturnString(dataMap);
+
+            GoodsSkuListVo2 goodsSkuListVo = zlGoodsService.findGoodsSkuList(hotelId, goodsId);
+            return new ReturnString(goodsSkuListVo);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("获取商品规格出错!");
+            return new ReturnString(e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "获取规格商品信息_姬慧慧")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "hotelId", dataType = "String", required = true, value = "酒店id"),
+            @ApiImplicitParam(paramType = "path", name = "goodsId", dataType = "String", required = true, value = "商品id")
+    })
+    @UserLoginToken
+    @PostMapping("findGoodsSkuList/{hotelId}/{goodsId}")
+    public ReturnString findGoodsPropertyIdInfo(@PathVariable Integer hotelId, @PathVariable Integer goodsId,
+                                                @RequestBody List<Integer> goodsPropertyIdList) {
+        try {
+            logger.info("开始请求->参数->酒店id：" + hotelId + "|商品id：" + goodsId + "|用户选择商品的规格: " + goodsPropertyIdList);
+            GoodsPropertysVO goodsPropertysVO = zlGoodsService.findGoodsPropertyIdInfo(hotelId, goodsId, goodsPropertyIdList);
+            return new ReturnString(goodsPropertysVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "获取用户选中规格信息回显_姬慧慧")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "hotelGoodsSkuId", dataType = "int", required = true, value = "酒店商品自增id")
+    })
+    @UserLoginToken
+    @PostMapping("findSelectedGoodsProperty/{hotelGoodsSkuId}")
+    public ReturnString findSelectedGoodsProperty(@PathVariable Integer hotelGoodsSkuId) {
+        try {
+            GoodsPropertysVO goodsPropertysVO = zlGoodsService.findSelectedGoodsProperty(hotelGoodsSkuId);
+            return new ReturnString(goodsPropertysVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
         }
     }
 

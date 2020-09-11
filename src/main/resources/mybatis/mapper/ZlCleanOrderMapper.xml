@@ -160,13 +160,24 @@
     </insert>
 
     <!--  查询清扫订单详情-->
-    <select id="selectCleanDetails" resultType="java.util.HashMap">
+    <select id="selectCleanDetails" resultType="com.zhiliao.hotel.controller.myAppointment.dto.ZlCleanOrderDTO">
         SELECT
           HotelName,
           RoomNumber,
           BookDate,
           Remark,
           OrderStatus,
+          CASE
+            OrderStatus
+            WHEN -1
+            THEN '已取消'
+            WHEN 0
+            THEN '待清扫'
+            WHEN 1
+            THEN '已完成'
+            WHEN 2
+            THEN '已接单'
+          END StatusMessage,
           CreateDate,
           SerialNumber,
           UpdateDate
@@ -183,7 +194,9 @@
           zl_cleanorder
         SET
           OrderStatus = -1,
-          UpdateDate = #{updatedate}
+          UpdateDate = #{updatedate},
+          CancelUserType = 1,
+          CancelRemark = '用户取消'
         WHERE OrderID = #{orderID}
           AND IsDelete = 0
   </update>

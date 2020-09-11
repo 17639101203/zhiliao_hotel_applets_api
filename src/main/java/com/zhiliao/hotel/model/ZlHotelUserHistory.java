@@ -42,8 +42,5 @@ public class ZlHotelUserHistory implements Serializable {
     @ApiModelProperty(value = "添加日期")
     private Integer createdate;
 
-    @ApiModelProperty(value = "二维码ID")
-    private Integer qrcodeid;
-
 }
 

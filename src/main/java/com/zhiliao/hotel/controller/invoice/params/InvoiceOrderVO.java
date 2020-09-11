@@ -79,7 +79,7 @@ public class InvoiceOrderVO {
     /**
      * 开票状态 -1:已取消;0:未开票;1开票中;2已开票
      */
-    @ApiModelProperty("开票状态 -1:已取消;0:未开票;1开票中;2已开票")
+    @ApiModelProperty("开票状态 -1:已取消;0:未开票;1开票中;2已开票;3已接单")
     private Byte invoicestatus;
 
     /**

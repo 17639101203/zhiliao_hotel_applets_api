@@ -17,4 +17,8 @@ public interface ZlRentCarGoodsMapper extends Mapper<ZlRentCarGoods> {
     List<ZlRentCarGoods> carGoodsList(@Param("hotelid") Integer hotelid);
 
     ZlRentCarGoods rentCarDetail(@Param("goodsid") Integer goodsid);
+
+    void updateStockCountDecrease(@Param("goodsid") Integer goodsid);
+
+    void updateStockCountAdd(@Param("goodsid") Integer goodsid);
 }

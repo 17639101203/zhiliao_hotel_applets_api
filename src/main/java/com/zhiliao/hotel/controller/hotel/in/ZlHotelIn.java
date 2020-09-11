@@ -142,4 +142,9 @@ public class ZlHotelIn implements Serializable {
      */
     private HotelMoneyVO hotelMoneyVO;
 
+    /**
+     * 服务时间
+     */
+    private Byte serviceTime;
+
 }

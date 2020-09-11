@@ -1,9 +1,12 @@
 package com.zhiliao.hotel.mapper;
 
+import com.zhiliao.hotel.controller.coupon.vo.CouponReceivedVO;
+import com.zhiliao.hotel.controller.coupon.vo.ZlCouponAllVO;
+import com.zhiliao.hotel.controller.coupon.vo.ZlCouponInfoVO;
 import com.zhiliao.hotel.controller.myOrder.vo.CouponUserVO;
 import com.zhiliao.hotel.model.ZlCoupon;
-import tk.mybatis.mapper.common.Mapper;
 import org.apache.ibatis.annotations.Param;
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
@@ -15,14 +18,23 @@ import java.util.List;
  **/
 public interface ZlCouponMapper extends Mapper<ZlCoupon> {
 
-    CouponUserVO findByRecID(@Param("recID") Integer recID);
+    List<ZlCouponAllVO> couponUnclaimed();
 
-    /**
-     * 查询在
-     * @param date
-     * @return
-     */
-    List<ZlCoupon> findAll(@Param("date") Integer date);
+    Integer getReceiveCouponCount(@Param("couponruleid") Integer couponruleid);
 
-    void updateById(@Param("couponid") Integer couponid, @Param("date") Integer date);
+    Integer getReceiveCouponCount2(@Param("couponruleid") Integer couponruleid, @Param("userId") Long userId);
+
+    List<Long> getUserGroup(@Param("couponruleid") Integer couponruleid);
+
+    List<Long> getUserList(@Param("couponruleid") Integer couponruleid);
+
+    ZlCouponInfoVO getZlCouponInfo(@Param("couponId") Integer couponId, @Param("couponruleId") Integer couponruleId);
+
+    CouponUserVO selectCouponInfo(@Param("couponUserId") Long couponUserId);
+
+    List<CouponReceivedVO> getCouponReceivedAll(@Param("userId") Long userId);
+
+    Integer getCouponCount(@Param("userId") Long userId);
+
+    void updateCouponUser(@Param("couponUserId") Long couponUserId, @Param("useDate") Integer useDate);
 }

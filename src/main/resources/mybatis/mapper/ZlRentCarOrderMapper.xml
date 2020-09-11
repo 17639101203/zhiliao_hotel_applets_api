@@ -41,7 +41,7 @@
       from zl_rentcarorder
       where HotelID = #{hotelid} and CarNumber = #{carnamer}
     </select>-->
-    <select id="rentCarOrderDetailVO" resultType="com.zhiliao.hotel.controller.rentcar.vo.RentCarOrderVO">
+    <select id="getRentCarOrderDetail" resultType="com.zhiliao.hotel.controller.myAppointment.dto.ZlRentCarOrderDTO">
     SELECT
       zo.OrderID,
       zo.OrderSerialNo,
@@ -53,6 +53,19 @@
       zg.CoverImgUrl,
       zo.Tel,
       zo.OrderStatus,
+      CASE
+          OrderStatus
+          WHEN - 1
+          THEN '已取消'
+          WHEN 0
+          THEN '待处理'
+          WHEN 1
+          THEN '已租赁'
+          WHEN 2
+          THEN '处理完成'
+          WHEN 3
+          THEN '已接单'
+        END StatusMessage,
       zo.GoodsName,
       zo.CarNumber,
       zo.RentBeginDate,
@@ -63,7 +76,8 @@
       zo.Remark,
       zo.CanCancelOrderMinute,
       zo.CreateDate,
-      zo.UpdateDate
+      zo.UpdateDate,
+      zg.CoverImgUrl
     FROM
       zl_rentcarorder zo
       LEFT JOIN zl_rentcargoods zg
@@ -82,6 +96,7 @@
     OrderStatus,
     GoodsName,
     CarNumber,
+    GoodsID,
     RentBeginDate,
     RentEndDate,
     GiveBackDate,
@@ -95,8 +110,16 @@
     where OrderID = #{orderid} and IsDelete = 0 and IsUserDelete = 0
   </select>
 
-    <update id="updateById" parameterType="com.zhiliao.hotel.model.ZlRentCarOrder">
-    update zl_rentcarorder set OrderStatus = #{orderstatus},UpdateDate = #{updatedate} where OrderID = #{orderid}
+    <update id="cancelRentCarOrder">
+        UPDATE
+          zl_rentcarorder
+        SET
+          OrderStatus = -1,
+          UpdateDate = #{updatedate},
+          CancelUserType = 1,
+          CancelRemark = '用户取消'
+        WHERE OrderID = #{orderID}
+          AND IsDelete = 0
   </update>
 
     <update id="dlRentCarOrder" parameterType="com.zhiliao.hotel.model.ZlRentCarOrder">

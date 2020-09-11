@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "zl_goodssku")
 public class ZlGoodssku implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,6 +58,31 @@ public class ZlGoodssku implements Serializable {
      * 销量
      */
     private Integer soldcount;
+
+    /**
+     * 预警库存
+     */
+    private Integer alertstock;
+
+    /**
+     * 安全库存
+     */
+    private Integer safestock;
+
+    /**
+     * 操作人员
+     */
+    private String operatorusername;
+
+    /**
+     * 操作人员IP
+     */
+    private String operatorip;
+
+    /**
+     * 商品属性详细
+     */
+    private String skuinfo;
 
     /**
      * 删除状态:0正常;1删除;

@@ -31,4 +31,13 @@
         WHERE HotelID = #{hotelId}
     </select>
 
+    <select id="getServiceTime" resultType="byte">
+        SELECT
+          ServiceTime
+        FROM
+          zl_hoteldetail
+        WHERE HotelID = 4
+          AND IsDelete = 0
+    </select>
+
 </mapper>

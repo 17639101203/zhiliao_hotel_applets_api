@@ -26,6 +26,11 @@ public class ZlRepairorder implements Serializable {
     private Long userid;
 
     /**
+     * zl_ordertype表ID
+     */
+    private Byte moldtype;
+
+    /**
      * 用户名
      */
     private String username;
@@ -81,9 +86,19 @@ public class ZlRepairorder implements Serializable {
     private Integer comeformid;
 
     /**
-     * -1:已取消;0待维修;1已完成
+     * -1:已取消;0待维修;1已完成;2已接单
      */
     private Byte orderstatus;
+
+    /**
+     * 取消用户类型:1-用户,2-平台
+     */
+    private Byte cancelusertype;
+
+    /**
+     * 取消原因
+     */
+    private String cancelremark;
 
     /**
      * 操作人员

@@ -5,6 +5,9 @@ import lombok.Data;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -16,11 +19,14 @@ import java.math.BigDecimal;
  */
 @Data
 @ApiModel("酒店设施")
+@Table(name="zl_hotelfacility")
 public class ZlHotelFacility implements Serializable {
     /**
      * 设施ID
      */
     @ApiModelProperty(value = "设施ID")
+    @Id
+    @GeneratedValue(generator="JDBC")
     private Integer facilityid;
 
     /**
@@ -52,6 +58,12 @@ public class ZlHotelFacility implements Serializable {
      */
     @ApiModelProperty(value = "使用人数")
     private Integer allowpersoncount;
+
+    /**
+     * 详情
+     */
+    @ApiModelProperty(value = "使用人数")
+    private String content;
 
     /**
      * 设施图片
@@ -147,9 +159,28 @@ public class ZlHotelFacility implements Serializable {
     private Integer updatedate;
 
     /**
-     * 详情
+     * 旧ID
      */
-    @ApiModelProperty(value = "详情")
-    private String content;
+    private Integer oldid;
+
+    /**
+     * 添加人
+     */
+    private String adminname;
+
+    /**
+     * 操作人
+     */
+    private String operatorname;
+
+    /**
+     * 操作IP
+     */
+    private String operatorip;
+
+    /**
+     * 操作时间
+     */
+    private Integer operatortime;
 
 }

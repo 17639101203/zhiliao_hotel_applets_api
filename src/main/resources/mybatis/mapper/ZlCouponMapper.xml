@@ -2,33 +2,160 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlCouponMapper">
 
-    <select id="findByRecID" resultType="com.zhiliao.hotel.controller.myOrder.vo.CouponUserVO">
+    <select id="couponUnclaimed" resultType="com.zhiliao.hotel.controller.coupon.vo.ZlCouponAllVO">
         SELECT
-          zcu.CouponID,
-          zcu.UserID,
-          zc.DiscountMoney
+          zc.ID,
+          zcr.ID AS CouponRuleID,
+          zcr.EffectType,
+          zcr.StartTime,
+          zcr.EndTime,
+          zcr.Days,
+          zcr.PutType,
+          zcr.PutNum,
+          zcr.GainStartTime,
+          zcr.GainEndTime,
+          zcr.GainNum,
+          zcr.SuitUserGroup
+        FROM
+          zl_coupon zc
+          LEFT JOIN zl_couponrule zcr
+            ON zc.ID = zcr.CouponID
+        WHERE zc.Status = 1
+          AND zc.IsDelete = 0
+          AND zcr.Status = 1
+          AND zcr.IsDelete = 0
+    </select>
+
+    <select id="getReceiveCouponCount" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        zl_couponuser
+        WHERE CouponRuleID = #{couponruleid}
+    </select>
+
+    <select id="getReceiveCouponCount2" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        zl_couponuser
+        WHERE CouponRuleID = #{couponruleid}
+        AND UserID = #{userId}
+    </select>
+
+    <select id="getUserGroup" resultType="long">
+        SELECT
+          zgu.UserID
+        FROM
+          zl_couponusergroup zcug
+          LEFT JOIN zl_groupuser zgu
+            ON zcug.UserDrawGroupID = zgu.UserGroupID
+        WHERE zcug.CouponRuleID = #{couponruleid}
+          AND zgu.IsDelete = 0
+        ORDER BY zgu.UserID
+    </select>
+
+    <select id="getUserList" resultType="long">
+        SELECT
+          UserID
+        FROM
+          zl_couponsigleuser
+        WHERE CouponRuleID = #{couponruleid}
+        ORDER BY UserID
+    </select>
+
+    <select id="getZlCouponInfo" resultType="com.zhiliao.hotel.controller.coupon.vo.ZlCouponInfoVO">
+      SELECT
+          zcr.ID AS CouponRuleID,
+          zcr.CouponID,
+          zc.Type,
+          zcr.EffectType,
+          zcr.StartTime,
+          zcr.EndTime,
+          zcr.Days
+        FROM
+          zl_coupon zc
+          LEFT JOIN zl_couponrule zcr
+            ON zc.ID = zcr.CouponID
+        WHERE zcr.ID = #{couponruleId}
+          AND zc.ID = #{couponId}
+          AND zc.Status = 1
+          AND zc.IsDelete = 0
+          AND zcr.Status = 1
+          AND zcr.IsDelete = 0
+        ORDER BY zcr.CouponID
+    </select>
+
+    <select id="selectCouponInfo" resultType="com.zhiliao.hotel.controller.myOrder.vo.CouponUserVO">
+        SELECT
+          zc.ID AS CouponID,
+          TYPE,
+          Price,
+          UseMinPrice,
+          Discount,
+          PriceReplace
         FROM
           zl_couponuser zcu
           LEFT JOIN zl_coupon zc
-            ON zcu.CouponID = zc.CouponID
-        WHERE zcu.RecID = #{recID}
-        LIMIT 1
-   </select>
-
-    <select id="findAll" resultType="com.zhiliao.hotel.model.ZlCoupon">
-        SELECT
-        zc.*
-        FROM
-        zl_coupon zc
-        LEFT JOIN zl_couponuser zcu ON zc.CouponID = zcu.CouponID
-        WHERE
-        UserID IS NULL
-        AND zc.CouponStatus = 1
-        AND #{date} &gt; zc.FetchBeginDate
-        AND #{date} &lt; zc.FetchEndDate
+            ON zcu.CouponID = zc.ID
+        WHERE zc.`Status` = 1
+          AND zc.`IsDelete` = 0
+          AND zcu.`Status` = 0
+          AND zcu.`IsDelete` = 0
+          AND zcu.`ID` = #{couponUserId}
     </select>
 
-    <update id="updateById">
-        update zl_coupon set CouponCount = CouponCount - 1,UpdateDate = #{date} where CouponID = #{couponid}
+    <select id="getCouponReceivedAll" resultType="com.zhiliao.hotel.controller.coupon.vo.CouponReceivedVO">
+        SELECT
+          zcu.`ID` AS CouponUserId,
+          zc.`Title`,
+          zcr.`Title` as RuleTitle,
+          zc.`Type`,
+          zc.`Price`,
+          zc.`UseMinPrice`,
+          zc.`Discount`,
+          zc.`PriceReplace`,
+          zcu.`Status`,
+          zcu.`EndTime`,
+          zcr.`SuitHotel`,
+          zcr.`SuitGoodsCategray`,
+          zcu.`CouponRuleID`,
+          zc.`ID` AS CouponID
+        FROM
+          zl_couponuser zcu
+          LEFT JOIN zl_coupon zc
+            ON zcu.`CouponID` = zc.`ID`
+          LEFT JOIN zl_couponrule zcr
+            ON zcu.`CouponRuleID` = zcr.`ID`
+        WHERE zcu.Status != - 2
+          AND zcu.`IsDelete` = 0
+          AND zc.`Status` = 1
+          AND zc.`IsDelete` = 0
+          AND zcr.`IsDelete` = 0
+          AND zcr.`Status` = 1
+          AND zcu.`UserID` = #{userId}
+        ORDER BY zcu.`CreateDate` DESC
+    </select>
+
+    <select id="getCouponCount" resultType="int">
+      SELECT
+          COUNT(ID)
+        FROM
+          zl_couponuser
+        WHERE UserID = #{userId}
+          AND STATUS = 0
+          AND IsDelete = 0
+        ORDER BY CreateDate DESC
+    </select>
+
+    <update id="updateCouponUser">
+        UPDATE
+          zl_couponuser
+        SET
+          UseTime = #{useDate},
+          STATUS = 1,
+          UpdateDate = #{useDate}
+        WHERE ID = #{couponUserId}
     </update>
+
 </mapper>

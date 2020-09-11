@@ -36,4 +36,16 @@
         <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
     </resultMap>
 
+    <update id="updateWxuser" parameterType="com.zhiliao.hotel.model.ZlWxuser">
+        UPDATE
+          zl_wxuser
+        SET
+          NickName = #{wxuser.nickname},
+          HeadImgUrl = #{wxuser.headimgurl},
+          Sex = #{wxuser.sex},
+          ComeFormID = 1,
+          UpdateDate = #{wxuser.updatedate}
+        WHERE UserID =  #{wxuser.userid}
+    </update>
+
 </mapper>

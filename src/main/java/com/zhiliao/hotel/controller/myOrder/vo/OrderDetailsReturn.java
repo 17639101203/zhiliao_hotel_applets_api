@@ -68,12 +68,12 @@ public class OrderDetailsReturn {
     private Byte paystatus;
 
     /**
-     * 订单状态:-2报损;-1:已取消;0待确认;1已确认/已下单;2 已发货；3已签收/已完成;4最终完成(不能被操作)
+     * 订单状态:-2报损;-1:已取消;0待确认;1已确认/已下单;2 已发货；3已签收/已完成;4最终完成(不能被操作),5已接单,100已结算
      */
     private Byte orderstatus;
 
     /**
-     * 退款状态:-2退款被驳回;-1用户取消退款;1审核中;2退款中;3已退款
+     * 退款状态:-12退款关闭(不可再申述);-2退款被驳回;-1取消退款;0正常;1审核中;2审核通过;3退款中(退款发起);4已退款
      */
     private Byte refundstatus;
 
@@ -108,10 +108,86 @@ public class OrderDetailsReturn {
     private Integer createdate;
 
     /**
-     * 支付/取消时间
+     * 更新时间
      */
     private Integer updatedate;
 
+    /**
+     * 支付时间
+     */
+    private Integer paydate;
+
+    /**
+     * 发货时间
+     */
+    private Integer senddate;
+
+    /**
+     * 接单时间
+     */
+    private Integer receivedate;
+
+    /**
+     * 取消时间
+     */
+    private Integer canceldate;
+
+    /**
+     * 完成时间(已签收/已完成)
+     */
+    private Integer completedate;
+
+    /**
+     * 退款完成时间
+     */
+    private Integer refundfinishdate;
+
+
     private List<ZlOrderDetail> zlOrderDetailList;
+
+    /**
+     * 状态展示码
+     */
+    private Integer statusShowCount;
+
+    /**
+     * 状态展示信息
+     */
+    private String statusShowInfo;
+
+    /**
+     * 最新发起的退款时间
+     */
+    private Integer refunddate;
+
+    /**
+     * 用户申请退款备注
+     */
+    private String userremark;
+
+    /**
+     * 退款类型:0无;1用户退款;2酒店退款
+     */
+    private Byte refundusertype;
+
+    /**
+     * 退款金额
+     */
+    private BigDecimal refundmoney;
+
+    /**
+     * 是否使用优惠券
+     */
+    private Boolean isUseCoupon;
+
+    /**
+     * 退款金额
+     */
+    private BigDecimal couponCash;
+
+    /**
+     * 是否寄件
+     */
+    private Boolean ismail;
 
 }

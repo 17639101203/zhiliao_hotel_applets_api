@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author xiegege
@@ -14,23 +16,11 @@ import java.math.BigDecimal;
 @Data
 public class GoodsSkuListVo {
 
-    @ApiModelProperty(value = "酒店商品skuId")
-    private Integer hotelGoodsSkuId;
+    @ApiModelProperty(value = "酒店商品Id")
+    private Integer goodsId;
 
-    @ApiModelProperty(value = "规格名称")
-    private String propertyName;
-
-    @ApiModelProperty(value = "规格图片")
-    private String imgUrl;
-
-    @ApiModelProperty(value = "原价")
-    private BigDecimal originalPrice;
-
-    @ApiModelProperty(value = "现价")
-    private BigDecimal currentPrice;
-
-    @ApiModelProperty(value = "库存")
-    private Integer stockCount;
+    @ApiModelProperty(value = "规格分类Id")
+    private String propertyId;
 
     @ApiModelProperty(value = "所属模块: 1便利店;2餐饮服务;3情趣用品;4土特产")
     private Byte belongModule;
@@ -40,5 +30,11 @@ public class GoodsSkuListVo {
 
     @ApiModelProperty(value = "商品名称")
     private String goodsName;
+
+//    @ApiModelProperty(value = "商品规格列表")
+//    private Map<String, List<GoodsSkuVO>> propertyMap;
+
+    @ApiModelProperty(value = "商品规格列表")
+    private List<List<GoodsSkuVO>> GoodsSkuVOLists;
 
 }

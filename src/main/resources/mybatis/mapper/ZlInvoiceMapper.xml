@@ -136,12 +136,16 @@
 
   <!--  根据用户ID查询发票抬头-->
   <select id="queryInvoiceByUserID" resultType="java.util.HashMap">
-        select
-            InvoiceID,InvoiceType,MainBodyType,Title
-        from
-            zl_invoice
-        where
-            UserID=#{userid,jdbcType=BIGINT} and IsDelete='0'
+        SELECT
+          InvoiceID,
+          InvoiceType,
+          MainBodyType,
+          Title
+        FROM
+          zl_invoice
+        WHERE UserID = #{userid}
+          AND IsDelete = '0'
+        ORDER BY CreateDate DESC
     </select>
 
 

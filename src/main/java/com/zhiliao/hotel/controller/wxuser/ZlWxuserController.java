@@ -7,6 +7,7 @@ import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.controller.wxuser.params.WxuserLoginParam;
 import com.zhiliao.hotel.model.ZlWxuser;
+import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.ZlWxuserService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.RedisCommonUtil;
@@ -15,6 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
@@ -107,6 +109,28 @@ public class ZlWxuserController {
                 wxuser.setCreatedate(DateUtils.javaToPhpNowDateTime());
                 wxuser.setUpdatedate(DateUtils.javaToPhpNowDateTime());
                 zlWxuserService.addWxuser(wxuser);
+                ZlWxuserdetail zlWxuserdetail = new ZlWxuserdetail();
+                zlWxuserdetail.setUserid(wxuser.getUserid());
+                zlWxuserdetail.setRealname(wxuser.getNickname());
+                zlWxuserService.addWxuserdetail(zlWxuserdetail);
+            } else {
+                // 用户存在，更新用户信息
+                JSONObject res1 = getUserInfo(wxuserLoginParam.getEncryptedData(), String.valueOf(res.get("session_key")), wxuserLoginParam.getIv());
+                if (res1 == null) {
+                    return new ReturnString("解析失败! res1 session_key");
+                }
+                wxuser.setNickname(res1.getString("nickName"));
+                wxuser.setHeadimgurl(res1.getString("avatarUrl"));
+                wxuser.setSex(res1.getByte("gender"));
+                wxuser.setComeformid(1);// 来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
+                wxuser.setUpdatedate(DateUtils.javaToPhpNowDateTime());
+                zlWxuserService.updateWxuser(wxuser);
+                if (!wxuser.getIsinfocompleted()) {
+                    ZlWxuserdetail zlWxuserdetail = new ZlWxuserdetail();
+                    zlWxuserdetail.setUserid(wxuser.getUserid());
+                    zlWxuserdetail.setRealname(wxuser.getNickname());
+                    zlWxuserService.updateWxuserdetail(zlWxuserdetail);
+                }
             }
             return returnUserInfoData(wxuser);
         } catch (Exception e) {

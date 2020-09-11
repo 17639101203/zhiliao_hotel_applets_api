@@ -23,11 +23,20 @@
 
         select
         <include refid="selectColumn"/>
-        from zl_hotelroom zm where (RoomID =#{roomId} and zm.IsDelete=0
-        and zm.HotelID =(select zh.HotelID FROM zl_hotel zh where zh.HotelID=#{hotelId})) and RoomTypeFlag=1
+        from zl_hotelroom zm where RoomID =#{roomId} and zm.IsDelete=0
+        and zm.HotelID =#{hotelId}
         order by zm.CreateDate desc
 
     </select>
+
+
+    <select id="getRoomById" resultType="com.zhiliao.hotel.model.ZlHotelroom">
+        select
+        <include refid="selectColumn"/>
+        from zl_hotelroom zm where RoomID =#{roomId}
+    </select>
+
+
 
     <select id="getByHotelIDAndRoomNumber" resultType="com.zhiliao.hotel.model.ZlHotelroom">
 

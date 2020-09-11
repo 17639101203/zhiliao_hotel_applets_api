@@ -1,10 +1,12 @@
 package com.zhiliao.hotel.controller.myOrder.vo;
 
 import io.swagger.annotations.ApiModel;
+import lombok.Data;
 
 /**
  * 酒店基本信息VO
  */
+@Data
 @ApiModel(value = "酒店基本信息")
 public class HotelBasicVO {
 
@@ -28,35 +30,4 @@ public class HotelBasicVO {
      */
     private String roomNumber;
 
-    public Integer getHotelID() {
-        return hotelID;
-    }
-
-    public void setHotelID(Integer hotelID) {
-        this.hotelID = hotelID;
-    }
-
-    public String getHotelName() {
-        return hotelName;
-    }
-
-    public void setHotelName(String hotelName) {
-        this.hotelName = hotelName;
-    }
-
-    public Integer getRoomID() {
-        return roomID;
-    }
-
-    public void setRoomID(Integer roomID) {
-        this.roomID = roomID;
-    }
-
-    public String getRoomNumber() {
-        return roomNumber;
-    }
-
-    public void setRoomNumber(String roomNumber) {
-        this.roomNumber = roomNumber;
-    }
 }

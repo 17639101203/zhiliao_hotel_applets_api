@@ -1,8 +1,11 @@
 package com.zhiliao.hotel.service;
 
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlServiceorderDTO2;
 import com.zhiliao.hotel.controller.serviceorder.params.ServiceorderCommitParams;
 import com.zhiliao.hotel.controller.serviceorder.vo.ServiceorderCommitVo;
 import com.zhiliao.hotel.controller.serviceorder.vo.ServiceorderInfoVo;
+
+import java.util.Map;
 
 public interface ZlServiceorderService {
 
@@ -12,7 +15,7 @@ public interface ZlServiceorderService {
      * @param scp
      * @return
      */
-    ServiceorderCommitVo serviceorderSubmit(String token, ServiceorderCommitParams scp) throws RuntimeException;
+    Map<String, Object> serviceorderSubmit(String token, ServiceorderCommitParams scp) throws RuntimeException;
 
     /**
      * 获取客房服务订单详情

@@ -17,12 +17,7 @@ import java.util.Map;
  */
 public interface ZlCommentService {
 
-    /**
-     * 添加点赞吐槽
-     */
-    Integer addComment(ZlComment zlComment);
-
-    Map<String, Object> addComment(Long userid, CommentParm commentParm, MultipartFile multipartFile);
+    Map<String, Object> addComment(Long userid, CommentParm commentParm);
 
     /**
      * 获取点赞吐槽标签

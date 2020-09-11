@@ -1,6 +1,7 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlRentCarOrderDTO;
 import com.zhiliao.hotel.controller.rentcar.vo.RentCarOrderVO;
 import com.zhiliao.hotel.model.ZlRentCarGoods;
 import com.zhiliao.hotel.model.ZlRentCarOrder;
@@ -20,7 +21,7 @@ public interface ZlRentCarGoodsService {
 
     Map<String, Object> addRentCar(Long userId, ZlRentCarOrder rentCarOrder, Integer goodsid);
 
-    RentCarOrderVO rentCarOrderDetail(Long orderid);
+    ZlRentCarOrderDTO rentCarOrderDetail(Long orderid);
 
     void cancelRentCarOrder(Long orderid);
 

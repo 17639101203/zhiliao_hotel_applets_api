@@ -1,20 +1,24 @@
 package com.zhiliao.hotel.model;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
- * 
- *
  * @author gaoxiang
  * @date 2020-05-25
  */
 @Data
+@Table(name = "zl_wxuserdetail")
 public class ZlWxuserdetail implements Serializable {
     /**
      * 自增ID
      */
+    @Id
+    @GeneratedValue(generator = "JDBC")
     private Long userdetailid;
 
     /**

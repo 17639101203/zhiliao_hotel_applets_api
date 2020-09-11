@@ -1,22 +1,16 @@
 package com.zhiliao.hotel.mapper;
 
-import com.zhiliao.hotel.controller.coupon.result.ZlCouponUserResult;
-import com.zhiliao.hotel.model.ZlCouponUser;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
-import java.util.List;
+/**
+ * @program: zhiliao_hotel_applets_api.git
+ * @description
+ * @author: 姬慧慧
+ * @create: 2020-08-07 11:13
+ **/
+public interface ZlCouponuserMapper extends Mapper<ZlCouponuser> {
+    void updateCouponUserStatus(@Param("couponUserId") String couponUserId);
 
-public interface ZlCouponUserMapper extends Mapper<ZlCouponUser> {
-    List<ZlCouponUserResult> usedCouponUser(@Param("userId") Long userId);
-
-    //Integer count(@Param("userId") Long userId, @Param("newDate") Integer newDate);
-
-    List<ZlCouponUserResult> effectiveCouponUser(@Param("userId") Long userId, @Param("date") Integer date);
-
-    List<ZlCouponUserResult> beOverdue(@Param("userId") Long userId,@Param("date") Integer date);
-
-    //List<ZlCouponUser> list(Long userId);
-
-    void updateCouponUser(@Param("recID") Integer recID, @Param("useDate") Integer useDate, @Param("out_trade_no") String out_trade_no);
+    void updateStatus(@Param("couponuserid") Long couponuserid);
 }

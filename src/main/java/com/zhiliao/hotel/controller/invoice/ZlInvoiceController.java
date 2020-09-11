@@ -11,6 +11,7 @@ import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderParam;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceParam;
 import com.zhiliao.hotel.controller.invoice.vo.InvoiceOrderToPhpVO;
+import com.zhiliao.hotel.controller.myAppointment.dto.InvoiceOrderDTO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.mapper.ZlHotelMapper;
@@ -19,6 +20,7 @@ import com.zhiliao.hotel.model.ZlHotel;
 import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.model.ZlInvoiceOrder;
 import com.zhiliao.hotel.model.ZlWxuser;
+import com.zhiliao.hotel.service.OrderLogService;
 import com.zhiliao.hotel.service.ZlInvoiceService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
@@ -62,6 +64,10 @@ public class ZlInvoiceController {
 
     @Autowired
     private ZlHotelMapper zlHotelMapper;
+
+
+    @Autowired
+    private OrderLogService orderLogService;
 
     // 允许最大的pageSize
     private final static int MAX_PAGE_SIZE = 20;
@@ -124,12 +130,13 @@ public class ZlInvoiceController {
 //        Long userid = System.currentTimeMillis();
         // 生成订单ID
         String invoiceOrderNumber = OrderIDUtil.createOrderID("FP");
-        map.put("invoiceordernumber", invoiceOrderNumber);
+        map.put("serialnumber", invoiceOrderNumber);
         Integer nowTime = DateUtils.javaToPhpNowDateTime();
         zlInvoiceOrder.setInvoiceordernumber(invoiceOrderNumber);    // 订单ID
         zlInvoiceOrder.setInvoiceid(invoiceOrderParam.getInvoiceid());   // 发票ID
         zlInvoiceOrder.setHotelid(invoiceOrderParam.getHotelid());        //酒店ID
         zlInvoiceOrder.setRoomnumber(invoiceOrderParam.getRoomnumber());  //房间号
+        zlInvoiceOrder.setComeforid(1);
         zlInvoiceOrder.setUserid(userid);        //  UserID
         zlInvoiceOrder.setInvoicetype(invoiceOrderParam.getInvoicetype());    //  发票类型:1:增值税普通发票;2增值税专用发票
         zlInvoiceOrder.setMainbodytype(invoiceOrderParam.getMainbodytype());  //发票类型:(主体)1: 个人;2单位
@@ -158,7 +165,7 @@ public class ZlInvoiceController {
             stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_INVOICE_ORDER, orderStr);
             logger.info("推送开票订单到redis通知php后台人员完成,订单信息:" + invoiceOrderToPhpVO);
 
-            map.put("invoiceorderid", zlInvoiceOrder.getInvoiceorderid());
+            map.put("orderid", zlInvoiceOrder.getInvoiceorderid());
             return new ReturnString<>(0, "增值税普通发票开票成功", map);
         } else if (invoiceOrderParam.getInvoicetype() == 2) {  //企业开票
             zlInvoiceOrder.setIdentifier(invoiceOrderParam.getIdentifier());  //单位的纳税人识别号:15/18或20位
@@ -181,7 +188,7 @@ public class ZlInvoiceController {
             stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_INVOICE_ORDER, orderStr);
             logger.info("推送开票订单到redis通知php后台人员完成,订单信息:" + invoiceOrderToPhpVO);
 
-            map.put("invoiceorderid", zlInvoiceOrder.getInvoiceorderid());
+            map.put("orderid", zlInvoiceOrder.getInvoiceorderid());
             return new ReturnString<>(0, "增值税专用发票开票成功", map);
         }
         return new ReturnString<>(-1, "开票类型错误，请重新再试!");
@@ -244,8 +251,8 @@ public class ZlInvoiceController {
         }
 
         try {
-            InvoiceOrderVO vo = zlInvoiceService.findInvoiceOrderdetail(invoiceorderid);
-            return new ReturnString(vo);
+            InvoiceOrderDTO invoiceOrderDTO = zlInvoiceService.findInvoiceOrderdetail(invoiceorderid);
+            return new ReturnString(invoiceOrderDTO);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("查询发票订单详情失败!");
@@ -263,13 +270,12 @@ public class ZlInvoiceController {
         if (invoiceorderid == null || "".equals(invoiceorderid)) {
             return new ReturnString<>(-1, "订单号为空，请重新再试");
         }
-        Integer nowTime = DateUtils.javaToPhpNowDateTime();
         try {
-            zlInvoiceService.cancelInvoiceOrder(invoiceorderid, nowTime);
+            zlInvoiceService.cancelInvoiceOrder(invoiceorderid);
             return new ReturnString<>(0, "预约已取消");
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ReturnString<>("取消预约失败!");
+            return new ReturnString<>(e.getMessage());
         }
     }
 

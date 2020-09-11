@@ -1,10 +1,11 @@
 package com.zhiliao.hotel.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+import javax.persistence.Table;
+
+@Data
+@Table(name = "zl_hotelroomqrcode")
 public class ZlHotelRoomQrcode {
 
     /**
@@ -16,6 +17,11 @@ public class ZlHotelRoomQrcode {
      * 二维码链接地址
      */
     private String QrCodeUrl;
+
+    /**
+     * 二维码链接地址
+     */
+    private String BackQrCodeUrl;
 
     /**
      *酒店ID
@@ -61,5 +67,25 @@ public class ZlHotelRoomQrcode {
      * 修改时间
      */
     private long UpdateDate;
+
+    /**
+     * 酒店台卡模板ID
+     */
+    private long qrcoderecid;
+
+    /**
+     * 批次ID
+     */
+    private Integer batchid;
+
+    /**
+     * 生成类型1同步生成，2预生成
+     */
+    private Byte createtype;
+
+    /**
+     * 绑定日期
+     */
+    private long binddate;
 
 }

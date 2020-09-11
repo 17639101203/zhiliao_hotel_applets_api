@@ -23,50 +23,68 @@
            BelongModule,
            DeliveryDate,
            CreateDate,
-           UpdateDate
-        FROM zl_order WHERE IsDelete=0
+           UpdateDate,
+           PayDate,
+           SendDate,
+           ReceiveDate,
+           CancelDate,
+           CompleteDate,
+           RefundFinishDate,
+           RefundDate,
+           RefundUserType
+        FROM zl_order zo WHERE IsDelete=0
         AND UserID=#{userid}
         AND OrderSerialNo=#{orderserialno}
         AND BelongModule=#{belongmodule}
   </select>
 
-    <select id="findAllOrder"
-            resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderList"
-            parameterType="com.zhiliao.hotel.controller.myOrder.vo.OrderInfoVO">
+    <!--<select id="findAllOrder" resultType="com.zhiliao.hotel.model.ZlOrder">-->
+    <!--SELECT-->
+    <!--*-->
+    <!--FROM-->
+    <!--zl_order-->
+    <!--WHERE HotelID = #{orderInfoDTO.hotelId}-->
+    <!--AND UserID = #{orderInfoDTO.userId}-->
+    <!--AND IsDelete = 0-->
+    <!--AND IsUserDelete = 0-->
+    <!--ORDER BY UpdateDate DESC-->
 
+    <!--</select>-->
+    <select id="findAllOrder" resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderVO">
         SELECT
         *
         FROM
         zl_order
-        WHERE UserID = #{userId}
+        WHERE HotelID = #{orderInfoDTO.hotelId}
+        AND UserID = #{orderInfoDTO.userId}
         AND IsDelete = 0
         AND IsUserDelete = 0
-
-        <if test="hotelid != null">
-            AND HotelID = #{hotelid}
+        <if test="orderInfoDTO.belongmodule != null">
+            and BelongModule = #{orderInfoDTO.belongmodule}
         </if>
-
-        <if test="paytype != null">
-            AND PayType = #{paytype}
+        <if test="orderInfoDTO.orderstatus == 0">
+            and ((PayStatus = 1 and OrderStatus = 0)
+            or (OrderStatus = -1)
+            or (PayStatus = 2 and OrderStatus = 1 and RefundStatus = 0)
+            or (PayStatus = 2 and OrderStatus = 2 and RefundStatus = 0)
+            or (PayStatus = 2 and OrderStatus = 5 and RefundStatus = 0)
+            or (PayStatus = 2 and (OrderStatus = 1 or OrderStatus = 2 or OrderStatus =3) and (RefundStatus = 1 or
+            RefundStatus = 2 or RefundStatus = 3))
+            or (PayStatus = 2 and (OrderStatus = 1 or OrderStatus = 2 or OrderStatus =3) and RefundStatus = -12)
+            or (PayStatus = 2 and (OrderStatus = 1 or OrderStatus = 2 or OrderStatus =3) and RefundStatus = -2)
+            or (PayStatus = 2 and (OrderStatus = 1 or OrderStatus = 2 or OrderStatus =3) and RefundStatus = -1)
+            or (PayStatus = 2 and (OrderStatus = 1 or OrderStatus = 2 or OrderStatus =3) and RefundStatus = 4)
+            or (PayStatus = 2 and OrderStatus = 3 and RefundStatus = 0)
+            or (OrderStatus = 4 or OrderStatus = 100))
         </if>
-
-        <if test="paystatus != null">
-            AND PayStatus = #{paystatus}
+        <if test="orderInfoDTO.orderstatus == 1">
+            and (PayStatus = 1 and OrderStatus = 0)
         </if>
-
-        <if test="orderstatus != null">
-            AND OrderStatus = #{orderstatus}
+        <if test="orderInfoDTO.orderstatus == 2">
+            and ((PayStatus = 2 and OrderStatus = 2 and RefundStatus = 0)
+            or (PayStatus = 2 and OrderStatus = 5 and RefundStatus = 0))
         </if>
-
-        <if test="refundstatus != null">
-            AND RefundStatus = #{refundstatus}
-        </if>
-
-        <if test="belongmodule != null">
-            AND BelongModule = #{belongmodule}
-        </if>
-
-        ORDER BY CreateDate DESC
+        ORDER BY UpdateDate DESC
 
     </select>
 
@@ -98,8 +116,20 @@
           zl_order
         SET
           PayStatus = 2,
-          OrderStatus = 1
+          OrderStatus = 1,
+          PayDate = #{payDate}
         WHERE OrderSerialNo = #{out_trade_no}
+    </update>
+
+    <update id="updateAllOrder">
+        UPDATE
+          zl_order
+        SET
+          PayStatus = 2,
+          OrderStatus = 1,
+          PayDate = #{payDate},
+          IsParentPay = 1
+        WHERE ParentOrderSerialNo = #{out_trade_no}
     </update>
 
     <select id="getByOrderSerialNo"
@@ -118,9 +148,9 @@
           zl_order
         SET
           UpdateDate = #{updateDate},
+          CancelDate = #{updateDate},
           OrderStatus = -1
         WHERE OrderSerialNo = #{out_trade_no}
-          AND BelongModule = #{belongModule}
     </update>
 
     <update id="autoUpdateOrderUpdateDate">
@@ -128,8 +158,9 @@
           zl_order
         SET
           UpdateDate = #{updateDate},
+          CancelDate = #{updateDate},
           OrderStatus = -1
-        WHERE OrderSerialNo = #{out_trade_no}
+        WHERE ParentOrderSerialNo = #{out_trade_no}
     </update>
 
     <select id="getOrderByOrderSerialNo"
@@ -141,6 +172,17 @@
         FROM
           zl_order
         WHERE OrderSerialNo = #{out_trade_no}
+        ORDER BY OrderID ASC
+    </select>
+
+    <select id="getByParentOrderSerialNo" resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderPayShortInfoVO">
+        SELECT
+          OrderID,
+          TotalPrice,
+          ActuallyPay
+        FROM
+          zl_order
+        WHERE ParentOrderSerialNo = #{out_trade_no}
         ORDER BY OrderID ASC
     </select>
 
@@ -166,10 +208,26 @@
           AND UserID = #{userid}
 	</select>
 
-    <select id="waitForGoodsTotal"
-            resultType="java.lang.Long">
-
-          SELECT COUNT(OrderID) FROM zl_order WHERE IsDelete=0 AND IsUserDelete = 0 AND OrderStatus=1 AND UserID=#{userid}
+    <select id="waitForGoodsTotal" resultType="java.lang.Long">
+          SELECT
+              COUNT(OrderID)
+            FROM
+              zl_order
+            WHERE IsDelete = 0
+              AND IsUserDelete = 0
+              AND (
+                (
+                  PayStatus = 2
+                  AND OrderStatus = 2
+                  AND RefundStatus = 0
+                )
+                OR (
+                  PayStatus = 2
+                  AND OrderStatus = 5
+                  AND RefundStatus = 0
+                )
+              )
+              AND UserID = #{userid}
 	</select>
 
     <select id="allOrderTotal"
@@ -190,5 +248,136 @@
           zl_order
         WHERE OrderID = #{orderid}
     </select>
+
+    <select id="getsupplierID" resultType="int">
+        SELECT
+          zg.SupplierID
+        FROM
+          zl_hotelgoodssku zh
+          LEFT JOIN zl_goods zg
+            ON zh.GoodsID = zg.GoodsID
+        WHERE zh.HotelGoodsSkuID = #{hotelGoodsSkuId}
+    </select>
+
+    <update id="updateParentOrderID">
+        UPDATE
+          zl_order
+        SET
+          ParentOrderID = #{parentid}
+        WHERE ParentOrderSerialNo = #{parentOrderSerialNo}
+    </update>
+
+    <update id="updateAllOrderUpdateDate">
+        UPDATE
+          zl_order
+        SET
+          UpdateDate = #{updateDate},
+          CancelDate = #{updateDate},
+          OrderStatus = -1
+        WHERE ParentOrderSerialNo = #{out_trade_no}
+    </update>
+
+    <update id="updateRefundStatus">
+        UPDATE
+          zl_order
+        SET
+          RefundStatus = 1,
+          UpdateDate = #{currertTime}
+        WHERE OrderID = #{orderid}
+    </update>
+
+    <select id="getOrderByOrderId" resultType="com.zhiliao.hotel.model.ZlOrder">
+        SELECT
+          *
+        FROM
+          zl_order
+        WHERE OrderID = #{orderId}
+          AND IsDelete = 0
+          AND IsUserDelete = 0
+        LIMIT 1
+    </select>
+
+    <update id="updateRefundStatus2">
+        UPDATE
+          zl_order
+        SET
+          RefundStatus = - 1,
+          UpdateDate = #{currertTime}
+        WHERE OrderID = #{orderId}
+    </update>
+
+    <update id="updateOrderRefundInfo">
+        UPDATE
+          zl_order
+        SET
+          RefundUserType = 1,
+          RefundCount = RefundCount + 1,
+          RefundStatus = 1,
+          UpdateDate = #{currertTime},
+          RefundDate = #{currertTime}
+        WHERE OrderID = #{orderid}
+    </update>
+
+    <update id="updateRefundStatus3">
+        UPDATE
+          zl_order
+        SET
+          RefundStatus = 4,
+          UpdateDate = #{currertTime}
+        WHERE OrderID = #{orderid}
+    </update>
+
+    <select id="getOrderActuallyPay" resultType="decimal">
+        SELECT
+          SUM(ActuallyPay)
+        FROM
+          zl_order
+        WHERE ParentOrderSerialNo = #{out_trade_no}
+    </select>
+
+    <select id="getOrderActuallyPay2" resultType="decimal">
+        SELECT
+          SUM(ActuallyPay)
+        FROM
+          zl_order
+        WHERE OrderSerialNo = #{out_trade_no}
+    </select>
+
+    <update id="signForOrder">
+        UPDATE
+          zl_order
+        SET
+          OrderStatus = 3,
+          UpdateDate = #{currertTime}
+        WHERE OrderID = #{orderId}
+    </update>
+
+    <update id="updateRefundStatus4">
+        UPDATE
+          zl_order
+        SET
+          RefundStatus = 1,
+          UpdateDate = #{currertTime}
+        WHERE OrderID = #{orderid}
+    </update>
+
+    <update id="updateRefundStatus4Two">
+        UPDATE
+          zl_order
+        SET
+          UpdateDate = #{currertTime},
+          RefundStatus = 2
+        WHERE OrderID = #{orderid}
+    </update>
+
+    <update id="updateRefundStatus5">
+        UPDATE
+          zl_order
+        SET
+          UpdateDate = #{currertTime},
+          SendDate = #{currertTime},
+          RefundStatus = 1
+        WHERE OrderID = #{orderid}
+    </update>
 
 </mapper>

@@ -35,6 +35,11 @@ public class ZlServiceorder implements Serializable {
     private Long userid;
 
     /**
+     * zl_ordertype表ID
+     */
+    private Byte moldtype;
+
+    /**
      * 用户
      */
     private String username;
@@ -105,9 +110,19 @@ public class ZlServiceorder implements Serializable {
     private String remark;
 
     /**
-     * -1:已取消;0待配送;1已完成
+     * -1:已取消;0待配送;1已完成;2已接单
      */
     private Byte orderstatus;
+
+    /**
+     * 取消用户类型:1-用户,2-平台
+     */
+    private Byte cancelusertype;
+
+    /**
+     * 取消原因
+     */
+    private String cancelremark;
 
     /**
      * 操作人员

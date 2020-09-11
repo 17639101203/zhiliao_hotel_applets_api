@@ -3,6 +3,7 @@ package com.zhiliao.hotel.controller.wake;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlWakeOrderDTO;
 import com.zhiliao.hotel.controller.wake.params.ZlWakeOrderParam;
 import com.zhiliao.hotel.model.ZlWakeOrder;
 import com.zhiliao.hotel.service.ZlWakeOrderService;
@@ -55,8 +56,8 @@ public class ZlWakeOrderController {
             Map<String, Object> map = wakeOrderService.addWakeOrder(userId, wakeOrder);
             return new ReturnString(0, "提交成功,祝您好梦!", map);
 
-        } catch (Exception e) {
-            return new ReturnString("提交失败");
+        } catch (RuntimeException e) {
+            return new ReturnString(e.getMessage());
         }
     }
 
@@ -71,8 +72,8 @@ public class ZlWakeOrderController {
     public ReturnString wakeOrderDetail(@PathVariable Long orderID) {
 
         try {
-            ZlWakeOrder wakeOrder = wakeOrderService.wakeOrderDetail(orderID);
-            return new ReturnString(wakeOrder);
+            ZlWakeOrderDTO zlWakeOrderDTO = wakeOrderService.wakeOrderDetail(orderID);
+            return new ReturnString(zlWakeOrderDTO);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取失败");

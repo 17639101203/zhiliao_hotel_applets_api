@@ -4,6 +4,7 @@ import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.clean.cleanparm.CleanParm;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlCleanOrderDTO;
 import com.zhiliao.hotel.model.ZlCleanOrder;
 import com.zhiliao.hotel.service.ZlCleanOrderService;
 import com.zhiliao.hotel.utils.DateUtils;
@@ -48,9 +49,9 @@ public class ZlCleanOrderController {
         try {
             Map<String, Object> map = zlCleanOrderService.addCleanOrder(userid, cleanParm);
             return new ReturnString<>(map);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ReturnString<>("下单失败!");
+            return new ReturnString<>(e.getMessage());
         }
 
     }
@@ -60,12 +61,11 @@ public class ZlCleanOrderController {
     @GetMapping("selectCleanDetails/{orderID}")
     @UserLoginToken
 //    @PassToken
-    public ReturnString<Map<String, Object>> selectCleanDetails(@PathVariable("orderID") Long orderID) {
+    public ReturnString selectCleanDetails(@PathVariable("orderID") Long orderID) {
 
-        Map<String, Object> cleanmap = null;
         try {
-            cleanmap = zlCleanOrderService.selectCleanDetails(orderID);
-            return new ReturnString<>(cleanmap);
+            ZlCleanOrderDTO zlCleanOrderDTO = zlCleanOrderService.selectCleanDetails(orderID);
+            return new ReturnString<>(zlCleanOrderDTO);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString<>("查询失败!");
@@ -80,11 +80,11 @@ public class ZlCleanOrderController {
     public ReturnString cancelCleanOrder(@PathVariable("orderID") Long orderID) {
         Integer nowTime = DateUtils.javaToPhpNowDateTime();
         try {
-            zlCleanOrderService.removeCleanOrder(orderID, nowTime);
+            zlCleanOrderService.removeCleanOrder(orderID);
             return new ReturnString<>(0, "预约已取消");
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ReturnString("取消失败!");
+            return new ReturnString(e.getMessage());
         }
     }
 

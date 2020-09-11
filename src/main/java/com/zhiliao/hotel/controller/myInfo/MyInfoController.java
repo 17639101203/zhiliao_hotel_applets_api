@@ -4,6 +4,7 @@ import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.myInfo.vo.MyInfoReturn;
+import com.zhiliao.hotel.mapper.ZlCouponMapper;
 import com.zhiliao.hotel.model.ZlWxuser;
 import com.zhiliao.hotel.service.*;
 import com.zhiliao.hotel.utils.TokenUtil;
@@ -37,48 +38,44 @@ public class MyInfoController {
     private ZlOrderService zlOrderService;
 
     @Autowired
-    private ZlCouponUserService couponUserService;
-
-    @Autowired
     private ZlCommentService zlCommentService;
 
     @Autowired
     private ZlHotelService zlHotelService;
 
-    // TODO: 2020/5/25  @PassToken
+    @Autowired
+    private ZlCouponMapper zlCouponMapper;
+
     @ApiOperation(value = "我的_界面信息_林生")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "hotelID", dataType = "int", required = true, value = "酒店ID")
     })
     @UserLoginToken
-//    @PassToken
     @PostMapping("Info")
     public ReturnString findAllOrder(HttpServletRequest request, Integer hotelID) {
 
         try {
 
-            // TODO: 2020/5/23  userId
             String token = request.getHeader("token");
             Long userId = TokenUtil.getUserId(token);
-//            Long userId = 3L;
 
             ZlWxuser zlWxuser = zlWxuserService.findWxuserByUserId(userId);
             Long waitForPayTotal = zlOrderService.waitForPayTotal(userId);
             Long waitForGoodsTotal = zlOrderService.waitForGoodsTotal(userId);
             Long orderTotal = zlOrderService.allOrderTotal(userId);
-            Integer couponCount = couponUserService.count(userId);
+            Integer couponCount = zlCouponMapper.getCouponCount(userId);
             Long appraiseTotal = zlCommentService.waitAppraiseTotal(userId);
             String receptionTel = zlHotelService.getReceptionTel(hotelID);
 
             MyInfoReturn myInfoReturn = new MyInfoReturn();
-            myInfoReturn.setNickname(zlWxuser.getNickname());
-            myInfoReturn.setHeadimgurl(zlWxuser.getHeadimgurl());
-            myInfoReturn.setWaitForPay(waitForPayTotal);
-            myInfoReturn.setWaitForGoods(waitForGoodsTotal);
-            myInfoReturn.setAllOrder(orderTotal);
-            myInfoReturn.setCoupons(couponCount);
-            myInfoReturn.setAppraise(appraiseTotal);
-            myInfoReturn.setServiceTel(receptionTel);
+            myInfoReturn.setNickname(zlWxuser.getNickname()); //昵称
+            myInfoReturn.setHeadimgurl(zlWxuser.getHeadimgurl()); //头像
+            myInfoReturn.setWaitForPay(waitForPayTotal); //待支付订单数量
+            myInfoReturn.setWaitForGoods(waitForGoodsTotal); //代配送订单数量
+            myInfoReturn.setAllOrder(orderTotal); //订单总数量
+            myInfoReturn.setCoupons(couponCount); //优惠总券数量
+            myInfoReturn.setAppraise(appraiseTotal); //我的评价
+            myInfoReturn.setServiceTel(receptionTel); //前台服务电话
 
             logger.error("我的界面：" + myInfoReturn);
 

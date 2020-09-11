@@ -10,4 +10,5 @@ import tk.mybatis.mapper.common.Mapper;
 
 public interface ZlWxuserMapper extends Mapper<ZlWxuser> {
 
+    void updateWxuser(@Param("wxuser") ZlWxuser wxuser);
 }

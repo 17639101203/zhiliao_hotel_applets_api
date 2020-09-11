@@ -19,6 +19,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,25 +40,19 @@ public class ZlCommentController {
     @Autowired
     private ZlCommentService zlCommentService;
 
-    @Autowired
-    private UploadFileController uploadFileController;
-
-
     @ApiOperation(value = "添加点赞吐槽")
-    @PostMapping(value = "addComment", consumes = {"multipart/*"}, headers = "content-type=multipart/form-data")
+    @PostMapping(value = "addComment")
     @UserLoginToken
-    public ReturnString addComment(HttpServletRequest request,
-                                   CommentParm commentParm,
-                                   @RequestParam(value = "multipartFile", required = false) MultipartFile multipartFile) {
+    public ReturnString addComment(HttpServletRequest request, @Validated @RequestBody CommentParm commentParm) {
 
         // 解析token获取userid
         Long userid = TokenUtil.getUserId(request.getHeader("token"));
         try {
-            Map<String, Object> map = zlCommentService.addComment(userid, commentParm, multipartFile);
+            Map<String, Object> map = zlCommentService.addComment(userid, commentParm);
             return new ReturnString(map);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ReturnString("添加点赞吐槽失败!");
+            return new ReturnString(e.getMessage());
         }
     }
 

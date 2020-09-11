@@ -25,7 +25,7 @@ public interface ZlServiceorderdetailMapper extends Mapper<ZlServiceorderdetail>
 
     //获取订单商品当日购买次数
     List<ZlServiceorderdetail> getBuyNumByOrderIds(@Param("goodsId") String goodsId, @Param("hotleId") Integer hotleId
-                                                    , @Param("roomID") Integer roomID, @Param("start") Integer start, @Param("end") Integer end);
+            , @Param("roomID") Integer roomID, @Param("start") Integer start, @Param("end") Integer end);
 
     //插入多条订单详情表
     int insertOrderDetailList(@Param("zlServiceorderdetails") List<ZlServiceorderdetail> zlServiceorderdetails);

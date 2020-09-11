@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
+import com.zhiliao.hotel.common.exception.BizException;
 import com.zhiliao.hotel.controller.hotelfacility.vo.ZlHotelFacilityOrderToPhpVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
@@ -128,8 +129,8 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
             }
         }
         //生成订单编号
-//        String serialNumber = OrderIDUtil.createOrderID("SS");
-        zlHotelFacilityOrder.setSerialnumber(OrderIDUtil.createOrderID("SS"));
+        String serialNumber = OrderIDUtil.createOrderID("SS");
+        zlHotelFacilityOrder.setSerialnumber(serialNumber);
         zlHotelFacilityOrder.setComeformid(1);
         ZlHotel zlHotel = hotelMapper.getById(zlHotelFacilityOrder.getHotelid());
         if (zlHotel != null) {
@@ -140,16 +141,24 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         zlHotelFacilityOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
 
         ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(zlHotelFacilityOrder.getRoomnumber(), zlHotelFacilityOrder.getHotelid());
+        if (zlHotelroom == null) {
+            throw new BizException("您的码是前台码，不提供该服务");
+        }
         zlHotelFacilityOrder.setFloornumber(zlHotelroom.getRoomfloor());
-        ZlWxuser zlWxuser = new ZlWxuser();
-        zlWxuser.setUserid(zlHotelFacilityOrder.getUserid());
-        ZlWxuser wxuser = zlWxuserMapper.selectOne(zlWxuser);
-        zlHotelFacilityOrder.setUsername(wxuser.getNickname());
+//        ZlWxuser zlWxuser = new ZlWxuser();
+//        zlWxuser.setUserid(zlHotelFacilityOrder.getUserid());
+//        ZlWxuser wxuser = zlWxuserMapper.selectOne(zlWxuser);
+//        zlHotelFacilityOrder.setUsername(wxuser.getNickname());
         if (zlHotelFacilityOrder.getTotalprice().intValue() == 0) {
             zlHotelFacilityOrder.setPaystatus((byte) 2);
         } else {
             zlHotelFacilityOrder.setPaystatus((byte) 1);
         }
+        //修改该设施相应信息数量
+        hotelFacilityDetail.setFacilitycount(hotelFacilityDetail.getFacilitycount() - 1);
+        hotelFacilityDetail.setFacilityremaincount(hotelFacilityDetail.getFacilityremaincount() - 1);
+        hotelFacilityDetail.setUsecount(hotelFacilityDetail.getUsecount() + 1);
+        hotelFacilityMapper.updateByPrimaryKeySelective(hotelFacilityDetail);
         facilityOrderMapper.insertSelective(zlHotelFacilityOrder);
         logger.info("酒店设施订单插入数据库完成,订单id:" + zlHotelFacilityOrder.getOrderid());
 
@@ -165,7 +174,8 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_FACILITY_ORDER, orderStr);
         logger.info("推送酒店设施订单到redis通知php后台人员完成,订单信息:" + zlHotelFacilityOrderToPhpVO);
 
-        map.put("orderId", zlHotelFacilityOrder.getOrderid());
+        map.put("orderid", zlHotelFacilityOrder.getOrderid());
+        map.put("serialnumber", serialNumber);
         return map;
     }
 }

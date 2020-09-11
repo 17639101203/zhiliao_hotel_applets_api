@@ -19,4 +19,6 @@ public interface ZlHotelMapper extends Mapper<ZlHotel> {
     String getReceptionTel(@Param("hotelId") Integer hotelId);
 
     HotelMoneyVO getHotelMoney(@Param("hotelId") Integer hotelId);
+
+    Byte getServiceTime(@Param("hotelId") Integer hotelId);
 }

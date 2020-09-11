@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiliao.hotel.mapper.ZlRefundRecordMapper">
+
+    <update id="updateRefundStatus2">
+        UPDATE
+          zl_refundrecord
+        SET
+          RefundStatus = - 1,
+          UpdateDate = #{currertTime}
+        WHERE OrderID = #{orderId}
+    </update>
+
+    <update id="uploadExpressInfo">
+        UPDATE
+          zl_refundrecord
+        SET
+          IsUserSend = 1,
+          UserExpressID = #{expressid},
+          UserTrackNumber = #{usertracknumber},
+          UserSendDate = #{currertTime},
+          UpdateDate = #{currertTime},
+          RecordStatus = 1,
+          CheckType = 2
+        WHERE OrderID = #{orderid}
+    </update>
+
+    <update id="updateRefundStatus3">
+        UPDATE
+          zl_refundrecord
+        SET
+          RecordStatus = 4,
+          UpdateDate = #{currertTime}
+        WHERE OrderID = #{orderid}
+    </update>
+
+    <update id="updateRefundStatus4">
+        UPDATE
+          zl_refundrecord
+        SET
+          RecordStatus = 1,
+          IsRepresent = 1,
+          UpdateDate = #{currertTime},
+          CheckType = 2
+        WHERE OrderID = #{orderid}
+    </update>
+
+    <update id="updateRefundStatus4Two">
+        UPDATE
+          zl_refundrecord
+        SET
+          IsRepresent = 1,
+          UpdateDate = #{currertTime},
+          CheckType = 2,
+          RecordStatus = 2
+        WHERE OrderID = #{orderid}
+    </update>
+
+</mapper>

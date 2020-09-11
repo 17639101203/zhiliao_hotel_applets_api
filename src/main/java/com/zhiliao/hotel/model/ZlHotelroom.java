@@ -1,5 +1,8 @@
 package com.zhiliao.hotel.model;
 
+import lombok.Data;
+
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -8,14 +11,15 @@ import java.io.Serializable;
  * @author denghanchen
  * @date 2020-04-14
  */
+@Data
+@Table(name = "zl_hotelroom")
 public class ZlHotelroom implements Serializable {
-
 
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
+     *
      */
     private Integer roomid;
 
@@ -67,12 +71,27 @@ public class ZlHotelroom implements Serializable {
     /**
      * 是否是房间 0前台;1房间
      */
-    private Boolean roomTypeFlag;
+    private Integer roomTypeFlag;
 
     /**
-     * 
+     * 删除状态:0正常;1删除;
      */
     private String isdelete;
+
+    /**
+     *操作员
+     */
+    private String operatorname;
+
+    /**
+     *操作员IP
+     */
+    private String operatorip;
+
+    /**
+     *操作员备注
+     */
+    private String operatorremark;
 
     /**
      * 修改时间
@@ -84,171 +103,9 @@ public class ZlHotelroom implements Serializable {
      */
     private Integer createdate;
 
+    /**
+     * 旧ID
+     */
+    private Integer oldid;
 
-    public Integer getRoomid() {
-        return roomid;
-    }
-
-
-    public void setRoomid(Integer roomid) {
-        this.roomid = roomid;
-    }
-
-
-    public Integer getRoomtypeid() {
-        return roomtypeid;
-    }
-
-
-    public void setRoomtypeid(Integer roomtypeid) {
-        this.roomtypeid = roomtypeid;
-    }
-
-
-    public Integer getHotelid() {
-        return hotelid;
-    }
-
-
-    public void setHotelid(Integer hotelid) {
-        this.hotelid = hotelid;
-    }
-
-
-    public String getRoomfloor() {
-        return roomfloor;
-    }
-
-
-    public void setRoomfloor(String roomfloor) {
-        this.roomfloor = roomfloor == null ? null : roomfloor.trim();
-    }
-
-
-    public String getRoomnumber() {
-        return roomnumber;
-    }
-
-    public Boolean getRoomTypeFlag() {
-        return roomTypeFlag;
-    }
-
-    public void setRoomTypeFlag(Boolean roomTypeFlag) {
-        this.roomTypeFlag = roomTypeFlag;
-    }
-
-
-    public void setRoomnumber(String roomnumber) {
-        this.roomnumber = roomnumber == null ? null : roomnumber.trim();
-    }
-
-
-    public String getModel() {
-        return model;
-    }
-
-
-    public void setModel(String model) {
-        this.model = model == null ? null : model.trim();
-    }
-
-
-
-
-    public String getWifiname() {
-        return wifiname;
-    }
-
-
-    public void setWifiname(String wifiname) {
-        this.wifiname = wifiname == null ? null : wifiname.trim();
-    }
-
-
-    public String getWifipwd() {
-        return wifipwd;
-    }
-
-
-    public void setWifipwd(String wifipwd) {
-        this.wifipwd = wifipwd == null ? null : wifipwd.trim();
-    }
-
-
-    public Byte getRoomstatus() {
-        return roomstatus;
-    }
-
-
-    public void setRoomstatus(Byte roomstatus) {
-        this.roomstatus = roomstatus;
-    }
-
-
-    public String getSerialnumber() {
-        return serialnumber;
-    }
-
-
-    public void setSerialnumber(String serialnumber) {
-        this.serialnumber = serialnumber == null ? null : serialnumber.trim();
-    }
-
-
-
-
-    public String getIsdelete() {
-        return isdelete;
-    }
-
-
-    public void setIsdelete(String isdelete) {
-        this.isdelete = isdelete == null ? null : isdelete.trim();
-    }
-
-
-    public Integer getUpdatedate() {
-        return updatedate;
-    }
-
-
-    public void setUpdatedate(Integer updatedate) {
-        this.updatedate = updatedate;
-    }
-
-
-    public Integer getCreatedate() {
-        return createdate;
-    }
-
-
-    public void setCreatedate(Integer createdate) {
-        this.createdate = createdate;
-    }
-
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", roomid=").append(roomid);
-        sb.append(", roomtypeid=").append(roomtypeid);
-        sb.append(", hotelid=").append(hotelid);
-        sb.append(", roomfloor=").append(roomfloor);
-        sb.append(", roomnumber=").append(roomnumber);
-        sb.append(", model=").append(model);
-        sb.append(", wifiname=").append(wifiname);
-        sb.append(", wifipwd=").append(wifipwd);
-        sb.append(", roomstatus=").append(roomstatus);
-        sb.append(", serialnumber=").append(serialnumber);
-        sb.append(", roomTypeFlag=").append(roomTypeFlag);
-        sb.append(", isdelete=").append(isdelete);
-        sb.append(", updatedate=").append(updatedate);
-        sb.append(", createdate=").append(createdate);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
-    }
 }

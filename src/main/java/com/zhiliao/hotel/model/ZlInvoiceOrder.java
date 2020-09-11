@@ -25,6 +25,16 @@ public class ZlInvoiceOrder implements Serializable {
     private Integer invoiceid;
 
     /**
+     * zl_ordertype表ID
+     */
+    private Byte moldtype;
+
+    /**
+     * 来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
+     */
+    private Integer comeforid;
+
+    /**
      * 用户ID
      */
     private Long userid;
@@ -85,9 +95,19 @@ public class ZlInvoiceOrder implements Serializable {
     private String remark;
 
     /**
-     * 开票状态 -1:已取消;0:未开票;1开票中;2已开票
+     * 开票状态 -1:已取消;0:未开票;1开票中;2已开票;2已接单
      */
     private Byte invoicestatus;
+
+    /**
+     * 取消用户类型:1-用户,2-平台
+     */
+    private Byte cancelusertype;
+
+    /**
+     * 取消原因
+     */
+    private String cancelremark;
 
     /**
      * 开户行

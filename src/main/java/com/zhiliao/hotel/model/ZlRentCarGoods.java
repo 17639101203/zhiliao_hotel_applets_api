@@ -1,7 +1,11 @@
 package com.zhiliao.hotel.model;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -10,10 +14,13 @@ import java.math.BigDecimal;
  * @date 2020-06-06
  */
 @Data
+@Table(name = "zl_rentcargoods")
 public class ZlRentCarGoods implements Serializable {
     /**
      * 商品ID
      */
+    @Id
+    @GeneratedValue(generator = "JDBC")
     private Integer goodsid;
 
     /**
@@ -40,6 +47,11 @@ public class ZlRentCarGoods implements Serializable {
      * 品牌等标签“|”隔开
      */
     private String tags;
+
+    /**
+     * 租车详情
+     */
+    private String content;
 
     /**
      * 租金/时
@@ -77,6 +89,26 @@ public class ZlRentCarGoods implements Serializable {
     private Integer sort;
 
     /**
+     * 操作员
+     */
+    private String operatorname;
+
+    /**
+     * 操作员IP
+     */
+    private String operatorip;
+
+    /**
+     * 操作员备注
+     */
+    private String operatorremark;
+
+    /**
+     * 审核时间
+     */
+    private Integer operatime;
+
+    /**
      * 删除状态:0正常;1删除;
      */
     private Boolean isdelete;
@@ -92,13 +124,9 @@ public class ZlRentCarGoods implements Serializable {
     private Integer updatedate;
 
     /**
-     * 租车详情
-     */
-    private String content;
-
-    /**
      * 租车协议文件地址
      */
+//    @Transient
     private String url;
 
 }

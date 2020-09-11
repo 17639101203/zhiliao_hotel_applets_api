@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.service;
 
+import com.zhiliao.hotel.controller.myOrder.dto.WxPayRefundQueryDTO;
 import com.zhiliao.hotel.controller.myOrder.params.WxPayRefundParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,10 +15,15 @@ import java.util.Map;
  **/
 public interface WxPayService {
 
-    Map<String, Object> wxPay(Long userID, String body, BigDecimal total_fee, String out_trade_no, HttpServletRequest request);
+    Map<String, String> wxPay(Long userID, String body, BigDecimal total_fee, String out_trade_no, HttpServletRequest request);
 
     Map<String, Object> wxPayRefund(WxPayRefundParam wxPayRefundParam);
 
     String wxPayReturn(String out_trade_no);
 
+    String wxPayReturnQuery(WxPayRefundQueryDTO wxPayRefundQueryDTO);
+
+    void updateRefundStatus(Long orderid);
+
+    void signForOrder(Long orderId);
 }

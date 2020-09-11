@@ -2,14 +2,14 @@ package com.zhiliao.hotel.controller.hotelfacility;
 
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.common.exception.BizException;
 import com.zhiliao.hotel.controller.hotelfacility.params.HotelFacilityOrderParam;
 import com.zhiliao.hotel.controller.hotelfacility.vo.HotelFacilityOrderParamVO;
+import com.zhiliao.hotel.controller.myAppointment.dto.HotelFacilityOrderParamDTO;
 import com.zhiliao.hotel.mapper.ZlHotelMapper;
 import com.zhiliao.hotel.mapper.ZlHotelRoomMapper;
-import com.zhiliao.hotel.model.ZlHotel;
-import com.zhiliao.hotel.model.ZlHotelFacility;
-import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
-import com.zhiliao.hotel.model.ZlHotelroom;
+import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
+import com.zhiliao.hotel.model.*;
 import com.zhiliao.hotel.service.ZlHotelFacilityOrderService;
 import com.zhiliao.hotel.service.ZlHotelFacilityService;
 import com.zhiliao.hotel.utils.DateUtils;
@@ -18,6 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,9 @@ public class ZlHotelFacilityController {
 
     @Autowired
     private ZlHotelRoomMapper zlHotelRoomMapper;
+
+    @Autowired
+    private ZlWxuserdetailMapper zlWxuserdetailMapper;
 
     @UserLoginToken
     @ApiOperation(value = "酒店设施列表展示")
@@ -81,18 +85,26 @@ public class ZlHotelFacilityController {
     //@PassToken
     public ReturnString addFacilityOrder(HttpServletRequest request, @RequestBody HotelFacilityOrderParam orderParam) {
 
-
+        ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(orderParam.getRoomnumber(), orderParam.getHotelId());
+        if (zlHotelroom == null) {
+            throw new BizException("您的码是前台码，不提供该服务");
+        }
         String token = request.getHeader("token");
         Long userId = TokenUtil.getUserId(token);
-//        System.out.println(orderParam.getUsebegindate());
-//        System.out.println(orderParam.getUseenddate());
-        //long userId = System.currentTimeMillis();
+
+        ZlWxuserdetail zlWxuserdetail = new ZlWxuserdetail();
+        zlWxuserdetail.setUserid(userId);
+        zlWxuserdetail = zlWxuserdetailMapper.selectOne(zlWxuserdetail);
+
         ZlHotelFacilityOrder facilityOrder = new ZlHotelFacilityOrder();
         facilityOrder.setUserid(userId);
+        facilityOrder.setUsername(zlWxuserdetail.getRealname());
+        if (StringUtils.isNoneBlank(zlWxuserdetail.getTel())) {
+            facilityOrder.setTel(zlWxuserdetail.getTel());
+        }
         facilityOrder.setFacilityid(orderParam.getFacilityId());
         facilityOrder.setHotelid(orderParam.getHotelId());
         facilityOrder.setHotelname(orderParam.getHotelName());
-        ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(orderParam.getRoomnumber(), orderParam.getHotelId());
         facilityOrder.setRoomid(zlHotelroom.getRoomid());
         facilityOrder.setRoomnumber(orderParam.getRoomnumber());
         facilityOrder.setFacilityname(orderParam.getFacilityName());
@@ -102,11 +114,12 @@ public class ZlHotelFacilityController {
         facilityOrder.setUsebegindate((int) (orderParam.getUsebegindate() / 1000));
         facilityOrder.setUseenddate((int) (orderParam.getUseenddate() / 1000));
         facilityOrder.setTel(orderParam.getTel());
+        facilityOrder.setUsername(orderParam.getUserName());
 
         try {
             Map<String, Object> map = hotelFacilityService.addFacilityOrder(facilityOrder);
             return new ReturnString(map);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
             return new ReturnString(e.getMessage());
         }
@@ -123,8 +136,8 @@ public class ZlHotelFacilityController {
     public ReturnString findOrderDetail(@PathVariable Long orderID) {
 
         try {
-            HotelFacilityOrderParamVO hotelFacilityOrderParamVO = hotelFacilityOrderService.findOrder(orderID);
-            return new ReturnString(hotelFacilityOrderParamVO);
+            HotelFacilityOrderParamDTO hotelFacilityOrderParamDTO = hotelFacilityOrderService.findOrder(orderID);
+            return new ReturnString(hotelFacilityOrderParamDTO);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("查询失败");

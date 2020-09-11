@@ -1,8 +1,5 @@
 package com.zhiliao.hotel.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class OrderIDUtil {
 
 

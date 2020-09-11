@@ -160,7 +160,7 @@
     </insert>
 
     <!--  查询发票订单详情-->
-    <select id="queryInvoiceOrderdetail" resultType="com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO">
+    <select id="queryInvoiceOrderdetail" resultType="com.zhiliao.hotel.controller.myAppointment.dto.InvoiceOrderDTO">
       SELECT
         InvoiceType,
         MainBodyType,
@@ -172,6 +172,19 @@
         Tel,
         Remark,
         InvoiceStatus,
+        CASE
+          InvoiceStatus
+          WHEN - 1
+          THEN '已取消'
+          WHEN 0
+          THEN '未开票'
+          WHEN 1
+          THEN '开票中'
+          WHEN 2
+          THEN '已开票'
+          WHEN 3
+          THEN '已接单'
+        END StatusMessage,
         Bank,
         BankAccountNumber,
         CompanyTel,
@@ -192,7 +205,9 @@
       zl_invoiceorder
     SET
       InvoiceStatus = "-1",
-      UpdateDate = #{updatedate}
+      UpdateDate = #{updatedate},
+      CancelUserType = 1,
+      CancelRemark = '用户取消'
     WHERE invoiceorderid = #{invoiceorderid}
       AND IsDelete = 0
   </update>

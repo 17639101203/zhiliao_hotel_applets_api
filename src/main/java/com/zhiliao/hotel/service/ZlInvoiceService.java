@@ -3,6 +3,7 @@ package com.zhiliao.hotel.service;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
 import com.zhiliao.hotel.controller.invoice.vo.InvoiceOrderToPhpVO;
+import com.zhiliao.hotel.controller.myAppointment.dto.InvoiceOrderDTO;
 import com.zhiliao.hotel.model.ZlInvoice;
 import com.zhiliao.hotel.model.ZlInvoiceOrder;
 import org.apache.ibatis.annotations.Param;
@@ -77,16 +78,15 @@ public interface ZlInvoiceService {
      * @param invoiceorderid
      * @return
      */
-    InvoiceOrderVO findInvoiceOrderdetail(Long invoiceorderid);
+    InvoiceOrderDTO findInvoiceOrderdetail(Long invoiceorderid);
 
 
     /**
      * 取消开票预约
      *
      * @param invoiceorderid
-     * @param updatedate
      */
-    void cancelInvoiceOrder(Long invoiceorderid, Integer updatedate);
+    void cancelInvoiceOrder(Long invoiceorderid);
 
     void deleteInvoiceOrder(Long invoiceorderid);
 

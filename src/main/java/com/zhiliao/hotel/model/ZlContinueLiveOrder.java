@@ -27,6 +27,16 @@ public class ZlContinueLiveOrder implements Serializable {
     private Long userid;
 
     /**
+     * zl_ordertype表ID
+     */
+    private Byte moldtype;
+
+    /**
+     * 用户名
+     */
+    private String username;
+
+    /**
      * 订单编号
      */
     private String orderserialno;
@@ -42,11 +52,6 @@ public class ZlContinueLiveOrder implements Serializable {
     private String hotelname;
 
     /**
-     * 楼层数
-     */
-    private String floornumber;
-
-    /**
      * 房间ID
      */
     private Integer roomid;
@@ -57,9 +62,9 @@ public class ZlContinueLiveOrder implements Serializable {
     private String roomnumber;
 
     /**
-     * 用户名
+     * 来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店
      */
-    private String username;
+    private Integer comeformid;
 
     /**
      * 手机
@@ -67,7 +72,7 @@ public class ZlContinueLiveOrder implements Serializable {
     private String tel;
 
     /**
-     * 订单状态:-1:已取消;0待处理;1处理完成
+     * 订单状态:-1:已取消;0待处理;1处理完成;2已接单
      */
     private Byte orderstatus;
 
@@ -85,6 +90,17 @@ public class ZlContinueLiveOrder implements Serializable {
      * 操作员备注
      */
     private String operatorremark;
+
+
+    /**
+     * 取消用户类型:1-用户,2-平台
+     */
+    private Byte cancelusertype;
+
+    /**
+     * 取消原因
+     */
+    private String cancelremark;
 
     /**
      * 删除状态:0正常;1删除;

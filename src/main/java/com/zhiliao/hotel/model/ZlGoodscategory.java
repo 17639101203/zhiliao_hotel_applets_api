@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "zl_goodscategory")
 public class ZlGoodscategory implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,6 +27,11 @@ public class ZlGoodscategory implements Serializable {
      * 分类ID
      */
     private Integer goodscategoryid;
+
+    /**
+     * 父级ID 第一级为0
+     */
+    private Integer parentid;
 
     /**
      * 分类名称:酒水/酒店/零食...
@@ -50,6 +57,11 @@ public class ZlGoodscategory implements Serializable {
      * 排序
      */
     private Short sort;
+
+    /**
+     * 操作人
+     */
+    private String operatorname;
 
     /**
      * 删除状态:0正常;1删除;

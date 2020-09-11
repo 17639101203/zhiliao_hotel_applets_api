@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "zl_cart")
 public class ZlCart implements Serializable {
 
     private static final long serialVersionUID = 1L;

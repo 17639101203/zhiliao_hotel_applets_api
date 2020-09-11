@@ -106,32 +106,32 @@ public class BeanUtils {
         return obj;
     }
 
-    /**
-     * 模仿Spring中 BeanUtils.copyProperties(source,target)
-     * 大小写可以忽略
-     * 下划线 _ 被忽略
-     *
-     * @param source
-     * @param target
-     * @param <T>
-     * @return
-     */
-    public static <T> T copyProperties(Object source, Object target) {
-        Map<String, Field> sourceMap = CacheFieldMap.getFieldMap(source.getClass());
-        CacheFieldMap.getFieldMap(target.getClass()).values().forEach((it) -> {
-            Field field = sourceMap.get(it.getName().toLowerCase().replace("_", ""));
-            if (field != null) {
-                it.setAccessible(true);
-                field.setAccessible(true);
-                try {
-                    it.set(target, field.get(source));
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        return (T) target;
-    }
+//    /**
+//     * 模仿Spring中 BeanUtils.copyProperties(source,target)
+//     * 大小写可以忽略
+//     * 下划线 _ 被忽略
+//     *
+//     * @param source
+//     * @param target
+//     * @param <T>
+//     * @return
+//     */
+//    public static <T> T copyProperties(Object source, Object target) {
+//        Map<String, Field> sourceMap = CacheFieldMap.getFieldMap(source.getClass());
+//        CacheFieldMap.getFieldMap(target.getClass()).values().forEach((it) -> {
+//            Field field = sourceMap.get(it.getName().toLowerCase().replace("_", ""));
+//            if (field != null) {
+//                it.setAccessible(true);
+//                field.setAccessible(true);
+//                try {
+//                    it.set(target, field.get(source));
+//                } catch (IllegalAccessException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//        return (T) target;
+//    }
 
     private static class CacheAsmFiledMethod {
         private static Map<String, Map<String, String>> cacheGetMethod = new HashMap<>();

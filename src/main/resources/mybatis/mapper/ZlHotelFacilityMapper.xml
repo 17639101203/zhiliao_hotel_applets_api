@@ -50,7 +50,7 @@
         OnceUseMinute
     from zl_hotelfacility
     where HotelID = #{hotelId} and FacilityStatus = 1 and IsDelete = 0 AND CheckStatus = 2
-    order by CreateDate DESC
+    order by Sort ASC
   </select>
 
     <select id="getHotelFacilityDetail" resultType="com.zhiliao.hotel.model.ZlHotelFacility">

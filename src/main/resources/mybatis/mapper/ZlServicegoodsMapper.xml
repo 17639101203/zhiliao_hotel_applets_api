@@ -71,7 +71,7 @@
         <if test='keyword!=null'>
             and zsg.GoodsName like concat('%',#{keyword},'%')
         </if>
-        order by zsg.Sort asc,zsg.UpdateDate desc
+        order by zsg.Sort ASC
     </select>
 
     <select id="findServicegoodsDetail" resultType="com.zhiliao.hotel.controller.servicegoods.vo.ServicegoodsListVo">
@@ -120,6 +120,7 @@
           AND GoodsStatus = 1
           AND CheckStatus = 2
           AND IsDelete = 0
+          ORDER BY Sort ASC
     </select>
 
 </mapper>

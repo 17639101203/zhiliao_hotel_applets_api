@@ -2,17 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiliao.hotel.mapper.ZlDisburdeneatliveMapper">
 
-    <select id="find" resultType="com.zhiliao.hotel.model.ZlDisburdeneatlive">
+    <select id="find" resultType="com.zhiliao.hotel.controller.eatRent.vo.ZlDisburdeneatliveVO">
         SELECT
           *
         FROM
           zl_disburdeneatlive
-        WHERE HotelID = #{hotelID}
+        WHERE HotelID = #{hotelId}
           AND EatLiveStatus = 1
           AND CheckStatus = 2
           AND IsDelete = 0
         ORDER BY CreateDate DESC
         LIMIT 1
 	</select>
+
+    <update id="addVisitCount">
+        UPDATE
+          zl_disburdeneatlive
+        SET
+          VisitCount = VisitCount + 1
+        WHERE RecID = #{recid}
+    </update>
 
 </mapper>

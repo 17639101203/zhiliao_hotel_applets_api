@@ -2,6 +2,8 @@ package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.controller.hotellive.param.ZlCheckoutOrderParam;
 import com.zhiliao.hotel.controller.hotellive.param.ZlContinueLiveOrderParam;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlCheckoutOrderDTO;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlContinueLiveOrderDTO;
 import com.zhiliao.hotel.controller.myOrder.vo.HotelBasicVO;
 import com.zhiliao.hotel.model.ZlCheckoutOrder;
 import com.zhiliao.hotel.model.ZlContinueLiveOrder;
@@ -28,7 +30,7 @@ public interface HotelLiveOrderService {
 
     void userDeleteContinueLiveOrder(Long orderID);
 
-    ZlCheckoutOrder checkoutOrderDetail(Long orderID);
+    ZlCheckoutOrderDTO checkoutOrderDetail(Long orderID);
 
-    ZlContinueLiveOrder continueLiveOrderDetail(Long orderID);
+    ZlContinueLiveOrderDTO continueLiveOrderDetail(Long orderID);
 }

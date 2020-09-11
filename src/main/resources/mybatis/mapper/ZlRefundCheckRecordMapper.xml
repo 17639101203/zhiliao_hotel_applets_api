@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiliao.hotel.mapper.ZlRefundCheckRecordMapper">
+
+    <select id="selectZlRefundCheckRecordList" resultType="com.zhiliao.hotel.controller.myOrder.vo.OrderRefundHistoryVO">
+        SELECT
+            zrr.*,
+            zr.RefundGoodsUrls,
+            zr.RefundMoney,
+            zr.RefundType,
+            zw.HeadImgUrl,
+            zr.UserExpressID,
+            zr.UserTrackNumber
+        FROM
+          zl_refundrecord zr
+          LEFT JOIN zl_refundcheckrecord zrr
+            ON zr.`OrderID` = zrr.`OrderID`
+          LEFT JOIN zl_wxuser zw
+            ON zr.`UserID` = zw.`UserID`
+        WHERE zr.`OrderID` = #{orderId}
+          AND zr.`IsDelete` = 0
+          AND zrr.`IsDelete` = 0
+          AND zw.`IsDelete` = 0
+        ORDER BY zrr.CreateDate ASC
+    </select>
+
+</mapper>

@@ -1,18 +1,21 @@
 package com.zhiliao.hotel.controller.myOrder;
 
 import com.zhiliao.hotel.common.PageInfoResult;
-import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.common.exception.BizException;
 import com.zhiliao.hotel.controller.myOrder.config.WxPayConfig;
+import com.zhiliao.hotel.controller.myOrder.dto.*;
 import com.zhiliao.hotel.controller.myOrder.params.GoodsInfoParam;
 import com.zhiliao.hotel.controller.myOrder.params.WxPayRefundParam;
 import com.zhiliao.hotel.controller.myOrder.util.PayUtil;
 import com.zhiliao.hotel.controller.myOrder.vo.*;
-import com.zhiliao.hotel.service.WxPayService;
-import com.zhiliao.hotel.service.ZlGoodsService;
-import com.zhiliao.hotel.service.ZlOrderDetailService;
-import com.zhiliao.hotel.service.ZlOrderService;
+import com.zhiliao.hotel.mapper.ZlOrderMapper;
+import com.zhiliao.hotel.model.ZlExpress;
+import com.zhiliao.hotel.model.ZlOrder;
+import com.zhiliao.hotel.model.ZlRefundCheckRecord;
+import com.zhiliao.hotel.model.ZlSupplierAddress;
+import com.zhiliao.hotel.service.*;
 import com.zhiliao.hotel.utils.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -21,6 +24,8 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletInputStream;
@@ -36,7 +41,7 @@ import java.util.Map;
 /**
  * ·
  */
-@Api(tags = "订单接口_林生_姬慧慧")
+@Api(tags = "订单接口_姬慧慧")
 @RestController
 @RequestMapping("order")
 public class ZlOrderController {
@@ -50,69 +55,52 @@ public class ZlOrderController {
     private WxPayService wxPayService;
 
     @Autowired
-    private PayUtil payUtil;
-
-    @Autowired
     private ZlOrderService zlOrderService;
 
     @Autowired
     private ZlGoodsService zlGoodsService;
 
-    // TODO: 2020/5/25  @PassToken
-    @ApiOperation(value = "我的订单_林生", notes = "可传入不同的请求参数，查询不同类型、不同状态的订单。查询全部订单：传入用户ID、每页条数、页码即可。")
+    @Autowired
+    private ZlOrderProfitService zlOrderProfitService;
+
+    @Autowired
+    private ZlOrderMapper zlOrderMapper;
+
+    @ApiOperation(value = "我的订单_姬慧慧")
     @UserLoginToken
 //    @PassToken
-    @PostMapping("all")
-    public ReturnString findAllOrder(HttpServletRequest request, @RequestBody OrderInfoVO vo) {
+    @PostMapping("allOrder")
+    public ReturnString findAllOrder(HttpServletRequest request, @Validated @RequestBody OrderInfoDTO orderInfoDTO) {
+
+        String token = request.getHeader("token");
+        Long userId = TokenUtil.getUserId(token);
 
         try {
-
-            // TODO: 2020/5/23  userId
-            String token = request.getHeader("token");
-            Long userId = TokenUtil.getUserId(token);
-
-//            Long userId = 150L;
-
-            if (vo == null) {
-                vo = new OrderInfoVO();
-            }
-            vo.setUserId(userId);
-
-            logger.error("我的订单，请求参数：" + vo);
-
-            PageInfoResult allOrder = zlOrderService.findAllOrder(vo);
+            orderInfoDTO.setUserId(userId);
+            PageInfoResult allOrder = zlOrderService.findAllOrder(orderInfoDTO);
             return new ReturnString(allOrder);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ReturnString("获取出错");
+            return new ReturnString(e.getMessage());
         }
 
     }
 
-    // TODO: 2020/5/25  @PassToken
-    @ApiOperation(value = "订单详情_林生", notes = "可传入不同的请求参数，查询不同批次订单的具体详情。")
-    @PostMapping("Detail")
-//    @PassToken
+    @ApiOperation(value = "订单详情_姬慧慧")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "orderId", dataType = "int", required = true, value = "订单id"),
+    })
+    @GetMapping("detail/{orderId}")
     @UserLoginToken
     @ResponseBody
-    public ReturnString findOrderDetail(HttpServletRequest request, @RequestBody OrderDetailInfoVO vo) {
+    public ReturnString findOrderDetail(@PathVariable("orderId") Integer orderId) {
+
         try {
-
-            // TODO: 2020/5/23  userId
-            String token = request.getHeader("token");
-            Long userId = TokenUtil.getUserId(token);
-
-//            Long userId = 1590214659794L;
-            if (vo == null) {
-                vo = new OrderDetailInfoVO();
-            }
-            vo.setUserid(userId);
-            logger.error("订单详情，请求参数：" + vo);
-            OrderDetailsReturn order = zlOrderDetailService.findOrder(vo);
-            return new ReturnString(order);
-        } catch (Exception e) {
+            OrderDetailsReturn orderDetailsReturn = zlOrderDetailService.findOrder(Long.valueOf(orderId));
+            return new ReturnString(orderDetailsReturn);
+        } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ReturnString("查询失败");
+            return new ReturnString(e.getMessage());
         }
     }
 
@@ -128,7 +116,7 @@ public class ZlOrderController {
 //    @PassToken
     @ResponseBody
     public ReturnString submitOrder(
-            HttpServletRequest httpServletRequest,
+            HttpServletRequest request,
             @PathVariable("hotelID") Integer hotelID,
             @PathVariable("hotelName") String hotelName,
             @PathVariable("roomID") Integer roomID,
@@ -141,16 +129,16 @@ public class ZlOrderController {
         hotelBasicVO.setRoomID(roomID);
         hotelBasicVO.setRoomNumber(roomNumber);
         //获取用户id
-        String token = httpServletRequest.getHeader("token");
+        String token = request.getHeader("token");
         Long userID = TokenUtil.getUserId(token);
 //        Long userID = 150L;
 
         try {
-            UserGoodsReturn userGoodsReturn = zlOrderService.submitOrder(userID, hotelBasicVO, goodsInfoParamMap);
+            UserGoodsReturn userGoodsReturn = zlOrderService.submitOrder(request,userID, hotelBasicVO, goodsInfoParamMap);
             return new ReturnString(userGoodsReturn);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("提交失败");
+            return new ReturnString(e.getMessage());
         }
     }
 
@@ -174,37 +162,37 @@ public class ZlOrderController {
         Long userID = TokenUtil.getUserId(token);
 
         try {
-            Map<String, Object> response = wxPayService.wxPay(userID, body, total_fee, out_trade_no, request);
+            Map<String, String> response = wxPayService.wxPay(userID, body, total_fee, out_trade_no, request);
             return new ReturnString(response);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ReturnString("下单提交失败");
+            return new ReturnString(e.getMessage());
         }
     }
 
-    @ApiOperation(value = "订单状态主动查询,仅查询结果供前端展示_姬慧慧")
+    @ApiOperation(value = "订单支付状态主动查询终极版接口_姬慧慧")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号")
     })
-    @PostMapping("wxPayReturn")
+    @PostMapping("wxPayReturn/{out_trade_no}")
     @UserLoginToken
     @ResponseBody
     public ReturnString wxPayReturn(@PathVariable("out_trade_no") String out_trade_no) {
 
         try {
             String resultString = wxPayService.wxPayReturn(out_trade_no);
-            return new ReturnString(resultString);
-        } catch (Exception e) {
+            return new ReturnString(0, resultString);
+        } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ReturnString("查询订单状态失败,请重新查询!");
+            return new ReturnString(e.getMessage());
         }
     }
 
-    @ApiOperation(value = "订单状态自动回调,包括数据库的相关修改_姬慧慧")
+   /* @ApiOperation(value = "订单支付状态查询接口_姬慧慧")
     @UserLoginToken
     @PostMapping("autoPayReturn")
     @ResponseBody
-    public ReturnString autoPayReturn(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public String autoPayReturn(HttpServletRequest request, HttpServletResponse response) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader((ServletInputStream) request.getInputStream()));
         String line = null;
         StringBuilder sb = new StringBuilder();
@@ -214,7 +202,6 @@ public class ZlOrderController {
         br.close();
         //sb为微信返回的xml
         String notityXml = sb.toString();
-        String resXml = "";
         System.out.println("接收到的报文：" + notityXml);
         // 将解析结果存储在HashMap中
         Map returnMap = null;
@@ -227,92 +214,291 @@ public class ZlOrderController {
         String return_code = (String) returnMap.get("return_code");
 
         if ("SUCCESS".equals(return_code)) {
-            String out_trade_no = (String) returnMap.get("out_trade_no");//订单号
-            //验证签名是否正确
-            Map<String, String> validParams = PayUtil.paraFilter(returnMap);  //回调验签时需要去除sign和空值参数
-            String validStr = PayUtil.createLinkString(validParams);//把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
-            String sign = PayUtil.sign(validStr, WxPayConfig.key, "utf-8").toUpperCase();//拼装生成服务器端验证的签名
-            // 因为微信回调会有八次之多,所以当第一次回调成功了,那么我们就不再执行逻辑了
-            //查询数据库中订单状态
-            OrderStatusVO orderStatusVO = zlOrderService.getByOrderSerialNo(out_trade_no);
-            Byte payStatus = orderStatusVO.getPayStatus();
-            Byte orderStatus = orderStatusVO.getOrderStatus();
-            if (payStatus == 2 && orderStatus == 1) {
-                logger.info("微信手机支付回调成功订单号:{}", out_trade_no);
-                resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
-            } else {
-                //根据微信官网的介绍，此处不仅对回调的参数进行验签，还需要对返回的金额与系统订单的金额进行比对等
-                if (sign.equals(returnMap.get("sign"))) {
 
-                    //查询该订单下的订单金额信息
-                    List<OrderPayShortInfoVO> orderPayShortInfoVOList = zlOrderService.getOrderByOrderSerialNo(out_trade_no);
-                    //判断付款金额参数是否正常
-                    BigDecimal totalPrice = null;
-                    for (OrderPayShortInfoVO orderPayShortInfoVO : orderPayShortInfoVOList) {
-                        BigDecimal actuallyPay = orderPayShortInfoVO.getActuallyPay();
-                        totalPrice = totalPrice.add(actuallyPay);
-                    }
-                    Integer total_fee = (Integer) returnMap.get("total_fee");
-                    if (totalPrice.intValue() == total_fee) {
-                        //订单金额相同,更改数据库状态
-                        zlGoodsService.updateGoodsCount(out_trade_no);
-                        zlOrderService.updateOrder(out_trade_no);
-                        logger.info("微信手机支付回调成功订单号:{}", out_trade_no);
-                        resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
-                    } else {
-                        logger.info("订单金额不符,订单号:", out_trade_no);
-                        resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[订单金额不符]]></return_msg>" + "</xml> ";
-                    }
-                } else {
-                    resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[微信支付回调失败!签名不一致]]></return_msg>" + "</xml> ";
+            String resultCode = returnMap.get("result_code").toString();
+            if (resultCode.equals("SUCCESS")) {
+                String out_trade_no = (String) returnMap.get("out_trade_no");//订单号
+                //验证签名是否正确
+                Map<String, String> packageParams = PayUtil.paraFilter(returnMap);  //回调验签时需要去除sign和空值参数
+
+                String mysign = null;
+                try {
+                    mysign = PayUtil.generateSignature(packageParams, WxPayConfig.key);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+
+                packageParams.put("sign", mysign);
+                boolean bool = false;
+                try {
+                    bool = PayUtil.isSignatureValid(packageParams, WxPayConfig.key);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (bool) {
+                    logger.info("签名验证成功...");
+                } else {
+                    logger.info("签名验证失败...");
+                    throw new BizException("签名验证失败...");
+                }
+
+                logger.info("------验证微信端传过来的sign参数-----");
+                if (!mysign.equals(returnMap.get("sign"))) {
+                    logger.info("微信端传过来的sign参数验证不通过,可能为假冒通知!!!");
+                    String xml = "<xml>"
+                            + "<return_code><![CDATA[FAIL]]</return_code>"
+                            + "<return_msg><![CDATA[签名不一致]]></return_msg>"
+                            + "</xml>";
+                    return xml;
+//                    throw new BizException("微信端传过来的sign参数验证不通过,可能为假冒通知!!!");
+                }
+
+                //此处对回调的参数进行验签，还需要对返回的金额与系统订单的金额进行比对等
+                logger.info("微信端传过来的sign参数验证通过");
+
+                //查询该订单下的订单金额信息
+                BigDecimal orderActuallyPay = new BigDecimal(0);
+                logger.info("------验证微信端传过来的金额参数-----");
+                if (out_trade_no.startsWith("SM")) {
+                    BigDecimal orderPay = zlOrderService.getOrderActuallyPay(out_trade_no);
+                    orderActuallyPay = orderActuallyPay.add(orderPay);
+                } else {
+                    BigDecimal orderPay = zlOrderService.getOrderActuallyPay2(out_trade_no);
+                    orderActuallyPay = orderActuallyPay.add(orderPay);
+                }
+
+                orderActuallyPay = orderActuallyPay.multiply(BigDecimal.valueOf(100));
+                Integer total_fee = (Integer) returnMap.get("total_fee");
+
+                if (orderActuallyPay.intValue() != total_fee) {
+                    logger.info("微信端传过来的金额参数验证不通过,可能为假冒通知!!!");
+                    String xml = "<xml>"
+                            + "<return_code><![CDATA[FAIL]]</return_code>"
+                            + "<return_msg><![CDATA[金额不一致]]></return_msg>"
+                            + "</xml>";
+                    return xml;
+//                    throw new BizException("微信端传过来的金额参数验证不通过,可能为假冒通知!!!");
+                }
+
+                logger.info("微信端传过来的金额参数验证通过");
+
+                //订单金额相同,更改数据库状态
+                zlGoodsService.updateGoodsCount(out_trade_no);
+                zlOrderService.updateOrder(out_trade_no);
+                //进行分润
+                zlOrderProfitService.setUpOrderProfit(out_trade_no);
+                //订单通知php
+                zlOrderService.OrderNoticeToPhp(out_trade_no);
+                logger.info("微信手机支付回调成功订单号:{}", out_trade_no);
+                String xml = "<xml>"
+                        + "<return_code><![CDATA[SUCCESS]]</return_code>"
+                        + "<return_msg><![CDATA[OK]]></return_msg>"
+                        + "</xml>";
+                return xml;
+            } else {
+                String xml = "<xml>"
+                        + "<return_code><![CDATA[FAIL]]</return_code>"
+                        + "<return_msg><![CDATA[支付通知失败]]></return_msg>"
+                        + "</xml>";
+                return xml;
             }
         } else {
-            resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
-                    + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+            String xml = "<xml>"
+                    + "<return_code><![CDATA[FAIL]]</return_code>"
+                    + "<return_msg><![CDATA[支付通知失败]]></return_msg>"
+                    + "</xml>";
+            return xml;
         }
-        System.out.println(resXml);
-        System.out.println("微信支付回调数据结束");
 
-        BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
-        out.write(resXml.getBytes());
-        out.flush();
-        out.close();
+    }*/
 
-        return new ReturnString(resXml);
+    /*@ApiOperation(value = "订单支付状态自动回调测试版_姬慧慧")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号")
+    })
+    @UserLoginToken
+    @PostMapping("autoPayReturnTest/{out_trade_no}")
+    @ResponseBody
+    public ReturnString autoPayReturnTest(@PathVariable("out_trade_no") String out_trade_no) throws Exception {
+        try {
+            //订单金额相同,更改数据库状态
+            zlGoodsService.updateGoodsCount(out_trade_no);
+            zlOrderService.updateOrder(out_trade_no);
+            //进行分润
+            zlOrderProfitService.setUpOrderProfit(out_trade_no);
+            //订单通知php
+            zlOrderService.OrderNoticeToPhp(out_trade_no);
+            return new ReturnString(0, "支付回调成功!");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+    }*/
 
-    }
 
     @ApiOperation(value = "用户手动取消订单_姬慧慧")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号"),
-            @ApiImplicitParam(paramType = "path", name = "belongModule", dataType = "String", required = true, value = "所属模块 1便利店;2餐饮服务;3情趣用品;4土特产")
+            @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号")
     })
-    @PostMapping("cancelOrder/{out_trade_no}/{belongModule}")
+    @PostMapping("cancelOrder/{out_trade_no}")
     @UserLoginToken
 //    @PassToken
     @ResponseBody
-    public ReturnString cancelOrder(@PathVariable("out_trade_no") String out_trade_no, @PathVariable("belongModule") Integer belongModule) {
+    public ReturnString cancelOrder(@PathVariable("out_trade_no") String out_trade_no) {
         try {
-            zlOrderService.cancelOrder(out_trade_no, belongModule);
+            zlOrderService.cancelOrder(out_trade_no);
             return new ReturnString(0, "已取消");
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ReturnString("取消失败");
+            return new ReturnString(e.getMessage());
         }
     }
 
-    @ApiOperation(value = "微信支付退款,目前仅支持整单退款_姬慧慧")
+    @ApiOperation(value = "用户签收订单_姬慧慧")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "orderId", dataType = "int", required = true, value = "订单id")
+    })
+    @PostMapping("signForOrder/{orderId}")
+    @UserLoginToken
+    @ResponseBody
+    public ReturnString signForOrder(@PathVariable("orderId") Integer orderId) {
+        try {
+            wxPayService.signForOrder(Long.valueOf(orderId));
+            return new ReturnString(0, "已签收!");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+    }
+
+/*    @ApiOperation(value = "微信小程序支付退款接口_姬慧慧")
     @PostMapping("wxPayRefund")
     @UserLoginToken
     @ResponseBody
-    public ReturnString wxPayRefund(@RequestBody WxPayRefundParam wxPayRefundParam) {
+    public ReturnString wxPayRefund(@Validated @RequestBody WxPayRefundParam wxPayRefundParam) {
         try {
-            Map<String, Object> response = wxPayService.wxPayRefund(wxPayRefundParam);
-            return new ReturnString(response);
+            Map<String, Object> orderSerialNoMap = wxPayService.wxPayRefund(wxPayRefundParam);
+            return new ReturnString(orderSerialNoMap);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+    }*/
+
+    /*@ApiOperation(value = "订单退款状态自动回调,包括数据库的相关修改_姬慧慧")
+    @UserLoginToken
+    @PostMapping("autoRefundReturn")
+    @ResponseBody
+    public String autoRefundReturn(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader((ServletInputStream) request.getInputStream()));
+        String line = null;
+        StringBuilder sb = new StringBuilder();
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        br.close();
+        //sb为微信返回的xml
+        String notityXml = sb.toString();
+        System.out.println("接收到的报文：" + notityXml);
+        // 将解析结果存储在HashMap中
+        Map returnMap = null;
+        try {
+            returnMap = PayUtil.xmlToMap(notityXml);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnString("支付回调失败");
+        }
+
+        String return_code = (String) returnMap.get("return_code");
+
+        if ("SUCCESS".equals(return_code)) {
+            String refund_status = (String) returnMap.get("refund_status");
+            if ("SUCCESS".equals(refund_status)) {
+                String out_trade_no = (String) returnMap.get("out_trade_no");
+                ZlOrder zlOrder = new ZlOrder();
+                zlOrder.setOrderserialno(out_trade_no);
+                zlOrder = zlOrderMapper.selectOne(zlOrder);
+
+                //更改数据库商品库存
+                zlGoodsService.updateGoodsCountReturn(zlOrder.getOrderid());
+                //更改数据库订单状态
+                wxPayService.updateRefundStatus(zlOrder.getOrderid());
+                logger.info("退款回调成功!");
+                String xml = "<xml>"
+                        + "<return_code><![CDATA[SUCCESS]]</return_code>"
+                        + "<return_msg><![CDATA[OK]]></return_msg>"
+                        + "</xml>";
+                return xml;
+            } else if ("CHANGE".equals(refund_status)) {
+                logger.info("退款异常!");
+                String xml = "<xml>"
+                        + "<return_code><![CDATA[FAIL]]</return_code>"
+                        + "<return_msg><![CDATA[退款异常]]></return_msg>"
+                        + "</xml>";
+                return xml;
+//                throw new BizException("退款异常!");
+            } else if ("REFUNDCLOSE".equals(refund_status)) {
+                logger.info("退款关闭!");
+                String xml = "<xml>"
+                        + "<return_code><![CDATA[FAIL]]</return_code>"
+                        + "<return_msg><![CDATA[退款关闭]]></return_msg>"
+                        + "</xml>";
+                return xml;
+//                throw new BizException("退款关闭!");
+            } else {
+                logger.info("退款通知失败!");
+                String xml = "<xml>"
+                        + "<return_code><![CDATA[FAIL]]</return_code>"
+                        + "<return_msg><![CDATA[退款通知失败]]></return_msg>"
+                        + "</xml>";
+                return xml;
+            }
+        } else {
+            logger.info("退款通知失败!");
+            String xml = "<xml>"
+                    + "<return_code><![CDATA[FAIL]]</return_code>"
+                    + "<return_msg><![CDATA[退款通知失败]]></return_msg>"
+                    + "</xml>";
+            return xml;
+        }
+
+    }*/
+
+    /*@ApiOperation(value = "订单退款状态自动回调测试版_姬慧慧")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "out_trade_no", dataType = "String", required = true, value = "商户订单号")
+    })
+    @UserLoginToken
+    @PostMapping("autoRefundReturnTest/{out_trade_no}")
+    @ResponseBody
+    public ReturnString autoRefundReturnTest(@PathVariable("out_trade_no") String out_trade_no) throws Exception {
+        try {
+            ZlOrder zlOrder = new ZlOrder();
+            zlOrder.setOrderserialno(out_trade_no);
+            zlOrder = zlOrderMapper.selectOne(zlOrder);
+
+            //更改数据库商品库存
+            zlGoodsService.updateGoodsCountReturn(zlOrder.getOrderid());
+            //更改数据库订单状态
+            wxPayService.updateRefundStatus(zlOrder.getOrderid());
+            return new ReturnString(0, "退款回调成功!");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+    }*/
+
+    @ApiOperation(value = "订单退款状态主动查询终极版接口_姬慧慧")
+    @PostMapping("wxPayReturnQuery")
+    @UserLoginToken
+    @ResponseBody
+    public ReturnString wxPayReturnQuery(@Validated @RequestBody WxPayRefundQueryDTO wxPayRefundQueryDTO) {
+
+        try {
+            String resultString = wxPayService.wxPayReturnQuery(wxPayRefundQueryDTO);
+            return new ReturnString(0, resultString);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
         }
     }
 
@@ -332,6 +518,135 @@ public class ZlOrderController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("删除订单失败!");
+        }
+    }
+
+    @ApiOperation(value = "用户申请退款_姬慧慧")
+    @PostMapping("orderRefundRecord")
+    @UserLoginToken
+//    @PassToken
+    @ResponseBody
+    public ReturnString orderRefundRecord(HttpServletRequest request,
+                                          @Validated @RequestBody RefundRecordDTO refundRecordDTO) {
+
+        //获取用户id
+        String token = request.getHeader("token");
+        Long userID = TokenUtil.getUserId(token);
+        try {
+//            RefundapplyInfoVO refundapplyInfoVO = zlOrderService.orderRefundRecord(request, userID, refundRecordDTO);
+            zlOrderService.orderRefundRecord(request, userID, refundRecordDTO);
+            return new ReturnString(0, "退款申请提交成功,请等待审核!");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "用户退款申诉_姬慧慧")
+    @PostMapping("orderRefundAppeal")
+    @UserLoginToken
+//    @PassToken
+    @ResponseBody
+    public ReturnString orderRefundAppeal(HttpServletRequest request, @Validated @RequestBody OrderRefundAppealDTO orderRefundAppealDTO) {
+
+        //获取用户id
+        String token = request.getHeader("token");
+        Long userID = TokenUtil.getUserId(token);
+        try {
+            zlOrderService.orderRefundAppeal(request, userID, orderRefundAppealDTO);
+            return new ReturnString(0, "申诉提交成功,请等待审核!");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "用户获取快递列表_姬慧慧")
+    @GetMapping("getExpressList")
+    @UserLoginToken
+//    @PassToken
+    @ResponseBody
+    public ReturnString getExpressList() {
+
+        try {
+            List<ZlExpress> zlExpressList = zlOrderService.getExpressList();
+            return new ReturnString(zlExpressList);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "用户上传物流信息_姬慧慧")
+    @PostMapping("uploadExpressInfo")
+    @UserLoginToken
+//    @PassToken
+    @ResponseBody
+    public ReturnString uploadExpressInfo(HttpServletRequest request, @Validated @RequestBody UploadExpressInfoDTO uploadExpressInfoDTO) {
+
+        try {
+            zlOrderService.uploadExpressInfo(request, uploadExpressInfoDTO);
+            return new ReturnString(0, "物流上传成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "用户取消退款申请_姬慧慧")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "orderId", dataType = "int", required = true, value = "订单id"),
+    })
+    @PostMapping("cancelRefundapply/{orderId}")
+    @UserLoginToken
+//    @PassToken
+    @ResponseBody
+    public ReturnString cancelRefundapply(@PathVariable("orderId") Integer orderId) {
+
+        try {
+            zlOrderService.cancelRefundapply(Long.valueOf(orderId));
+            return new ReturnString(0, "取消退款成功!");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "用户退款协商历史_姬慧慧")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "orderId", dataType = "int", required = true, value = "订单id"),
+    })
+    @PostMapping("orderRefundHistory/{orderId}")
+    @UserLoginToken
+//    @PassToken
+    @ResponseBody
+    public ReturnString orderRefundHistory(@PathVariable("orderId") Integer orderId) {
+
+        try {
+            List<OrderRefundHistoryVO> orderRefundHistoryVOList = zlOrderService.orderRefundHistory(Long.valueOf(orderId));
+            return new ReturnString(orderRefundHistoryVOList);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "获取供应商详细地址信息_姬慧慧")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "orderId", dataType = "Long", required = true, value = "订单id"),
+    })
+    @PostMapping("getSupplierAddress/{orderId}")
+    @UserLoginToken
+//    @PassToken
+    @ResponseBody
+    public ReturnString getSupplierAddress(@PathVariable("orderId") Long orderId) {
+
+        try {
+            ZlSupplierAddress zlSupplierAddress = zlOrderService.getSupplierAddress(orderId);
+            return new ReturnString(zlSupplierAddress);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
         }
     }
 

@@ -5,6 +5,8 @@ import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.controller.hotellive.param.ZlCheckoutOrderParam;
 import com.zhiliao.hotel.controller.hotellive.param.ZlContinueLiveOrderParam;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlCheckoutOrderDTO;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlContinueLiveOrderDTO;
 import com.zhiliao.hotel.controller.myOrder.ZlOrderController;
 import com.zhiliao.hotel.controller.myOrder.vo.HotelBasicVO;
 import com.zhiliao.hotel.model.ZlCheckoutOrder;
@@ -90,9 +92,9 @@ public class HotelLiveOrderController {
         try {
             hotelLiveOrderService.cancelCheckoutOrder(orderID);
             return new ReturnString(0, "取消退房成功!");
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ReturnString("取消退房失败!");
+            return new ReturnString(e.getMessage());
         }
     }
 
@@ -106,8 +108,8 @@ public class HotelLiveOrderController {
     @ResponseBody
     public ReturnString checkoutOrderDetail(@PathVariable("orderID") Long orderID) {
         try {
-            ZlCheckoutOrder checkoutOrder = hotelLiveOrderService.checkoutOrderDetail(orderID);
-            return new ReturnString(checkoutOrder);
+            ZlCheckoutOrderDTO zlCheckoutOrderDTO = hotelLiveOrderService.checkoutOrderDetail(orderID);
+            return new ReturnString(zlCheckoutOrderDTO);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取失败!");
@@ -183,9 +185,9 @@ public class HotelLiveOrderController {
         try {
             hotelLiveOrderService.cancelContinueLiveOrder(orderID);
             return new ReturnString(0, "取消续住成功!");
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ReturnString("取消续住失败!");
+            return new ReturnString(e.getMessage());
         }
     }
 
@@ -217,8 +219,8 @@ public class HotelLiveOrderController {
     @ResponseBody
     public ReturnString continueLiveOrderDetail(@PathVariable("orderID") Long orderID) {
         try {
-            ZlContinueLiveOrder continueLiveOrder = hotelLiveOrderService.continueLiveOrderDetail(orderID);
-            return new ReturnString(continueLiveOrder);
+            ZlContinueLiveOrderDTO zlContinueLiveOrderDTO = hotelLiveOrderService.continueLiveOrderDetail(orderID);
+            return new ReturnString(zlContinueLiveOrderDTO);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString("获取失败!");

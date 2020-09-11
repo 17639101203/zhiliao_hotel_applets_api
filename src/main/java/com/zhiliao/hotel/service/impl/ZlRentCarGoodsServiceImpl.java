@@ -1,11 +1,16 @@
 package com.zhiliao.hotel.service.impl;
 
-import com.alibaba.fastjson.JSON;
+import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
+import com.zhiliao.hotel.model.ZlWxuserdetail;
+import com.zhiliao.hotel.service.OrderLogService;
+import com.zhiliao.hotel.service.ZlRentCarGoodsService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
+import com.zhiliao.hotel.common.exception.BizException;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlRentCarOrderDTO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
 import com.zhiliao.hotel.controller.rentcar.vo.RentCarOrderToPhpVO;
@@ -16,9 +21,9 @@ import com.zhiliao.hotel.mapper.ZlRentCarOrderMapper;
 import com.zhiliao.hotel.model.ZlHotelroom;
 import com.zhiliao.hotel.model.ZlRentCarGoods;
 import com.zhiliao.hotel.model.ZlRentCarOrder;
-import com.zhiliao.hotel.service.ZlRentCarGoodsService;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import com.zhiliao.hotel.utils.PushInfoToPhpUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +58,12 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
 
     @Autowired
     private ZlHotelRoomMapper zlHotelRoomMapper;
+
+    @Autowired
+    private OrderLogService orderLogService;
+
+    @Autowired
+    private ZlWxuserdetailMapper zlWxuserdetailMapper;
 
     /**
      * 获取车型列表
@@ -91,7 +102,15 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
     @Override
     public Map<String, Object> addRentCar(Long userId, ZlRentCarOrder rentCarOrder, Integer goodsid) {
 
+        ZlWxuserdetail zlWxuserdetail = new ZlWxuserdetail();
+        zlWxuserdetail.setUserid(userId);
+        zlWxuserdetail = zlWxuserdetailMapper.selectOne(zlWxuserdetail);
+
         rentCarOrder.setUserid(userId);
+        rentCarOrder.setUsername(zlWxuserdetail.getRealname());
+        if (StringUtils.isNoneBlank(zlWxuserdetail.getTel())) {
+            rentCarOrder.setTel(zlWxuserdetail.getTel());
+        }
 
         //判断该车型数量充足
         ZlRentCarGoods rentCarGoods = rentCarGoodsMapper.rentCarDetail(goodsid);
@@ -101,9 +120,7 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
         if (rentCarGoods.getStockcount() <= 0) {
             throw new RuntimeException("该车型已被预定完,请选择其他车型");
         }
-        /*ZlRentCarOrder order = rentCarOrderMapper.findAllByCarNumber(rentCarOrder.getHotelid(),rentCarOrder.getCarnumber());
-        if (order != null){
-        }*/
+
         String orderSerialNo = OrderIDUtil.createOrderID("ZC");
         rentCarOrder.setOrderserialno(orderSerialNo);
         rentCarOrder.setOrderstatus((byte) 0);
@@ -112,14 +129,21 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
         rentCarOrder.setCancancelorderminute(rentCarGoods.getCancancelorderminute());
         rentCarOrder.setIsdelete(false);
         rentCarOrder.setIsuserdelete(false);
+        rentCarOrder.setComeformid(1);
         rentCarOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         rentCarOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(rentCarOrder.getRoomnumber(), rentCarOrder.getHotelid());
+        if (zlHotelroom == null) {
+            throw new BizException("您的码是前台码，不提供该服务");
+        }
         rentCarOrder.setFloornumber(zlHotelroom.getRoomfloor());
+        //更新租车表相应数量
+//        rentCarGoodsMapper.updateStockCountDecrease(goodsid);
         int num = rentCarOrderMapper.insertSelective(rentCarOrder);
         if (num > 0) {
             Map<String, Object> map = new HashMap<>();
-            map.put("orderId", rentCarOrder.getOrderid());
+            map.put("orderid", rentCarOrder.getOrderid());
+            map.put("serialnumber", orderSerialNo);
             logger.info("租车服务订单插入数据库完成,订单id:" + rentCarOrder.getOrderid());
 
             // 推送消息
@@ -146,23 +170,20 @@ public class ZlRentCarGoodsServiceImpl implements ZlRentCarGoodsService {
      * @return
      */
     @Override
-    public RentCarOrderVO rentCarOrderDetail(Long orderid) {
-        return rentCarOrderMapper.rentCarOrderDetailVO(orderid);
+    public ZlRentCarOrderDTO rentCarOrderDetail(Long orderid) {
+        return rentCarOrderMapper.getRentCarOrderDetail(orderid);
     }
 
     @Override
     public void cancelRentCarOrder(Long orderid) {
         ZlRentCarOrder rentCarOrder = rentCarOrderMapper.rentCarOrderDetail(orderid);
         if (rentCarOrder == null) {
-            throw new RuntimeException("没有此订单");
+            throw new RuntimeException("参数有误!");
         }
-        rentCarOrder.setOrderstatus((byte) -1);
-        rentCarOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
-        int num = rentCarOrderMapper.updateById(rentCarOrder);
-        if (num == 0) {
-            throw new RuntimeException("取消失败");
 
-        }
+        //将订单取消操作写到记录表中
+        orderLogService.cancelOrderLog(rentCarOrder.getOrderid(), rentCarOrder.getHotelid(), rentCarOrder.getCreatedate(), rentCarOrder.getMoldtype());
+        rentCarOrderMapper.cancelRentCarOrder(orderid, Math.toIntExact(System.currentTimeMillis() / 1000));
     }
 
     /**

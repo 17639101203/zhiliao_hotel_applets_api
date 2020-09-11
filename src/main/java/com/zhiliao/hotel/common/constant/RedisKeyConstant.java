@@ -12,6 +12,9 @@ public class RedisKeyConstant {
     //用户刷新Token存活时间(单位:秒)
     public final static Integer USERFLASHTIME = 60 * 60 * 24 * 30;
 
+    //用户登录Token存活时间(单位:秒)
+    public final static Integer ACCESSTOKEN = 60 * 115;
+
     //banner key
     public final static String BANNER_KEY = "banner";
 
@@ -19,19 +22,43 @@ public class RedisKeyConstant {
     public final static String ORDER_HOTELGOODSSKUID_ID = "order_HotelGoodsSkuID_";
 
     //存入redis的优惠券的键的名称,后加RecID
-    public final static String ORDER_RECID = "order_RecID_";
+    public final static String ORDER_COUPONUSERID = "order_couponUserId_";
     //存入redis的优惠券集合的名称,后加OrderSerialNo
-    public final static String ORDER_RECID_ORDERSERIALNO = "order_RecID_OrderSerialNo_";
+    public final static String ORDER_COUPONUSERID_ORDERSERIALNO = "order_couponUserId_OrderSerialNo_";
 
     //存入redis的用户订单信息的键的名称,后加OrderSerialNo
     public final static String ORDER_ORDERSERIALNO = "order_OrderSerialNo_";
     //存入redis的用户订单信息的标记的名称,后加OrderSerialNo
     public final static String ORDER_ORDERSERIALNO_FLAG = "order_OrderSerialNo_Flag_";
 
+    //存入redis的优惠券,用于优惠券过期操作数据库状态的处理,后加用户优惠券表自增id
+    public final static String COUPON_USER_FLAG = "coupon_user_";
+
     /**
      * 酒店超市主题
      */
-    public static final String TOPIC_HOTELSHOP = "TOPIC_HOTELSHOP_ORDER";
+    public static final String TOPIC_SUPERMARKET_ORDER = "TOPIC_SUPERMARKET_ORDER";
+
+    /**
+     * 便利店主题
+     */
+    public static final String TOPIC_STORE_ORDER = "TOPIC_STORE_ORDER";
+
+    /**
+     * 餐饮服务主题
+     */
+    public static final String TOPIC_CATERING_ORDER = "TOPIC_CATERING_ORDER";
+
+    /**
+     * 情趣用品主题
+     */
+    public static final String TOPIC_SEXTOY_ORDER = "TOPIC_SEXTOY_ORDER";
+
+    /**
+     * 土特产主题
+     */
+    public static final String TOPIC_LOCALSPECIALTY_ORDER = "TOPIC_LOCALSPECIALTY_ORDER";
+
     /**
      * 客房服务主题
      */

@@ -3,8 +3,10 @@ package com.zhiliao.hotel.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
+import com.zhiliao.hotel.common.exception.BizException;
 import com.zhiliao.hotel.controller.clean.cleanparm.CleanParm;
 import com.zhiliao.hotel.controller.clean.vo.CleanOrderToPhpVO;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlCleanOrderDTO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.mapper.ZlCleanOrderMapper;
 import com.zhiliao.hotel.mapper.ZlHotelRoomMapper;
@@ -13,12 +15,16 @@ import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
 import com.zhiliao.hotel.model.ZlCleanOrder;
 import com.zhiliao.hotel.model.ZlHotelroom;
 import com.zhiliao.hotel.model.ZlWxuser;
+import com.zhiliao.hotel.model.ZlWxuserdetail;
+import com.zhiliao.hotel.service.OrderLogService;
 import com.zhiliao.hotel.service.ZlCleanOrderService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import com.zhiliao.hotel.utils.PushInfoToPhpUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -49,8 +55,14 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
     @Autowired
     private ZlWxuserMapper zlWxuserMapper;
 
+    @Autowired
+    private OrderLogService orderLogService;
+
     @Override
     public Map<String, Object> addCleanOrder(Long userid, CleanParm cleanParm) {
+        ZlWxuserdetail zlWxuserdetail = new ZlWxuserdetail();
+        zlWxuserdetail.setUserid(userid);
+        zlWxuserdetail = zlWxuserdetailMapper.selectOne(zlWxuserdetail);
         Map<String, Object> map = new HashMap<>();
 //        ZlWxuserdetail zlWxuserdetail = zlWxuserdetailMapper.findByUserId(userid);
         String serialnumber = OrderIDUtil.createOrderID("QS");
@@ -71,11 +83,14 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
         zlCleanOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));   //支付/取消时间
 //        zlCleanOrderMapper.addCleanOrder(zlCleanOrder);
         ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(cleanParm.getRoomnumber(), cleanParm.getHotelid());
+        if (zlHotelroom == null) {
+            throw new BizException("您的码是前台码，不提供该服务");
+        }
         zlCleanOrder.setFloornumber(zlHotelroom.getRoomfloor());
-        ZlWxuser zlWxuser = new ZlWxuser();
-        zlWxuser.setUserid(userid);
-        ZlWxuser wxuser = zlWxuserMapper.selectOne(zlWxuser);
-        zlCleanOrder.setUsername(wxuser.getNickname());
+        zlCleanOrder.setUsername(zlWxuserdetail.getRealname());
+        if (StringUtils.isNoneBlank(zlWxuserdetail.getTel())) {
+            zlCleanOrder.setTel(zlWxuserdetail.getTel());
+        }
         zlCleanOrderMapper.insertSelective(zlCleanOrder);
 
         logger.info("清扫订单插入数据库完成,订单id:" + zlCleanOrder.getOrderid());
@@ -92,18 +107,30 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_CLEAN_ORDER, orderStr);
         logger.info("推送清扫订单到redis通知php后台人员完成,订单信息:" + cleanOrderVO);
 
-        map.put("serialnumber", serialnumber);
         map.put("orderid", zlCleanOrder.getOrderid());
+        map.put("serialnumber", serialnumber);
         return map;
     }
 
     @Override
-    public Map<String, Object> selectCleanDetails(Long orderID) {
+    public ZlCleanOrderDTO selectCleanDetails(Long orderID) {
         return zlCleanOrderMapper.selectCleanDetails(orderID);
     }
 
     @Override
-    public void removeCleanOrder(Long orderID, Integer updatedate) {
+    public void removeCleanOrder(Long orderID) {
+        Integer updatedate = DateUtils.javaToPhpNowDateTime();
+
+        ZlCleanOrder zlCleanOrder = new ZlCleanOrder();
+        zlCleanOrder.setOrderid(orderID);
+        zlCleanOrder = zlCleanOrderMapper.selectOne(zlCleanOrder);
+
+        if (zlCleanOrder == null) {
+            throw new BizException("参数有误!");
+        }
+
+        //将订单取消操作写到记录表中
+        orderLogService.cancelOrderLog(zlCleanOrder.getOrderid(), zlCleanOrder.getHotelid(), zlCleanOrder.getCreatedate(), zlCleanOrder.getMoldtype());
         zlCleanOrderMapper.removeCleanOrder(orderID, updatedate);
     }
 

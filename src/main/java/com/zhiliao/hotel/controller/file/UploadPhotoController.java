@@ -5,6 +5,7 @@ import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.controller.file.params.UploadPhotoParam;
 import com.zhiliao.hotel.utils.AliyunOssUtil;
 import com.zhiliao.hotel.utils.MultipartFileUtil;
+import com.zhiliao.hotel.utils.UploadPhotoUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ import java.util.UUID;
 @RequestMapping("uploadPhoto")
 public class UploadPhotoController {
 
-    @ApiOperation(value = "上传图片")
+    @ApiOperation(value = "前端上传图片")
     @PostMapping(value = "uploadPhoto", consumes = {"multipart/*"}, headers = "content-type=multipart/form-data")
     @PassToken
     public ReturnString uploadPhoto(
@@ -45,6 +46,24 @@ public class UploadPhotoController {
             boolean bool = AliyunOssUtil.qdFileUpload(file, fileName);
             file.delete();
             imgurl = AliyunOssUtil.visitendpoint + AliyunOssUtil.zlgjqdFolderName + "/" + fileName;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(imgurl);
+        return new ReturnString(0, imgurl);
+
+    }
+
+    @ApiOperation(value = "后端上传图片")
+    @PostMapping(value = "backUploadPhoto", consumes = {"multipart/*"}, headers = "content-type=multipart/form-data")
+    @PassToken
+    public ReturnString backUploadPhoto(@RequestParam(value = "multipartFile") MultipartFile multipartFile) {
+
+        String imgurl = "";
+
+        try {
+            imgurl = UploadPhotoUtil.uploadPhotoUtil2(multipartFile);
         } catch (Exception e) {
             e.printStackTrace();
         }

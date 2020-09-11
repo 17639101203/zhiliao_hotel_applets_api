@@ -79,15 +79,15 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
     @Override
     public ReturnString getById(Integer hotelId, String roomId, String token) {
-        ZlHotelroom zlHotelroom = null;
         //固定 小程序渠道 1为C端
         String state = "1";
-        if (StringUtils.equals(state, "1")) {
-            if (!StringUtils.isEmpty(roomId) && Integer.valueOf(roomId) != 0) {
-                //根据酒店id，客房id
-                zlHotelroom = zlHotelRoomMapper.getById(roomId, hotelId);
-                if (zlHotelroom != null) {
 
+        //根据酒店id，客房id
+        ZlHotelroom zlHotelroom = zlHotelRoomMapper.getById(roomId, hotelId);
+        if (StringUtils.equals(state, "1")) {
+
+            if (zlHotelroom != null) {
+                if (zlHotelroom.getRoomTypeFlag() == 1) {
                     if (!StringUtils.isEmpty(token)) {
                         //获取 token得到微信用户Id
                         Long weiXinUserId = TokenUtil.getUserId(token);
@@ -98,6 +98,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                     }
                 }
             }
+
             ZlHotel byId = zlHotelMapper.getById(hotelId);
             ZlHotelIn zlHotel = new ZlHotelIn(byId);
             if (zlHotel != null) {
@@ -115,7 +116,8 @@ public class ZlHotelServiceImpl implements ZlHotelService {
                     bannerList = (List<ZlBanner>) redisTemplate.opsForValue().get(RedisKeyConstant.BANNER_KEY + hotelId);
                 } else {
                     bannerList = zlBannerService.findBanner(Integer.valueOf(hotelId), 0);
-                    redisTemplate.opsForValue().set(RedisKeyConstant.BANNER_KEY + hotelId, bannerList);
+                    //目前先不放缓存
+//                    redisTemplate.opsForValue().set(RedisKeyConstant.BANNER_KEY + hotelId, bannerList);
                 }
 
                 //判断缓存没数据情况则添加
@@ -127,7 +129,11 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
                 //根据酒店ID获取菜单
                 if (!StringUtils.isEmpty(roomId)) {
-                    List<ZlXcxmenu> zlXcxMenuList = zlXcxMenuService.getMenuList(String.valueOf(zlHotel.getHotelID()), Integer.valueOf(roomId));
+                    int roomTypeFlag = 0;
+                    if (zlHotelroom != null) {
+                        roomTypeFlag = zlHotelroom.getRoomTypeFlag();
+                    }
+                    List<ZlXcxmenu> zlXcxMenuList = zlXcxMenuService.getMenuList(String.valueOf(zlHotel.getHotelID()), roomTypeFlag);
                     for (ZlXcxmenu zlXcxmenu : zlXcxMenuList) {
                         Integer menuid = zlXcxmenu.getMenuid();
                         BusinessHoursVO businessHoursVO = zlGoodsService.getBusinessHours(menuid);
@@ -165,6 +171,10 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
             HotelMoneyVO hotelMoneyVO = zlHotelMapper.getHotelMoney(hotelId);
             hotelData.setHotelMoneyVO(hotelMoneyVO);
+            Byte serviceTime = zlHotelMapper.getServiceTime(hotelId);
+            if (serviceTime != null) {
+                hotelData.setServiceTime(serviceTime);
+            }
 
             return new ReturnString(hotelData);
         }

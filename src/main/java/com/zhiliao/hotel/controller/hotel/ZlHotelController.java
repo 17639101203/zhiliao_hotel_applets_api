@@ -48,11 +48,7 @@ public class ZlHotelController {
     })
     public ReturnString getHotelList(String codeId, HttpServletRequest request) {
         String token = request.getHeader("token");
-        //获取 token得到微信用户Id
-       /* Long weiXinUserId = TokenUtil.getUserId(token);
-        if (weiXinUserId == null) {
-            return new ReturnString("没有访问权限，用户未登录或登录已过期!");
-        }*/
+
         String realCodeId = "";
         try {
             realCodeId = PhpCodeUtils.decodeStr(codeId);
@@ -66,6 +62,7 @@ public class ZlHotelController {
         logger.info("二维码ID是：" + realCodeId);
 
         ZlHotelRoomQrcode roomQrcodeId = zlHotelRoomQrcodeService.getRoomQrcodeId(realCodeId);
+//        ZlHotelRoomQrcode roomQrcodeId = zlHotelRoomQrcodeService.getRoomQrcodeId(codeId);
 
         logger.info("房间ID是：" + roomQrcodeId);
 

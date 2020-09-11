@@ -2,6 +2,7 @@ package com.zhiliao.hotel.mapper;
 
 import com.zhiliao.hotel.controller.hotelfacility.vo.HotelFacilityOrderParamVO;
 import com.zhiliao.hotel.controller.hotelfacility.vo.ZlHotelFacilityOrderToPhpVO;
+import com.zhiliao.hotel.controller.myAppointment.dto.HotelFacilityOrderParamDTO;
 import com.zhiliao.hotel.model.ZlHotelFacilityOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import org.apache.ibatis.annotations.Param;
@@ -13,13 +14,13 @@ import java.util.Map;
 
 public interface ZlHotelFacilityOrderMapper extends Mapper<ZlHotelFacilityOrder> {
     List<ZlHotelFacilityOrder> findAllOrder(@Param("userId") Long userId,
-                                            @Param("orderStatus") Byte orderStatus,
+                                            @Param("orderstatus") Byte orderstatus,
                                             @Param("hotelId") Integer hotelId
     );
 
     ZlHotelFacilityOrder findOrderById(@Param("orderID") Long orderID);
 
-    HotelFacilityOrderParamVO findOrderByIdVO(@Param("orderID") Long orderID);
+    HotelFacilityOrderParamDTO findOrderByIdVO(@Param("orderID") Long orderID);
 
     int byOrderId(ZlHotelFacilityOrder order);
 
@@ -31,7 +32,7 @@ public interface ZlHotelFacilityOrderMapper extends Mapper<ZlHotelFacilityOrder>
                                                @Param("facilityid") Integer facilityid);
 
     @Select("select count(*) from zl_hotelfacilityorder where UserID = #{userId} and HotelID = #{hotelId} and IsDelete = 0 and IsUserDelete = 0")
-    int selectCountFacility(@Param("userId")Long userId, @Param("hotelId")Integer hotelId);
+    int selectCountFacility(@Param("userId") Long userId, @Param("hotelId") Integer hotelId);
 
     void updateById(@Param("orderID") Long orderID, @Param("updateDate") Integer updateDate);
 

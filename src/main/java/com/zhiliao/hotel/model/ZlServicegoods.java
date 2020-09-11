@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "zl_servicegoods")
 public class ZlServicegoods implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,6 +53,11 @@ public class ZlServicegoods implements Serializable {
      * 标签
      */
     private String tags;
+
+    /**
+     * 商品详情
+     */
+    private String content;
 
     /**
      * 一天可领取次数
@@ -123,6 +130,21 @@ public class ZlServicegoods implements Serializable {
     private Boolean isdelete;
 
     /**
+     * 旧ID
+     */
+    private Integer oldid;
+
+    /**
+     * 操作员
+     */
+    private String operatorname;
+
+    /**
+     * 操作员IP
+     */
+    private String operatorip;
+
+    /**
      * 添加时间
      */
     private Integer createdate;
@@ -132,8 +154,4 @@ public class ZlServicegoods implements Serializable {
      */
     private Integer updatedate;
 
-    /**
-     * 商品详情
-     */
-    private String content;
 }

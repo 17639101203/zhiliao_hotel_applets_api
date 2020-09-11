@@ -53,4 +53,10 @@ public class GoodsListVo {
     @ApiModelProperty(value = "酒店id")
     private Integer hotelId;
 
+    @ApiModelProperty(value = "供应商id")
+    private Integer supplierId;
+
+    @ApiModelProperty(value = "-1:紧急下架;0:安全下架;1上架;2导入待编辑")
+    private Integer goodsStatus;
+
 }

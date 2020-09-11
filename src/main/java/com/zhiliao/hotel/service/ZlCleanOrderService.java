@@ -2,6 +2,7 @@ package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.controller.clean.cleanparm.CleanParm;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlCleanOrderDTO;
 import com.zhiliao.hotel.model.ZlCleanOrder;
 
 import java.util.List;
@@ -25,12 +26,12 @@ public interface ZlCleanOrderService {
      * @param orderID
      * @return
      */
-    Map<String, Object> selectCleanDetails(Long orderID);
+    ZlCleanOrderDTO selectCleanDetails(Long orderID);
 
     /**
      * 取消清扫预约
      */
-    void removeCleanOrder(Long orderID, Integer updatedate);
+    void removeCleanOrder(Long orderID);
 
     void deleteCleanOrder(Long orderID);
 }

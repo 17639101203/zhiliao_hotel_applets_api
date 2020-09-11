@@ -168,7 +168,7 @@
 
 
     <!--  查询订单详情-->
-    <select id="queryRepairMsg" resultType="com.zhiliao.hotel.controller.Repair.vo.RepairOrderVO">
+    <select id="queryRepairMsg" resultType="com.zhiliao.hotel.controller.myAppointment.dto.ZlRepairorderDTO">
         SELECT
           OrderID,
           SerialNumber,
@@ -177,6 +177,17 @@
           ImgUrls,
           Remark,
           OrderStatus,
+          CASE
+              OrderStatus
+              WHEN - 1
+              THEN '已取消'
+              WHEN 0
+              THEN '待维修'
+              WHEN 1
+              THEN '已完成'
+              WHEN 2
+              THEN '已接单'
+            END StatusMessage,
           CreateDate,
           UpdateDate
         FROM
@@ -192,7 +203,9 @@
           zl_repairorder
         SET
           OrderStatus = '-1',
-          UpdateDate = #{updatedate}
+          UpdateDate = #{updatedate},
+          CancelUserType = 1,
+          CancelRemark = '用户取消'
         WHERE OrderID = #{orderID}
           AND IsDelete = '0'
           AND IsUserDelete = '0'
@@ -205,7 +218,6 @@
       IsUserDelete = 1,
       UpdateDate = #{updatedate}
     WHERE OrderID = #{orderID}
-      AND IsDelete = '0'
   </update>
     <update id="updateCommentImg">
         UPDATE

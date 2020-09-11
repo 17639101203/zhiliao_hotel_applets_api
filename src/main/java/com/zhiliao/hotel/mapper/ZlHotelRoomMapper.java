@@ -18,6 +18,7 @@ public interface ZlHotelRoomMapper extends Mapper<ZlHotelroom> {
     List<WifiVo> findWiFi(@Param("hotelID") Integer hotelID, @Param("roomID") Integer roomID);
 
     ZlHotelroom getById(@Param("roomId") String roomId, @Param("hotelId") Integer hotelId);
+    ZlHotelroom getRoomById(@Param("roomId") String roomId);
 
     ZlHotelroom getByHotelIDAndRoomNumber(@Param("roomNumber") String roomNumber, @Param("hotelId") Integer hotelId);
 

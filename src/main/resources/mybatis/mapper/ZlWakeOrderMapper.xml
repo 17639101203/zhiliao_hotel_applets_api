@@ -28,7 +28,7 @@
     <result column="UpdateDate" jdbcType="INTEGER" property="updatedate" />
   </resultMap>
 
-  <select id="wakeOrderDetail" resultType="com.zhiliao.hotel.model.ZlWakeOrder">
+  <select id="wakeOrderDetail2" resultType="com.zhiliao.hotel.controller.myAppointment.dto.ZlWakeOrderDTO">
     select
     OrderID,
     OrderSerialNo,
@@ -37,6 +37,17 @@
     UserName,
     Tel,
     OrderStatus,
+    CASE
+      OrderStatus
+      WHEN - 1
+      THEN '已取消'
+      WHEN 0
+      THEN '待处理'
+      WHEN 1
+      THEN '处理完成'
+      WHEN 2
+      THEN '已接单'
+    END StatusMessage,
     WakeDate,
     Remark,
     CreateDate,
@@ -46,7 +57,36 @@
     where OrderID = #{orderID} and IsDelete = 0 and IsUserDelete = 0
   </select>
 
-  <update id="updateById" parameterType="com.zhiliao.hotel.model.ZlWakeOrder">
+  <select id="wakeOrderDetail" resultType="com.zhiliao.hotel.model.ZlWakeOrder">
+    select
+    OrderID,
+    OrderSerialNo,
+    HotelName,
+    RoomNumber,
+    UserName,
+    Tel,
+    OrderStatus,
+    CASE
+      OrderStatus
+      WHEN - 1
+      THEN '已取消'
+      WHEN 0
+      THEN '待处理'
+      WHEN 1
+      THEN '处理完成'
+      WHEN 2
+      THEN '已接单'
+    END StatusMessage,
+    WakeDate,
+    Remark,
+    CreateDate,
+    UpdateDate
+    from
+    zl_wakeorder
+    where OrderID = #{orderID} and IsDelete = 0 and IsUserDelete = 0
+  </select>
+
+  <update id="updateById">
     update zl_wakeorder
     set
     <if test="orderstatus != null">
@@ -63,4 +103,17 @@
   <select id="selectToPhp" resultType="com.zhiliao.hotel.controller.wake.vo.ZlWakeOrderToPhpVO">
     select * from zl_wakeorder where OrderID = #{orderid}
   </select>
+
+  <update id="cancelWakeOrder">
+      UPDATE
+          zl_wakeorder
+        SET
+          OrderStatus = -1,
+          UpdateDate = #{updatedate},
+          CancelUserType = 1,
+          CancelRemark = '用户取消'
+        WHERE OrderID = #{orderID}
+          AND IsDelete = 0
+  </update>
+
 </mapper>

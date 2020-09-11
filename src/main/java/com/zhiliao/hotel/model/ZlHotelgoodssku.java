@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "zl_hotelgoodssku")
 public class ZlHotelgoodssku implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,6 +57,11 @@ public class ZlHotelgoodssku implements Serializable {
      * 虚拟销量
      */
     private Integer virtualsoldcount;
+
+    /**
+     * 商品属性详细
+     */
+    private String skuinfo;
 
     /**
      * 是否默认0:否；1是

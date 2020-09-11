@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.common.exception.BizException;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlServiceorderDTO2;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.serviceorder.params.ServiceorderCommitParams;
 import com.zhiliao.hotel.controller.serviceorder.vo.ServiceorderCommitVo;
@@ -11,6 +12,7 @@ import com.zhiliao.hotel.controller.serviceorder.vo.ServiceorderInfoVo;
 import com.zhiliao.hotel.controller.serviceorder.vo.ServiceorderToPhpVO;
 import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.model.*;
+import com.zhiliao.hotel.service.OrderLogService;
 import com.zhiliao.hotel.service.ZlServiceorderService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.OrderIDUtil;
@@ -65,8 +67,11 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
     @Autowired
     private ZlWxuserMapper zlWxuserMapper;
 
+    @Autowired
+    private OrderLogService orderLogService;
+
     @Override
-    public ServiceorderCommitVo serviceorderSubmit(String token, ServiceorderCommitParams scp) throws RuntimeException {
+    public Map<String, Object> serviceorderSubmit(String token, ServiceorderCommitParams scp) throws RuntimeException {
         ServiceorderCommitVo serviceorderCommitVo = new ServiceorderCommitVo();
         //校验参数
         if (scp.getHotelid() == null) {
@@ -111,6 +116,10 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         List<ZlServiceorderdetail> orderDetails = new ArrayList<>();
         //根据 token得到微信用户Id
         Long userId = TokenUtil.getUserId(token);
+
+        ZlWxuserdetail zlWxuserdetail = new ZlWxuserdetail();
+        zlWxuserdetail.setUserid(userId);
+        zlWxuserdetail = zlWxuserdetailMapper.selectOne(zlWxuserdetail);
 
         //拼接服务项目字符串
         StringBuilder serviceItemBuilder = new StringBuilder();
@@ -157,8 +166,8 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         }
         String serviceItemStr = serviceItemBuilder.toString();
         String serviceItem = serviceItemStr.substring(1);
-        //todo 校验送达时间是否在服务时间内
-        //todo 超时时间  暂时按15分钟  送达时间、超时时间要放到redis，key暂定
+        //校验送达时间是否在服务时间内
+        //超时时间  暂时按15分钟  送达时间、超时时间要放到redis，key暂定
         int timeoutDate;
         if (scp.getDeliverydate() == 0) {
             timeoutDate = DateUtils.javaToPhpNowDateTime() + (15 * 60);
@@ -195,6 +204,10 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         order.setDeliverydate((int) (scp.getDeliverydate() / 1000));
         order.setUpdatedate(DateUtils.javaToPhpNowDateTime());
         order.setServiceitem(serviceItem);
+        order.setUsername(zlWxuserdetail.getRealname());
+        if (StringUtils.isNoneBlank(zlWxuserdetail.getTel())) {
+            order.setTel(zlWxuserdetail.getTel());
+        }
         zlServiceorderMapper.insertSelective(order);
         //插入客服服务订单商品表数据
         orderDetails.stream().forEach(orderDetail -> orderDetail.setOrderid(order.getOrderid()));
@@ -207,7 +220,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
 //        zlServiceorderdetailMapper.insertOrderDetailList(orderDetails);
         //返回客房服务订单id
         serviceorderCommitVo.setOrderid(order.getOrderid());
-        //todo 获取商家服务平均时间配置，目前默认15分钟
+        //获取商家服务平均时间配置，目前默认15分钟
         serviceorderCommitVo.setDealWithTime(15);
 
         // 推送消息
@@ -222,7 +235,11 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         stringRedisTemplate.convertAndSend(RedisKeyConstant.TOPIC_ROOMSERVICE, orderStr);
         logger.info("推送客房服务订单到redis通知php后台人员完成,订单信息:" + serviceorderToPhpVO);
 
-        return serviceorderCommitVo;
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderid", order.getOrderid());
+        map.put("serialnumber", orderSerialNo);
+
+        return map;
     }
 
     @Override
@@ -230,7 +247,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
     public ServiceorderInfoVo getServiceorderInfo(Long orderId) throws RuntimeException {
         ServiceorderInfoVo serviceorderInfoVo = new ServiceorderInfoVo();
         //获取客房服务订单详情
-        ZlServiceorder order = zlServiceorderMapper.getByOrderId(orderId);
+        ZlServiceorderDTO2 order = zlServiceorderMapper.getByOrderIdDetil(orderId);
         if (order == null) {
             throw new BizException("该订单不存在，请刷新页面重试！");
         }
@@ -248,14 +265,6 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         serviceorderInfoVo.setOrderGoodsList(orderGoodsList);
         //根据字段复制实体
         BeanUtils.copyProperties(order, serviceorderInfoVo);
-//        String createdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getCreatedate()).toString());
-//        serviceorderInfoVo.setCreatedate(createdate);
-//        if (order.getDeliverydate() == 0) {
-//            serviceorderInfoVo.setDeliverydate("0");
-//        } else {
-//            String bookdate = DateUtils.transferLongToDate(DateUtils.phpToJavaDateTime(order.getDeliverydate()).toString());
-//            serviceorderInfoVo.setDeliverydate(bookdate);
-//        }
         ZlHotel zlHotel = zlHotelMapper.getById(serviceorderInfoVo.getHotelid());
         serviceorderInfoVo.setHotelname(zlHotel.getHotelName());
         return serviceorderInfoVo;
@@ -266,11 +275,11 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         //获取客房服务订单详情
         ZlServiceorder order = zlServiceorderMapper.getByOrderId(orderId);
         if (order == null) {
-            throw new BizException("该订单不存在，请刷新页面重试！");
+            throw new BizException("参数有误!");
         }
-        if (order.getOrderstatus() != 0) {
-            throw new BizException("该订单状态已发生改变，请刷新页面重试！");
-        }
+
+        //将订单取消操作写到记录表中
+        orderLogService.cancelOrderLog(order.getOrderid(), order.getHotelid(), order.getCreatedate(), order.getMoldtype());
         //修改订单状态
         Integer updateDate = DateUtils.javaToPhpNowDateTime();
         zlServiceorderMapper.updateOrderStatusById(orderId, updateDate);

@@ -1,5 +1,7 @@
 package com.zhiliao.hotel.controller.myOrder.vo;
 
+import lombok.Data;
+
 import java.util.List;
 
 /**
@@ -8,25 +10,19 @@ import java.util.List;
  * @author: 姬慧慧
  * @create: 2020-05-21 14:32
  **/
+@Data
 public class UserGoodsReturn<T> {
 
     private List<T> userGoodsInfoList;
 
+    /**
+     * 提示内容
+     */
     private String content;
 
-    public List<T> getUserGoodsInfoList() {
-        return userGoodsInfoList;
-    }
+    /**
+     * -1表示有商品商品库存不足,0表示提交成功
+     */
+    private Integer flag;
 
-    public void setUserGoodsInfoList(List<T> usergoodsInfoList) {
-        this.userGoodsInfoList = usergoodsInfoList;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 }

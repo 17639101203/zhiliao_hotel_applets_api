@@ -3,10 +3,13 @@ package com.zhiliao.hotel.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
+import com.zhiliao.hotel.common.exception.BizException;
 import com.zhiliao.hotel.controller.hotellive.param.ZlCheckoutOrderParam;
 import com.zhiliao.hotel.controller.hotellive.param.ZlContinueLiveOrderParam;
 import com.zhiliao.hotel.controller.hotellive.vo.ZlCheckoutOrderToPhpVO;
 import com.zhiliao.hotel.controller.hotellive.vo.ZlContinueLiveOrderToPhpVO;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlCheckoutOrderDTO;
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlContinueLiveOrderDTO;
 import com.zhiliao.hotel.controller.myOrder.vo.HotelBasicVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpVO;
@@ -19,8 +22,10 @@ import com.zhiliao.hotel.model.ZlContinueLiveOrder;
 import com.zhiliao.hotel.model.ZlHotelroom;
 import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.HotelLiveOrderService;
+import com.zhiliao.hotel.service.OrderLogService;
 import com.zhiliao.hotel.utils.OrderIDUtil;
 import com.zhiliao.hotel.utils.PushInfoToPhpUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +63,15 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
     @Autowired
     private ZlHotelRoomMapper zlHotelRoomMapper;
 
+    @Autowired
+    private OrderLogService orderLogService;
+
     @Override
     public Map<String, Object> checkoutOrder(Long userID, HotelBasicVO hotelBasicVO, ZlCheckoutOrderParam zlCheckoutOrderParam) {
+
+        ZlWxuserdetail zlWxuserdetail = new ZlWxuserdetail();
+        zlWxuserdetail.setUserid(userID);
+        zlWxuserdetail = zlWxuserdetailMapper.selectOne(zlWxuserdetail);
 
         //调用工具类生成订单编号
         String orderSerialNo = OrderIDUtil.createOrderID("TF");
@@ -72,16 +84,22 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         zlCheckoutOrder.setHotelname(hotelBasicVO.getHotelName());
         zlCheckoutOrder.setRoomid(hotelBasicVO.getRoomID());
         zlCheckoutOrder.setRoomnumber(hotelBasicVO.getRoomNumber());
-//        zlCheckoutOrder.setUsername(zlWxuserdetail.getRealname());
+        zlCheckoutOrder.setUsername(zlWxuserdetail.getRealname());
+        if (StringUtils.isNoneBlank(zlWxuserdetail.getTel())) {
+            zlCheckoutOrder.setTel(zlWxuserdetail.getTel());
+        }
         zlCheckoutOrder.setRemark(zlCheckoutOrderParam.getRemark());
-        zlCheckoutOrder.setTel(zlCheckoutOrder.getTel());
         zlCheckoutOrder.setOrderstatus((byte) 0);
         zlCheckoutOrder.setIsdelete(false);
         zlCheckoutOrder.setIsuserdelete(false);
+        zlCheckoutOrder.setComeformid(1);
         zlCheckoutOrder.setCheckoutdate((int) (zlCheckoutOrderParam.getCheckOutDate() / 1000));
         zlCheckoutOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         zlCheckoutOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(hotelBasicVO.getRoomNumber(), hotelBasicVO.getHotelID());
+        if (zlHotelroom == null) {
+            throw new BizException("您的码是前台码，不提供该服务");
+        }
         zlCheckoutOrder.setFloornumber(zlHotelroom.getRoomfloor());
 
         zlCheckoutOrderMapper.insertSelective(zlCheckoutOrder);
@@ -101,25 +119,34 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderid", zlCheckoutOrder.getOrderid());
+        map.put("serialnumber", orderSerialNo);
         return map;
     }
 
     @Override
     public Map<String, Object> continueLiveOrder(Long userID, HotelBasicVO hotelBasicVO, ZlContinueLiveOrderParam zlContinueLiveOrderParam) {
+
+//        ZlWxuserdetail zlWxuserdetail = new ZlWxuserdetail();
+//        zlWxuserdetail.setUserid(userID);
+//        zlWxuserdetail = zlWxuserdetailMapper.selectOne(zlWxuserdetail);
+
         //调用工具类生成订单编号
         String orderSerialNo = OrderIDUtil.createOrderID("XZ");
 
-        ZlWxuserdetail zlWxuserdetail = zlWxuserdetailMapper.findByUserId(userID);
         ZlContinueLiveOrder zlContinueLiveOrder = new ZlContinueLiveOrder();
         zlContinueLiveOrder.setUserid(userID);
         zlContinueLiveOrder.setOrderserialno(orderSerialNo);
-        zlContinueLiveOrder.setUserid(userID);
         zlContinueLiveOrder.setHotelid(hotelBasicVO.getHotelID());
         zlContinueLiveOrder.setHotelname(hotelBasicVO.getHotelName());
         zlContinueLiveOrder.setRoomid(hotelBasicVO.getRoomID());
         zlContinueLiveOrder.setRoomnumber(hotelBasicVO.getRoomNumber());
-        zlContinueLiveOrder.setUsername(zlWxuserdetail.getRealname());
-        zlContinueLiveOrder.setTel(zlWxuserdetail.getTel());
+//        zlContinueLiveOrder.setUsername(zlWxuserdetail.getRealname());
+//        if (StringUtils.isNoneBlank(zlWxuserdetail.getTel())) {
+//            zlContinueLiveOrder.setTel(zlWxuserdetail.getTel());
+//        }
+        zlContinueLiveOrder.setUsername(zlContinueLiveOrderParam.getUserName());
+        zlContinueLiveOrder.setTel(zlContinueLiveOrderParam.getTel());
+        zlContinueLiveOrder.setComeformid(1);
         zlContinueLiveOrder.setOrderstatus((byte) 0);
         zlContinueLiveOrder.setIsdelete(false);
         zlContinueLiveOrder.setIsuserdelete(false);
@@ -128,9 +155,11 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         zlContinueLiveOrder.setCreatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         zlContinueLiveOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(hotelBasicVO.getRoomNumber(), hotelBasicVO.getHotelID());
-        zlContinueLiveOrder.setFloornumber(zlHotelroom.getRoomfloor());
+        if (zlHotelroom == null) {
+            throw new BizException("您的码是前台码，不提供该服务");
+        }
 
-        zlContinueLiveOrderMapper.insert(zlContinueLiveOrder);
+        zlContinueLiveOrderMapper.insertSelective(zlContinueLiveOrder);
         logger.info("续住订单插入数据库完成,订单id:" + zlContinueLiveOrder.getOrderid());
 
         // 推送消息
@@ -147,18 +176,39 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderid", zlContinueLiveOrder.getOrderid());
+        map.put("serialnumber", orderSerialNo);
         return map;
     }
 
     @Override
     public void cancelCheckoutOrder(Long orderID) {
         Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
+
+        ZlCheckoutOrder zlCheckoutOrder = new ZlCheckoutOrder();
+        zlCheckoutOrder.setOrderid(orderID);
+        zlCheckoutOrder = zlCheckoutOrderMapper.selectOne(zlCheckoutOrder);
+
+        if (zlCheckoutOrder == null) {
+            throw new BizException("参数有误!");
+        }
+        //将订单取消操作写到记录表中
+        orderLogService.cancelOrderLog(zlCheckoutOrder.getOrderid(), zlCheckoutOrder.getHotelid(), zlCheckoutOrder.getCreatedate(), zlCheckoutOrder.getMoldtype());
         zlCheckoutOrderMapper.cancelCheckoutOrder(orderID, updateDate);
     }
 
     @Override
     public void cancelContinueLiveOrder(Long orderID) {
         Integer updateDate = Math.toIntExact(System.currentTimeMillis() / 1000);
+
+        ZlContinueLiveOrder zlContinueLiveOrder = new ZlContinueLiveOrder();
+        zlContinueLiveOrder.setOrderid(orderID);
+        zlContinueLiveOrder = zlContinueLiveOrderMapper.selectOne(zlContinueLiveOrder);
+
+        if (zlContinueLiveOrder == null) {
+            throw new BizException("参数有误!");
+        }
+        //将订单取消操作写到记录表中
+        orderLogService.cancelOrderLog(zlContinueLiveOrder.getOrderid(), zlContinueLiveOrder.getHotelid(), zlContinueLiveOrder.getCreatedate(), zlContinueLiveOrder.getMoldtype());
         zlContinueLiveOrderMapper.cancelContinueLiveOrder(orderID, updateDate);
     }
 
@@ -181,7 +231,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
      * @return
      */
     @Override
-    public ZlCheckoutOrder checkoutOrderDetail(Long orderID) {
+    public ZlCheckoutOrderDTO checkoutOrderDetail(Long orderID) {
         return zlCheckoutOrderMapper.checkoutOrderDetail(orderID);
     }
 
@@ -192,7 +242,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
      * @return
      */
     @Override
-    public ZlContinueLiveOrder continueLiveOrderDetail(Long orderID) {
+    public ZlContinueLiveOrderDTO continueLiveOrderDetail(Long orderID) {
         return zlContinueLiveOrderMapper.continueLiveOrderDetail(orderID);
     }
 

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "zl_goodsproperty")
 public class ZlGoodsproperty implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,4 +57,20 @@ public class ZlGoodsproperty implements Serializable {
      * 修改时间
      */
     private Integer updatedate;
+
+    /**
+     * 操作人
+     */
+    private String operatorname;
+
+    /**
+     * 操作人员IP
+     */
+    private String operatorip;
+
+    /**
+     * 商品ID
+     */
+    private String goodsid;
+
 }

@@ -1,12 +1,20 @@
 package com.zhiliao.hotel.controller.myOrder.vo;
 
+import lombok.Data;
+
 /**
  * @program: zhiliao_hotel_applets_api
  * @description
  * @author: 姬慧慧
  * @create: 2020-05-22 17:30
  **/
+@Data
 public class GoodsShortInfoVO {
+
+    /**
+     * 用户id
+     */
+    private Long userID;
 
     /**
      * 数量
@@ -27,36 +35,5 @@ public class GoodsShortInfoVO {
      * 酒店HotelID
      */
     private Integer hotelID;
-
-    public Short getBelongModule() {
-        return belongModule;
-    }
-
-    public void setBelongModule(Short belongModule) {
-        this.belongModule = belongModule;
-    }
-
-    public Integer getHotelID() {
-        return hotelID;
-    }
-
-    public void setHotelID(Integer hotelID) {
-        this.hotelID = hotelID;
-    }
-
-    public Integer getHotelGoodsSkuID() {
-        return hotelGoodsSkuID;
-    }
-
-    public void setHotelGoodsSkuID(Integer hotelGoodsSkuID) {
-        this.hotelGoodsSkuID = hotelGoodsSkuID;
-    }
-
-    public Integer getGoodsCount() {
-        return goodsCount;
-    }
-
-    public void setGoodsCount(Integer goodsCount) {
-        this.goodsCount = goodsCount;
-    }
+    
 }

@@ -1,5 +1,6 @@
 package com.zhiliao.hotel.service;
 
+import com.zhiliao.hotel.controller.myAppointment.dto.ZlWakeOrderDTO;
 import com.zhiliao.hotel.model.ZlWakeOrder;
 
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
 public interface ZlWakeOrderService {
     Map<String,Object> addWakeOrder(Long userId, ZlWakeOrder wakeOrder);
 
-    ZlWakeOrder wakeOrderDetail(Long orderID);
+    ZlWakeOrderDTO wakeOrderDetail(Long orderID);
 
     void cancelWakeOrder(Long orderID);
 

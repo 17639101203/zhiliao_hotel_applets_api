@@ -13,6 +13,7 @@ import java.io.Serializable;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class ZlComment implements Serializable {
 
     /**
@@ -38,7 +39,7 @@ public class ZlComment implements Serializable {
     private Long userid;
 
     /**
-     * 用户名
+     *
      */
     private String username;
 
@@ -58,7 +59,7 @@ public class ZlComment implements Serializable {
     private String tagids;
 
     /**
-     * 评论图片地址（多张）
+     * 评论图片地址（多张）用“|”隔开
      */
     private String imageurls;
 
@@ -116,6 +117,5 @@ public class ZlComment implements Serializable {
      * 回复内容
      */
     private String replycontent;
-
 
 }
