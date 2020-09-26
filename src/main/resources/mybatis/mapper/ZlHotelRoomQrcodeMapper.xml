@@ -15,7 +15,7 @@
           STATUS
         FROM
           zl_hotelroomqrcode
-        WHERE STATUS = 1
+        WHERE Status = 1
           AND IsBind = 1
           AND IsDelete = 0
           AND QrCodeID = #{codeId}

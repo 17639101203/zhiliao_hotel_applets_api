@@ -4,6 +4,8 @@ import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.PassToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
+import com.zhiliao.hotel.controller.goods.dto.DeleteEsGoodsDTO;
+import com.zhiliao.hotel.controller.goods.dto.EsDbDTO;
 import com.zhiliao.hotel.controller.goods.vo.*;
 import com.zhiliao.hotel.service.ZlGoodsService;
 import com.zhiliao.hotel.utils.RedisCommonUtil;
@@ -14,9 +16,9 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -225,6 +227,19 @@ public class ZlGoodsController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnString<>("获取酒店营业时间出错!");
+        }
+    }
+
+    @ApiOperation(value = "酒店超市_删除es索引库中的商品_姬慧慧")
+    @PassToken
+    @PostMapping("deleteEsGoods")
+    public ReturnString deleteEsGoods(@RequestBody @Validated DeleteEsGoodsDTO deleteEsGoodsDTO) {
+        try {
+            zlGoodsService.deleteEsGoods(deleteEsGoodsDTO);
+            return new ReturnString<>(0, "删除成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnString<>("删除失败!");
         }
     }
 

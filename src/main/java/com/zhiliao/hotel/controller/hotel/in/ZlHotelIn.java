@@ -147,4 +147,14 @@ public class ZlHotelIn implements Serializable {
      */
     private Byte serviceTime;
 
+    /**
+     * 经度
+     */
+    private Float longitude;
+
+    /**
+     * 纬度
+     */
+    private Float latitude;
+
 }

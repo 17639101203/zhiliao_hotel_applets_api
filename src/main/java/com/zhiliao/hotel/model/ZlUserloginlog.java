@@ -57,11 +57,11 @@ public class ZlUserloginlog implements Serializable {
     /**
      * 渠道来源:
      */
-    private int comefromid;
+    private Byte comefromid;
 
     /**
      * 创建时间(登录时间)
      */
-    private Long createdate;
+    private Integer createdate;
 
 }

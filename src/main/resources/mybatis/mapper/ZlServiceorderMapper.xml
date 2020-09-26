@@ -196,7 +196,7 @@
           WHEN - 1
           THEN '已取消'
           WHEN 0
-          THEN '待维修'
+          THEN '待配送'
           WHEN 1
           THEN '已完成'
           WHEN 2

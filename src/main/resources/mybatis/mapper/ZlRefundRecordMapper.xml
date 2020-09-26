@@ -6,7 +6,7 @@
         UPDATE
           zl_refundrecord
         SET
-          RefundStatus = - 1,
+          RecordStatus = - 1,
           UpdateDate = #{currertTime}
         WHERE OrderID = #{orderId}
     </update>

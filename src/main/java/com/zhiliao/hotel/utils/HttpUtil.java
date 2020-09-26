@@ -296,7 +296,7 @@ public class HttpUtil {
             // 创建URL对象
             URL url = new URL(url_param);
             // 打开URL连接
-            HttpURLConnection httpConn = (HttpURLConnection) url
+            java.net.HttpURLConnection httpConn = (java.net.HttpURLConnection) url
                     .openConnection();
             // 设置属性
             httpConn.setRequestProperty("Content-Type",

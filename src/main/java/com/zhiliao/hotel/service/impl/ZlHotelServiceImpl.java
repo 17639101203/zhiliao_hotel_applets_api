@@ -10,10 +10,7 @@ import com.zhiliao.hotel.controller.hotel.ZlHotelController;
 import com.zhiliao.hotel.controller.hotel.in.ZlHotelIn;
 import com.zhiliao.hotel.controller.hotel.vo.HotelMoneyVO;
 import com.zhiliao.hotel.controller.hotel.vo.ZlXcxmenuVO;
-import com.zhiliao.hotel.mapper.ZlHotelMapper;
-import com.zhiliao.hotel.mapper.ZlHotelRoomMapper;
-import com.zhiliao.hotel.mapper.ZlHotelUserHistoryMapper;
-import com.zhiliao.hotel.mapper.ZlNewsMapper;
+import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.model.*;
 import com.zhiliao.hotel.service.*;
 import com.zhiliao.hotel.utils.*;
@@ -77,8 +74,11 @@ public class ZlHotelServiceImpl implements ZlHotelService {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private ZlHotelDetailMapper zlHotelDetailMapper;
+
     @Override
-    public ReturnString getById(Integer hotelId, String roomId, String token) {
+    public ReturnString getById(Integer hotelId, String roomId) {
         //固定 小程序渠道 1为C端
         String state = "1";
 
@@ -86,30 +86,9 @@ public class ZlHotelServiceImpl implements ZlHotelService {
         ZlHotelroom zlHotelroom = zlHotelRoomMapper.getById(roomId, hotelId);
         if (StringUtils.equals(state, "1")) {
 
-            if (zlHotelroom != null) {
-                if (zlHotelroom.getRoomTypeFlag() == 1) {
-                    if (!StringUtils.isEmpty(token)) {
-                        //获取 token得到微信用户Id
-                        Long weiXinUserId = TokenUtil.getUserId(token);
-                        if (weiXinUserId != null) {
-                            //客房扫描率录入
-                            addZlUserLoginLog(weiXinUserId, hotelId, Integer.valueOf(roomId), zlHotelroom.getRoomnumber());
-                        }
-                    }
-                }
-            }
-
             ZlHotel byId = zlHotelMapper.getById(hotelId);
             ZlHotelIn zlHotel = new ZlHotelIn(byId);
             if (zlHotel != null) {
-                //获取缓存value
-//                String bannerValue = (String) redisCommonUtil.getCache(RedisKeyConstant.BANNER_KEY + ":" + hotelId);
-
-                //判断缓存中是否有数据，没数据直接往数据库查
-/*                List<ZlBanner> zlBanners = Optional.ofNullable(bannerValue).map((val) -> GsonUtils.jsonToList(val,
-                        ZlBanner.class
-                )).
-                        orElse(zlBannerService.findBanner(Integer.valueOf(hotelId), 0));*/
 
                 List<ZlBanner> bannerList = null;
                 if (redisTemplate.hasKey(RedisKeyConstant.BANNER_KEY + hotelId)) {
@@ -120,10 +99,6 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 //                    redisTemplate.opsForValue().set(RedisKeyConstant.BANNER_KEY + hotelId, bannerList);
                 }
 
-                //判断缓存没数据情况则添加
-/*                if (!Optional.ofNullable(bannerValue).isPresent()) {
-                    redisCommonUtil.setCache(RedisKeyConstant.BANNER_KEY + ":" + hotelId, GsonUtils.objToJson(zlBanners));
-                }*/
                 //获取轮播图数据
                 zlHotel.setZlBannerList(bannerList);
 
@@ -171,6 +146,14 @@ public class ZlHotelServiceImpl implements ZlHotelService {
 
             HotelMoneyVO hotelMoneyVO = zlHotelMapper.getHotelMoney(hotelId);
             hotelData.setHotelMoneyVO(hotelMoneyVO);
+
+            //添加酒店经纬度信息
+            ZlHotelDetail zlHotelDetail = new ZlHotelDetail();
+            zlHotelDetail.setHotelid(hotelId);
+            zlHotelDetail = zlHotelDetailMapper.selectOne(zlHotelDetail);
+            hotelData.setLongitude(zlHotelDetail.getLongitude());//经度
+            hotelData.setLatitude(zlHotelDetail.getLatitude());//纬度
+
             Byte serviceTime = zlHotelMapper.getServiceTime(hotelId);
             if (serviceTime != null) {
                 hotelData.setServiceTime(serviceTime);
@@ -200,7 +183,7 @@ public class ZlHotelServiceImpl implements ZlHotelService {
             //客房名称
             zlUserloginlog.setRoomnumber(roomNumBer);
             //获取当前时间戳
-            zlUserloginlog.setCreatedate(Long.valueOf(DateUtils.javaToPhpNowDateTime()));
+            zlUserloginlog.setCreatedate(DateUtils.javaToPhpNowDateTime());
             //客房Id
             zlUserloginlog.setRoomid(roomId);
             int count = zlUserloginlogService.insert(zlUserloginlog);

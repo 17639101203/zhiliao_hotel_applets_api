@@ -10,7 +10,7 @@ import com.zhiliao.hotel.model.ZlHotel;
  */
 public interface ZlHotelService {
 
-    ReturnString getById(Integer hotelId, String roomId, String token);
+    ReturnString getById(Integer hotelId, String roomId);
 
     /**
      * 获取用户酒店入住历史

@@ -5,9 +5,16 @@ import com.zhiliao.hotel.common.NoLoginRequiredToken;
 import com.zhiliao.hotel.common.ReturnString;
 import com.zhiliao.hotel.common.UserLoginToken;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
+import com.zhiliao.hotel.controller.wxuser.dto.UserLoginLogDTO;
+import com.zhiliao.hotel.controller.wxuser.dto.UserVisitHotelLogDTO;
+import com.zhiliao.hotel.controller.wxuser.dto.UserVisitMenuLogDTO;
 import com.zhiliao.hotel.controller.wxuser.params.WxuserLoginParam;
+import com.zhiliao.hotel.mapper.ZlWxuserMapper;
 import com.zhiliao.hotel.model.ZlWxuser;
 import com.zhiliao.hotel.model.ZlWxuserdetail;
+import com.zhiliao.hotel.service.ZlUserhotellogService;
+import com.zhiliao.hotel.service.ZlUserloginlogService;
+import com.zhiliao.hotel.service.ZlUsermenulogService;
 import com.zhiliao.hotel.service.ZlWxuserService;
 import com.zhiliao.hotel.utils.DateUtils;
 import com.zhiliao.hotel.utils.RedisCommonUtil;
@@ -23,10 +30,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -65,6 +71,21 @@ public class ZlWxuserController {
     private final RedisCommonUtil redisCommonUtil;
 
     @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Autowired
+    private ZlWxuserMapper zlWxuserMapper;
+
+    @Autowired
+    private ZlUserloginlogService zlUserloginlogService;
+
+    @Autowired
+    private ZlUserhotellogService zlUserhotellogService;
+
+    @Autowired
+    private ZlUsermenulogService zlUsermenulogService;
+
+    @Autowired
     public ZlWxuserController(ZlWxuserService zlWxuserService, RedisCommonUtil redisCommonUtil) {
         this.zlWxuserService = zlWxuserService;
         this.redisCommonUtil = redisCommonUtil;
@@ -80,11 +101,11 @@ public class ZlWxuserController {
             JSONObject res = getJsonObject(url);
             logger.info("res: " + res);
             if (res == null) {
-                return new ReturnString("解析失败!");
+                return new ReturnString("网络好像出了点小问题,请您重新登录!");
             }
 
             if (res.get("errcode") != null) {
-                return new ReturnString("解析失败! ");
+                return new ReturnString("网络好像出了点小问题,请您重新登录! ");
             }
             logger.info("res: " + res.get("errcode"));
             String openid = res.getString("openid");
@@ -94,7 +115,7 @@ public class ZlWxuserController {
                 // 用户不存在，新增注册用户
                 JSONObject res1 = getUserInfo(wxuserLoginParam.getEncryptedData(), String.valueOf(res.get("session_key")), wxuserLoginParam.getIv());
                 if (res1 == null) {
-                    return new ReturnString("解析失败! res1 session_key");
+                    return new ReturnString("网络好像出了点小问题,请您重新登录!");
                 }
                 wxuser = new ZlWxuser();
                 wxuser.setWxopenid(openid);
@@ -117,7 +138,7 @@ public class ZlWxuserController {
                 // 用户存在，更新用户信息
                 JSONObject res1 = getUserInfo(wxuserLoginParam.getEncryptedData(), String.valueOf(res.get("session_key")), wxuserLoginParam.getIv());
                 if (res1 == null) {
-                    return new ReturnString("解析失败! res1 session_key");
+                    return new ReturnString("网络好像出了点小问题,请重新登录!");
                 }
                 wxuser.setNickname(res1.getString("nickName"));
                 wxuser.setHeadimgurl(res1.getString("avatarUrl"));
@@ -236,4 +257,87 @@ public class ZlWxuserController {
         }
         return JSONObject.parseObject(result);
     }
+
+    @ApiOperation(value = "微信用户退出登录")
+    @UserLoginToken
+    @PostMapping("wxuserLoginOut")
+    public ReturnString wxuserLoginOut(HttpServletRequest request) {
+
+        String token = request.getHeader("token");
+        // 解析token获取userid
+        Long userid = TokenUtil.getUserId(request.getHeader("token"));
+        ZlWxuser zlWxuser = new ZlWxuser();
+        zlWxuser.setUserid(userid);
+        zlWxuser = zlWxuserMapper.selectOne(zlWxuser);
+
+        System.out.println(zlWxuser.getWxopenid());
+        //清除redis中该用户的token和flashtoken
+        if (redisTemplate.hasKey(zlWxuser.getWxopenid())) {
+            redisTemplate.delete(zlWxuser.getWxopenid());
+        }
+        if (redisTemplate.hasKey(zlWxuser.getWxopenid() + "flash")) {
+            redisTemplate.delete(zlWxuser.getWxopenid() + "flash");
+        }
+
+        if (!redisTemplate.hasKey(zlWxuser.getWxopenid()) && !redisTemplate.hasKey(zlWxuser.getWxopenid() + "falsh")) {
+            return new ReturnString(0, "退出成功!");
+        } else {
+            return new ReturnString("退出失败!");
+        }
+    }
+
+    @ApiOperation(value = "记录用户登录日志")
+    @UserLoginToken
+    @PostMapping("userLoginLog")
+    public ReturnString userLoginLog(HttpServletRequest request, @Validated @RequestBody UserLoginLogDTO userLoginLogDTO) {
+
+        // 解析token获取userid
+        Long userid = TokenUtil.getUserId(request.getHeader("token"));
+
+        try {
+            zlUserloginlogService.insertUserLog(request, userid, userLoginLogDTO);
+            return new ReturnString(0, "记录用户登录日志成功!");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+
+    }
+
+    @ApiOperation(value = "记录用户访问酒店日志")
+    @UserLoginToken
+    @PostMapping("userVisitHotelLog")
+    public ReturnString userVisitHotelLog(HttpServletRequest request, @Validated @RequestBody UserVisitHotelLogDTO userVisitHotelLogDTO) {
+
+        // 解析token获取userid
+        Long userid = TokenUtil.getUserId(request.getHeader("token"));
+
+        try {
+            zlUserhotellogService.userVisitHotelLog(userid, userVisitHotelLogDTO);
+            return new ReturnString(0, "记录用户访问酒店日志成功!");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+
+    }
+
+    @ApiOperation(value = "记录用户访问酒店菜单日志")
+    @UserLoginToken
+    @PostMapping("userVisitMenuLog")
+    public ReturnString userVisitMenuLog(HttpServletRequest request, @RequestBody UserVisitMenuLogDTO userVisitMenuLogDTO) {
+
+        // 解析token获取userid
+        Long userid = TokenUtil.getUserId(request.getHeader("token"));
+
+        try {
+            zlUsermenulogService.userVisitMenuLog(userid, userVisitMenuLogDTO);
+            return new ReturnString(0, "记录用户访问酒店菜单日志成功!");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ReturnString(e.getMessage());
+        }
+
+    }
+
 }

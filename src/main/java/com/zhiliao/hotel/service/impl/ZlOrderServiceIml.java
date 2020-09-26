@@ -95,6 +95,9 @@ public class ZlOrderServiceIml implements ZlOrderService {
     @Autowired
     private ZlWxuserdetailMapper zlWxuserdetailMapper;
 
+    @Autowired
+    private ZlHotelRoomMapper zlHotelRoomMapper;
+
     @Override
     public PageInfoResult findAllOrder(OrderInfoDTO orderInfoDTO) {
 
@@ -120,6 +123,10 @@ public class ZlOrderServiceIml implements ZlOrderService {
             Long goodsTotal = zlOrderDetailMapper.countGoods(zlOrder.getUserid(), zlOrder.getOrderserialno(), zlOrder.getBelongmodule());
             orderVO.setZlOrderDetailList(goodsList);
             orderVO.setGoodsTotal(goodsTotal);
+
+            ZlRefundRecord zlRefundRecord = new ZlRefundRecord();
+            zlRefundRecord.setOrderid(zlOrder.getOrderid());
+            zlRefundRecord = zlRefundRecordMapper.selectOne(zlRefundRecord);
 
             if (zlOrder.getPaystatus() == 1 && zlOrder.getOrderstatus() == 0) {
                 orderVO.setStatusShowCount(1);
@@ -149,23 +156,23 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 orderVOAllList.add(orderVO);
                 orderVOToBeReceivedAllList.add(orderVO);
             } else if (zlOrder.getPaystatus() == 2 && (zlOrder.getOrderstatus() == 1 || zlOrder.getOrderstatus() == 2 || zlOrder.getOrderstatus() == 3)) {
-                if (zlOrder.getRefundstatus() == 1 || zlOrder.getRefundstatus() == 3) {
+                if (zlOrder.getRefundstatus() == 3) {
                     orderVO.setStatusShowCount(6);
                     orderVO.setStatusShowInfo("审核中");
                     orderVOAllList.add(orderVO);
                 }
+                if (zlOrder.getRefundstatus() == 1) {
+                    orderVO.setStatusShowCount(6);
+                    orderVO.setStatusShowInfo("审核中");
+                    if (zlRefundRecord.getIsusersend()) {
+                        orderVO.setIsmail(true);
+                    }
+                    orderVOAllList.add(orderVO);
+                }
                 if (zlOrder.getRefundstatus() == 2) {
-                    ZlRefundRecord zlRefundRecord = new ZlRefundRecord();
-                    zlRefundRecord.setOrderid(zlOrder.getOrderid());
-                    zlRefundRecord = zlRefundRecordMapper.selectOne(zlRefundRecord);
                     if (zlRefundRecord != null && zlRefundRecord.getRefundtype() == 1 && (!zlRefundRecord.getIsusersend())) {
                         orderVO.setStatusShowCount(13);
                         orderVO.setStatusShowInfo("申请通过");
-                        orderVOAllList.add(orderVO);
-                    } else if (zlRefundRecord.getIsusersend()) {
-                        orderVO.setStatusShowCount(6);
-                        orderVO.setStatusShowInfo("审核中");
-                        orderVO.setIsmail(true);
                         orderVOAllList.add(orderVO);
                     }
                 }
@@ -217,6 +224,11 @@ public class ZlOrderServiceIml implements ZlOrderService {
     public UserGoodsReturn submitOrder(HttpServletRequest request, Long userID,
                                        HotelBasicVO hotelBasicVO,
                                        Map<String, List<GoodsInfoParam>> goodsInfoParamMap) {
+
+        ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(hotelBasicVO.getRoomNumber(), hotelBasicVO.getHotelID());
+        if (zlHotelroom == null) {
+            throw new BizException("该房间不存在,详情请咨询酒店前台!");
+        }
 
         int orderFlag = 0;
 
@@ -498,7 +510,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
             zlOrder.setParentorderserialno(out_trade_no);
             List<ZlOrder> zlOrderList = zlOrderMapper.select(zlOrder);
             if (CollectionUtils.isEmpty(zlOrderList)) {
-                throw new BizException("订单为空...");
+                throw new BizException("参数有误...");
             }
             for (ZlOrder order : zlOrderList) {
                 Long couponuserid = order.getCouponuserid();
@@ -511,7 +523,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
             zlOrder.setOrderserialno(out_trade_no);
             zlOrder = zlOrderMapper.selectOne(zlOrder);
             if (zlOrder == null) {
-                throw new BizException("订单为空...");
+                throw new BizException("参数有误...");
             }
             Long couponuserid = zlOrder.getCouponuserid();
             if (couponuserid != 0) {
@@ -617,7 +629,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
      * @param hotelBasicVO
      * @param goodsInfoParamMap
      */
-    private UserGoodsReturn submitManyOrder(HttpServletRequest request, Long userID, HotelBasicVO hotelBasicVO, Map<String, List<GoodsInfoParam>> goodsInfoParamMap, int orderFlag) {
+    private synchronized UserGoodsReturn submitManyOrder(HttpServletRequest request, Long userID, HotelBasicVO hotelBasicVO, Map<String, List<GoodsInfoParam>> goodsInfoParamMap, int orderFlag) {
 
         String ipAddr = IpUtils.getIpAddr(request);
         ZlWxuserdetail zlWxuserdetail = new ZlWxuserdetail();
@@ -781,7 +793,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 } else if (couponUserVO.getType() == 3) {
                     BigDecimal actuallyPay = totalPrice.subtract((couponUserVO.getPricereplace()));
                     if (actuallyPay.intValue() < 0) {
-                        actuallyPay = new BigDecimal(0.01);
+                        actuallyPay = new BigDecimal(0.00);
                     }
                     zlOrder.setActuallypay(actuallyPay);
                     allactuallypay = allactuallypay.add(actuallyPay);
@@ -1007,15 +1019,28 @@ public class ZlOrderServiceIml implements ZlOrderService {
         if (zlOrder == null) {
             throw new BizException("订单id有误,请重新输入...");
         }
+
+        if (zlOrder.getBelongmodule() == 4) {
+            if (refundRecordDTO.getRefundtype() == null) {
+                throw new BizException("售后类型不能为空");
+            }
+            if (refundRecordDTO.getGoodsstatus() == null) {
+                throw new BizException("订单商品状态不能为空");
+            }
+            if (refundRecordDTO.getRefundtype() != 1 && refundRecordDTO.getRefundtype() != 2) {
+                throw new BizException("售后类型有误,请重新填写...");
+            }
+            if (refundRecordDTO.getGoodsstatus() != 1 && refundRecordDTO.getGoodsstatus() != 2) {
+                throw new BizException("订单商品状态有误,请重新填写...");
+            }
+        }
+
         zlOrderMapper.updateOrderRefundInfo(refundRecordDTO.getOrderid(), currertTime);
 
         BigDecimal actuallypay = zlOrder.getActuallypay();
 
         if (!(actuallypay.subtract(refundRecordDTO.getRefundmoney()).intValue() == 0)) {
             throw new BizException("退款金额有误,请重新填写...");
-        }
-        if (refundRecordDTO.getRefundtype() != 1 && refundRecordDTO.getRefundtype() != 2) {
-            throw new BizException("售后类型有误,请重新填写...");
         }
 
         ZlWxuser zlWxuser = new ZlWxuser();
@@ -1113,7 +1138,7 @@ public class ZlOrderServiceIml implements ZlOrderService {
         zlRefundCheckRecord.setUpdatedate(currertTime);
         zlRefundCheckRecord.setUseroperatype((byte) -1);//-2用户取消申述,-1用户取消申请,0非用户操作,1用户发起申请,2用户发起申述,3用户上传物流信息
 
-        if (zlOrder.getOrderstatus() == 2 || zlOrder.getOrderstatus() == 3) {
+        if (zlOrder.getOrderstatus() == 1 || zlOrder.getOrderstatus() == 2 || zlOrder.getOrderstatus() == 3) {
             if (zlOrder.getRefundstatus() == 1) {
                 //修改数据库取消退款的信息
                 zlOrderMapper.updateRefundStatus2(orderId, currertTime);
@@ -1288,6 +1313,9 @@ public class ZlOrderServiceIml implements ZlOrderService {
                     throw new BizException("快递id有误!");
                 }
                 orderRefundHistoryVO.setExpressname(zlExpress.getExpressname());
+            }
+            if (orderRefundHistoryVO.getCurrentchecktype() != 3) {
+                orderRefundHistoryVO.setHeadimgurl("");
             }
         }
 

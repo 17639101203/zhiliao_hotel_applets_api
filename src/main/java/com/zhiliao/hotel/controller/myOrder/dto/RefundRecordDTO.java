@@ -46,14 +46,14 @@ public class RefundRecordDTO {
     /**
      * 售后类型：1退货退款,2仅退款
      */
-    @NotNull(message = "售后类型不能为空")
+//    @NotNull(message = "售后类型不能为空")
     @ApiModelProperty(value = "售后类型: 1退货退款, 2仅退款", allowableValues = "1,2")
     private Byte refundtype;
 
     /**
      * 订单商品状态 1未收到货 2已收到货
      */
-    @NotNull(message = "订单商品状态不能为空")
+//    @NotNull(message = "订单商品状态不能为空")
     @ApiModelProperty(value = "订单商品状态 1未收到货 2已收到货", allowableValues = "1,2")
     private Byte goodsstatus;
 

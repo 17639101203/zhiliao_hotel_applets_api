@@ -12,11 +12,9 @@ import com.zhiliao.hotel.controller.comment.vo.CommentDetailVO;
 import com.zhiliao.hotel.controller.comment.vo.CommentToPhpVO;
 import com.zhiliao.hotel.controller.comment.vo.CommentVO;
 import com.zhiliao.hotel.controller.myOrder.vo.OrderPhpSendVO;
-import com.zhiliao.hotel.mapper.ZlCommentMapper;
-import com.zhiliao.hotel.mapper.ZlTagMapper;
-import com.zhiliao.hotel.mapper.ZlWxuserMapper;
-import com.zhiliao.hotel.mapper.ZlWxuserdetailMapper;
+import com.zhiliao.hotel.mapper.*;
 import com.zhiliao.hotel.model.ZlComment;
+import com.zhiliao.hotel.model.ZlHotelroom;
 import com.zhiliao.hotel.model.ZlWxuser;
 import com.zhiliao.hotel.model.ZlWxuserdetail;
 import com.zhiliao.hotel.service.ZlCommentService;
@@ -50,6 +48,9 @@ public class ZlCommentServiceImpl implements ZlCommentService {
     private ZlCommentMapper zlCommentMapper;
 
     @Autowired
+    private ZlHotelRoomMapper zlHotelRoomMapper;
+
+    @Autowired
     private ZlTagMapper zlTagMapper;
 
     @Autowired
@@ -63,6 +64,11 @@ public class ZlCommentServiceImpl implements ZlCommentService {
 
     @Override
     public Map<String, Object> addComment(Long userid, CommentParm commentParm) {
+
+        ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(commentParm.getRoomnumber(), commentParm.getHotelID());
+        if (zlHotelroom == null) {
+            throw new BizException("该房间不存在,详情请咨询酒店前台!");
+        }
 
         ZlWxuserdetail zlWxuserdetail = new ZlWxuserdetail();
         zlWxuserdetail.setUserid(userid);

@@ -49,7 +49,7 @@
 <!--        </javaClientGenerator>-->
 
         <!--将example类型设为false，否则实体类里面会多一个example的类exampleStudent -->
-        <table tableName="zl_supplieraddress" domainObjectName="ZlSupplierAddress" enableCountByExample="false"
+        <table tableName="zl_usermenulog" domainObjectName="ZlUsermenulog" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false"
 

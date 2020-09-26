@@ -142,7 +142,7 @@ public class ZlHotelFacilityServiceImpl implements ZlHotelFacilityService {
 
         ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(zlHotelFacilityOrder.getRoomnumber(), zlHotelFacilityOrder.getHotelid());
         if (zlHotelroom == null) {
-            throw new BizException("您的码是前台码，不提供该服务");
+            throw new BizException("该房间不存在,详情请咨询酒店前台!");
         }
         zlHotelFacilityOrder.setFloornumber(zlHotelroom.getRoomfloor());
 //        ZlWxuser zlWxuser = new ZlWxuser();

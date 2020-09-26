@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ZlOrderDetailMapper extends Mapper<ZlOrderDetail> {
 
-    List<ZlOrderDetail> findOrderDetails(@Param("orderId") Long orderId);
+    List<ZlOrderDetail> findOrderDetails(@Param("orderId")Long orderId);
 
     List<ZlOrderDetail> find2Goods(@Param("userID") Long userID, @Param("orderSerialNo") String orderSerialNo, @Param("belongModule") Short belongModule);
 

@@ -76,12 +76,11 @@
       zo.Remark,
       zo.CanCancelOrderMinute,
       zo.CreateDate,
-      zo.UpdateDate,
-      zg.CoverImgUrl
+      zo.UpdateDate
     FROM
       zl_rentcarorder zo
       LEFT JOIN zl_rentcargoods zg
-        ON zo.CarNumber = zg.CarNumber
+        ON zo.GoodsID = zg.GoodsID
     WHERE zo.OrderID = #{orderid}
       AND zo.IsDelete = 0
       AND zo.IsUserDelete = 0

@@ -98,4 +98,10 @@ public class ZlCoupon implements Serializable {
     @Transient
     private Integer couponruleid;
 
+    /**
+     * 有效期：结束时间(如果为自领用日起算的券，换算结束时间)
+     */
+    @Transient
+    private Integer endtime;
+
 }

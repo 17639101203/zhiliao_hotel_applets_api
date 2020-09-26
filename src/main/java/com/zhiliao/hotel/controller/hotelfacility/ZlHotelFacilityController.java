@@ -87,7 +87,7 @@ public class ZlHotelFacilityController {
 
         ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(orderParam.getRoomnumber(), orderParam.getHotelId());
         if (zlHotelroom == null) {
-            throw new BizException("您的码是前台码，不提供该服务");
+            throw new BizException("该房间不存在,详情请咨询酒店前台!");
         }
         String token = request.getHeader("token");
         Long userId = TokenUtil.getUserId(token);

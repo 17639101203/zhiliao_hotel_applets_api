@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public interface ZlHotelRoomService {
 
-    List<WifiVo> findWiFi(@Param("hotelID") Integer hotelID, Integer roomID);
+    List<WifiVo> findWiFi(@Param("hotelID") Integer hotelID,Integer roomID);
 
     ZlHotelroom getByRoomNumber(@Param("roomNumber") String roomNumber, @Param("hotelID") Integer hotelID);
 }

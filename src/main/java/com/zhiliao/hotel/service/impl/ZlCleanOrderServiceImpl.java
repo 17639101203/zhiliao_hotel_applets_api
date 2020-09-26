@@ -84,7 +84,7 @@ public class ZlCleanOrderServiceImpl implements ZlCleanOrderService {
 //        zlCleanOrderMapper.addCleanOrder(zlCleanOrder);
         ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(cleanParm.getRoomnumber(), cleanParm.getHotelid());
         if (zlHotelroom == null) {
-            throw new BizException("您的码是前台码，不提供该服务");
+            throw new BizException("该房间不存在,详情请咨询酒店前台!");
         }
         zlCleanOrder.setFloornumber(zlHotelroom.getRoomfloor());
         zlCleanOrder.setUsername(zlWxuserdetail.getRealname());

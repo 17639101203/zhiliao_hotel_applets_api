@@ -98,7 +98,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         zlCheckoutOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(hotelBasicVO.getRoomNumber(), hotelBasicVO.getHotelID());
         if (zlHotelroom == null) {
-            throw new BizException("您的码是前台码，不提供该服务");
+            throw new BizException("该房间不存在,详情请咨询酒店前台!");
         }
         zlCheckoutOrder.setFloornumber(zlHotelroom.getRoomfloor());
 
@@ -156,7 +156,7 @@ public class HotelLiveOrderServiceImpl implements HotelLiveOrderService {
         zlContinueLiveOrder.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
         ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(hotelBasicVO.getRoomNumber(), hotelBasicVO.getHotelID());
         if (zlHotelroom == null) {
-            throw new BizException("您的码是前台码，不提供该服务");
+            throw new BizException("该房间不存在,详情请咨询酒店前台!");
         }
 
         zlContinueLiveOrderMapper.insertSelective(zlContinueLiveOrder);

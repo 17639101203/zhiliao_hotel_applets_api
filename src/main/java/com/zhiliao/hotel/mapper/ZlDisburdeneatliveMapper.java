@@ -12,5 +12,5 @@ public interface ZlDisburdeneatliveMapper extends Mapper<ZlDisburdeneatlive> {
 
     ZlDisburdeneatliveVO find(@Param("hotelId") Integer hotelId);
 
-    void addVisitCount(@Param("recid") Integer recid);
+    void addVisitCount(@Param("recid")Integer recid);
 }

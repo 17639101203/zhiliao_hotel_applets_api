@@ -16,6 +16,7 @@ import com.zhiliao.hotel.service.ZlGoodsService;
 import com.zhiliao.hotel.service.ZlOrderProfitService;
 import com.zhiliao.hotel.service.ZlOrderService;
 import com.zhiliao.hotel.utils.IPUtils;
+import com.zhiliao.hotel.utils.OrderIDUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -30,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletRequest;
@@ -234,6 +236,41 @@ public class WxPayServiceImpl implements WxPayService {
 
     @Override
     public String wxPayReturn(String out_trade_no) {
+
+        //判断该订单付款金额是否为0
+        ZlOrder zlOrder = new ZlOrder();
+        BigDecimal actuallyPay = new BigDecimal(0);
+        if (out_trade_no.startsWith("SM")) {
+            zlOrder.setParentorderserialno(out_trade_no);
+            List<ZlOrder> zlOrderList = zlOrderMapper.select(zlOrder);
+            if (CollectionUtils.isEmpty(zlOrderList)) {
+                throw new BizException("参数有误...");
+            }
+            for (ZlOrder order : zlOrderList) {
+                actuallyPay = actuallyPay.add(order.getActuallypay());
+            }
+        } else {
+            zlOrder.setOrderserialno(out_trade_no);
+            zlOrder = zlOrderMapper.selectOne(zlOrder);
+            if (zlOrder == null) {
+                throw new BizException("参数有误...");
+            }
+            actuallyPay = actuallyPay.add(zlOrder.getActuallypay());
+        }
+
+        if (actuallyPay.compareTo(BigDecimal.ZERO) == 0) {
+            logger.info("支付成功,订单号:", out_trade_no);
+            //订单金额相同,更改数据库状态
+            zlGoodsService.updateGoodsCount(out_trade_no);
+            zlOrderService.updateOrder(out_trade_no);
+            //进行分润
+            zlOrderProfitService.setUpOrderProfit(out_trade_no);
+            //订单通知php
+            zlOrderService.OrderNoticeToPhp(out_trade_no);
+            return "支付成功";
+        }
+
+
         //生成的随机字符串
         String nonce_str = StringUtils.getRandomStringByLength(32);
 
@@ -517,7 +554,7 @@ public class WxPayServiceImpl implements WxPayService {
 
         //生成的退款单号字符串
         String out_refund_no = zlRefundRecord.getRefundserialno();
-//        String out_refund_no = "BL5062477166245106";
+//        String out_refund_no = OrderIDUtil.createOrderID("TK");;
 
         BigDecimal refund_fee = wxPayRefundParam.getRefund_fee();
         BigDecimal actuallypay = zlOrder.getActuallypay();

@@ -19,7 +19,7 @@ public interface ZlCheckoutOrderMapper extends Mapper<ZlCheckoutOrder> {
     void userDeleteCheckoutOrder(@Param("orderID") Long orderID, @Param("updateDate") Integer updateDate);
 
     @Select("select count(*) from zl_checkoutorder where UserID = #{userId} and HotelID = #{hotelId} and IsDelete = 0 and IsUserDelete = 0")
-    int selectCountCheckOut(@Param("userId") Long userId, @Param("hotelId") Integer hotelId);
+    int selectCountCheckOut(@Param("userId")Long userId, @Param("hotelId")Integer hotelId);
 
     ZlCheckoutOrderDTO checkoutOrderDetail(@Param("orderID") Long orderID);
 

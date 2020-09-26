@@ -58,11 +58,13 @@ public class ZlCouponServiceImpl implements ZlCouponService {
     @Override
     public Map<String, List<ZlCoupon>> couponUnclaimed(Long userId) {
 
+        //当前时间
+        Integer currertTime = Math.toIntExact(System.currentTimeMillis() / 1000);
+
         //先查出有效优惠券
         List<ZlCouponAllVO> zlCouponAllVOList = couponMapper.couponUnclaimed();
-
         if (CollectionUtils.isEmpty(zlCouponAllVOList)) {
-            throw new BizException(0, "当前系统没有发放优惠券...");
+            return new HashMap<>();
         }
 
         //定义符合条件的优惠券id集合
@@ -207,7 +209,7 @@ public class ZlCouponServiceImpl implements ZlCouponService {
         }
 
         if (CollectionUtils.isEmpty(couponruleIdList)) {
-            throw new BizException(0, "当前系统没有发放优惠券...");
+            return new HashMap<>();
         }
 
         Map<String, List<ZlCoupon>> zlCouponMap = new HashMap<>();
@@ -224,6 +226,17 @@ public class ZlCouponServiceImpl implements ZlCouponService {
             zlCoupon = couponMapper.selectOne(zlCoupon);
             zlCoupon.setRuletitle(zlCouponrule.getTitle());
             zlCoupon.setCouponruleid(integer);
+
+            if (zlCouponrule.getEffecttype() == 0) {
+                int timeDifference = zlCouponrule.getEndtime() - zlCouponrule.getStarttime();
+                zlCoupon.setEndtime(timeDifference + currertTime);
+            } else if (zlCouponrule.getEffecttype() == 1) {
+                Integer days = zlCouponrule.getDays();
+                int endtime = Math.toIntExact(System.currentTimeMillis() / 1000 + days * 24 * 60 * 60);
+                zlCoupon.setEndtime(endtime);
+            }
+
+
             if (zlCoupon.getType() == 1) {
                 zlCouponList1.add(zlCoupon);
             } else if (zlCoupon.getType() == 2) {

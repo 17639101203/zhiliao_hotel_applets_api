@@ -40,14 +40,13 @@ public class ZlHotelController {
     private ZlHotelRoomQrcodeService zlHotelRoomQrcodeService;
 
     @ApiOperation(value = "陈荣_首页")
-    @UserLoginToken
+//    @UserLoginToken
     @PassToken
     @GetMapping("getHotelList")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "codeId", dataType = "String", required = true, value = "二维码ID"),
     })
     public ReturnString getHotelList(String codeId, HttpServletRequest request) {
-        String token = request.getHeader("token");
 
         String realCodeId = "";
         try {
@@ -67,7 +66,7 @@ public class ZlHotelController {
         logger.info("房间ID是：" + roomQrcodeId);
 
         if (roomQrcodeId != null) {
-            return zlHotelService.getById(roomQrcodeId.getHotelID(), String.valueOf(roomQrcodeId.getRoomID()), token);
+            return zlHotelService.getById(roomQrcodeId.getHotelID(), String.valueOf(roomQrcodeId.getRoomID()));
         }
         return new ReturnString("房间未启动,请联系管理员");
     }

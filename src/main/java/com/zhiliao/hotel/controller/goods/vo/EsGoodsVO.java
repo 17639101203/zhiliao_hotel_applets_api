@@ -51,5 +51,10 @@ public class EsGoodsVO {
     /**
      * 库存
      */
-    private Integer soldcount;
+    private Integer stockCount;
+
+    /**
+     * -1:紧急下架;0:安全下架;1上架;2导入待编辑
+     */
+    private Integer goodsStatus;
 }

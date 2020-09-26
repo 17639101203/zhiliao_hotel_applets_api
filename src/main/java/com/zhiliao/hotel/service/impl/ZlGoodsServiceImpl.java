@@ -5,21 +5,26 @@ import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
 import com.zhiliao.hotel.common.constant.RedisKeyConstant;
 import com.zhiliao.hotel.common.exception.BizException;
+import com.zhiliao.hotel.controller.goods.dto.DeleteEsGoodsDTO;
+import com.zhiliao.hotel.controller.goods.dto.EsDbDTO;
 import com.zhiliao.hotel.controller.goods.vo.*;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsCouponInfoVO;
 import com.zhiliao.hotel.controller.myOrder.vo.GoodsShortInfoVO;
 import com.zhiliao.hotel.mapper.*;
+import com.zhiliao.hotel.model.ZlOrder;
 import com.zhiliao.hotel.model.ZlOrderDetail;
 import com.zhiliao.hotel.model.ZlXcxmenu;
 import com.zhiliao.hotel.service.ZlGoodsService;
 import com.zhiliao.hotel.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.DeleteQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -47,12 +52,6 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
 
     @Autowired
     private RedisTemplate redisTemplate;
-
-    @Autowired
-    private ZlCouponMapper zlCouponMapper;
-
-    @Autowired
-    private ZlOrderMapper zlOrderMapper;
 
     @Autowired
     private ZlXcxMenuMapper zlXcxMenuMapper;
@@ -87,12 +86,12 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
             } else {
                 goodsListVo.setIsManySku(false);
             }
-            Integer stockCount = zlGoodsMapper.getByHotelIDAndGoodsID(goodsListVo.getHotelId(), goodsListVo.getGoodsId());
-            if (goodsListVo.getGoodsStatus() == 0 && stockCount == 0) {
+            if (goodsListVo.getGoodsStatus() == 0) {
+                Integer stockCount = zlGoodsMapper.getByHotelIDAndGoodsID(goodsListVo.getHotelId(), goodsListVo.getGoodsId());
                 //安全下架
-                goodsListVoIterator.remove();
-            } else {
-                goodsListVo.setStockCount(stockCount);
+                if (stockCount == 0) {
+                    goodsListVoIterator.remove();
+                }
             }
         }
 
@@ -174,8 +173,8 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
                 goodsListVo.setIsManySku(false);
             }
             //查询该商品的总库存
-            Integer stockCount = zlGoodsMapper.getByHotelIDAndGoodsID(goodsListVo.getHotelId(), goodsListVo.getGoodsId());
-            goodsListVo.setStockCount(stockCount);
+//            Integer stockCount = zlGoodsMapper.getByHotelIDAndGoodsID(goodsListVo.getHotelId(), goodsListVo.getGoodsId());
+//            goodsListVo.setStockCount(stockCount);
         }
         return goodsListVo;
     }
@@ -185,6 +184,16 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
         List<GoodsListVo> recommendGoodsList = zlGoodsMapper.findRecommendGoodsList(hotelId);
         if (CollectionUtils.isEmpty(recommendGoodsList)) {
             return null;
+        }
+        for (GoodsListVo goodsListVo : recommendGoodsList) {
+            //查询该商品是否为多规格
+            Integer skuCount = zlGoodsMapper.findSkuCount(goodsListVo.getGoodsId());
+            if (skuCount > 1) {
+                goodsListVo.setIsManySku(true);
+                goodsListVo.setHotelGoodsSkuId(-1);
+            } else {
+                goodsListVo.setIsManySku(false);
+            }
         }
         Iterator<GoodsListVo> goodsListVoIterator = recommendGoodsList.iterator();
         while (goodsListVoIterator.hasNext()) {
@@ -212,9 +221,12 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
 
                 Integer currertTime = Math.toIntExact(System.currentTimeMillis() / 1000);
                 //更新mysql数据库库存
-                zlGoodsMapper.updateGoods(hotelGoodsSkuID, goodsCount, currertTime);
-                zlGoodsMapper.updateGoodsSku(hotelGoodsSkuID, goodsCount, currertTime);
-                zlGoodsMapper.updateHotelGoodsSku(hotelGoodsSkuID, goodsCount, currertTime);
+//                zlGoodsMapper.updateGoods(hotelGoodsSkuID, goodsCount, currertTime);
+//                zlGoodsMapper.updateGoodsSku(hotelGoodsSkuID, goodsCount, currertTime);
+
+                if (goodsShortInfoVO.getBelongModule() != 4) {
+                    zlGoodsMapper.updateHotelGoodsSku(hotelGoodsSkuID, goodsCount, currertTime);
+                }
 
                 //更新redis该商品数量(删除redis中锁定的商品数量)
                 Integer count = (Integer) redisTemplate.opsForValue().get(RedisKeyConstant.ORDER_HOTELGOODSSKUID_ID + hotelGoodsSkuID);
@@ -252,8 +264,39 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
     @Override
     public List<EsGoodsVO> searchGoods(Integer hotelId, String selectParam, Integer belongModule, Integer pageNo, Integer pageSize) {
 
-        QueryBuilder queryBuilder = QueryBuilders.boolQuery()
-                .must(QueryBuilders.termQuery("belongmodule", belongModule))
+        PageHelper.startPage(pageNo, pageSize);
+        List<EsGoodsVO> esGoodsVOList = zlGoodsMapper.searchGoods(hotelId, selectParam, belongModule);
+        if (CollectionUtils.isEmpty(esGoodsVOList)) {
+            return null;
+        }
+        //根据字段复制实体并查询商品是否为多规格
+        for (EsGoodsVO esGoodsVO : esGoodsVOList) {
+            Integer skuCount = zlGoodsMapper.findSkuCount(esGoodsVO.getGoodsid());
+            if (skuCount > 1) {
+                esGoodsVO.setIsManySku(true);
+            } else {
+                esGoodsVO.setIsManySku(false);
+            }
+        }
+        Iterator<EsGoodsVO> iterator = esGoodsVOList.iterator();
+        while (iterator.hasNext()) {
+            EsGoodsVO esGoodsVO = iterator.next();
+            if (esGoodsVO.getGoodsStatus() == 0) {
+                Integer stockCount = zlGoodsMapper.getByHotelIDAndGoodsID(hotelId, esGoodsVO.getGoodsid());
+                //安全下架
+                if (stockCount == 0) {
+                    iterator.remove();
+                }
+            }
+        }
+        return esGoodsVOList;
+
+        //es搜索目前先不使用(勿删)
+        /*BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        if (belongModule != 0) {
+            boolQueryBuilder.must(QueryBuilders.termQuery("belongmodule", belongModule));
+        }
+        QueryBuilder queryBuilder = boolQueryBuilder
                 .must(QueryBuilders.termQuery("hotelid", hotelId))
                 .must(QueryBuilders.matchQuery("goodsname", selectParam));
 
@@ -281,7 +324,7 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
             esGoodsVOList.add(esGoodsVO);
         }
 
-        return esGoodsVOList;
+        return esGoodsVOList;*/
     }
 
     @Override
@@ -402,4 +445,21 @@ public class ZlGoodsServiceImpl implements ZlGoodsService {
 
         //更新mysql数据库库存
     }
+
+    @Override
+    public void deleteEsGoods(DeleteEsGoodsDTO deleteEsGoodsDTO) {
+
+        DeleteQuery deleteQuery = new DeleteQuery();
+        deleteQuery.setIndex("zlgj");
+
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        QueryBuilder queryBuilder = boolQueryBuilder.must(QueryBuilders.termQuery("hotelid", deleteEsGoodsDTO.getHotelId()))
+                .must(QueryBuilders.termQuery("goodsid", deleteEsGoodsDTO.getGoodsId()));
+        deleteQuery.setQuery(queryBuilder);
+
+        deleteQuery.setType("shop");
+
+        elasticsearchTemplate.delete(deleteQuery);
+    }
+
 }

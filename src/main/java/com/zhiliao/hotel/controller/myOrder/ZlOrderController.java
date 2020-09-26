@@ -371,7 +371,7 @@ public class ZlOrderController {
         }
     }
 
-/*    @ApiOperation(value = "微信小程序支付退款接口_姬慧慧")
+    @ApiOperation(value = "微信小程序支付退款接口_姬慧慧")
     @PostMapping("wxPayRefund")
     @UserLoginToken
     @ResponseBody
@@ -383,7 +383,7 @@ public class ZlOrderController {
             e.printStackTrace();
             return new ReturnString(e.getMessage());
         }
-    }*/
+    }
 
     /*@ApiOperation(value = "订单退款状态自动回调,包括数据库的相关修改_姬慧慧")
     @UserLoginToken

@@ -66,6 +66,10 @@ public class ZlOrderDetailImpl implements ZlOrderDetailService {
         orderDetailsReturn.setZlOrderDetailList(orderDetailsList);
         orderDetailsReturn.setIsUseCoupon(false);
 
+        ZlRefundRecord zlRefundRecord = new ZlRefundRecord();
+        zlRefundRecord.setOrderid(zlOrder.getOrderid());
+        zlRefundRecord = zlRefundRecordMapper.selectOne(zlRefundRecord);
+
         if (zlOrder.getCouponcash().intValue() > 0) {
             orderDetailsReturn.setIsUseCoupon(true);
             orderDetailsReturn.setCouponcash(zlOrder.getCouponcash());
@@ -90,21 +94,21 @@ public class ZlOrderDetailImpl implements ZlOrderDetailService {
             orderDetailsReturn.setStatusShowCount(11);
             orderDetailsReturn.setStatusShowInfo("已签收");
         } else if (zlOrder.getPaystatus() == 2 && (zlOrder.getOrderstatus() == 1 || zlOrder.getOrderstatus() == 2 || zlOrder.getOrderstatus() == 3)) {
-            if (zlOrder.getRefundstatus() == 1 || zlOrder.getRefundstatus() == 3) {
+            if (zlOrder.getRefundstatus() == 3) {
                 orderDetailsReturn.setStatusShowCount(6);
                 orderDetailsReturn.setStatusShowInfo("审核中");
             }
+            if (zlOrder.getRefundstatus() == 1) {
+                orderDetailsReturn.setStatusShowCount(6);
+                orderDetailsReturn.setStatusShowInfo("审核中");
+                if (zlRefundRecord.getIsusersend()) {
+                    orderDetailsReturn.setIsmail(true);
+                }
+            }
             if (zlOrder.getRefundstatus() == 2) {
-                ZlRefundRecord zlRefundRecord = new ZlRefundRecord();
-                zlRefundRecord.setOrderid(zlOrder.getOrderid());
-                zlRefundRecord = zlRefundRecordMapper.selectOne(zlRefundRecord);
                 if (zlRefundRecord != null && zlRefundRecord.getRefundtype() == 1 && (!zlRefundRecord.getIsusersend())) {
                     orderDetailsReturn.setStatusShowCount(13);
                     orderDetailsReturn.setStatusShowInfo("申请通过");
-                } else if (zlRefundRecord.getIsusersend()) {
-                    orderDetailsReturn.setStatusShowCount(6);
-                    orderDetailsReturn.setStatusShowInfo("审核中");
-                    orderDetailsReturn.setIsmail(true);
                 }
             }
             if (zlOrder.getRefundstatus() == -12) {

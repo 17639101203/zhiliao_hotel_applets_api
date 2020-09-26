@@ -92,7 +92,7 @@ public class ZlServiceorderServiceImpl implements ZlServiceorderService {
         //校验房间号是否存在
         ZlHotelroom zlHotelroom = zlHotelRoomMapper.getByHotelIDAndRoomNumber(scp.getRoomnumber(), scp.getHotelid());
         if (zlHotelroom == null) {
-            throw new BizException("该房间号不存在，请再次确认！");
+            throw new BizException("该房间不存在,详情请咨询酒店前台！");
         }
         //获取订单商品id集合
         String goodIds = scp.getOrderGoods().stream().map(goods -> goods.getGoodsId().toString()).collect(Collectors.joining(","));

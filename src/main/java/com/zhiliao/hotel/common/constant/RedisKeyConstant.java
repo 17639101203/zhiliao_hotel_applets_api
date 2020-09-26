@@ -35,14 +35,14 @@ public class RedisKeyConstant {
     public final static String COUPON_USER_FLAG = "coupon_user_";
 
     /**
-     * 便利店主题
+     * 酒店超市主题
      */
-    public static final String TOPIC_STORE_ORDER = "TOPIC_STORE_ORDER";
+    public static final String TOPIC_SUPERMARKET_ORDER = "TOPIC_SUPERMARKET_ORDER";
 
     /**
      * 便利店主题
      */
-//    public static final String TOPIC_STORE_ORDER = "TOPIC_STORE_ORDER";
+    public static final String TOPIC_STORE_ORDER = "TOPIC_STORE_ORDER";
 
     /**
      * 餐饮服务主题

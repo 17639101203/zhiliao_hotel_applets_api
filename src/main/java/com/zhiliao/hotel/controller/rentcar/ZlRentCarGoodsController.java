@@ -102,8 +102,8 @@ public class ZlRentCarGoodsController {
         ZlHotel zlHotel = zlHotelService.getByHotelID(carOrderParam.getHotelId());
         rentCarOrder.setHotelname(zlHotel.getHotelName());
         ZlHotelroom zlHotelroom = zlHotelRoomService.getByRoomNumber(carOrderParam.getRoomNumber(), carOrderParam.getHotelId());
-        if(zlHotelroom==null){
-            throw new BizException("您的码是前台码，不提供该服务");
+        if (zlHotelroom == null) {
+            throw new BizException("该房间不存在,详情请咨询酒店前台!");
         }
         rentCarOrder.setRoomid(zlHotelroom.getRoomid());
         rentCarOrder.setRoomnumber(carOrderParam.getRoomNumber());

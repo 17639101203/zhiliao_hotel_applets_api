@@ -80,7 +80,7 @@ public class ZlXcxmenu implements Serializable {
     /**
      * 状态:-1禁用;1启用
      */
-    private Boolean menustatus;
+    private Byte menustatus;
 
     /**
      * ComeFormID:来自1小程序C端，2小程序B端，3公众号,4民宿，5好评返现，6分时酒店

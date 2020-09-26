@@ -1,6 +1,8 @@
 package com.zhiliao.hotel.service;
 
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.controller.goods.dto.DeleteEsGoodsDTO;
+import com.zhiliao.hotel.controller.goods.dto.EsDbDTO;
 import com.zhiliao.hotel.controller.goods.vo.*;
 
 import java.util.List;
@@ -33,4 +35,7 @@ public interface ZlGoodsService {
     void updateGoodsCountReturn(Long orderid);
 
     GoodsPropertysVO findSelectedGoodsProperty(Integer hotelGoodsSkuId);
+
+    void deleteEsGoods(DeleteEsGoodsDTO deleteEsGoodsDTO);
+
 }

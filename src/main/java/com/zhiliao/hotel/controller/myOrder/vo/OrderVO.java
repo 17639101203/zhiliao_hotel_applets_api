@@ -288,6 +288,6 @@ public class OrderVO {
     /**
      * 是否寄件
      */
-    private Boolean ismail;
+    private Boolean ismail = false;
 
 }

@@ -1,9 +1,6 @@
 package com.zhiliao.hotel.mapper;
 
-import com.zhiliao.hotel.controller.goods.vo.GoodsListVo;
-import com.zhiliao.hotel.controller.goods.vo.GoodsPropertyInfoVO;
-import com.zhiliao.hotel.controller.goods.vo.GoodsSkuListVo;
-import com.zhiliao.hotel.controller.goods.vo.GoodsSkuVO;
+import com.zhiliao.hotel.controller.goods.vo.*;
 import com.zhiliao.hotel.model.ZlHotelgoodssku;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
@@ -51,5 +48,7 @@ public interface ZlGoodsMapper extends Mapper<ZlHotelgoodssku> {
 
     void updateHotelGoodsSkuReturn(@Param("hotelGoodsSkuID") Integer hotelGoodsSkuID, @Param("goodsCount") Integer goodsCount, @Param("currertTime") Integer currertTime);
 
-    GoodsPropertyInfoVO findSelectedGoodsProperty(@Param("hotelGoodsSkuId") Integer hotelGoodsSkuId);
+    GoodsPropertyInfoVO findSelectedGoodsProperty(@Param("hotelGoodsSkuId")Integer hotelGoodsSkuId);
+
+    List<EsGoodsVO> searchGoods(@Param("hotelId")Integer hotelId, @Param("selectParam")String selectParam, @Param("belongModule")Integer belongModule);
 }
