@@ -62,6 +62,6 @@ public class ZlReservelog implements Serializable {
     /**
      * 订单表
      */
-    private Byte ordertype;
+    private Byte belongmodule;
 
 }

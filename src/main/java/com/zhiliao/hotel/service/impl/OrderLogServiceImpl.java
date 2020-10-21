@@ -31,7 +31,7 @@ public class OrderLogServiceImpl implements OrderLogService {
         zlReservelog.setOperatetime(currentTime);
         zlReservelog.setUsetime(currentTime - createdate);
         zlReservelog.setOperatetype(false);
-        zlReservelog.setOrdertype(moldtype);
+        zlReservelog.setBelongmodule(moldtype);
 
         zlReservelogMapper.insertSelective(zlReservelog);
     }

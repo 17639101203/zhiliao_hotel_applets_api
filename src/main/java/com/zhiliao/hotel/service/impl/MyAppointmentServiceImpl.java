@@ -3,6 +3,7 @@ package com.zhiliao.hotel.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhiliao.hotel.common.PageInfoResult;
+import com.zhiliao.hotel.common.exception.BizException;
 import com.zhiliao.hotel.controller.myAppointment.dto.*;
 import com.zhiliao.hotel.controller.invoice.params.InvoiceOrderVO;
 import com.zhiliao.hotel.controller.myAppointment.result.ZlServiceorderResult;
@@ -28,47 +29,53 @@ import java.util.*;
 @Service
 public class MyAppointmentServiceImpl implements MyAppointmentService {
 
-    private final ZlCleanOrderMapper cleanOrderMapper;
-
-    private final ZlInvoiceMapper invoiceMapper;
+    @Autowired
+    private ZlCleanOrderMapper cleanOrderMapper;
 
     @Autowired
     private ZlHotelFacilityOrderService facilityOrderService;
 
     @Autowired
     private ZlServiceorderMapper serviceorderMapper;
+
     @Autowired
     private ZlRepairorderMapper repairorderMapper;
+
     @Autowired
     private MyAppointmentMapper myAppointmentMapper;
+
     @Autowired
     private ZlInvoiceOrderMapper invoiceOrderMapper;
+
     @Autowired
     private ZlHotelFacilityOrderMapper facilityOrderMapper;
+
     @Autowired
     private ZlWakeOrderMapper wakeOrderMapper;
+
     @Autowired
     private ZlRentCarOrderMapper rentCarOrderMapper;
+
     @Autowired
     private ZlContinueLiveOrderMapper continueLiveOrderMapper;
+
     @Autowired
     private ZlCheckoutOrderMapper checkoutOrderMapper;
+
     @Autowired
     private ZlWakeOrderService wakeOrderService;
+
     @Autowired
     private ZlRentCarGoodsService rentCarGoodsService;
+
     @Autowired
     private HotelLiveOrderService hotelLiveOrderService;
 
     @Autowired
     private ZlHotelMapper zlHotelMapper;
 
-
     @Autowired
-    public MyAppointmentServiceImpl(ZlInvoiceMapper invoiceMapper, ZlCleanOrderMapper cleanOrderMapper) {
-        this.cleanOrderMapper = cleanOrderMapper;
-        this.invoiceMapper = invoiceMapper;
-    }
+    private OrderLogService orderLogService;
 
     /**
      * 获取所有清扫订单
@@ -550,9 +557,11 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         ZlRepairorder zlRepairorder = new ZlRepairorder();
         zlRepairorder.setOrderid(orderid);
         ZlRepairorder repairorder = repairorderMapper.selectOne(zlRepairorder);
-        if (repairorder != null) {
-            repairorderMapper.removeRepairOrder(orderid, Math.toIntExact(System.currentTimeMillis() / 1000));
+        if (repairorder == null) {
+            throw new BizException("参数有误!");
         }
+        orderLogService.cancelOrderLog(orderid, repairorder.getHotelid(), repairorder.getCreatedate(), repairorder.getMoldtype());
+        repairorderMapper.removeRepairOrder(orderid, Math.toIntExact(System.currentTimeMillis() / 1000));
     }
 
     /**
@@ -578,9 +587,13 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         ZlCleanOrder zlCleanOrder = new ZlCleanOrder();
         zlCleanOrder.setOrderid(orderid);
         ZlCleanOrder cleanOrder = cleanOrderMapper.selectOne(zlCleanOrder);
-        if (cleanOrder != null) {
-            cleanOrderMapper.removeCleanOrder(orderid, Math.toIntExact(System.currentTimeMillis() / 1000));
+
+        if (cleanOrder == null) {
+            throw new BizException("参数有误!");
         }
+
+        orderLogService.cancelOrderLog(orderid, cleanOrder.getHotelid(), cleanOrder.getCreatedate(), cleanOrder.getMoldtype());
+        cleanOrderMapper.removeCleanOrder(orderid, Math.toIntExact(System.currentTimeMillis() / 1000));
     }
 
     /**
@@ -592,9 +605,12 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
         ZlInvoiceOrder invoiceOrder = new ZlInvoiceOrder();
         invoiceOrder.setInvoiceorderid(invoiceorderid);
         ZlInvoiceOrder invoice = invoiceOrderMapper.selectOne(invoiceOrder);
-        if (invoice != null) {
-            invoiceOrderMapper.removeInvoiceOrder(invoice.getInvoiceorderid(), Math.toIntExact(System.currentTimeMillis() / 1000));
+        if (invoice == null) {
+            throw new BizException("参数有误!");
         }
+
+        orderLogService.cancelOrderLog(invoiceorderid, invoice.getHotelid(), invoice.getCreatedate(), invoice.getMoldtype());
+        invoiceOrderMapper.removeInvoiceOrder(invoice.getInvoiceorderid(), Math.toIntExact(System.currentTimeMillis() / 1000));
     }
 
 
@@ -606,11 +622,12 @@ public class MyAppointmentServiceImpl implements MyAppointmentService {
     public void canceServiceOrder(Long orderid) {
         ZlServiceorder serviceorder = new ZlServiceorder();
         serviceorder.setOrderid(orderid);
-        ZlServiceorder order = serviceorderMapper.selectOne(serviceorder);
-        if (serviceorder != null) {
-            order.setOrderstatus((byte) -1);
-            order.setUpdatedate(Math.toIntExact(System.currentTimeMillis() / 1000));
-            serviceorderMapper.updateOrderStatusById(orderid, Math.toIntExact(System.currentTimeMillis() / 1000));
+        serviceorder = serviceorderMapper.selectOne(serviceorder);
+        if (serviceorder == null) {
+            throw new BizException("参数有误!");
         }
+
+        orderLogService.cancelOrderLog(orderid, serviceorder.getHotelid(), serviceorder.getCreatedate(), serviceorder.getMoldtype());
+        serviceorderMapper.updateOrderStatusById(orderid, Math.toIntExact(System.currentTimeMillis() / 1000));
     }
 }

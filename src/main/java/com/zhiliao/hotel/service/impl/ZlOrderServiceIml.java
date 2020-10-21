@@ -778,15 +778,21 @@ public class ZlOrderServiceIml implements ZlOrderService {
                 //算出用户在这个模块的实际支付金额(优惠券类型 1：满减券 2:折扣券 3:代金券)
                 if (couponUserVO.getType() == 1) {
                     BigDecimal actuallyPay = totalPrice.subtract(couponUserVO.getPrice());
+                    if (actuallyPay.intValue() < 0.01) {
+                        actuallyPay = new BigDecimal(0.00);
+                    }
                     zlOrder.setActuallypay(actuallyPay);
                     allactuallypay = allactuallypay.add(actuallyPay);
                     zlOrder.setCouponcash(couponUserVO.getPrice());
                 } else if (couponUserVO.getType() == 2) {
-                    if (couponUserVO.getDiscount() > 1) {
+                    if (couponUserVO.getDiscount() > 10) {
                         throw new BizException("优惠券出错...");
                     }
 
                     BigDecimal actuallyPay = totalPrice.multiply(BigDecimal.valueOf(couponUserVO.getDiscount()).divide(BigDecimal.valueOf(10)));
+                    if (actuallyPay.intValue() < 0.01) {
+                        actuallyPay = new BigDecimal(0.00);
+                    }
                     zlOrder.setActuallypay(actuallyPay);
                     allactuallypay = allactuallypay.add(actuallyPay);
                     zlOrder.setCouponcash(totalPrice.subtract(actuallyPay));
